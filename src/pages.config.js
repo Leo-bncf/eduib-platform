@@ -69,6 +69,7 @@ import CoordinatorDashboard from './pages/CoordinatorDashboard';
 import ClassWorkspace from './pages/ClassWorkspace';
 import AssignmentDetail from './pages/AssignmentDetail';
 import SubmissionReview from './pages/SubmissionReview';
+import ClassGradebook from './pages/ClassGradebook';
 import __Layout from './Layout.jsx';
 
 
@@ -95,6 +96,7 @@ export const PAGES = {
     "ClassWorkspace": ClassWorkspace,
     "AssignmentDetail": AssignmentDetail,
     "SubmissionReview": SubmissionReview,
+    "ClassGradebook": ClassGradebook,
 }
 
 export const pagesConfig = {
