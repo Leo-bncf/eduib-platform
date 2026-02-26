@@ -1,6 +1,7 @@
 import React from 'react';
 import PublicNavbar from '@/components/public/PublicNavbar';
 import PublicFooter from '@/components/public/PublicFooter';
+import { createPageUrl } from '@/utils';
 import { Mail, MapPin, Phone, MessageSquare } from 'lucide-react';
 
 export default function Contact() {

@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
+import { createPageUrl } from '@/utils';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SuperAdminDashboard', icon: LayoutDashboard },
