@@ -91,6 +91,7 @@ import FirstLogin from './pages/FirstLogin';
 import PasswordReset from './pages/PasswordReset';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminPlans from './pages/SuperAdminPlans';
+import DemoShowcase from './pages/DemoShowcase';
 import __Layout from './Layout.jsx';
 
 
@@ -139,6 +140,7 @@ export const PAGES = {
     "PasswordReset": PasswordReset,
     "SuperAdminSchoolDetail": SuperAdminSchoolDetail,
     "SuperAdminPlans": SuperAdminPlans,
+    "DemoShowcase": DemoShowcase,
 }
 
 export const pagesConfig = {
