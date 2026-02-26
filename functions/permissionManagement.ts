@@ -5,6 +5,30 @@
 
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+// Define constants locally since we can't import from components
+const RESOURCES = {
+  SCHOOL: 'school', CLASS: 'class', USER: 'user', ASSIGNMENT: 'assignment',
+  SUBMISSION: 'submission', GRADE: 'grade', REPORT: 'report', ATTENDANCE: 'attendance',
+  MESSAGE: 'message', SETTINGS: 'settings', BILLING: 'billing', AUDIT_LOG: 'audit_log',
+};
+
+const ACTIONS = {
+  CREATE: 'create', READ: 'read', UPDATE: 'update', DELETE: 'delete',
+  PUBLISH: 'publish', APPROVE: 'approve', EXPORT: 'export', SHARE: 'share',
+};
+
+const DEFAULT_ROLES = {
+  school_admin: { name: 'School Administrator', isCustom: false },
+  ib_coordinator: { name: 'IB Coordinator', isCustom: false },
+  teacher: { name: 'Teacher', isCustom: false },
+  student: { name: 'Student', isCustom: false },
+  parent: { name: 'Parent', isCustom: false },
+};
+
+function createCustomRole(name, description, permissions) {
+  return { id: `custom_${Date.now()}`, name, description, isCustom: true, permissions, createdAt: new Date().toISOString() };
+}
+
 /**
  * Main handler
  * Actions: create-role, get-role, list-roles, update-permissions, validate-permission
