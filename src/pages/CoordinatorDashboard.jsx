@@ -16,7 +16,7 @@ const sidebarLinks = [
   { label: 'Cohorts', page: 'CoordinatorDashboard', icon: Users },
   { label: 'Predicted Grades', page: 'CoordinatorDashboard', icon: BarChart3 },
   { label: 'Reporting', page: 'CoordinatorDashboard', icon: FileText },
-  { label: 'IB Core', page: 'CoordinatorDashboard', icon: Star },
+  { label: 'IB Core', page: 'CoordinatorIBCore', icon: Star },
 ];
 
 export default function CoordinatorDashboard() {
