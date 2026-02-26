@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Search, ChevronRight, Plus } from 'lucide-react';
+import { Loader2, Search, ChevronRight, Edit2 } from 'lucide-react';
 import SchoolStatusBadge from '@/components/admin/SchoolStatusBadge';
 import SchoolOnboardingProgress from '@/components/admin/SchoolOnboardingProgress';
-import CreateSchoolDialog from '@/components/admin/CreateSchoolDialog';
+import SchoolFormSection from '@/components/admin/SchoolFormSection';
+import SchoolQuickEdit from '@/components/admin/SchoolQuickEdit';
 
 /**
  * Super admin school management view
@@ -22,7 +23,7 @@ export default function SuperAdminSchools() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterBilling, setFilterBilling] = useState('all');
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [editingSchoolId, setEditingSchoolId] = useState(null);
 
   useEffect(() => {
     const loadSchools = async () => {
@@ -55,6 +56,20 @@ export default function SuperAdminSchools() {
   const handleSchoolCreated = (newSchool) => {
     setSchools(prev => [newSchool, ...prev]);
     setFilteredSchools(prev => [newSchool, ...prev]);
+  };
+
+  const handleSchoolUpdated = () => {
+    const reloadSchools = async () => {
+      try {
+        const allSchools = await base44.entities.School.list();
+        setSchools(allSchools);
+        setFilteredSchools(allSchools);
+      } catch (error) {
+        console.error('Error reloading schools:', error);
+      }
+    };
+    reloadSchools();
+    setEditingSchoolId(null);
   };
 
   // Filter schools
@@ -100,19 +115,13 @@ export default function SuperAdminSchools() {
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Management</h1>
             <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage all schools and their lifecycle</p>
           </div>
-          <div className="flex gap-2">
-            <Button 
-              onClick={() => setCreateDialogOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-700 gap-2 text-xs md:text-sm"
-            >
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Create School</span>
-            </Button>
-            <Button onClick={() => navigate('/super-admin-dashboard')} variant="outline" className="text-xs md:text-sm">
-              Back to Dashboard
-            </Button>
-          </div>
+          <Button onClick={() => navigate('/super-admin-dashboard')} variant="outline" className="text-xs md:text-sm">
+            Back to Dashboard
+          </Button>
         </div>
+
+        {/* Create School Form */}
+        <SchoolFormSection onSchoolCreated={handleSchoolCreated} />
 
         {/* Filters */}
         <Card className="mb-6">
@@ -205,70 +214,101 @@ export default function SuperAdminSchools() {
               </CardContent>
             </Card>
           ) : (
-            filteredSchools.map((school) => (
-              <Card
-                key={school.id}
-                className="cursor-pointer hover:shadow-md transition-shadow"
-                onClick={() => navigate(`/super-admin-school/${school.id}`)}
-              >
-                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <h3 className="text-base md:text-lg font-bold text-slate-900 truncate">
-                          {school.name}
-                        </h3>
-                        <div className="flex items-center gap-1">
-                          <SchoolStatusBadge
-                            status={school.status}
-                            billingStatus={school.billing_status}
-                          />
-                        </div>
-                      </div>
+            filteredSchools.map((school) => {
+              const isEditing = editingSchoolId === school.id;
+              
+              return (
+                <Card
+                  key={school.id}
+                  className={`transition-all ${isEditing ? 'ring-2 ring-indigo-500' : 'hover:shadow-md cursor-pointer'}`}
+                >
+                  <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+                    {isEditing ? (
+                      <SchoolQuickEdit
+                        school={school}
+                        onUpdated={handleSchoolUpdated}
+                        onCancel={() => setEditingSchoolId(null)}
+                      />
+                    ) : (
+                      <>
+                        <div className="flex items-start justify-between gap-2 mb-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                              <h3 className="text-base md:text-lg font-bold text-slate-900 truncate">
+                                {school.name}
+                              </h3>
+                              <div className="flex items-center gap-1">
+                                <SchoolStatusBadge
+                                  status={school.status}
+                                  billingStatus={school.billing_status}
+                                />
+                              </div>
+                            </div>
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 text-xs md:text-sm mt-3">
-                        <div className="min-w-0">
-                          <p className="text-slate-600">Location</p>
-                          <p className="font-semibold text-slate-900 truncate">
-                            {school.city || 'N/A'}, {school.country || 'N/A'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-slate-600">Plan</p>
-                          <p className="font-semibold text-slate-900 capitalize">
-                            {school.plan || 'Starter'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-slate-600">Created</p>
-                          <p className="font-semibold text-slate-900 text-xs">
-                            {new Date(school.created_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-slate-600">Trial End</p>
-                          <p className={`font-semibold text-xs ${
-                            school.trial_end_date ? 'text-slate-900' : 'text-slate-500'
-                          }`}>
-                            {school.trial_end_date
-                              ? new Date(school.trial_end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-                              : 'N/A'
-                            }
-                          </p>
-                        </div>
-                      </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 text-xs md:text-sm mt-3">
+                              <div className="min-w-0">
+                                <p className="text-slate-600">Location</p>
+                                <p className="font-semibold text-slate-900 truncate">
+                                  {school.city || 'N/A'}, {school.country || 'N/A'}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-slate-600">Plan</p>
+                                <p className="font-semibold text-slate-900 capitalize">
+                                  {school.plan || 'Starter'}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-slate-600">Created</p>
+                                <p className="font-semibold text-slate-900 text-xs">
+                                  {new Date(school.created_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-slate-600">Trial End</p>
+                                <p className={`font-semibold text-xs ${
+                                  school.trial_end_date ? 'text-slate-900' : 'text-slate-500'
+                                }`}>
+                                  {school.trial_end_date
+                                    ? new Date(school.trial_end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                                    : 'N/A'
+                                  }
+                                </p>
+                              </div>
+                            </div>
 
-                      {/* Onboarding Progress */}
-                      <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t">
-                        <SchoolOnboardingProgress schoolId={school.id} />
-                      </div>
-                    </div>
+                            {/* Onboarding Progress */}
+                            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t">
+                              <SchoolOnboardingProgress schoolId={school.id} />
+                            </div>
+                          </div>
 
-                    <ChevronRight className="w-5 md:w-6 h-5 md:h-6 text-slate-400 flex-shrink-0" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))
+                          <div className="flex gap-2 flex-shrink-0">
+                            <Button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingSchoolId(school.id);
+                              }}
+                              variant="outline"
+                              size="icon"
+                              className="h-9 w-9"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </Button>
+                            <button
+                              onClick={() => navigate(`/super-admin-school/${school.id}`)}
+                              className="text-slate-400 hover:text-slate-600"
+                            >
+                              <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })
           )}
         </div>
 
@@ -276,13 +316,6 @@ export default function SuperAdminSchools() {
         <div className="mt-8 text-center text-sm text-slate-600">
           Showing {filteredSchools.length} of {schools.length} schools
         </div>
-
-        {/* Create School Dialog */}
-        <CreateSchoolDialog
-          open={createDialogOpen}
-          onOpenChange={setCreateDialogOpen}
-          onSchoolCreated={handleSchoolCreated}
-        />
       </div>
     </div>
   );
