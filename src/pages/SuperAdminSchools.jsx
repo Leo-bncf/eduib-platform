@@ -85,15 +85,15 @@ export default function SuperAdminSchools() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">School Management</h1>
-            <p className="text-slate-600 mt-2">Manage all schools and their lifecycle</p>
+        <div className="mb-6 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex-1">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Management</h1>
+            <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage all schools and their lifecycle</p>
           </div>
-          <Button onClick={() => navigate('/super-admin-dashboard')}>
+          <Button onClick={() => navigate('/super-admin-dashboard')} className="text-xs md:text-sm">
             Back to Dashboard
           </Button>
         </div>
@@ -181,11 +181,11 @@ export default function SuperAdminSchools() {
         </Card>
 
         {/* Schools List */}
-        <div className="space-y-3">
+        <div className="space-y-2 md:space-y-3">
           {filteredSchools.length === 0 ? (
             <Card>
-              <CardContent className="pt-6">
-                <p className="text-center text-slate-600">No schools found</p>
+              <CardContent className="pt-6 p-4 md:p-6">
+                <p className="text-center text-xs md:text-sm text-slate-600">No schools found</p>
               </CardContent>
             </Card>
           ) : (
@@ -195,23 +195,25 @@ export default function SuperAdminSchools() {
                 className="cursor-pointer hover:shadow-md transition-shadow"
                 onClick={() => navigate(`/super-admin-school/${school.id}`)}
               >
-                <CardContent className="pt-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-bold text-slate-900">
+                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <h3 className="text-base md:text-lg font-bold text-slate-900 truncate">
                           {school.name}
                         </h3>
-                        <SchoolStatusBadge
-                          status={school.status}
-                          billingStatus={school.billing_status}
-                        />
+                        <div className="flex items-center gap-1">
+                          <SchoolStatusBadge
+                            status={school.status}
+                            billingStatus={school.billing_status}
+                          />
+                        </div>
                       </div>
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mt-3">
-                        <div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 text-xs md:text-sm mt-3">
+                        <div className="min-w-0">
                           <p className="text-slate-600">Location</p>
-                          <p className="font-semibold text-slate-900">
+                          <p className="font-semibold text-slate-900 truncate">
                             {school.city || 'N/A'}, {school.country || 'N/A'}
                           </p>
                         </div>
@@ -223,17 +225,17 @@ export default function SuperAdminSchools() {
                         </div>
                         <div>
                           <p className="text-slate-600">Created</p>
-                          <p className="font-semibold text-slate-900">
-                            {new Date(school.created_date).toLocaleDateString()}
+                          <p className="font-semibold text-slate-900 text-xs">
+                            {new Date(school.created_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                           </p>
                         </div>
                         <div>
                           <p className="text-slate-600">Trial End</p>
-                          <p className={`font-semibold ${
+                          <p className={`font-semibold text-xs ${
                             school.trial_end_date ? 'text-slate-900' : 'text-slate-500'
                           }`}>
                             {school.trial_end_date
-                              ? new Date(school.trial_end_date).toLocaleDateString()
+                              ? new Date(school.trial_end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                               : 'N/A'
                             }
                           </p>
@@ -241,12 +243,12 @@ export default function SuperAdminSchools() {
                       </div>
 
                       {/* Onboarding Progress */}
-                      <div className="mt-4 pt-4 border-t">
+                      <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t">
                         <SchoolOnboardingProgress schoolId={school.id} />
                       </div>
                     </div>
 
-                    <ChevronRight className="w-6 h-6 text-slate-400 flex-shrink-0 ml-4" />
+                    <ChevronRight className="w-5 md:w-6 h-5 md:h-6 text-slate-400 flex-shrink-0" />
                   </div>
                 </CardContent>
               </Card>
