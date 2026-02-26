@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
+import { logAudit, AuditActions, AuditLevels } from '@/components/utils/auditLogger';
 import { LayoutDashboard, Users, BookOpen, Calendar, Shield, ClipboardList, Plus, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,7 +33,20 @@ export default function SchoolAdminClasses() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Class.create({ ...data, school_id: schoolId, status: 'active' }),
+    mutationFn: async (data) => {
+      const result = await base44.entities.Class.create({ ...data, school_id: schoolId, status: 'active' });
+      
+      await logAudit({
+        action: AuditActions.CLASS_CREATED,
+        entityType: 'Class',
+        entityId: result.id,
+        details: `Created class: ${data.name}`,
+        level: AuditLevels.INFO,
+        schoolId,
+      });
+      
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['school-classes'] });
       setShowCreate(false);
