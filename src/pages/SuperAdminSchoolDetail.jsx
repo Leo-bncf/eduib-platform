@@ -37,15 +37,15 @@ export default function SuperAdminSchoolDetail() {
         }
 
         const user = await base44.auth.me();
-        if (user.role !== 'admin') {
-          navigate('/dashboard');
+        if (user?.role !== 'super_admin') {
+          navigate('/');
           return;
         }
 
         // Load school
         const schools = await base44.entities.School.filter({ id: schoolId });
         if (schools.length === 0) {
-          navigate('/super-admin-schools');
+          navigate('/SuperAdminSchools');
           return;
         }
 
@@ -142,7 +142,7 @@ export default function SuperAdminSchoolDetail() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
         <div className="max-w-7xl mx-auto">
-          <Button onClick={() => navigate('/super-admin-schools')} variant="outline" className="mb-4">
+          <Button onClick={() => navigate('/SuperAdminSchools')} variant="outline" className="mb-4">
             <ChevronLeft className="w-4 h-4 mr-2" />
             Back to Schools
           </Button>
@@ -178,7 +178,7 @@ export default function SuperAdminSchoolDetail() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <Button
-          onClick={() => navigate('/super-admin-schools')}
+          onClick={() => navigate('/SuperAdminSchools')}
           variant="outline"
           className="mb-6 text-xs md:text-sm"
         >
