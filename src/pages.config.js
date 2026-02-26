@@ -74,6 +74,10 @@ import Messages from './pages/Messages';
 import StudentBehavior from './pages/StudentBehavior';
 import SchoolAdminAttendance from './pages/SchoolAdminAttendance';
 import SchoolAdminTimetable from './pages/SchoolAdminTimetable';
+import StudentCAS from './pages/StudentCAS';
+import StudentEE from './pages/StudentEE';
+import StudentTOK from './pages/StudentTOK';
+import CoordinatorIBCore from './pages/CoordinatorIBCore';
 import __Layout from './Layout.jsx';
 
 
@@ -105,6 +109,10 @@ export const PAGES = {
     "StudentBehavior": StudentBehavior,
     "SchoolAdminAttendance": SchoolAdminAttendance,
     "SchoolAdminTimetable": SchoolAdminTimetable,
+    "StudentCAS": StudentCAS,
+    "StudentEE": StudentEE,
+    "StudentTOK": StudentTOK,
+    "CoordinatorIBCore": CoordinatorIBCore,
 }
 
 export const pagesConfig = {

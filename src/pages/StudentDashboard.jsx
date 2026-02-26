@@ -20,7 +20,7 @@ const sidebarLinks = [
   { label: 'Assignments', page: 'StudentDashboard', icon: ClipboardCheck },
   { label: 'My Grades', page: 'StudentDashboard', icon: BarChart3 },
   { label: 'Messages', page: 'StudentDashboard', icon: MessageSquare },
-  { label: 'IB Core', page: 'StudentDashboard', icon: Star },
+  { label: 'IB Core', page: 'StudentCAS', icon: Star },
 ];
 
 export default function StudentDashboard() {
