@@ -22,7 +22,16 @@ export default function SuperAdminDashboard() {
   useEffect(() => {
     const checkAuth = async () => {
       const authed = await base44.auth.isAuthenticated();
-      if (!authed) navigate('/');
+      if (!authed) {
+        navigate('/');
+        return;
+      }
+      
+      const user = await base44.auth.me();
+      if (user?.role !== 'super_admin') {
+        navigate('/');
+        return;
+      }
     };
     checkAuth();
   }, [navigate]);
