@@ -277,7 +277,7 @@ export default function SuperAdminUsers() {
 
         {/* Summary */}
          <div className="mt-8 text-center text-sm text-slate-600">
-           Showing {superAdminFilteredUsers.length} super admin users
+           Showing {filteredUsers.length} of {users.length} users
          </div>
 
         {/* Manage User Dialog */}
