@@ -1,7 +1,8 @@
 import React from 'react';
-import { FileText, Presentation, Table, FileIcon, Link as LinkIcon, ExternalLink, Trash2 } from 'lucide-react';
+import { FileText, Presentation, Table, FileIcon, Link as LinkIcon, ExternalLink, Trash2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import DocumentAccessValidator from '@/components/google/DocumentAccessValidator';
 
 const TYPE_CONFIGS = {
   google_doc: { icon: FileText, label: 'Google Doc', color: 'bg-blue-50 text-blue-700 border-blue-200' },
@@ -12,7 +13,7 @@ const TYPE_CONFIGS = {
   external_link: { icon: LinkIcon, label: 'Link', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
 };
 
-export default function SubmissionDocumentsView({ documents, onRemove = null, onOpen = null, compact = false }) {
+export default function SubmissionDocumentsView({ documents, onRemove = null, onOpen = null, compact = false, isTeacher = false }) {
   if (!documents || documents.length === 0) {
     return null;
   }
@@ -22,15 +23,16 @@ export default function SubmissionDocumentsView({ documents, onRemove = null, on
       {documents.map((doc) => {
         const config = TYPE_CONFIGS[doc.type] || TYPE_CONFIGS.external_link;
         const Icon = config.icon;
+        const isGoogleDoc = doc.type?.includes('google');
 
         return (
           <div
             key={doc.id}
-            className={`border rounded-lg p-3 ${config.color} transition-colors hover:opacity-80 ${
+            className={`border rounded-lg p-3 ${config.color} transition-colors ${
               compact ? 'flex items-center justify-between' : 'space-y-2'
             }`}
           >
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-3 flex-1">
               <Icon className="w-5 h-5 mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -47,8 +49,14 @@ export default function SubmissionDocumentsView({ documents, onRemove = null, on
               </div>
             </div>
 
-            <div className="flex gap-2">
-              {doc.url && (
+            <div className="flex gap-2 flex-shrink-0">
+              {isGoogleDoc && isTeacher ? (
+                <DocumentAccessValidator 
+                  document={doc}
+                  onOpenDocument={onOpen}
+                  isTeacher={true}
+                />
+              ) : doc.url ? (
                 <Button
                   onClick={() => onOpen?.(doc)}
                   variant="ghost"
@@ -60,7 +68,7 @@ export default function SubmissionDocumentsView({ documents, onRemove = null, on
                     <ExternalLink className="w-3.5 h-3.5 mr-1" /> Open
                   </a>
                 </Button>
-              )}
+              ) : null}
               {onRemove && (
                 <Button
                   onClick={() => onRemove(doc.id)}
