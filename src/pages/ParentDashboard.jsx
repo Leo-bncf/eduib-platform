@@ -7,6 +7,7 @@ import ChildGradesOverview from '@/components/parent/ChildGradesOverview';
 import ChildAssignmentsOverview from '@/components/parent/ChildAssignmentsOverview';
 import ChildAttendanceOverview from '@/components/parent/ChildAttendanceOverview';
 import ChildBehaviorOverview from '@/components/parent/ChildBehaviorOverview';
+import ChildPredictedGrades from '@/components/parent/ChildPredictedGrades';
 import ParentMessaging from '@/components/parent/ParentMessaging';
 import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -50,6 +51,10 @@ export default function ParentDashboard() {
                     <BarChart3 className="w-4 h-4 mr-2" />
                     Grades
                   </TabsTrigger>
+                  <TabsTrigger value="predicted">
+                    <BarChart3 className="w-4 h-4 mr-2" />
+                    Predicted Grades
+                  </TabsTrigger>
                   <TabsTrigger value="assignments">
                     <ClipboardCheck className="w-4 h-4 mr-2" />
                     Assignments
@@ -85,6 +90,13 @@ export default function ParentDashboard() {
                   <div className="bg-white rounded-xl border border-slate-200 p-6">
                     <h2 className="text-xl font-bold text-slate-900 mb-6">Grades & Feedback</h2>
                     <ChildGradesOverview schoolId={schoolId} studentId={selectedChildId} />
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="predicted">
+                  <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <h2 className="text-xl font-bold text-slate-900 mb-6">Predicted IB Grades</h2>
+                    <ChildPredictedGrades schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 

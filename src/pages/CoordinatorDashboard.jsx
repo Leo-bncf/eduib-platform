@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 const sidebarLinks = [
   { label: 'Dashboard', page: 'CoordinatorDashboard', icon: LayoutDashboard },
   { label: 'Cohorts', page: 'CoordinatorDashboard', icon: Users },
-  { label: 'Predicted Grades', page: 'CoordinatorDashboard', icon: BarChart3 },
+  { label: 'Predicted Grades', page: 'CoordinatorPredictedGrades', icon: BarChart3 },
   { label: 'Reporting', page: 'CoordinatorDashboard', icon: FileText },
   { label: 'IB Core', page: 'CoordinatorIBCore', icon: Star },
 ];

@@ -110,8 +110,6 @@ export default function CreateGradeItem({ classData, assignments = [], onClose, 
                     <SelectItem value="points">Points (0-100)</SelectItem>
                     <SelectItem value="ib_scale">IB Scale (1-7)</SelectItem>
                     <SelectItem value="percentage">Percentage</SelectItem>
-                    <SelectItem value="letter">Letter Grade</SelectItem>
-                    <SelectItem value="rubric">Rubric (Future)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
