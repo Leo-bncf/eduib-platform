@@ -134,7 +134,7 @@ export default function SuperAdminDashboard() {
                 </Badge>
               </div>
               <Button
-                onClick={() => navigate('/super-admin-schools')}
+                onClick={() => navigate('/SuperAdminSchools')}
                 className="w-full mt-4"
                 variant="outline"
               >
@@ -177,28 +177,28 @@ export default function SuperAdminDashboard() {
             </CardHeader>
             <CardContent className="space-y-2">
               <Button
-                onClick={() => navigate('/super-admin-schools')}
+                onClick={() => navigate('/SuperAdminSchools')}
                 variant="outline"
                 className="w-full justify-start"
               >
                 Manage Schools
               </Button>
               <Button
-                onClick={() => navigate('/super-admin-users')}
+                onClick={() => navigate('/SuperAdminUsers')}
                 variant="outline"
                 className="w-full justify-start"
               >
                 Manage Users
               </Button>
               <Button
-                onClick={() => navigate('/super-admin-plans')}
+                onClick={() => navigate('/SuperAdminPlans')}
                 variant="outline"
                 className="w-full justify-start"
               >
                 View Plans & Billing
               </Button>
               <Button
-                onClick={() => navigate('/super-admin-audit-logs')}
+                onClick={() => navigate('/SuperAdminAuditLogs')}
                 variant="outline"
                 className="w-full justify-start"
               >
@@ -226,7 +226,7 @@ export default function SuperAdminDashboard() {
                   <div
                     key={school.id}
                     className="flex items-center justify-between p-2 md:p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer gap-2"
-                    onClick={() => navigate(`/super-admin-school/${school.id}`)}
+                    onClick={() => navigate(`/SuperAdminSchoolDetail/${school.id}`)}
                   >
                     <div className="min-w-0 flex-1">
                       <p className="font-semibold text-slate-900 text-xs md:text-sm truncate">{school.name}</p>
