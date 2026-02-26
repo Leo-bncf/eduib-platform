@@ -5,9 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, ChevronLeft, AlertCircle, CheckCircle, Users, Zap } from 'lucide-react';
+import { Loader2, ChevronLeft, AlertCircle, CheckCircle, Users, Zap, Edit2, DollarSign, Lock, Unlock } from 'lucide-react';
 import SchoolStatusBadge from '@/components/admin/SchoolStatusBadge';
 import SchoolOnboardingProgress from '@/components/admin/SchoolOnboardingProgress';
+import EditSchoolDialog from '@/components/admin/EditSchoolDialog';
+import ManageBillingDialog from '@/components/admin/ManageBillingDialog';
 
 /**
  * School detail view for super admin
@@ -21,6 +23,9 @@ export default function SuperAdminSchoolDetail() {
   const [school, setSchool] = useState(null);
   const [stats, setStats] = useState(null);
   const [members, setMembers] = useState([]);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [billingDialogOpen, setBillingDialogOpen] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {
     const loadSchoolDetail = async () => {
@@ -79,6 +84,51 @@ export default function SuperAdminSchoolDetail() {
 
     loadSchoolDetail();
   }, [schoolId, navigate]);
+
+  const reloadSchool = async () => {
+    try {
+      const schools = await base44.entities.School.filter({ id: schoolId });
+      if (schools.length > 0) {
+        setSchool(schools[0]);
+      }
+    } catch (error) {
+      console.error('Error reloading school:', error);
+    }
+  };
+
+  const handleSuspendSchool = async () => {
+    if (!window.confirm('Are you sure you want to suspend this school? Users will not be able to access it.')) {
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      await base44.entities.School.update(schoolId, {
+        status: 'suspended'
+      });
+      await reloadSchool();
+    } catch (error) {
+      console.error('Error suspending school:', error);
+      alert('Failed to suspend school');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleActivateSchool = async () => {
+    setActionLoading(true);
+    try {
+      await base44.entities.School.update(schoolId, {
+        status: 'active'
+      });
+      await reloadSchool();
+    } catch (error) {
+      console.error('Error activating school:', error);
+      alert('Failed to activate school');
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -336,22 +386,62 @@ export default function SuperAdminSchoolDetail() {
                 <CardTitle className="text-base md:text-lg">Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 p-4 md:p-6 pt-0 md:pt-0">
+                <Button
+                  onClick={() => setEditDialogOpen(true)}
+                  disabled={actionLoading}
+                  className="w-full justify-start text-xs md:text-sm"
+                  variant="outline"
+                >
+                  <Edit2 className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
+                  Edit Details
+                </Button>
+
+                <Button
+                  onClick={() => setBillingDialogOpen(true)}
+                  disabled={actionLoading}
+                  className="w-full justify-start text-xs md:text-sm"
+                  variant="outline"
+                >
+                  <DollarSign className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
+                  Manage Billing
+                </Button>
+
                 {school.status === 'onboarding' && (
-                  <Button className="w-full justify-start text-xs md:text-sm" variant="outline">
+                  <Button
+                    onClick={handleActivateSchool}
+                    disabled={actionLoading}
+                    className="w-full justify-start text-xs md:text-sm"
+                    variant="outline"
+                  >
+                    {actionLoading && <Loader2 className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2 animate-spin" />}
                     <Zap className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
                     Activate School
                   </Button>
                 )}
-                {school.status === 'active' && school.billing_status === 'trial' && (
-                  <Button className="w-full justify-start text-xs md:text-sm" variant="outline">
-                    <Zap className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
-                    Extend Trial
+
+                {school.status === 'active' && (
+                  <Button
+                    onClick={handleSuspendSchool}
+                    disabled={actionLoading}
+                    className="w-full justify-start text-xs md:text-sm text-red-600 hover:text-red-700"
+                    variant="outline"
+                  >
+                    {actionLoading && <Loader2 className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2 animate-spin" />}
+                    <Lock className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
+                    Suspend School
                   </Button>
                 )}
+
                 {school.status === 'suspended' && (
-                  <Button className="w-full justify-start text-xs md:text-sm" variant="outline">
-                    <CheckCircle className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
-                    Reactivate
+                  <Button
+                    onClick={handleActivateSchool}
+                    disabled={actionLoading}
+                    className="w-full justify-start text-xs md:text-sm"
+                    variant="outline"
+                  >
+                    {actionLoading && <Loader2 className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2 animate-spin" />}
+                    <Unlock className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
+                    Reactivate School
                   </Button>
                 )}
               </CardContent>
@@ -377,6 +467,22 @@ export default function SuperAdminSchoolDetail() {
             </Card>
           </div>
         </div>
+
+        {/* Edit School Dialog */}
+        <EditSchoolDialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          school={school}
+          onSchoolUpdated={reloadSchool}
+        />
+
+        {/* Manage Billing Dialog */}
+        <ManageBillingDialog
+          open={billingDialogOpen}
+          onOpenChange={setBillingDialogOpen}
+          school={school}
+          onUpdated={reloadSchool}
+        />
       </div>
     </div>
   );
