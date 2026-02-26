@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import StatCard from '@/components/app/StatCard';
+import TodaySchedule from '@/components/timetable/TodaySchedule';
 import { useUser } from '@/components/auth/UserContext';
 import { 
   LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, 
@@ -65,23 +66,14 @@ export default function TeacherDashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-white rounded-xl border border-slate-100">
                     <div className="px-6 py-4 border-b border-slate-100">
-                      <h2 className="font-semibold text-slate-900">Today's Classes</h2>
+                      <h2 className="font-semibold text-slate-900 flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-indigo-600" />
+                        Today's Teaching Schedule
+                      </h2>
                     </div>
-                    {classes.length === 0 ? (
-                      <div className="p-12 text-center text-slate-400 text-sm">No classes assigned yet</div>
-                    ) : (
-                      <div className="divide-y divide-slate-50">
-                        {classes.map(c => (
-                          <div key={c.id} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
-                            <div>
-                              <p className="font-medium text-slate-900 text-sm">{c.name}</p>
-                              <p className="text-xs text-slate-400">{c.room ? `Room ${c.room}` : ''} · {c.student_ids?.length || 0} students</p>
-                            </div>
-                            <Clock className="w-4 h-4 text-slate-300" />
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <div className="p-6">
+                      <TodaySchedule schoolId={schoolId} userId={user?.id} userRole="teacher" />
+                    </div>
                   </div>
 
                   <div className="bg-white rounded-xl border border-slate-100">
