@@ -106,14 +106,6 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
     },
   };
 
-  const handleRemoveDocument = (doc) => {
-    setDocuments(documents.filter(d => d.id !== doc.id));
-  };
-
-  const handleOpenDocument = (doc) => {
-    window.open(doc.url, '_blank', 'noopener,noreferrer');
-  };
-
   const handleSubmit = (status) => {
     const isLate = new Date() > new Date(assignment.due_date);
     submitMutation.mutate({
