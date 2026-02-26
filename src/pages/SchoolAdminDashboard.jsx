@@ -1,102 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
+import { useUser } from '@/components/auth/UserContext';
+import { useSchoolData, useSchoolMetrics } from '@/components/hooks/useDashboardData';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, AlertCircle, Users, Settings, FileText, BookOpen } from 'lucide-react';
+import { AlertCircle, Users, Settings, FileText, BookOpen } from 'lucide-react';
 import SetupChecklist from '@/components/school/SetupChecklist';
-import OnboardingProgress from '@/components/school/OnboardingProgress';
+import LoadingStateBase from '@/components/common/LoadingStateBase';
 
 /**
  * School admin dashboard with onboarding awareness
  */
 export default function SchoolAdminDashboard() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
-  const [school, setSchool] = useState(null);
-  const [setupProgress, setSetupProgress] = useState(null);
-  const [stats, setStats] = useState(null);
+  const { user, schoolId } = useUser();
+
+  const { data: school, isLoading: schoolLoading } = useSchoolData(schoolId);
+  const { data: metrics, isLoading: metricsLoading } = useSchoolMetrics(schoolId);
 
   useEffect(() => {
-    const initializeDashboard = async () => {
-      try {
-        const authed = await base44.auth.isAuthenticated();
-        if (!authed) {
-          navigate('/');
-          return;
-        }
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
-        const currentUser = await base44.auth.me();
-        setUser(currentUser);
-
-        // Get user's school
-        const memberships = await base44.entities.SchoolMembership.filter({
-          user_id: currentUser.id
-        });
-
-        if (!memberships || memberships.length === 0) {
-          navigate('/no-school');
-          return;
-        }
-
-        const schoolId = memberships[0].school_id;
-        const schools = await base44.entities.School.filter({ id: schoolId });
-
-        if (schools.length > 0) {
-          setSchool(schools[0]);
-
-          // Load setup stats
-          const [academicYears, terms, subjects, classes, members] = await Promise.all([
-            base44.entities.AcademicYear.filter({ school_id: schoolId }),
-            base44.entities.Term.filter({ school_id: schoolId }),
-            base44.entities.Subject.filter({ school_id: schoolId }),
-            base44.entities.Class.filter({ school_id: schoolId }),
-            base44.entities.SchoolMembership.filter({ school_id: schoolId })
-          ]);
-
-          const completedSetupItems = [
-            schools[0].name ? 1 : 0,
-            academicYears.length > 0 ? 1 : 0,
-            terms.length > 0 ? 1 : 0,
-            subjects.length > 0 ? 1 : 0,
-            classes.length > 0 ? 1 : 0,
-            members.length > 1 ? 1 : 0
-          ];
-
-          setSetupProgress({
-            completed: completedSetupItems.reduce((a, b) => a + b, 0),
-            total: 6
-          });
-
-          setStats({
-            academicYears: academicYears.length,
-            terms: terms.length,
-            subjects: subjects.length,
-            classes: classes.length,
-            staff: Math.max(0, members.length - 1)
-          });
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.error('Error initializing dashboard:', error);
-        setLoading(false);
-      }
-    };
-
-    initializeDashboard();
-  }, [navigate]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-      </div>
-    );
+  if (!user || schoolLoading || metricsLoading) {
+    return <LoadingStateBase />;
   }
 
-  const isSetupComplete = setupProgress && setupProgress.completed === setupProgress.total;
+  const isSetupComplete = metrics && metrics.setupProgress.completed === metrics.setupProgress.total;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
@@ -104,7 +36,7 @@ export default function SchoolAdminDashboard() {
         {/* Header */}
         <div className="mb-6 md:mb-8">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Admin Dashboard</h1>
-          <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Welcome, {user?.full_name}</p>
+          <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Welcome, {user.full_name}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
@@ -120,17 +52,15 @@ export default function SchoolAdminDashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
-                  <p className="text-xs md:text-sm text-amber-800">
-                    Complete your school setup to unlock all features. You're {setupProgress?.completed || 0} of {setupProgress?.total || 6} steps complete.
-                  </p>
-                  {setupProgress && (
+                    <p className="text-xs md:text-sm text-amber-800">
+                      Complete your school setup to unlock all features. You're {metrics.setupProgress.completed} of {metrics.setupProgress.total} steps complete.
+                    </p>
                     <div className="w-full bg-amber-200 rounded-full h-2">
                       <div
                         className="bg-amber-600 h-2 rounded-full transition-all"
-                        style={{ width: `${(setupProgress.completed / setupProgress.total) * 100}%` }}
+                        style={{ width: `${(metrics.setupProgress.completed / metrics.setupProgress.total) * 100}%` }}
                       />
                     </div>
-                  )}
                   <Button
                     onClick={() => navigate('/school-onboarding')}
                     className="w-full bg-amber-600 hover:bg-amber-700 gap-2 text-sm"
@@ -147,7 +77,7 @@ export default function SchoolAdminDashboard() {
                 <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
                   <div className="text-center">
                     <BookOpen className="w-6 md:w-8 h-6 md:h-8 text-indigo-600 mx-auto mb-2" />
-                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stats?.academicYears || 0}</p>
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{metrics.academicYears}</p>
                     <p className="text-xs md:text-sm text-slate-600 mt-1">Academic Years</p>
                   </div>
                 </CardContent>
@@ -157,7 +87,7 @@ export default function SchoolAdminDashboard() {
                 <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
                   <div className="text-center">
                     <FileText className="w-6 md:w-8 h-6 md:h-8 text-green-600 mx-auto mb-2" />
-                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stats?.subjects || 0}</p>
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{metrics.subjects}</p>
                     <p className="text-xs md:text-sm text-slate-600 mt-1">Subjects</p>
                   </div>
                 </CardContent>
@@ -167,7 +97,7 @@ export default function SchoolAdminDashboard() {
                 <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
                   <div className="text-center">
                     <BookOpen className="w-6 md:w-8 h-6 md:h-8 text-blue-600 mx-auto mb-2" />
-                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stats?.classes || 0}</p>
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{metrics.classes}</p>
                     <p className="text-xs md:text-sm text-slate-600 mt-1">Classes</p>
                   </div>
                 </CardContent>
@@ -177,7 +107,7 @@ export default function SchoolAdminDashboard() {
                 <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
                   <div className="text-center">
                     <Users className="w-6 md:w-8 h-6 md:h-8 text-purple-600 mx-auto mb-2" />
-                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stats?.staff || 0}</p>
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{metrics.staff}</p>
                     <p className="text-xs md:text-sm text-slate-600 mt-1">Staff Members</p>
                   </div>
                 </CardContent>
@@ -215,14 +145,9 @@ export default function SchoolAdminDashboard() {
           {/* Sidebar */}
           <div className="space-y-4 md:space-y-6">
             {/* Setup Checklist */}
-            {setupProgress && !isSetupComplete && (
-              <SetupChecklist
-                schoolId={school?.id}
-                onNavigate={(taskId) => {
-                  // Navigate to specific setup step
-                }}
-              />
-            )}
+              {metrics && !isSetupComplete && (
+                <SetupChecklist schoolId={schoolId} />
+              )}
 
             {/* School Info Card */}
             <Card>
@@ -232,15 +157,15 @@ export default function SchoolAdminDashboard() {
               <CardContent className="space-y-3 text-xs md:text-sm p-4 md:p-6 pt-0 md:pt-0">
                 <div>
                   <p className="text-slate-600">Name</p>
-                  <p className="font-semibold text-slate-900 truncate">{school?.name}</p>
+                  <p className="font-semibold text-slate-900 truncate">{school.name}</p>
                 </div>
                 <div>
                   <p className="text-slate-600">Plan</p>
-                  <p className="font-semibold text-slate-900 capitalize">{school?.plan}</p>
+                  <p className="font-semibold text-slate-900 capitalize">{school.plan}</p>
                 </div>
                 <div>
                   <p className="text-slate-600">Status</p>
-                  <p className="font-semibold text-slate-900 capitalize">{school?.status}</p>
+                  <p className="font-semibold text-slate-900 capitalize">{school.status}</p>
                 </div>
               </CardContent>
             </Card>
