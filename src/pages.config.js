@@ -54,6 +54,7 @@ import ClassWorkspace from './pages/ClassWorkspace';
 import Contact from './pages/Contact';
 import CoordinatorDashboard from './pages/CoordinatorDashboard';
 import CoordinatorIBCore from './pages/CoordinatorIBCore';
+import CoordinatorPredictedGrades from './pages/CoordinatorPredictedGrades';
 import Demo from './pages/Demo';
 import Features from './pages/Features';
 import Landing from './pages/Landing';
@@ -80,7 +81,6 @@ import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import SuperAdminSchools from './pages/SuperAdminSchools';
 import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
-import CoordinatorPredictedGrades from './pages/CoordinatorPredictedGrades';
 import __Layout from './Layout.jsx';
 
 
@@ -92,6 +92,7 @@ export const PAGES = {
     "Contact": Contact,
     "CoordinatorDashboard": CoordinatorDashboard,
     "CoordinatorIBCore": CoordinatorIBCore,
+    "CoordinatorPredictedGrades": CoordinatorPredictedGrades,
     "Demo": Demo,
     "Features": Features,
     "Landing": Landing,
@@ -118,7 +119,6 @@ export const PAGES = {
     "SuperAdminSchools": SuperAdminSchools,
     "TeacherClasses": TeacherClasses,
     "TeacherDashboard": TeacherDashboard,
-    "CoordinatorPredictedGrades": CoordinatorPredictedGrades,
 }
 
 export const pagesConfig = {

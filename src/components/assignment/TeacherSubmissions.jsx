@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Loader2, CheckCircle, Clock, XCircle, AlertCircle, Eye } from 'lucide-react';
+import { Loader2, CheckCircle, Clock, XCircle, AlertCircle, Eye, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
@@ -109,6 +109,7 @@ export default function TeacherSubmissions({ assignment, classData }) {
             <tr className="border-b border-slate-200 bg-slate-50">
               <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Student</th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Status</th>
+              <th className="px-6 py-3 text-center text-xs font-semibold text-slate-600 uppercase">Documents</th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Submitted</th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Action</th>
             </tr>
@@ -127,6 +128,18 @@ export default function TeacherSubmissions({ assignment, classData }) {
                     {student.statusIcon}
                     {student.status}
                   </Badge>
+                </td>
+                <td className="px-6 py-4 text-center">
+                  {student.submission?.documents && student.submission.documents.length > 0 ? (
+                    <div className="flex items-center justify-center gap-1">
+                      <FileText className="w-4 h-4 text-indigo-600" />
+                      <span className="text-sm font-medium text-slate-700">
+                        {student.submission.documents.length}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-slate-400 text-sm">—</span>
+                  )}
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-600">
                   {student.submission?.submitted_at 

@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { createPageUrl } from '@/utils';
+import DocumentCard from '@/components/assignment/DocumentCard';
 
 export default function SubmissionReview() {
   const { user, schoolId } = useUser();
@@ -110,6 +111,7 @@ export default function SubmissionReview() {
                 <FileText className="w-5 h-5" />
                 Student Work
               </h2>
+
               {submission.content && (
                 <div className="mb-6">
                   <p className="text-sm font-medium text-slate-700 mb-2">Written Response</p>
@@ -118,9 +120,27 @@ export default function SubmissionReview() {
                   </div>
                 </div>
               )}
+
+              {submission.documents && submission.documents.length > 0 && (
+                <div className="mb-6">
+                  <p className="text-sm font-medium text-slate-700 mb-3">Documents & Attachments</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {submission.documents.map(doc => (
+                      <DocumentCard
+                        key={doc.id}
+                        document={doc}
+                        onOpen={(doc) => window.open(doc.url, '_blank')}
+                        compact={false}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Legacy support for old submissions */}
               {submission.link_url && (
                 <div className="mb-6">
-                  <p className="text-sm font-medium text-slate-700 mb-2">Link</p>
+                  <p className="text-sm font-medium text-slate-700 mb-2">Link (Legacy)</p>
                   <a
                     href={submission.link_url}
                     target="_blank"
@@ -133,8 +153,8 @@ export default function SubmissionReview() {
                 </div>
               )}
               {submission.file_urls && submission.file_urls.length > 0 && (
-                <div>
-                  <p className="text-sm font-medium text-slate-700 mb-2">Attachments</p>
+                <div className="mb-6">
+                  <p className="text-sm font-medium text-slate-700 mb-2">Attachments (Legacy)</p>
                   <div className="space-y-2">
                     {submission.file_urls.map((url, i) => (
                       <a
@@ -151,7 +171,11 @@ export default function SubmissionReview() {
                   </div>
                 </div>
               )}
-              {!submission.content && !submission.link_url && (!submission.file_urls || submission.file_urls.length === 0) && (
+
+              {!submission.content && 
+               (!submission.documents || submission.documents.length === 0) && 
+               !submission.link_url && 
+               (!submission.file_urls || submission.file_urls.length === 0) && (
                 <p className="text-slate-400 text-center py-8">No work submitted yet</p>
               )}
             </div>
