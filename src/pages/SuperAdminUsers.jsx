@@ -222,7 +222,7 @@ export default function SuperAdminUsers() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 gap-3">
-              {filteredUsers.map((user) => (
+              {superAdminFilteredUsers.map((user) => (
                 <Card
                   key={user.id}
                   className="cursor-pointer hover:shadow-md transition-shadow"
