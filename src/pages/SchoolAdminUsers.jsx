@@ -163,6 +163,7 @@ export default function SchoolAdminUsers() {
               <InvitationsManager schoolId={schoolId} schoolName={school?.name} />
             </TabsContent>
           </Tabs>
+          </div>
         </main>
 
         <Dialog open={showCreate} onOpenChange={setShowCreate}>
