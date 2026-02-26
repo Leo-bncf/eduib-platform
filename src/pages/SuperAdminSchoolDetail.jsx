@@ -124,32 +124,34 @@ export default function SuperAdminSchoolDetail() {
   const isAtRisk = healthIssues.length > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <Button
           onClick={() => navigate('/super-admin-schools')}
           variant="outline"
-          className="mb-6"
+          className="mb-6 text-xs md:text-sm"
         >
-          <ChevronLeft className="w-4 h-4 mr-2" />
+          <ChevronLeft className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
           Back to Schools
         </Button>
 
         {/* School Header Card */}
         <Card className="mb-6">
-          <CardContent className="pt-6">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h1 className="text-3xl font-bold text-slate-900">{school.name}</h1>
-                <p className="text-slate-600 mt-1">
-                  {school.city}, {school.country} • Created {new Date(school.created_date).toLocaleDateString()}
+          <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+              <div className="min-w-0">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 truncate">{school.name}</h1>
+                <p className="text-xs md:text-sm text-slate-600 mt-1 truncate">
+                  {school.city}, {school.country} • Created {new Date(school.created_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </p>
               </div>
-              <SchoolStatusBadge
-                status={school.status}
-                billingStatus={school.billing_status}
-              />
+              <div className="flex-shrink-0">
+                <SchoolStatusBadge
+                  status={school.status}
+                  billingStatus={school.billing_status}
+                />
+              </div>
             </div>
 
             {isAtRisk && (
@@ -163,53 +165,53 @@ export default function SuperAdminSchoolDetail() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
             {/* Onboarding Status */}
             <Card>
-              <CardHeader>
-                <CardTitle>Onboarding Status</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Onboarding Status</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
                 <SchoolOnboardingProgress schoolId={schoolId} />
               </CardContent>
             </Card>
 
             {/* Core Data */}
             <Card>
-              <CardHeader>
-                <CardTitle>School Setup</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">School Setup</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                   <div>
-                    <p className="text-sm text-slate-600 font-semibold">Academic Years</p>
-                    <p className="text-3xl font-bold text-slate-900 mt-1">
+                    <p className="text-xs md:text-sm text-slate-600 font-semibold">Academic Years</p>
+                    <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
                       {stats?.academicYears || 0}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-slate-600 font-semibold">Terms</p>
-                    <p className="text-3xl font-bold text-slate-900 mt-1">
+                    <p className="text-xs md:text-sm text-slate-600 font-semibold">Terms</p>
+                    <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
                       {stats?.terms || 0}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-slate-600 font-semibold">Subjects</p>
-                    <p className="text-3xl font-bold text-slate-900 mt-1">
+                    <p className="text-xs md:text-sm text-slate-600 font-semibold">Subjects</p>
+                    <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
                       {stats?.subjects || 0}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-slate-600 font-semibold">Classes</p>
-                    <p className="text-3xl font-bold text-slate-900 mt-1">
+                    <p className="text-xs md:text-sm text-slate-600 font-semibold">Classes</p>
+                    <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
                       {stats?.classes || 0}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-slate-600 font-semibold">Staff Members</p>
-                    <p className="text-3xl font-bold text-slate-900 mt-1">
+                    <p className="text-xs md:text-sm text-slate-600 font-semibold">Staff</p>
+                    <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
                       {stats?.staff || 0}
                     </p>
                   </div>
@@ -219,11 +221,11 @@ export default function SuperAdminSchoolDetail() {
 
             {/* Billing Information */}
             <Card>
-              <CardHeader>
-                <CardTitle>Billing & Subscription</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Billing & Subscription</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
+                <div className="grid grid-cols-2 gap-2 md:gap-4">
                   <div className="p-3 bg-slate-50 rounded-lg">
                     <p className="text-xs text-slate-600 font-semibold">Plan</p>
                     <p className="text-lg font-bold text-slate-900 mt-1 capitalize">
@@ -272,27 +274,27 @@ export default function SuperAdminSchoolDetail() {
 
             {/* Staff Members */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5" />
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                  <Users className="w-4 md:w-5 h-4 md:h-5" />
                   Staff & Members ({members.length})
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
                 {members.length === 0 ? (
-                  <p className="text-sm text-slate-600">No staff members added yet</p>
+                  <p className="text-xs md:text-sm text-slate-600">No staff members added yet</p>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
                     {members.map((member) => (
                       <div
                         key={member.id}
-                        className="flex items-center justify-between p-2 border border-slate-200 rounded"
+                        className="flex items-center justify-between p-2 border border-slate-200 rounded text-xs md:text-sm gap-2"
                       >
-                        <div>
-                          <p className="font-semibold text-slate-900">{member.user_name || 'Unknown'}</p>
-                          <p className="text-xs text-slate-600 mt-0.5">{member.user_email}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-slate-900 truncate">{member.user_name || 'Unknown'}</p>
+                          <p className="text-xs text-slate-600 mt-0.5 truncate">{member.user_email}</p>
                         </div>
-                        <Badge variant="outline">{member.role}</Badge>
+                        <Badge variant="outline" className="text-xs flex-shrink-0">{member.role}</Badge>
                       </div>
                     ))}
                   </div>
@@ -302,24 +304,24 @@ export default function SuperAdminSchoolDetail() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {/* School Details */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Details</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Details</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 text-sm">
-                <div>
+              <CardContent className="space-y-3 text-xs md:text-sm p-4 md:p-6 pt-0 md:pt-0">
+                <div className="min-w-0">
                   <p className="text-slate-600">Email</p>
-                  <p className="font-semibold text-slate-900">{school.email || 'N/A'}</p>
+                  <p className="font-semibold text-slate-900 truncate">{school.email || 'N/A'}</p>
                 </div>
                 <div>
                   <p className="text-slate-600">Phone</p>
                   <p className="font-semibold text-slate-900">{school.phone || 'N/A'}</p>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-slate-600">Address</p>
-                  <p className="font-semibold text-slate-900">{school.address || 'N/A'}</p>
+                  <p className="font-semibold text-slate-900 truncate">{school.address || 'N/A'}</p>
                 </div>
                 <div>
                   <p className="text-slate-600">Timezone</p>
@@ -330,25 +332,25 @@ export default function SuperAdminSchoolDetail() {
 
             {/* Quick Actions */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Actions</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Actions</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-2 p-4 md:p-6 pt-0 md:pt-0">
                 {school.status === 'onboarding' && (
-                  <Button className="w-full justify-start" variant="outline">
-                    <Zap className="w-4 h-4 mr-2" />
+                  <Button className="w-full justify-start text-xs md:text-sm" variant="outline">
+                    <Zap className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
                     Activate School
                   </Button>
                 )}
                 {school.status === 'active' && school.billing_status === 'trial' && (
-                  <Button className="w-full justify-start" variant="outline">
-                    <Zap className="w-4 h-4 mr-2" />
+                  <Button className="w-full justify-start text-xs md:text-sm" variant="outline">
+                    <Zap className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
                     Extend Trial
                   </Button>
                 )}
                 {school.status === 'suspended' && (
-                  <Button className="w-full justify-start" variant="outline">
-                    <CheckCircle className="w-4 h-4 mr-2" />
+                  <Button className="w-full justify-start text-xs md:text-sm" variant="outline">
+                    <CheckCircle className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
                     Reactivate
                   </Button>
                 )}
@@ -357,17 +359,17 @@ export default function SuperAdminSchoolDetail() {
 
             {/* System Info */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">System</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">System</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 text-xs">
-                <div>
+              <CardContent className="space-y-2 text-xs p-4 md:p-6 pt-0 md:pt-0">
+                <div className="min-w-0">
                   <p className="text-slate-600">School ID</p>
-                  <p className="font-mono text-slate-900 break-all">{school.id}</p>
+                  <p className="font-mono text-slate-900 break-all text-xs">{school.id}</p>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-slate-600">Stripe Customer ID</p>
-                  <p className="font-mono text-slate-900 break-all">
+                  <p className="font-mono text-slate-900 break-all text-xs">
                     {school.stripe_customer_id || 'None'}
                   </p>
                 </div>
