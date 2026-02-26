@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
+import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BookOpen, Users, BarChart3, Shield, 
   MessageSquare, Calendar, ClipboardCheck, Star,
@@ -12,6 +13,17 @@ import {
 } from 'lucide-react';
 
 function HeroSection() {
+  const navigate = useNavigate();
+
+  const handleSignIn = async () => {
+    const isAuthed = await base44.auth.isAuthenticated();
+    if (isAuthed) {
+      navigate(createPageUrl('AppHome'));
+    } else {
+      base44.auth.redirectToLogin(createPageUrl('AppHome'));
+    }
+  };
+
   return (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-violet-50" />
@@ -39,7 +51,7 @@ function HeroSection() {
              <Button 
                size="lg" 
                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 h-12 text-base shadow-lg shadow-indigo-200"
-               onClick={() => base44.auth.redirectToLogin()}
+               onClick={handleSignIn}
              >
                Sign In <ArrowRight className="ml-2 w-4 h-4" />
              </Button>
