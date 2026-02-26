@@ -86,16 +86,16 @@ export default function ClassWorkspace() {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
+          <div className="flex items-center gap-2 md:gap-4 flex-wrap">
             <a href={createPageUrl(getBackLink())}>
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-2" /> Back
+              <Button variant="ghost" size="sm" className="text-xs md:text-sm">
+                <ArrowLeft className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" /> Back
               </Button>
             </a>
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold text-slate-900">{classData.name}</h1>
-              <p className="text-sm text-slate-500">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg md:text-2xl font-bold text-slate-900 truncate">{classData.name}</h1>
+              <p className="text-xs md:text-sm text-slate-500 truncate">
                 {classData.section ? `Section ${classData.section}` : ''} 
                 {classData.room ? ` · Room ${classData.room}` : ''}
                 {classData.schedule_info ? ` · ${classData.schedule_info}` : ''}
