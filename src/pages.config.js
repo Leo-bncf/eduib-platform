@@ -88,6 +88,7 @@ import SuperAdminSchools from './pages/SuperAdminSchools';
 import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
 import FirstLogin from './pages/FirstLogin';
+import PasswordReset from './pages/PasswordReset';
 import __Layout from './Layout.jsx';
 
 
@@ -133,6 +134,7 @@ export const PAGES = {
     "TeacherClasses": TeacherClasses,
     "TeacherDashboard": TeacherDashboard,
     "FirstLogin": FirstLogin,
+    "PasswordReset": PasswordReset,
 }
 
 export const pagesConfig = {
