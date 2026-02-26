@@ -50,8 +50,8 @@ export default function SuperAdminUsers() {
         const allSchools = await base44.entities.School.list();
         setSchools(allSchools);
 
-        // Load all users - fetch with high limit to get all users
-         const allUsers = await base44.asServiceRole.entities.User.list('', 10000);
+        // Load all users - use filter with empty query to get all users
+         const allUsers = await base44.asServiceRole.entities.User.filter({}, '', 10000);
         
         // Enhance users with school info
         const usersWithSchools = await Promise.all(

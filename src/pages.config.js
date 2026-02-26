@@ -92,9 +92,9 @@ import SuperAdminProduction from './pages/SuperAdminProduction';
 import SuperAdminProductionLaunch from './pages/SuperAdminProductionLaunch';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSchools from './pages/SuperAdminSchools';
+import SuperAdminUsers from './pages/SuperAdminUsers';
 import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
-import SuperAdminUsers from './pages/SuperAdminUsers';
 import __Layout from './Layout.jsx';
 
 
@@ -144,9 +144,9 @@ export const PAGES = {
     "SuperAdminProductionLaunch": SuperAdminProductionLaunch,
     "SuperAdminSchoolDetail": SuperAdminSchoolDetail,
     "SuperAdminSchools": SuperAdminSchools,
+    "SuperAdminUsers": SuperAdminUsers,
     "TeacherClasses": TeacherClasses,
     "TeacherDashboard": TeacherDashboard,
-    "SuperAdminUsers": SuperAdminUsers,
 }
 
 export const pagesConfig = {
