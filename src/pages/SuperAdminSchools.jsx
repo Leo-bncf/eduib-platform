@@ -5,9 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Search, ChevronRight } from 'lucide-react';
+import { Loader2, Search, ChevronRight, Plus } from 'lucide-react';
 import SchoolStatusBadge from '@/components/admin/SchoolStatusBadge';
 import SchoolOnboardingProgress from '@/components/admin/SchoolOnboardingProgress';
+import CreateSchoolDialog from '@/components/admin/CreateSchoolDialog';
 
 /**
  * Super admin school management view
@@ -21,6 +22,7 @@ export default function SuperAdminSchools() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterBilling, setFilterBilling] = useState('all');
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     const loadSchools = async () => {
@@ -49,6 +51,11 @@ export default function SuperAdminSchools() {
 
     loadSchools();
   }, [navigate]);
+
+  const handleSchoolCreated = (newSchool) => {
+    setSchools(prev => [newSchool, ...prev]);
+    setFilteredSchools(prev => [newSchool, ...prev]);
+  };
 
   // Filter schools
   useEffect(() => {
@@ -93,9 +100,18 @@ export default function SuperAdminSchools() {
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Management</h1>
             <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage all schools and their lifecycle</p>
           </div>
-          <Button onClick={() => navigate('/super-admin-dashboard')} className="text-xs md:text-sm">
-            Back to Dashboard
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => setCreateDialogOpen(true)}
+              className="bg-indigo-600 hover:bg-indigo-700 gap-2 text-xs md:text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">Create School</span>
+            </Button>
+            <Button onClick={() => navigate('/super-admin-dashboard')} variant="outline" className="text-xs md:text-sm">
+              Back to Dashboard
+            </Button>
+          </div>
         </div>
 
         {/* Filters */}
@@ -260,6 +276,13 @@ export default function SuperAdminSchools() {
         <div className="mt-8 text-center text-sm text-slate-600">
           Showing {filteredSchools.length} of {schools.length} schools
         </div>
+
+        {/* Create School Dialog */}
+        <CreateSchoolDialog
+          open={createDialogOpen}
+          onOpenChange={setCreateDialogOpen}
+          onSchoolCreated={handleSchoolCreated}
+        />
       </div>
     </div>
   );

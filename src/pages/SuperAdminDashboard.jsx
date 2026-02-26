@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { base44 } from '@/api/base44Client';
 import { useAllSchools, usePlatformMetrics } from '@/components/hooks/useDashboardData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, Users, Building2, DollarSign, AlertCircle } from 'lucide-react';
+import { TrendingUp, Users, Building2, DollarSign, AlertCircle, Plus } from 'lucide-react';
 import LoadingStateBase from '@/components/common/LoadingStateBase';
+import CreateSchoolDialog from '@/components/admin/CreateSchoolDialog';
 
 /**
  * Super admin operations dashboard
@@ -13,8 +15,9 @@ import LoadingStateBase from '@/components/common/LoadingStateBase';
  */
 export default function SuperAdminDashboard() {
   const navigate = useNavigate();
-  const { data: schools = [], isLoading } = useAllSchools();
+  const { data: schools = [], isLoading, refetch } = useAllSchools();
   const metrics = usePlatformMetrics(schools);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -24,6 +27,10 @@ export default function SuperAdminDashboard() {
     checkAuth();
   }, [navigate]);
 
+  const handleSchoolCreated = () => {
+    refetch();
+  };
+
   if (isLoading) {
     return <LoadingStateBase />;
   }
@@ -32,9 +39,18 @@ export default function SuperAdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-4xl font-bold text-slate-900">Platform Operations</h1>
-          <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage schools, billing, and platform health</p>
+        <div className="mb-6 md:mb-8 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl md:text-4xl font-bold text-slate-900">Platform Operations</h1>
+            <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage schools, billing, and platform health</p>
+          </div>
+          <Button
+            onClick={() => setCreateDialogOpen(true)}
+            className="bg-indigo-600 hover:bg-indigo-700 gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span className="hidden sm:inline">Create School</span>
+          </Button>
         </div>
 
         {/* Key Metrics */}
@@ -225,6 +241,13 @@ export default function SuperAdminDashboard() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Create School Dialog */}
+        <CreateSchoolDialog
+          open={createDialogOpen}
+          onOpenChange={setCreateDialogOpen}
+          onSchoolCreated={handleSchoolCreated}
+        />
       </div>
     </div>
   );
