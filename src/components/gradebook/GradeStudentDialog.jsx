@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2 } from 'lucide-react';
+import { logAudit, AuditActions, AuditLevels } from '@/components/utils/auditLogger';
 
 export default function GradeStudentDialog({ gradeItem, student, existingGrade, open, onClose }) {
   const queryClient = useQueryClient();
@@ -32,11 +33,30 @@ export default function GradeStudentDialog({ gradeItem, student, existingGrade, 
   }, [existingGrade]);
 
   const saveMutation = useMutation({
-    mutationFn: (data) => {
+    mutationFn: async (data) => {
+      let result;
       if (existingGrade) {
-        return base44.entities.GradeItem.update(existingGrade.id, data);
+        result = await base44.entities.GradeItem.update(existingGrade.id, data);
+        await logAudit({
+          action: AuditActions.GRADE_UPDATED,
+          entityType: 'GradeItem',
+          entityId: existingGrade.id,
+          details: `Updated grade for ${student.user_name || student.user_email} in ${gradeItem.title}`,
+          level: AuditLevels.INFO,
+          schoolId: gradeItem.school_id,
+        });
+      } else {
+        result = await base44.entities.GradeItem.create(data);
+        await logAudit({
+          action: AuditActions.GRADE_CREATED,
+          entityType: 'GradeItem',
+          entityId: result.id,
+          details: `Created grade for ${student.user_name || student.user_email} in ${gradeItem.title}`,
+          level: AuditLevels.INFO,
+          schoolId: gradeItem.school_id,
+        });
       }
-      return base44.entities.GradeItem.create(data);
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['class-grades'] });

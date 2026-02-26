@@ -12,7 +12,7 @@ import {
   BarChart3, AlertCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { logAudit, AuditActions } from '@/lib/auditLogger';
+import { logAudit, AuditActions } from '@/components/utils/auditLogger';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SchoolAdminDashboard', icon: LayoutDashboard },
