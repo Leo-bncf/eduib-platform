@@ -96,7 +96,7 @@ function HeroSection() {
 function ProblemSection() {
   const problems = [
     { icon: '📊', text: 'Scattered data across spreadsheets, email, and disconnected tools' },
-    { icon: '🔓', text: 'Weak role-based access — teachers see data they shouldn't' },
+    { icon: '🔓', text: "Weak role-based access — teachers see data they shouldn't" },
     { icon: '😤', text: 'Parents lack real-time visibility into their child\'s progress' },
     { icon: '⏳', text: 'Tedious manual workflows for assignments, grading, and reporting' },
   ];
