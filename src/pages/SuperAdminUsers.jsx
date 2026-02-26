@@ -51,7 +51,7 @@ export default function SuperAdminUsers() {
         setSchools(allSchools);
 
         // Load all users
-        const allUsers = await base44.entities.User.list();
+         const allUsers = await base44.asServiceRole.entities.User.list();
         
         // Enhance users with school info
         const usersWithSchools = await Promise.all(
