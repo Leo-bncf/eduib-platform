@@ -280,9 +280,9 @@ export default function SuperAdminUsers() {
         </div>
 
         {/* Summary */}
-        <div className="mt-8 text-center text-sm text-slate-600">
-          Showing {filteredUsers.length} of {users.length} users
-        </div>
+         <div className="mt-8 text-center text-sm text-slate-600">
+           Showing {superAdminFilteredUsers.length} super admin users
+         </div>
 
         {/* Manage User Dialog */}
         {selectedUser && (
