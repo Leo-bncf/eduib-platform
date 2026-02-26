@@ -8,7 +8,7 @@ import TodaySchedule from '@/components/timetable/TodaySchedule';
 import { useUser } from '@/components/auth/UserContext';
 import { 
   LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, 
-  MessageSquare, Star, Loader2, Clock, AlertTriangle
+  MessageSquare, Star, Loader2, Clock, AlertTriangle, GraduationCap
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
@@ -16,17 +16,8 @@ import { createPageUrl } from '@/utils';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'My Classes', page: 'StudentDashboard', icon: BookOpen },
-  { label: 'Assignments', page: 'StudentDashboard', icon: ClipboardCheck },
   { label: 'My Grades', page: 'StudentDashboard', icon: BarChart3 },
-  { label: 'Messages', page: 'StudentDashboard', icon: MessageSquare },
   { label: 'IB Core', page: 'StudentCAS', icon: Star },
-];
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'My Grades', page: 'StudentDashboard', icon: BarChart3 },
-  { label: 'IB Core', page: 'StudentDashboard', icon: GraduationCap },
   { label: 'Messages', page: 'Messages', icon: MessageSquare },
 ];
 
