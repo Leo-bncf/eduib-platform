@@ -63,6 +63,10 @@ import SchoolAdminClasses from './pages/SchoolAdminClasses';
 import SchoolAdminSubjects from './pages/SchoolAdminSubjects';
 import TeacherDashboard from './pages/TeacherDashboard';
 import TeacherClasses from './pages/TeacherClasses';
+import StudentDashboard from './pages/StudentDashboard';
+import ParentDashboard from './pages/ParentDashboard';
+import CoordinatorDashboard from './pages/CoordinatorDashboard';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -82,9 +86,13 @@ export const PAGES = {
     "SchoolAdminSubjects": SchoolAdminSubjects,
     "TeacherDashboard": TeacherDashboard,
     "TeacherClasses": TeacherClasses,
+    "StudentDashboard": StudentDashboard,
+    "ParentDashboard": ParentDashboard,
+    "CoordinatorDashboard": CoordinatorDashboard,
 }
 
 export const pagesConfig = {
     mainPage: "Landing",
     Pages: PAGES,
+    Layout: __Layout,
 };
