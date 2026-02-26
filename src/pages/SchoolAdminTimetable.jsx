@@ -7,7 +7,7 @@ import AppSidebar from '@/components/app/AppSidebar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LayoutDashboard, Users, BookOpen, GraduationCap, Settings, Calendar, Loader2, Clock, MapPin, Plus, RefreshCw } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, GraduationCap, Settings, Calendar, Loader2, Clock, MapPin, Plus, RefreshCw, FileText } from 'lucide-react';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SchoolAdminDashboard', icon: LayoutDashboard },
@@ -16,6 +16,7 @@ const sidebarLinks = [
   { label: 'Subjects', page: 'SchoolAdminSubjects', icon: GraduationCap },
   { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
   { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Clock },
+  { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
   { label: 'Settings', page: 'SchoolAdminDashboard', icon: Settings },
 ];
 

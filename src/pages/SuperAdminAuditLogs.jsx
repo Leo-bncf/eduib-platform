@@ -7,17 +7,15 @@ import AppSidebar from '@/components/app/AppSidebar';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { 
-  LayoutDashboard, Building2, Users, Shield, FileText, 
-  Loader2, Search, Filter, AlertTriangle, Info, AlertCircle
+  LayoutDashboard, Building2, Shield, 
+  Loader2, Search, AlertTriangle, Info, AlertCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SuperAdminDashboard', icon: LayoutDashboard },
   { label: 'Schools', page: 'SuperAdminSchools', icon: Building2 },
-  { label: 'Users', page: 'SuperAdminDashboard', icon: Users },
   { label: 'Audit Logs', page: 'SuperAdminAuditLogs', icon: Shield },
-  { label: 'Settings', page: 'SuperAdminDashboard', icon: FileText },
 ];
 
 const levelColors = {

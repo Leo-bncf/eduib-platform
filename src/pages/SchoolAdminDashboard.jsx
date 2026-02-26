@@ -8,7 +8,7 @@ import { useUser } from '@/components/auth/UserContext';
 import { 
   LayoutDashboard, Users, BookOpen, Calendar, Settings, 
   FileText, Shield, GraduationCap, Loader2, UserPlus, 
-  ClipboardList, Link2
+  ClipboardList, Clock
 } from 'lucide-react';
 
 const sidebarLinks = [
@@ -16,8 +16,10 @@ const sidebarLinks = [
   { label: 'Users', page: 'SchoolAdminUsers', icon: Users },
   { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
   { label: 'Subjects', page: 'SchoolAdminSubjects', icon: ClipboardList },
-  { label: 'Academic Years', page: 'SchoolAdminDashboard', icon: Calendar },
-  { label: 'Audit Logs', page: 'SchoolAdminDashboard', icon: Shield },
+  { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
+  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Clock },
+  { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
+  { label: 'Settings', page: 'SchoolAdminDashboard', icon: Settings },
 ];
 
 export default function SchoolAdminDashboard() {

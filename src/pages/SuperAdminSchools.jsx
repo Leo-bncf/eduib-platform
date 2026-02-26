@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
-import { LayoutDashboard, Building2, BarChart3, Plus, Loader2, Search } from 'lucide-react';
+import { LayoutDashboard, Building2, Shield, Plus, Loader2, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SuperAdminDashboard', icon: LayoutDashboard },
   { label: 'Schools', page: 'SuperAdminSchools', icon: Building2 },
-  { label: 'Platform Analytics', page: 'SuperAdminDashboard', icon: BarChart3 },
+  { label: 'Audit Logs', page: 'SuperAdminAuditLogs', icon: Shield },
 ];
 
 export default function SuperAdminSchools() {

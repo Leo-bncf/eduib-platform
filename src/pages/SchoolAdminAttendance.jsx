@@ -5,7 +5,7 @@ import { useUser } from '@/components/auth/UserContext';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { Badge } from '@/components/ui/badge';
-import { LayoutDashboard, Users, BookOpen, GraduationCap, Settings, Calendar, Loader2, CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, GraduationCap, Settings, Calendar, Loader2, CheckCircle2, XCircle, Clock, AlertCircle, FileText } from 'lucide-react';
 import { format, subDays } from 'date-fns';
 
 const sidebarLinks = [
@@ -14,6 +14,8 @@ const sidebarLinks = [
   { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
   { label: 'Subjects', page: 'SchoolAdminSubjects', icon: GraduationCap },
   { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
+  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Clock },
+  { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
   { label: 'Settings', page: 'SchoolAdminDashboard', icon: Settings },
 ];
 

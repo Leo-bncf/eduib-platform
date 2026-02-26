@@ -10,9 +10,7 @@ import { createPageUrl } from '@/utils';
 const sidebarLinks = [
   { label: 'Dashboard', page: 'TeacherDashboard', icon: LayoutDashboard },
   { label: 'My Classes', page: 'TeacherClasses', icon: BookOpen },
-  { label: 'Assignments', page: 'TeacherDashboard', icon: ClipboardCheck },
-  { label: 'Gradebook', page: 'TeacherDashboard', icon: BarChart3 },
-  { label: 'Messages', page: 'TeacherDashboard', icon: MessageSquare },
+  { label: 'Messages', page: 'Messages', icon: MessageSquare },
 ];
 
 export default function TeacherClasses() {
