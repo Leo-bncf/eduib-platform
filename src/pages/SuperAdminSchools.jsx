@@ -35,8 +35,8 @@ export default function SuperAdminSchools() {
         }
 
         const user = await base44.auth.me();
-        if (user.role !== 'admin') {
-          navigate('/dashboard');
+        if (user?.role !== 'super_admin') {
+          navigate('/');
           return;
         }
 
