@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useUser } from '@/components/auth/UserContext';
-import { Loader2, ArrowLeft, Calendar, FileText, Paperclip } from 'lucide-react';
+import { Loader2, ArrowLeft, Calendar, FileText, Paperclip, Presentation, Table, Upload, Link as LinkIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
@@ -204,6 +204,29 @@ export default function AssignmentDetail() {
                   <p className="text-slate-500">Late Submissions</p>
                   <p className="font-medium text-slate-900">{assignment.allow_late ? 'Allowed' : 'Not Allowed'}</p>
                 </div>
+                {assignment.expected_submission_formats && assignment.expected_submission_formats.length > 0 && (
+                  <div>
+                    <p className="text-slate-500 mb-2">Expected Format</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {assignment.expected_submission_formats.map(format => {
+                        let Icon = FileText;
+                        let color = 'bg-slate-100 text-slate-700';
+                        let label = format;
+                        if (format === 'google_doc') { Icon = FileText; color = 'bg-blue-50 text-blue-700'; label = 'Doc'; }
+                        else if (format === 'google_slides') { Icon = Presentation; color = 'bg-amber-50 text-amber-700'; label = 'Slides'; }
+                        else if (format === 'google_sheet') { Icon = Table; color = 'bg-emerald-50 text-emerald-700'; label = 'Sheet'; }
+                        else if (format === 'file_upload') { Icon = Upload; color = 'bg-slate-100 text-slate-700'; label = 'File'; }
+                        else if (format === 'link') { Icon = LinkIcon; color = 'bg-indigo-50 text-indigo-700'; label = 'Link'; }
+                        return (
+                          <Badge key={format} className={`${color} border-0 text-xs flex items-center gap-1`}>
+                            <Icon className="w-3 h-3" />
+                            {label}
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
