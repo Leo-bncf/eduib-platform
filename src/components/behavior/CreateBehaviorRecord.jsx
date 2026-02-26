@@ -1,0 +1,226 @@
+import React, { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Loader2, Plus } from 'lucide-react';
+import { format } from 'date-fns';
+
+export default function CreateBehaviorRecord({ schoolId, studentId, studentName, recorderId, recorderName, onClose, trigger }) {
+  const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({
+    type: 'note',
+    category: 'other',
+    title: '',
+    description: '',
+    date: format(new Date(), 'yyyy-MM-dd'),
+    severity: 'low',
+    visible_to_student: false,
+    visible_to_parent: false,
+    action_taken: '',
+    follow_up_required: false,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data) => base44.entities.BehaviorRecord.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['student-behavior'] });
+      queryClient.invalidateQueries({ queryKey: ['parent-child-behavior'] });
+      setOpen(false);
+      if (onClose) onClose();
+      setForm({
+        type: 'note',
+        category: 'other',
+        title: '',
+        description: '',
+        date: format(new Date(), 'yyyy-MM-dd'),
+        severity: 'low',
+        visible_to_student: false,
+        visible_to_parent: false,
+        action_taken: '',
+        follow_up_required: false,
+      });
+    },
+  });
+
+  const handleCreate = () => {
+    createMutation.mutate({
+      ...form,
+      school_id: schoolId,
+      student_id: studentId,
+      student_name: studentName,
+      recorded_by: recorderId,
+      recorded_by_name: recorderName,
+    });
+  };
+
+  return (
+    <>
+      {trigger ? (
+        <div onClick={() => setOpen(true)}>{trigger}</div>
+      ) : (
+        <Button onClick={() => setOpen(true)} className="bg-indigo-600 hover:bg-indigo-700">
+          <Plus className="w-4 h-4 mr-2" /> New Record
+        </Button>
+      )}
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create Behavior Record</DialogTitle>
+            <p className="text-sm text-slate-500">For: {studentName}</p>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-sm font-semibold">Type</Label>
+                <Select value={form.type} onValueChange={v => setForm({ ...form, type: v })}>
+                  <SelectTrigger className="mt-1.5">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="positive">Positive Recognition</SelectItem>
+                    <SelectItem value="concern">Concern</SelectItem>
+                    <SelectItem value="incident">Incident</SelectItem>
+                    <SelectItem value="note">General Note</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-sm font-semibold">Category</Label>
+                <Select value={form.category} onValueChange={v => setForm({ ...form, category: v })}>
+                  <SelectTrigger className="mt-1.5">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="academic">Academic</SelectItem>
+                    <SelectItem value="social">Social</SelectItem>
+                    <SelectItem value="conduct">Conduct</SelectItem>
+                    <SelectItem value="participation">Participation</SelectItem>
+                    <SelectItem value="achievement">Achievement</SelectItem>
+                    <SelectItem value="attendance_related">Attendance Related</SelectItem>
+                    <SelectItem value="safety">Safety</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-sm font-semibold">Date</Label>
+              <input
+                type="date"
+                value={form.date}
+                onChange={e => setForm({ ...form, date: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm mt-1.5"
+              />
+            </div>
+
+            <div>
+              <Label className="text-sm font-semibold">Title *</Label>
+              <Input
+                value={form.title}
+                onChange={e => setForm({ ...form, title: e.target.value })}
+                placeholder="Brief title..."
+                className="mt-1.5"
+              />
+            </div>
+
+            <div>
+              <Label className="text-sm font-semibold">Description</Label>
+              <Textarea
+                value={form.description}
+                onChange={e => setForm({ ...form, description: e.target.value })}
+                placeholder="Detailed description..."
+                rows={4}
+                className="mt-1.5"
+              />
+            </div>
+
+            {(form.type === 'concern' || form.type === 'incident') && (
+              <div>
+                <Label className="text-sm font-semibold">Severity</Label>
+                <Select value={form.severity} onValueChange={v => setForm({ ...form, severity: v })}>
+                  <SelectTrigger className="mt-1.5">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            <div>
+              <Label className="text-sm font-semibold">Action Taken</Label>
+              <Textarea
+                value={form.action_taken}
+                onChange={e => setForm({ ...form, action_taken: e.target.value })}
+                placeholder="Actions or follow-up steps..."
+                rows={2}
+                className="mt-1.5"
+              />
+            </div>
+
+            <div className="space-y-3 pt-2 border-t">
+              <Label className="text-sm font-semibold">Visibility</Label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="visible_student"
+                  checked={form.visible_to_student}
+                  onChange={e => setForm({ ...form, visible_to_student: e.target.checked })}
+                  className="w-4 h-4"
+                />
+                <Label htmlFor="visible_student" className="text-sm cursor-pointer">
+                  Visible to student
+                </Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="visible_parent"
+                  checked={form.visible_to_parent}
+                  onChange={e => setForm({ ...form, visible_to_parent: e.target.checked })}
+                  className="w-4 h-4"
+                />
+                <Label htmlFor="visible_parent" className="text-sm cursor-pointer">
+                  Visible to parents
+                </Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="follow_up"
+                  checked={form.follow_up_required}
+                  onChange={e => setForm({ ...form, follow_up_required: e.target.checked })}
+                  className="w-4 h-4"
+                />
+                <Label htmlFor="follow_up" className="text-sm cursor-pointer">
+                  Follow-up required
+                </Label>
+              </div>
+            </div>
+
+            <Button
+              onClick={handleCreate}
+              disabled={!form.title || createMutation.isPending}
+              className="w-full bg-indigo-600 hover:bg-indigo-700"
+            >
+              {createMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              Create Record
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}

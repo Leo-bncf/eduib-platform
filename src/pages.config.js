@@ -71,6 +71,8 @@ import AssignmentDetail from './pages/AssignmentDetail';
 import SubmissionReview from './pages/SubmissionReview';
 import ClassGradebook from './pages/ClassGradebook';
 import Messages from './pages/Messages';
+import StudentBehavior from './pages/StudentBehavior';
+import SchoolAdminAttendance from './pages/SchoolAdminAttendance';
 import __Layout from './Layout.jsx';
 
 
@@ -99,6 +101,8 @@ export const PAGES = {
     "SubmissionReview": SubmissionReview,
     "ClassGradebook": ClassGradebook,
     "Messages": Messages,
+    "StudentBehavior": StudentBehavior,
+    "SchoolAdminAttendance": SchoolAdminAttendance,
 }
 
 export const pagesConfig = {

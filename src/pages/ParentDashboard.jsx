@@ -6,8 +6,9 @@ import ChildSelector from '@/components/parent/ChildSelector';
 import ChildGradesOverview from '@/components/parent/ChildGradesOverview';
 import ChildAssignmentsOverview from '@/components/parent/ChildAssignmentsOverview';
 import ChildAttendanceOverview from '@/components/parent/ChildAttendanceOverview';
+import ChildBehaviorOverview from '@/components/parent/ChildBehaviorOverview';
 import ParentMessaging from '@/components/parent/ParentMessaging';
-import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const sidebarLinks = [
@@ -61,6 +62,10 @@ export default function ParentDashboard() {
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Messages
                   </TabsTrigger>
+                  <TabsTrigger value="behavior">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Behavior
+                  </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview">
@@ -106,6 +111,13 @@ export default function ParentDashboard() {
                       schoolId={schoolId}
                       studentId={selectedChildId}
                     />
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="behavior">
+                  <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <h2 className="text-xl font-bold text-slate-900 mb-6">Behavior & Notes</h2>
+                    <ChildBehaviorOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
               </Tabs>

@@ -1,0 +1,101 @@
+import React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Smile, AlertTriangle, AlertCircle, FileText, Eye, EyeOff } from 'lucide-react';
+import { format } from 'date-fns';
+
+export default function BehaviorRecordsList({ records, showVisibilityIndicators = false }) {
+  const getTypeIcon = (type) => {
+    switch (type) {
+      case 'positive': return <Smile className="w-5 h-5 text-emerald-600" />;
+      case 'concern': return <AlertTriangle className="w-5 h-5 text-amber-600" />;
+      case 'incident': return <AlertCircle className="w-5 h-5 text-red-600" />;
+      default: return <FileText className="w-5 h-5 text-slate-600" />;
+    }
+  };
+
+  const getTypeColor = (type) => {
+    switch (type) {
+      case 'positive': return 'bg-emerald-50 border-emerald-200 text-emerald-700';
+      case 'concern': return 'bg-amber-50 border-amber-200 text-amber-700';
+      case 'incident': return 'bg-red-50 border-red-200 text-red-700';
+      default: return 'bg-slate-50 border-slate-200 text-slate-700';
+    }
+  };
+
+  const getSeverityBadge = (severity) => {
+    const colors = {
+      low: 'bg-blue-50 text-blue-700 border-0',
+      medium: 'bg-amber-50 text-amber-700 border-0',
+      high: 'bg-red-50 text-red-700 border-0',
+    };
+    return <Badge className={colors[severity]}>{severity} severity</Badge>;
+  };
+
+  if (records.length === 0) {
+    return (
+      <div className="text-center py-12 text-slate-400">
+        <FileText className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+        <p>No behavior records found</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      {records.map(record => (
+        <div key={record.id} className={`rounded-xl border p-5 ${getTypeColor(record.type)}`}>
+          <div className="flex items-start gap-4">
+            <div className="mt-1">{getTypeIcon(record.type)}</div>
+            <div className="flex-1">
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <h4 className="font-semibold text-slate-900">{record.title}</h4>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge variant="outline" className="text-xs capitalize">{record.type}</Badge>
+                    <Badge variant="outline" className="text-xs capitalize">{record.category}</Badge>
+                    {record.severity && getSeverityBadge(record.severity)}
+                  </div>
+                </div>
+                {showVisibilityIndicators && (
+                  <div className="flex items-center gap-2">
+                    {record.visible_to_student && (
+                      <Eye className="w-4 h-4 text-blue-600" title="Visible to student" />
+                    )}
+                    {record.visible_to_parent && (
+                      <Eye className="w-4 h-4 text-emerald-600" title="Visible to parent" />
+                    )}
+                    {!record.visible_to_student && !record.visible_to_parent && (
+                      <EyeOff className="w-4 h-4 text-slate-400" title="Staff only" />
+                    )}
+                  </div>
+                )}
+              </div>
+              
+              {record.description && (
+                <p className="text-sm text-slate-700 mt-2">{record.description}</p>
+              )}
+
+              {record.action_taken && (
+                <div className="mt-3 pt-3 border-t border-current/10">
+                  <p className="text-xs font-semibold text-slate-700 mb-1">Action Taken:</p>
+                  <p className="text-sm text-slate-600">{record.action_taken}</p>
+                </div>
+              )}
+
+              <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+                <span>Recorded by: {record.recorded_by_name}</span>
+                <span>{record.date ? format(new Date(record.date), 'MMM d, yyyy') : ''}</span>
+              </div>
+
+              {record.follow_up_required && (
+                <Badge className="bg-orange-50 text-orange-700 border-orange-200 mt-2">
+                  Follow-up required
+                </Badge>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
