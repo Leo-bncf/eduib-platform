@@ -43,7 +43,7 @@ export default function TeacherDashboard() {
   return (
     <RoleGuard allowedRoles={['teacher', 'school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
-        <AppSidebar links={sidebarLinks} role="teacher" schoolName={school?.name} userName={user?.full_name} />
+        <AppSidebar links={sidebarLinks} role="teacher" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         <main className="ml-64 p-8">
           <div className="max-w-7xl mx-auto">
             <div className="mb-8">

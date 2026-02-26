@@ -46,7 +46,7 @@ export default function CoordinatorDashboard() {
   return (
     <RoleGuard allowedRoles={['ib_coordinator', 'school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
-        <AppSidebar links={sidebarLinks} role="ib_coordinator" schoolName={school?.name} userName={user?.full_name} />
+        <AppSidebar links={sidebarLinks} role="ib_coordinator" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         <main className="ml-64 p-8">
           <div className="max-w-7xl mx-auto">
             <div className="mb-8">

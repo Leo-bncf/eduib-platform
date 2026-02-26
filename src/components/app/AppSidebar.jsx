@@ -3,8 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { GraduationCap, LogOut } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import NotificationBell from '@/components/notifications/NotificationBell';
 
-export default function AppSidebar({ links, role, schoolName, userName }) {
+export default function AppSidebar({ links, role, schoolName, userName, userId, schoolId }) {
   const location = useLocation();
 
   const roleLabels = {
@@ -19,11 +20,16 @@ export default function AppSidebar({ links, role, schoolName, userName }) {
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-64 bg-slate-900 text-white flex flex-col z-40">
       <div className="p-5 border-b border-slate-800">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
-            <GraduationCap className="w-4.5 h-4.5 text-white" />
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 flex-1 min-w-0">
+            <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
+              <GraduationCap className="w-4.5 h-4.5 text-white" />
+            </div>
+            <span className="text-lg font-bold truncate">Atlas<span className="text-indigo-400">IB</span></span>
           </div>
-          <span className="text-lg font-bold">Atlas<span className="text-indigo-400">IB</span></span>
+          {userId && schoolId && (
+            <NotificationBell userId={userId} schoolId={schoolId} />
+          )}
         </div>
         {schoolName && (
           <p className="text-xs text-slate-400 mt-2 truncate">{schoolName}</p>

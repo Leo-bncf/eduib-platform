@@ -70,6 +70,7 @@ import ClassWorkspace from './pages/ClassWorkspace';
 import AssignmentDetail from './pages/AssignmentDetail';
 import SubmissionReview from './pages/SubmissionReview';
 import ClassGradebook from './pages/ClassGradebook';
+import Messages from './pages/Messages';
 import __Layout from './Layout.jsx';
 
 
@@ -97,6 +98,7 @@ export const PAGES = {
     "AssignmentDetail": AssignmentDetail,
     "SubmissionReview": SubmissionReview,
     "ClassGradebook": ClassGradebook,
+    "Messages": Messages,
 }
 
 export const pagesConfig = {
