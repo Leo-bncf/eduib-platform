@@ -109,7 +109,7 @@ export default function SuperAdminUsers() {
     // Reload users
     const reloadUsers = async () => {
        try {
-         const allUsers = await base44.asServiceRole.entities.User.list('', 10000);
+         const allUsers = await base44.asServiceRole.entities.User.filter({}, '', 10000);
         const usersWithSchools = await Promise.all(
           allUsers.map(async (u) => {
             if (u.active_school_id) {
