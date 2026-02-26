@@ -16,11 +16,6 @@ const sidebarLinks = [
   { label: 'Messages', page: 'Messages', icon: MessageSquare },
 ];
 
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'ParentDashboard', icon: LayoutDashboard },
-  { label: 'Messages', page: 'Messages', icon: MessageSquare },
-];
-
 export default function ParentDashboard() {
   const { user, school, schoolId } = useUser();
   const [selectedChildId, setSelectedChildId] = useState(null);
