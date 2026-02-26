@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { hasPermission, hasAllPermissions } from '@/lib/PageNotFound';
 
 const UserContext = createContext(null);
 
@@ -57,6 +58,17 @@ export function UserProvider({ children }) {
     return membership?.school_id || null;
   };
 
+  // Permission checking helpers
+  const checkPermission = (resource, action) => {
+    const userData = { ...user, role: getRole() };
+    return hasPermission(userData, resource, action);
+  };
+
+  const checkAllPermissions = (checks) => {
+    const userData = { ...user, role: getRole() };
+    return hasAllPermissions(userData, checks);
+  };
+
   return (
     <UserContext.Provider value={{
       user,
@@ -67,6 +79,8 @@ export function UserProvider({ children }) {
       role: getRole(),
       schoolId: getSchoolId(),
       reload: loadUser,
+      checkPermission,
+      checkAllPermissions,
     }}>
       {children}
     </UserContext.Provider>
