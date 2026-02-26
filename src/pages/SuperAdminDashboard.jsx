@@ -175,6 +175,13 @@ export default function SuperAdminDashboard() {
                 Manage Schools
               </Button>
               <Button
+                onClick={() => navigate('/super-admin-users')}
+                variant="outline"
+                className="w-full justify-start"
+              >
+                Manage Users
+              </Button>
+              <Button
                 onClick={() => navigate('/super-admin-plans')}
                 variant="outline"
                 className="w-full justify-start"
