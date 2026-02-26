@@ -187,47 +187,47 @@ export default function FirstLogin() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         {currentStep === 'welcome' && (
-          <>
-            <CardHeader>
-              <CardTitle className="text-center">Welcome to the Platform</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mx-auto">
-                <CheckCircle className="w-8 h-8 text-indigo-600" />
-              </div>
+         <>
+           <CardHeader>
+             <CardTitle className="text-center">Welcome to the Platform</CardTitle>
+           </CardHeader>
+           <CardContent className="space-y-6">
+             <div className="flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mx-auto">
+               <CheckCircle className="w-8 h-8 text-indigo-600" />
+             </div>
 
-              <div className="text-center space-y-2">
-                <p className="text-lg font-semibold text-slate-900">
-                  Welcome, {user?.full_name}!
-                </p>
-                <p className="text-sm text-slate-600">
-                  Your account has been created and is ready to use.
-                </p>
-              </div>
+             <div className="text-center space-y-2">
+               <p className="text-lg font-semibold text-slate-900">
+                 Welcome, {user?.full_name}!
+               </p>
+               <p className="text-sm text-slate-600">
+                 Your account has been created and is ready to use.
+               </p>
+             </div>
 
-              {accountState && (
-                <div className="space-y-3 bg-slate-50 p-4 rounded-lg">
-                  <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">School</p>
-                    <p className="text-slate-900 mt-1">{accountState.school_name}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">Your Role</p>
-                    <p className="text-slate-900 mt-1 capitalize">
-                      {accountState.role.replace(/_/g, ' ')}
-                    </p>
-                  </div>
-                </div>
-              )}
+             {accountState && (
+               <div className="space-y-3 bg-slate-50 p-4 rounded-lg">
+                 <div>
+                   <p className="text-xs font-semibold text-slate-600 uppercase">School</p>
+                   <p className="text-slate-900 mt-1">{accountState.school_name}</p>
+                 </div>
+                 <div>
+                   <p className="text-xs font-semibold text-slate-600 uppercase">Your Role</p>
+                   <p className="text-slate-900 mt-1 capitalize">
+                     {accountState.role.replace(/_/g, ' ')}
+                   </p>
+                 </div>
+               </div>
+             )}
 
-              <Button
-                onClick={() => navigate('/dashboard')}
-                className="w-full bg-indigo-600 hover:bg-indigo-700"
-              >
-                Go to Dashboard
-              </Button>
-            </CardContent>
-          </>
+             <Button
+               onClick={navigateToDashboard}
+               className="w-full bg-indigo-600 hover:bg-indigo-700"
+             >
+               Go to Dashboard
+             </Button>
+           </CardContent>
+         </>
         )}
 
         {currentStep === 'set_password' && (
