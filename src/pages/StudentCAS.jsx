@@ -15,11 +15,9 @@ import {
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'My Classes', page: 'StudentDashboard', icon: BookOpen },
-  { label: 'Assignments', page: 'StudentDashboard', icon: ClipboardCheck },
   { label: 'My Grades', page: 'StudentDashboard', icon: BarChart3 },
-  { label: 'Messages', page: 'StudentDashboard', icon: MessageSquare },
   { label: 'IB Core', page: 'StudentCAS', icon: Star },
+  { label: 'Messages', page: 'Messages', icon: MessageSquare },
 ];
 
 export default function StudentCAS() {

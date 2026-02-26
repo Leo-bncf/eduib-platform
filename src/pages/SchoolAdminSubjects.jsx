@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
-import { LayoutDashboard, Users, BookOpen, Calendar, Shield, ClipboardList, Plus, Loader2 } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Calendar, Clock, GraduationCap, Settings, FileText, Plus, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -16,9 +16,11 @@ const sidebarLinks = [
   { label: 'Dashboard', page: 'SchoolAdminDashboard', icon: LayoutDashboard },
   { label: 'Users', page: 'SchoolAdminUsers', icon: Users },
   { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
-  { label: 'Subjects', page: 'SchoolAdminSubjects', icon: ClipboardList },
-  { label: 'Academic Years', page: 'SchoolAdminDashboard', icon: Calendar },
-  { label: 'Audit Logs', page: 'SchoolAdminDashboard', icon: Shield },
+  { label: 'Subjects', page: 'SchoolAdminSubjects', icon: GraduationCap },
+  { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
+  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Clock },
+  { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
+  { label: 'Settings', page: 'SchoolAdminDashboard', icon: Settings },
 ];
 
 export default function SchoolAdminSubjects() {

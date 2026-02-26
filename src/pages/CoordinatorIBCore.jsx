@@ -7,19 +7,16 @@ import AppSidebar from '@/components/app/AppSidebar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  LayoutDashboard, Users, BookOpen, GraduationCap, 
-  Settings, MessageSquare, Loader2, Star, FileText, 
-  Palette, Heart, Users as UsersIcon
+  LayoutDashboard, Users, BarChart3, FileText, Loader2, Star, 
+  Palette, Heart, Users as UsersIcon, GraduationCap
 } from 'lucide-react';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'CoordinatorDashboard', icon: LayoutDashboard },
-  { label: 'Students', page: 'CoordinatorDashboard', icon: Users },
-  { label: 'Classes', page: 'CoordinatorDashboard', icon: BookOpen },
+  { label: 'Cohorts', page: 'CoordinatorDashboard', icon: Users },
+  { label: 'Predicted Grades', page: 'CoordinatorDashboard', icon: BarChart3 },
+  { label: 'Reporting', page: 'CoordinatorDashboard', icon: FileText },
   { label: 'IB Core', page: 'CoordinatorIBCore', icon: Star },
-  { label: 'Reports', page: 'CoordinatorDashboard', icon: GraduationCap },
-  { label: 'Messages', page: 'CoordinatorDashboard', icon: MessageSquare },
-  { label: 'Settings', page: 'CoordinatorDashboard', icon: Settings },
 ];
 
 export default function CoordinatorIBCore() {

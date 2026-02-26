@@ -5,15 +5,13 @@ import { useUser } from '@/components/auth/UserContext';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import BehaviorRecordsList from '@/components/behavior/BehaviorRecordsList';
-import { LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, MessageSquare, FileText, Loader2 } from 'lucide-react';
+import { LayoutDashboard, BarChart3, MessageSquare, Star, Loader2 } from 'lucide-react';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'Classes', page: 'StudentDashboard', icon: BookOpen },
-  { label: 'Assignments', page: 'StudentDashboard', icon: ClipboardCheck },
-  { label: 'Grades', page: 'StudentDashboard', icon: BarChart3 },
+  { label: 'My Grades', page: 'StudentDashboard', icon: BarChart3 },
+  { label: 'IB Core', page: 'StudentCAS', icon: Star },
   { label: 'Messages', page: 'Messages', icon: MessageSquare },
-  { label: 'Behavior', page: 'StudentBehavior', icon: FileText },
 ];
 
 export default function StudentBehavior() {
