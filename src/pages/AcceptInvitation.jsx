@@ -1,238 +1,318 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, CheckCircle, XCircle, Mail, Building2, UserCheck } from 'lucide-react';
-import { createPageUrl } from '@/utils';
+import { Loader2, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 
+/**
+ * Invitation acceptance page
+ * User arrives here from email link with invitation token
+ * Shows school/role context and prompts to accept or create account
+ */
 export default function AcceptInvitation() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
-  const [fullName, setFullName] = useState('');
-  const [accepting, setAccepting] = useState(false);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  const { data: invitation, isLoading, error } = useQuery({
-    queryKey: ['invitation', token],
-    queryFn: async () => {
-      const invitations = await base44.entities.UserInvitation.filter({
-        invitation_token: token,
-        status: 'pending'
-      });
-      if (invitations.length === 0) {
-        throw new Error('Invitation not found or already used');
-      }
-      const inv = invitations[0];
-      
-      // Check if expired
-      if (new Date(inv.expires_at) < new Date()) {
-        throw new Error('This invitation has expired');
-      }
-      
-      return inv;
-    },
-    enabled: !!token,
-    retry: false,
-  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [invitation, setInvitation] = useState(null);
+  const [step, setStep] = useState('review'); // review, accept, create_account
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const { data: school } = useQuery({
-    queryKey: ['school', invitation?.school_id],
-    queryFn: async () => {
-      const schools = await base44.entities.School.filter({ id: invitation.school_id });
-      return schools[0];
-    },
-    enabled: !!invitation?.school_id,
-  });
+  const token = searchParams.get('token');
 
+  // Fetch invitation details
   useEffect(() => {
-    if (invitation?.metadata?.first_name && invitation?.metadata?.last_name) {
-      setFullName(`${invitation.metadata.first_name} ${invitation.metadata.last_name}`);
-    }
-  }, [invitation]);
+    const fetchInvitation = async () => {
+      try {
+        if (!token) {
+          setError('Invalid invitation link. Missing token.');
+          setLoading(false);
+          return;
+        }
 
-  const acceptInvitation = async () => {
-    setAccepting(true);
+        const invitations = await base44.entities.UserInvitation.filter({
+          invitation_token: token
+        });
+
+        if (!invitations || invitations.length === 0) {
+          setError('This invitation link is invalid or has expired.');
+          setLoading(false);
+          return;
+        }
+
+        const inv = invitations[0];
+
+        if (inv.status !== 'pending') {
+          setError(`This invitation has already been ${inv.status}.`);
+          setLoading(false);
+          return;
+        }
+
+        // Check expiration
+        if (new Date(inv.expires_at) < new Date()) {
+          setError('This invitation has expired. Please ask your school administrator to send a new one.');
+          setLoading(false);
+          return;
+        }
+
+        setInvitation(inv);
+        setEmail(inv.email);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching invitation:', err);
+        setError('An error occurred while processing your invitation.');
+        setLoading(false);
+      }
+    };
+
+    fetchInvitation();
+  }, [token]);
+
+  const handleAccept = async () => {
+    setIsProcessing(true);
     try {
-      const isAuthed = await base44.auth.isAuthenticated();
+      // Check if user already exists
+      const existingUsers = await base44.entities.User.filter({ email });
       
-      if (!isAuthed) {
-        // Redirect to login with invitation token
-        base44.auth.redirectToLogin(createPageUrl('AcceptInvitation') + `?token=${token}`);
-        return;
+      if (existingUsers.length > 0) {
+        // User exists - just accept invitation and update their account state
+        await base44.entities.UserInvitation.update(invitation.id, {
+          status: 'accepted',
+          accepted_at: new Date().toISOString(),
+          user_id: existingUsers[0].id
+        });
+
+        // Create/update account state
+        await base44.functions.invoke('acceptInvitation', {
+          invitation_id: invitation.id,
+          token
+        });
+
+        navigate('/first-login?step=profile');
+      } else {
+        // New user - move to account creation
+        setStep('create_account');
       }
-
-      const user = await base44.auth.me();
-
-      // Check if email matches
-      if (user.email !== invitation.email) {
-        alert(`This invitation was sent to ${invitation.email}. Please log in with that email address.`);
-        setAccepting(false);
-        return;
-      }
-
-      // Update user full name if provided
-      if (fullName.trim() && !user.full_name) {
-        await base44.auth.updateMe({ full_name: fullName.trim() });
-      }
-
-      // Create school membership
-      await base44.entities.SchoolMembership.create({
-        user_id: user.id,
-        user_email: user.email,
-        user_name: fullName.trim() || user.full_name || user.email,
-        school_id: invitation.school_id,
-        role: invitation.role,
-        status: 'active',
-        grade_level: invitation.metadata?.grade_level,
-        department: invitation.metadata?.department,
-      });
-
-      // Mark invitation as accepted
-      await base44.entities.UserInvitation.update(invitation.id, {
-        status: 'accepted',
-        accepted_at: new Date().toISOString(),
-        user_id: user.id,
-      });
-
-      // Set active school
-      await base44.auth.updateMe({ active_school_id: invitation.school_id });
-
-      // Redirect to appropriate dashboard
-      setTimeout(() => {
-        window.location.href = createPageUrl('AppHome');
-      }, 1500);
-    } catch (error) {
-      console.error('Error accepting invitation:', error);
-      alert('Failed to accept invitation. Please try again.');
-      setAccepting(false);
+    } catch (err) {
+      console.error('Error accepting invitation:', err);
+      setError(err.message || 'Failed to accept invitation');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  if (!token) {
+  const handleCreateAccount = async () => {
+    // Validate
+    if (!firstName || !lastName) {
+      setError('Please enter your full name');
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      // Create account via backend function
+      const result = await base44.functions.invoke('createAccountFromInvitation', {
+        email,
+        password,
+        first_name: firstName,
+        last_name: lastName,
+        invitation_token: token
+      });
+
+      if (result.data.success) {
+        navigate('/first-login?step=welcome');
+      } else {
+        setError(result.data.error || 'Failed to create account');
+      }
+    } catch (err) {
+      console.error('Error creating account:', err);
+      setError(err.message || 'Failed to create account');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-        <div className="text-center max-w-md">
-          <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Invalid Invitation</h1>
-          <p className="text-slate-500">No invitation token provided.</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center p-4">
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
       </div>
     );
   }
 
-  if (isLoading) {
+  if (error && !invitation) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="text-center">
-          <Loader2 className="w-10 h-10 animate-spin text-indigo-600 mx-auto mb-4" />
-          <p className="text-slate-500">Verifying invitation...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !invitation) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-        <div className="text-center max-w-md">
-          <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Invitation Invalid</h1>
-          <p className="text-slate-500 mb-6">
-            {error?.message || 'This invitation is no longer valid.'}
-          </p>
-          <Button variant="outline" onClick={() => window.location.href = createPageUrl('Landing')}>
-            Return to Homepage
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  if (accepting) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="text-center max-w-md bg-white rounded-2xl border border-slate-200 p-8">
-          <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
-          </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Setting up your account...</h2>
-          <p className="text-slate-500 text-sm">This will just take a moment</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mx-auto mb-4">
+              <AlertCircle className="w-6 h-6 text-red-600" />
+            </div>
+            <p className="text-center font-semibold text-slate-900 mb-2">Invitation Error</p>
+            <p className="text-center text-sm text-slate-600 mb-6">{error}</p>
+            <Button onClick={() => navigate('/')} className="w-full">
+              Return Home
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-violet-50 px-4">
-      <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-8 py-6">
-          <div className="flex items-center gap-3 text-white mb-2">
-            <Building2 className="w-6 h-6" />
-            <h1 className="text-2xl font-bold">{school?.name || 'School'}</h1>
-          </div>
-          <p className="text-indigo-100 text-sm">You've been invited to join!</p>
-        </div>
-
-        <div className="p-8">
-          <div className="mb-6">
-            <div className="flex items-start gap-3 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
-              <Mail className="w-5 h-5 text-indigo-600 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-indigo-900">Invitation Details</p>
-                <p className="text-xs text-indigo-700 mt-1">
-                  Email: <strong>{invitation.email}</strong>
-                </p>
-                <p className="text-xs text-indigo-700">
-                  Role: <strong className="capitalize">{invitation.role.replace('_', ' ')}</strong>
-                </p>
-                {invitation.invited_by_name && (
-                  <p className="text-xs text-indigo-600 mt-1">
-                    Invited by {invitation.invited_by_name}
-                  </p>
-                )}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        {step === 'review' && (
+          <>
+            <CardHeader>
+              <CardTitle className="text-center">You're Invited</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 mx-auto">
+                <CheckCircle className="w-6 h-6 text-indigo-600" />
               </div>
-            </div>
-          </div>
 
-          {invitation.metadata?.custom_message && (
-            <Alert className="mb-6 border-slate-200">
-              <AlertDescription className="text-sm text-slate-700 italic">
-                "{invitation.metadata.custom_message}"
-              </AlertDescription>
-            </Alert>
-          )}
+              <div className="space-y-4 bg-slate-50 p-4 rounded-lg">
+                <div>
+                  <p className="text-xs font-semibold text-slate-600 uppercase">School</p>
+                  <p className="text-lg font-semibold text-slate-900 mt-1">{invitation?.metadata?.school_name || 'School'}</p>
+                </div>
 
-          <div className="space-y-4 mb-6">
-            <div>
-              <Label className="text-sm font-semibold">Your Full Name</Label>
-              <Input
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter your name"
-                className="mt-1.5"
-              />
-              <p className="text-xs text-slate-500 mt-1">
-                This will be displayed across the platform
+                <div>
+                  <p className="text-xs font-semibold text-slate-600 uppercase">Your Role</p>
+                  <p className="text-lg font-semibold text-slate-900 mt-1 capitalize">
+                    {invitation?.role.replace(/_/g, ' ')}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold text-slate-600 uppercase">Email</p>
+                  <p className="text-slate-900 mt-1">{email}</p>
+                </div>
+              </div>
+
+              {error && (
+                <Alert className="bg-red-50 border-red-200">
+                  <AlertCircle className="w-4 h-4 text-red-600" />
+                  <AlertDescription className="text-red-800 ml-3 text-sm">
+                    {error}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <Button
+                onClick={handleAccept}
+                disabled={isProcessing}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 gap-2"
+              >
+                {isProcessing && <Loader2 className="w-4 h-4 animate-spin" />}
+                Accept Invitation
+              </Button>
+
+              <p className="text-xs text-slate-600 text-center">
+                By accepting, you agree to join {invitation?.metadata?.school_name}
               </p>
-            </div>
-          </div>
+            </CardContent>
+          </>
+        )}
 
-          <Button 
-            onClick={acceptInvitation}
-            disabled={!fullName.trim()}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 h-12 text-base font-semibold"
-          >
-            <UserCheck className="w-5 h-5 mr-2" />
-            Accept Invitation & Continue
-          </Button>
+        {step === 'create_account' && (
+          <>
+            <CardHeader>
+              <CardTitle>Create Your Account</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Alert className="bg-blue-50 border-blue-200">
+                <AlertDescription className="text-blue-800 text-sm">
+                  Welcome to {invitation?.metadata?.school_name || 'your school'}. Please create your account to proceed.
+                </AlertDescription>
+              </Alert>
 
-          <p className="text-xs text-slate-400 text-center mt-6">
-            By accepting, you agree to join {school?.name} and access the platform as a {invitation.role.replace('_', ' ')}.
-          </p>
-        </div>
-      </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-sm font-semibold mb-1 block">First Name</Label>
+                  <Input
+                    placeholder="First"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold mb-1 block">Last Name</Label>
+                  <Input
+                    placeholder="Last"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-sm font-semibold mb-1 block">Email</Label>
+                <Input disabled value={email} className="bg-slate-100" />
+              </div>
+
+              <div>
+                <Label className="text-sm font-semibold mb-1 block">Password</Label>
+                <Input
+                  type="password"
+                  placeholder="At least 8 characters"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <Label className="text-sm font-semibold mb-1 block">Confirm Password</Label>
+                <Input
+                  type="password"
+                  placeholder="Confirm password"
+                  value={passwordConfirm}
+                  onChange={(e) => setPasswordConfirm(e.target.value)}
+                />
+              </div>
+
+              {error && (
+                <Alert className="bg-red-50 border-red-200">
+                  <AlertCircle className="w-4 h-4 text-red-600" />
+                  <AlertDescription className="text-red-800 ml-3 text-sm">
+                    {error}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <Button
+                onClick={handleCreateAccount}
+                disabled={isProcessing}
+                className="w-full bg-indigo-600 hover:bg-indigo-700"
+              >
+                {isProcessing && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                Create Account & Continue
+              </Button>
+            </CardContent>
+          </>
+        )}
+      </Card>
     </div>
   );
 }

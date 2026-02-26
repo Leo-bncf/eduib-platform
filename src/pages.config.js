@@ -47,6 +47,7 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AcceptInvitation from './pages/AcceptInvitation';
 import AppHome from './pages/AppHome';
 import AssignmentDetail from './pages/AssignmentDetail';
 import ClassGradebook from './pages/ClassGradebook';
@@ -61,14 +62,17 @@ import Landing from './pages/Landing';
 import Messages from './pages/Messages';
 import NoSchool from './pages/NoSchool';
 import ParentDashboard from './pages/ParentDashboard';
+import Plans from './pages/Plans';
 import Pricing from './pages/Pricing';
 import SchoolAdminAttendance from './pages/SchoolAdminAttendance';
+import SchoolAdminBilling from './pages/SchoolAdminBilling';
 import SchoolAdminClasses from './pages/SchoolAdminClasses';
 import SchoolAdminDashboard from './pages/SchoolAdminDashboard';
 import SchoolAdminReports from './pages/SchoolAdminReports';
 import SchoolAdminSubjects from './pages/SchoolAdminSubjects';
 import SchoolAdminTimetable from './pages/SchoolAdminTimetable';
 import SchoolAdminUsers from './pages/SchoolAdminUsers';
+import SchoolOnboarding from './pages/SchoolOnboarding';
 import Security from './pages/Security';
 import StudentBehavior from './pages/StudentBehavior';
 import StudentCAS from './pages/StudentCAS';
@@ -77,20 +81,18 @@ import StudentEE from './pages/StudentEE';
 import StudentTOK from './pages/StudentTOK';
 import SubmissionReview from './pages/SubmissionReview';
 import SuperAdminAuditLogs from './pages/SuperAdminAuditLogs';
+import SuperAdminBilling from './pages/SuperAdminBilling';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
+import SuperAdminPlanManagement from './pages/SuperAdminPlanManagement';
 import SuperAdminSchools from './pages/SuperAdminSchools';
 import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
-import AcceptInvitation from './pages/AcceptInvitation';
-import SchoolOnboarding from './pages/SchoolOnboarding';
-import SchoolAdminBilling from './pages/SchoolAdminBilling';
-import SuperAdminBilling from './pages/SuperAdminBilling';
-import Plans from './pages/Plans';
-import SuperAdminPlanManagement from './pages/SuperAdminPlanManagement';
+import FirstLogin from './pages/FirstLogin';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AcceptInvitation": AcceptInvitation,
     "AppHome": AppHome,
     "AssignmentDetail": AssignmentDetail,
     "ClassGradebook": ClassGradebook,
@@ -105,14 +107,17 @@ export const PAGES = {
     "Messages": Messages,
     "NoSchool": NoSchool,
     "ParentDashboard": ParentDashboard,
+    "Plans": Plans,
     "Pricing": Pricing,
     "SchoolAdminAttendance": SchoolAdminAttendance,
+    "SchoolAdminBilling": SchoolAdminBilling,
     "SchoolAdminClasses": SchoolAdminClasses,
     "SchoolAdminDashboard": SchoolAdminDashboard,
     "SchoolAdminReports": SchoolAdminReports,
     "SchoolAdminSubjects": SchoolAdminSubjects,
     "SchoolAdminTimetable": SchoolAdminTimetable,
     "SchoolAdminUsers": SchoolAdminUsers,
+    "SchoolOnboarding": SchoolOnboarding,
     "Security": Security,
     "StudentBehavior": StudentBehavior,
     "StudentCAS": StudentCAS,
@@ -121,16 +126,13 @@ export const PAGES = {
     "StudentTOK": StudentTOK,
     "SubmissionReview": SubmissionReview,
     "SuperAdminAuditLogs": SuperAdminAuditLogs,
+    "SuperAdminBilling": SuperAdminBilling,
     "SuperAdminDashboard": SuperAdminDashboard,
+    "SuperAdminPlanManagement": SuperAdminPlanManagement,
     "SuperAdminSchools": SuperAdminSchools,
     "TeacherClasses": TeacherClasses,
     "TeacherDashboard": TeacherDashboard,
-    "AcceptInvitation": AcceptInvitation,
-    "SchoolOnboarding": SchoolOnboarding,
-    "SchoolAdminBilling": SchoolAdminBilling,
-    "SuperAdminBilling": SuperAdminBilling,
-    "Plans": Plans,
-    "SuperAdminPlanManagement": SuperAdminPlanManagement,
+    "FirstLogin": FirstLogin,
 }
 
 export const pagesConfig = {
