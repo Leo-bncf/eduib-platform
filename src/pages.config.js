@@ -73,6 +73,7 @@ import ClassGradebook from './pages/ClassGradebook';
 import Messages from './pages/Messages';
 import StudentBehavior from './pages/StudentBehavior';
 import SchoolAdminAttendance from './pages/SchoolAdminAttendance';
+import SchoolAdminTimetable from './pages/SchoolAdminTimetable';
 import __Layout from './Layout.jsx';
 
 
@@ -103,6 +104,7 @@ export const PAGES = {
     "Messages": Messages,
     "StudentBehavior": StudentBehavior,
     "SchoolAdminAttendance": SchoolAdminAttendance,
+    "SchoolAdminTimetable": SchoolAdminTimetable,
 }
 
 export const pagesConfig = {

@@ -78,6 +78,18 @@ export default function StudentDashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-white rounded-xl border border-slate-100">
                     <div className="px-6 py-4 border-b border-slate-100">
+                      <h2 className="font-semibold text-slate-900 flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-indigo-600" />
+                        Today's Schedule
+                      </h2>
+                    </div>
+                    <div className="p-6">
+                      <TodaySchedule schoolId={schoolId} userId={user?.id} userRole="student" />
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl border border-slate-100">
+                    <div className="px-6 py-4 border-b border-slate-100">
                       <h2 className="font-semibold text-slate-900">Upcoming Assignments</h2>
                     </div>
                     {upcomingAssignments.length === 0 ? (
