@@ -50,12 +50,13 @@ export default function SuperAdminUsers() {
         const allSchools = await base44.entities.School.list();
         setSchools(allSchools);
 
-        // Load all users
+        // Load only super_admin users
         const allUsers = await base44.entities.User.list();
+        const superAdminUsers = allUsers.filter(u => u.role === 'super_admin');
         
         // Enhance users with school info
         const usersWithSchools = await Promise.all(
-          allUsers.map(async (u) => {
+          superAdminUsers.map(async (u) => {
             if (u.active_school_id) {
               const schoolList = await base44.entities.School.filter({ id: u.active_school_id });
               return {
