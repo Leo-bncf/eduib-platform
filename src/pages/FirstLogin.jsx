@@ -123,12 +123,32 @@ export default function FirstLogin() {
       }
 
       setCurrentStep('complete');
+      setError(null);
     } catch (err) {
       console.error('Error completing profile:', err);
       setError(err.message || 'Failed to save profile');
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const navigateToDashboard = () => {
+    // Route based on user role from accountState
+    if (!accountState) {
+      navigate('/');
+      return;
+    }
+
+    const routes = {
+      school_admin: '/school-admin-dashboard',
+      ib_coordinator: '/coordinator-dashboard',
+      teacher: '/teacher-dashboard',
+      student: '/student-dashboard',
+      parent: '/parent-dashboard',
+    };
+
+    const targetRoute = routes[accountState.role] || '/';
+    navigate(targetRoute);
   };
 
   if (loading) {
@@ -352,7 +372,7 @@ export default function FirstLogin() {
               </div>
 
               <Button
-                onClick={() => navigate('/dashboard')}
+                onClick={navigateToDashboard}
                 className="w-full bg-indigo-600 hover:bg-indigo-700"
               >
                 Go to Dashboard

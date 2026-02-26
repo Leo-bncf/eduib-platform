@@ -57,11 +57,14 @@ import CoordinatorDashboard from './pages/CoordinatorDashboard';
 import CoordinatorIBCore from './pages/CoordinatorIBCore';
 import CoordinatorPredictedGrades from './pages/CoordinatorPredictedGrades';
 import Demo from './pages/Demo';
+import DemoShowcase from './pages/DemoShowcase';
 import Features from './pages/Features';
+import FirstLogin from './pages/FirstLogin';
 import Landing from './pages/Landing';
 import Messages from './pages/Messages';
 import NoSchool from './pages/NoSchool';
 import ParentDashboard from './pages/ParentDashboard';
+import PasswordReset from './pages/PasswordReset';
 import Plans from './pages/Plans';
 import Pricing from './pages/Pricing';
 import SchoolAdminAttendance from './pages/SchoolAdminAttendance';
@@ -84,16 +87,13 @@ import SuperAdminAuditLogs from './pages/SuperAdminAuditLogs';
 import SuperAdminBilling from './pages/SuperAdminBilling';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import SuperAdminPlanManagement from './pages/SuperAdminPlanManagement';
+import SuperAdminPlans from './pages/SuperAdminPlans';
+import SuperAdminProduction from './pages/SuperAdminProduction';
+import SuperAdminProductionLaunch from './pages/SuperAdminProductionLaunch';
+import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSchools from './pages/SuperAdminSchools';
 import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
-import FirstLogin from './pages/FirstLogin';
-import PasswordReset from './pages/PasswordReset';
-import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
-import SuperAdminPlans from './pages/SuperAdminPlans';
-import DemoShowcase from './pages/DemoShowcase';
-import SuperAdminProduction from './pages/SuperAdminProduction';
-import SuperAdminProductionLaunch from './pages/SuperAdminProductionLaunch';
 import __Layout from './Layout.jsx';
 
 
@@ -108,11 +108,14 @@ export const PAGES = {
     "CoordinatorIBCore": CoordinatorIBCore,
     "CoordinatorPredictedGrades": CoordinatorPredictedGrades,
     "Demo": Demo,
+    "DemoShowcase": DemoShowcase,
     "Features": Features,
+    "FirstLogin": FirstLogin,
     "Landing": Landing,
     "Messages": Messages,
     "NoSchool": NoSchool,
     "ParentDashboard": ParentDashboard,
+    "PasswordReset": PasswordReset,
     "Plans": Plans,
     "Pricing": Pricing,
     "SchoolAdminAttendance": SchoolAdminAttendance,
@@ -135,16 +138,13 @@ export const PAGES = {
     "SuperAdminBilling": SuperAdminBilling,
     "SuperAdminDashboard": SuperAdminDashboard,
     "SuperAdminPlanManagement": SuperAdminPlanManagement,
+    "SuperAdminPlans": SuperAdminPlans,
+    "SuperAdminProduction": SuperAdminProduction,
+    "SuperAdminProductionLaunch": SuperAdminProductionLaunch,
+    "SuperAdminSchoolDetail": SuperAdminSchoolDetail,
     "SuperAdminSchools": SuperAdminSchools,
     "TeacherClasses": TeacherClasses,
     "TeacherDashboard": TeacherDashboard,
-    "FirstLogin": FirstLogin,
-    "PasswordReset": PasswordReset,
-    "SuperAdminSchoolDetail": SuperAdminSchoolDetail,
-    "SuperAdminPlans": SuperAdminPlans,
-    "DemoShowcase": DemoShowcase,
-    "SuperAdminProduction": SuperAdminProduction,
-    "SuperAdminProductionLaunch": SuperAdminProductionLaunch,
 }
 
 export const pagesConfig = {
