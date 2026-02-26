@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import StatCard from '@/components/app/StatCard';
+import TodaySchedule from '@/components/timetable/TodaySchedule';
 import { useUser } from '@/components/auth/UserContext';
 import { 
   LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, 
