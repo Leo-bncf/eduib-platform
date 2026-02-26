@@ -99,28 +99,28 @@ export default function SchoolAdminDashboard() {
   const isSetupComplete = setupProgress && setupProgress.completed === setupProgress.total;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">School Admin Dashboard</h1>
-          <p className="text-slate-600 mt-2">Welcome, {user?.full_name}</p>
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Admin Dashboard</h1>
+          <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Welcome, {user?.full_name}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
             {/* Setup Status Card */}
             {!isSetupComplete && (
               <Card className="bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-amber-900">
-                    <AlertCircle className="w-5 h-5" />
+                <CardHeader className="p-4 md:p-6">
+                  <CardTitle className="flex items-center gap-2 text-amber-900 text-base md:text-lg">
+                    <AlertCircle className="w-4 md:w-5 h-4 md:h-5 flex-shrink-0" />
                     School Setup In Progress
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-amber-800">
+                <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
+                  <p className="text-xs md:text-sm text-amber-800">
                     Complete your school setup to unlock all features. You're {setupProgress?.completed || 0} of {setupProgress?.total || 6} steps complete.
                   </p>
                   {setupProgress && (
@@ -133,7 +133,7 @@ export default function SchoolAdminDashboard() {
                   )}
                   <Button
                     onClick={() => navigate('/school-onboarding')}
-                    className="w-full bg-amber-600 hover:bg-amber-700 gap-2"
+                    className="w-full bg-amber-600 hover:bg-amber-700 gap-2 text-sm"
                   >
                     Continue Setup
                   </Button>
@@ -142,43 +142,43 @@ export default function SchoolAdminDashboard() {
             )}
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2 md:gap-4">
               <Card>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
                   <div className="text-center">
-                    <BookOpen className="w-8 h-8 text-indigo-600 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-slate-900">{stats?.academicYears || 0}</p>
-                    <p className="text-sm text-slate-600 mt-1">Academic Years</p>
+                    <BookOpen className="w-6 md:w-8 h-6 md:h-8 text-indigo-600 mx-auto mb-2" />
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stats?.academicYears || 0}</p>
+                    <p className="text-xs md:text-sm text-slate-600 mt-1">Academic Years</p>
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
                   <div className="text-center">
-                    <FileText className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-slate-900">{stats?.subjects || 0}</p>
-                    <p className="text-sm text-slate-600 mt-1">Subjects</p>
+                    <FileText className="w-6 md:w-8 h-6 md:h-8 text-green-600 mx-auto mb-2" />
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stats?.subjects || 0}</p>
+                    <p className="text-xs md:text-sm text-slate-600 mt-1">Subjects</p>
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
                   <div className="text-center">
-                    <BookOpen className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-slate-900">{stats?.classes || 0}</p>
-                    <p className="text-sm text-slate-600 mt-1">Classes</p>
+                    <BookOpen className="w-6 md:w-8 h-6 md:h-8 text-blue-600 mx-auto mb-2" />
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stats?.classes || 0}</p>
+                    <p className="text-xs md:text-sm text-slate-600 mt-1">Classes</p>
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
                   <div className="text-center">
-                    <Users className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-slate-900">{stats?.staff || 0}</p>
-                    <p className="text-sm text-slate-600 mt-1">Staff Members</p>
+                    <Users className="w-6 md:w-8 h-6 md:h-8 text-purple-600 mx-auto mb-2" />
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stats?.staff || 0}</p>
+                    <p className="text-xs md:text-sm text-slate-600 mt-1">Staff Members</p>
                   </div>
                 </CardContent>
               </Card>
@@ -186,26 +186,26 @@ export default function SchoolAdminDashboard() {
 
             {/* Quick Actions */}
             <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Quick Actions</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-3">
-                  <Button variant="outline" className="gap-2">
-                    <Users className="w-4 h-4" />
-                    Invite Staff
+              <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
+                <div className="grid grid-cols-2 gap-2 md:gap-3">
+                  <Button variant="outline" className="gap-1 md:gap-2 text-xs md:text-sm">
+                    <Users className="w-3 md:w-4 h-3 md:h-4" />
+                    <span>Invite Staff</span>
                   </Button>
-                  <Button variant="outline" className="gap-2">
-                    <Settings className="w-4 h-4" />
-                    School Settings
+                  <Button variant="outline" className="gap-1 md:gap-2 text-xs md:text-sm">
+                    <Settings className="w-3 md:w-4 h-3 md:h-4" />
+                    <span>Settings</span>
                   </Button>
-                  <Button variant="outline" className="gap-2">
-                    <FileText className="w-4 h-4" />
-                    View Classes
+                  <Button variant="outline" className="gap-1 md:gap-2 text-xs md:text-sm">
+                    <FileText className="w-3 md:w-4 h-3 md:h-4" />
+                    <span>Classes</span>
                   </Button>
-                  <Button variant="outline" className="gap-2">
-                    <BookOpen className="w-4 h-4" />
-                    Manage Subjects
+                  <Button variant="outline" className="gap-1 md:gap-2 text-xs md:text-sm">
+                    <BookOpen className="w-3 md:w-4 h-3 md:h-4" />
+                    <span>Subjects</span>
                   </Button>
                 </div>
               </CardContent>
@@ -213,7 +213,7 @@ export default function SchoolAdminDashboard() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {/* Setup Checklist */}
             {setupProgress && !isSetupComplete && (
               <SetupChecklist
@@ -226,13 +226,13 @@ export default function SchoolAdminDashboard() {
 
             {/* School Info Card */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">School Info</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">School Info</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 text-sm">
+              <CardContent className="space-y-3 text-xs md:text-sm p-4 md:p-6 pt-0 md:pt-0">
                 <div>
                   <p className="text-slate-600">Name</p>
-                  <p className="font-semibold text-slate-900">{school?.name}</p>
+                  <p className="font-semibold text-slate-900 truncate">{school?.name}</p>
                 </div>
                 <div>
                   <p className="text-slate-600">Plan</p>
