@@ -4,23 +4,28 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Loader2, Send, Save, Plus } from 'lucide-react';
+import { Loader2, Send, Save, Plus, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { FileText, Presentation, Table, Upload as UploadIcon, Link as LinkIcon } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useUser } from '@/components/auth/UserContext';
 import DocumentCard from './DocumentCard';
 import DocumentPicker from './DocumentPicker';
 import GoogleDocCreator from './GoogleDocCreator';
 import GoogleDrivePicker from './GoogleDrivePicker';
 import SubmissionDocumentsView from './SubmissionDocumentsView';
+import GoogleConnectionStatus from '@/components/google/GoogleConnectionStatus';
 
 export default function StudentSubmission({ assignment, studentId, studentName, existingSubmission }) {
   const queryClient = useQueryClient();
+  const { school } = useUser();
   const [content, setContent] = useState(existingSubmission?.content || '');
   const [documents, setDocuments] = useState(existingSubmission?.documents || []);
   const [documentPickerOpen, setDocumentPickerOpen] = useState(false);
   const [googleDocCreator, setGoogleDocCreator] = useState({ open: false, type: null });
   const [googleDrivePickerOpen, setGoogleDrivePickerOpen] = useState(false);
+  const [googleConnectionAlert, setGoogleConnectionAlert] = useState(null);
 
   const submitMutation = useMutation({
     mutationFn: (data) => {
@@ -40,16 +45,65 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
     setDocumentPickerOpen(false);
   };
 
-  const handleCreateGoogleDoc = (type) => {
-    setGoogleDocCreator({ open: true, type });
+  const handleCreateGoogleDoc = async (type) => {
+    try {
+      const response = await base44.functions.invoke('verifyGoogleConnection', {
+        schoolId: school?.id,
+        userId: studentId
+      });
+      
+      if (response.data.requiresReconnection || response.data.requiresConnection) {
+        setGoogleConnectionAlert({
+          type: 'connection_error',
+          message: response.data.message,
+          errorCode: response.data.errorCode
+        });
+        return;
+      }
+      
+      setGoogleDocCreator({ open: true, type });
+    } catch (error) {
+      console.error('Error checking Google connection:', error);
+      setGoogleConnectionAlert({
+        type: 'error',
+        message: 'Failed to verify Google connection. Please try again.'
+      });
+    }
   };
 
   const handleGoogleDocCreated = (doc) => {
     setDocuments([...documents, doc]);
   };
 
-  const handleGoogleDriveFilesSelected = (newDocs) => {
+  const handleGoogleDriveFilesSelected = async (newDocs) => {
     setDocuments([...documents, ...newDocs]);
+    setGoogleDrivePickerOpen(false);
+  };
+
+  const handleGoogleDrivePickerOpen = async () => {
+    try {
+      const response = await base44.functions.invoke('verifyGoogleConnection', {
+        schoolId: school?.id,
+        userId: studentId
+      });
+      
+      if (response.data.requiresReconnection || response.data.requiresConnection) {
+        setGoogleConnectionAlert({
+          type: 'connection_error',
+          message: response.data.message,
+          errorCode: response.data.errorCode
+        });
+        return;
+      }
+      
+      setGoogleDrivePickerOpen(true);
+    } catch (error) {
+      console.error('Error checking Google connection:', error);
+      setGoogleConnectionAlert({
+        type: 'error',
+        message: 'Failed to verify Google connection. Please try again.'
+      });
+    }
   };
 
   const handleRemoveDocument = (docId) => {
