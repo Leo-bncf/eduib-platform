@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2, Plus, Upload, X, FileText } from 'lucide-react';
+import SubmissionFormatSelector from './SubmissionFormatSelector';
 
 export default function CreateAssignment({ classData, userId, onClose, trigger }) {
   const queryClient = useQueryClient();
@@ -21,6 +22,7 @@ export default function CreateAssignment({ classData, userId, onClose, trigger }
     max_score: 100,
     allow_late: true,
     status: 'draft',
+    expected_submission_formats: [],
   });
   const [attachments, setAttachments] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -40,6 +42,7 @@ export default function CreateAssignment({ classData, userId, onClose, trigger }
         max_score: 100,
         allow_late: true,
         status: 'draft',
+        expected_submission_formats: [],
       });
       setAttachments([]);
     },
@@ -162,6 +165,13 @@ export default function CreateAssignment({ classData, userId, onClose, trigger }
                 value={form.max_score}
                 onChange={e => setForm({ ...form, max_score: Number(e.target.value) })}
                 className="mt-1.5 w-32"
+              />
+            </div>
+
+            <div className="pt-4 border-t">
+              <SubmissionFormatSelector
+                selectedFormats={form.expected_submission_formats}
+                onChange={(formats) => setForm({ ...form, expected_submission_formats: formats })}
               />
             </div>
 

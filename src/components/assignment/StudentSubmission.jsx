@@ -7,14 +7,17 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Send, Save, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
+import { FileText, Presentation, Table, Upload as UploadIcon, Link as LinkIcon } from 'lucide-react';
 import DocumentCard from './DocumentCard';
 import DocumentPicker from './DocumentPicker';
+import GoogleDocCreator from './GoogleDocCreator';
 
 export default function StudentSubmission({ assignment, studentId, studentName, existingSubmission }) {
   const queryClient = useQueryClient();
   const [content, setContent] = useState(existingSubmission?.content || '');
   const [documents, setDocuments] = useState(existingSubmission?.documents || []);
   const [documentPickerOpen, setDocumentPickerOpen] = useState(false);
+  const [googleDocCreator, setGoogleDocCreator] = useState({ open: false, type: null });
 
   const submitMutation = useMutation({
     mutationFn: (data) => {
@@ -32,6 +35,50 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
   const handleAddDocuments = (newDocs) => {
     setDocuments([...documents, ...newDocs]);
     setDocumentPickerOpen(false);
+  };
+
+  const handleCreateGoogleDoc = (type) => {
+    setGoogleDocCreator({ open: true, type });
+  };
+
+  const handleGoogleDocCreated = (doc) => {
+    setDocuments([...documents, doc]);
+  };
+
+  const expectedFormats = assignment.expected_submission_formats || [];
+  const hasFormatGuidance = expectedFormats.length > 0;
+
+  const formatActions = {
+    google_doc: {
+      icon: FileText,
+      label: 'Create Google Doc',
+      color: 'bg-blue-600 hover:bg-blue-700',
+      action: () => handleCreateGoogleDoc('google_doc'),
+    },
+    google_slides: {
+      icon: Presentation,
+      label: 'Create Google Slides',
+      color: 'bg-amber-600 hover:bg-amber-700',
+      action: () => handleCreateGoogleDoc('google_slides'),
+    },
+    google_sheet: {
+      icon: Table,
+      label: 'Create Google Sheet',
+      color: 'bg-emerald-600 hover:bg-emerald-700',
+      action: () => handleCreateGoogleDoc('google_sheet'),
+    },
+    file_upload: {
+      icon: UploadIcon,
+      label: 'Upload File',
+      color: 'bg-slate-600 hover:bg-slate-700',
+      action: () => setDocumentPickerOpen(true),
+    },
+    link: {
+      icon: LinkIcon,
+      label: 'Add Link',
+      color: 'bg-indigo-600 hover:bg-indigo-700',
+      action: () => setDocumentPickerOpen(true),
+    },
   };
 
   const handleRemoveDocument = (doc) => {
@@ -105,44 +152,115 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
 
       <div>
         <div className="flex items-center justify-between mb-3">
-          <Label className="text-sm font-semibold">Documents & Links</Label>
-          {isEditable && (
-            <Button 
-              onClick={() => setDocumentPickerOpen(true)}
-              variant="outline" 
-              size="sm"
-              className="border-indigo-200 text-indigo-700"
-            >
-              <Plus className="w-4 h-4 mr-1.5" /> Add Document
-            </Button>
-          )}
+          <Label className="text-sm font-semibold">
+            {hasFormatGuidance ? 'Your Submission' : 'Documents & Links'}
+          </Label>
         </div>
 
+        {hasFormatGuidance && isEditable && documents.length === 0 && (
+          <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-4">
+            <p className="text-sm font-semibold text-indigo-900 mb-1">Expected Format</p>
+            <p className="text-sm text-indigo-700">
+              {expectedFormats.length === 1
+                ? `Your teacher expects you to submit this assignment as a ${formatActions[expectedFormats[0]]?.label || expectedFormats[0]}.`
+                : `Your teacher accepts: ${expectedFormats.map(f => formatActions[f]?.label || f).join(', ')}.`}
+            </p>
+          </div>
+        )}
+
         {documents.length === 0 ? (
-          <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center">
-            <p className="text-sm text-slate-400 mb-3">No documents attached yet</p>
-            {isEditable && (
-              <Button 
-                onClick={() => setDocumentPickerOpen(true)}
-                variant="outline"
-                size="sm"
-              >
-                <Plus className="w-4 h-4 mr-2" /> Add Your First Document
-              </Button>
+          <div className="border-2 border-dashed border-slate-200 rounded-xl p-6">
+            {isEditable ? (
+              hasFormatGuidance ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-slate-600 text-center mb-4">Start your work:</p>
+                  <div className={`grid ${expectedFormats.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-3`}>
+                    {expectedFormats.map(format => {
+                      const action = formatActions[format];
+                      if (!action) return null;
+                      const Icon = action.icon;
+                      return (
+                        <Button
+                          key={format}
+                          onClick={action.action}
+                          className={`${action.color} text-white h-auto py-4`}
+                        >
+                          <Icon className="w-5 h-5 mr-2" />
+                          {action.label}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                  <div className="pt-3 text-center">
+                    <Button 
+                      onClick={() => setDocumentPickerOpen(true)}
+                      variant="ghost"
+                      size="sm"
+                      className="text-slate-500"
+                    >
+                      or add another format
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <p className="text-sm text-slate-400 mb-3">No documents attached yet</p>
+                  <Button 
+                    onClick={() => setDocumentPickerOpen(true)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Plus className="w-4 h-4 mr-2" /> Add Your First Document
+                  </Button>
+                </div>
+              )
+            ) : (
+              <p className="text-sm text-slate-400 text-center">No documents attached yet</p>
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {documents.map(doc => (
-              <DocumentCard
-                key={doc.id}
-                document={doc}
-                onRemove={isEditable ? handleRemoveDocument : null}
-                onOpen={handleOpenDocument}
-                compact={false}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              {documents.map(doc => (
+                <DocumentCard
+                  key={doc.id}
+                  document={doc}
+                  onRemove={isEditable ? handleRemoveDocument : null}
+                  onOpen={handleOpenDocument}
+                  compact={false}
+                />
+              ))}
+            </div>
+            {isEditable && hasFormatGuidance && (
+              <div className="flex gap-2 flex-wrap">
+                {expectedFormats.map(format => {
+                  const action = formatActions[format];
+                  if (!action) return null;
+                  const Icon = action.icon;
+                  return (
+                    <Button
+                      key={format}
+                      onClick={action.action}
+                      variant="outline"
+                      size="sm"
+                      className="border-indigo-200 text-indigo-700"
+                    >
+                      <Icon className="w-4 h-4 mr-1.5" />
+                      {action.label}
+                    </Button>
+                  );
+                })}
+                <Button 
+                  onClick={() => setDocumentPickerOpen(true)}
+                  variant="ghost"
+                  size="sm"
+                  className="text-slate-500"
+                >
+                  <Plus className="w-4 h-4 mr-1.5" /> More
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -179,6 +297,14 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
         open={documentPickerOpen}
         onClose={() => setDocumentPickerOpen(false)}
         onAddDocuments={handleAddDocuments}
+      />
+
+      <GoogleDocCreator
+        type={googleDocCreator.type}
+        open={googleDocCreator.open}
+        onClose={() => setGoogleDocCreator({ open: false, type: null })}
+        onDocumentCreated={handleGoogleDocCreated}
+        defaultTitle={assignment.title}
       />
     </div>
   );
