@@ -77,69 +77,69 @@ export default function SuperAdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900">Platform Operations</h1>
-          <p className="text-slate-600 mt-2">Manage schools, billing, and platform health</p>
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold text-slate-900">Platform Operations</h1>
+          <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage schools, billing, and platform health</p>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 mb-6 md:mb-8">
           <Card className="bg-gradient-to-br from-blue-50 to-blue-50 border-blue-200">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-slate-600 text-sm font-semibold">Total Schools</p>
-                  <p className="text-3xl font-bold text-slate-900 mt-2">{metrics?.total || 0}</p>
+            <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-slate-600 text-xs md:text-sm font-semibold">Total Schools</p>
+                  <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">{metrics?.total || 0}</p>
                 </div>
-                <Building2 className="w-8 h-8 text-blue-600 opacity-20" />
+                <Building2 className="w-6 md:w-8 h-6 md:h-8 text-blue-600 opacity-20 flex-shrink-0" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-emerald-50 to-emerald-50 border-emerald-200">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-slate-600 text-sm font-semibold">Active Schools</p>
-                  <p className="text-3xl font-bold text-slate-900 mt-2">{metrics?.active || 0}</p>
+            <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-slate-600 text-xs md:text-sm font-semibold">Active Schools</p>
+                  <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">{metrics?.active || 0}</p>
                 </div>
-                <TrendingUp className="w-8 h-8 text-emerald-600 opacity-20" />
+                <TrendingUp className="w-6 md:w-8 h-6 md:h-8 text-emerald-600 opacity-20 flex-shrink-0" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-purple-50 to-purple-50 border-purple-200">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-slate-600 text-sm font-semibold">Paid Schools</p>
-                  <p className="text-3xl font-bold text-slate-900 mt-2">{metrics?.paid || 0}</p>
-                  <p className="text-xs text-slate-500 mt-1">{metrics?.trial || 0} on trial</p>
+            <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-slate-600 text-xs md:text-sm font-semibold">Paid Schools</p>
+                  <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">{metrics?.paid || 0}</p>
+                  <p className="text-xs text-slate-500 mt-0.5 md:mt-1">{metrics?.trial || 0} on trial</p>
                 </div>
-                <DollarSign className="w-8 h-8 text-purple-600 opacity-20" />
+                <DollarSign className="w-6 md:w-8 h-6 md:h-8 text-purple-600 opacity-20 flex-shrink-0" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-red-50 to-red-50 border-red-200">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-slate-600 text-sm font-semibold">At Risk</p>
-                  <p className="text-3xl font-bold text-slate-900 mt-2">{metrics?.atRisk || 0}</p>
-                  <p className="text-xs text-slate-500 mt-1">Billing or suspended</p>
+            <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-slate-600 text-xs md:text-sm font-semibold">At Risk</p>
+                  <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">{metrics?.atRisk || 0}</p>
+                  <p className="text-xs text-slate-500 mt-0.5 md:mt-1">Billing or suspended</p>
                 </div>
-                <AlertCircle className="w-8 h-8 text-red-600 opacity-20" />
+                <AlertCircle className="w-6 md:w-8 h-6 md:h-8 text-red-600 opacity-20 flex-shrink-0" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* School Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Onboarding Status */}
           <Card>
             <CardHeader>
@@ -241,20 +241,20 @@ export default function SuperAdminDashboard() {
                 .map((school) => (
                   <div
                     key={school.id}
-                    className="flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer"
+                    className="flex items-center justify-between p-2 md:p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer gap-2"
                     onClick={() => navigate(`/super-admin-school/${school.id}`)}
                   >
-                    <div>
-                      <p className="font-semibold text-slate-900">{school.name}</p>
-                      <p className="text-xs text-slate-600 mt-0.5">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-slate-900 text-xs md:text-sm truncate">{school.name}</p>
+                      <p className="text-xs text-slate-600 mt-0.5 truncate">
                         {school.city}, {school.country}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 flex-shrink-0">
                       <Badge variant="outline" className="text-xs">
                         {school.status}
                       </Badge>
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-xs hidden sm:inline-block">
                         {school.billing_status || 'no-plan'}
                       </Badge>
                     </div>
