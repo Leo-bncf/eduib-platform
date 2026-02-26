@@ -93,6 +93,7 @@ import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminPlans from './pages/SuperAdminPlans';
 import DemoShowcase from './pages/DemoShowcase';
 import SuperAdminProduction from './pages/SuperAdminProduction';
+import SuperAdminProductionLaunch from './pages/SuperAdminProductionLaunch';
 import __Layout from './Layout.jsx';
 
 
@@ -143,6 +144,7 @@ export const PAGES = {
     "SuperAdminPlans": SuperAdminPlans,
     "DemoShowcase": DemoShowcase,
     "SuperAdminProduction": SuperAdminProduction,
+    "SuperAdminProductionLaunch": SuperAdminProductionLaunch,
 }
 
 export const pagesConfig = {
