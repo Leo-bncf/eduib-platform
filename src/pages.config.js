@@ -83,6 +83,9 @@ import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
 import AcceptInvitation from './pages/AcceptInvitation';
 import SchoolOnboarding from './pages/SchoolOnboarding';
+import SchoolAdminBilling from './pages/SchoolAdminBilling';
+import SuperAdminBilling from './pages/SuperAdminBilling';
+import Plans from './pages/Plans';
 import __Layout from './Layout.jsx';
 
 
@@ -123,6 +126,9 @@ export const PAGES = {
     "TeacherDashboard": TeacherDashboard,
     "AcceptInvitation": AcceptInvitation,
     "SchoolOnboarding": SchoolOnboarding,
+    "SchoolAdminBilling": SchoolAdminBilling,
+    "SuperAdminBilling": SuperAdminBilling,
+    "Plans": Plans,
 }
 
 export const pagesConfig = {
