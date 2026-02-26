@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { createPageUrl } from '@/utils';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SuperAdminDashboard', icon: LayoutDashboard },
@@ -59,9 +60,11 @@ export default function SuperAdminSchools() {
                 <h1 className="text-2xl font-bold text-slate-900">Schools</h1>
                 <p className="text-sm text-slate-500 mt-1">Manage all registered schools</p>
               </div>
-              <Button onClick={() => setShowCreate(true)} className="bg-indigo-600 hover:bg-indigo-700">
-                <Plus className="w-4 h-4 mr-2" /> Add School
-              </Button>
+              <a href={createPageUrl('SchoolOnboarding')}>
+                <Button className="bg-indigo-600 hover:bg-indigo-700">
+                  <Plus className="w-4 h-4 mr-2" /> Add School
+                </Button>
+              </a>
             </div>
 
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">

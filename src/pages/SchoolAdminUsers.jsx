@@ -5,13 +5,15 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
 import { logAudit, AuditActions, AuditLevels } from '@/components/utils/auditLogger';
-import { LayoutDashboard, Users, BookOpen, Calendar, Shield, ClipboardList, Plus, Loader2, Search } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Calendar, Shield, ClipboardList, Plus, Loader2, Search, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import InvitationsManager from '@/components/onboarding/InvitationsManager';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SchoolAdminDashboard', icon: LayoutDashboard },
@@ -83,17 +85,25 @@ export default function SchoolAdminUsers() {
         <AppSidebar links={sidebarLinks} role="school_admin" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         <main className="ml-64 p-8">
           <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900">Users</h1>
-                <p className="text-sm text-slate-500 mt-1">Manage school members</p>
-              </div>
-              <Button onClick={() => setShowCreate(true)} className="bg-indigo-600 hover:bg-indigo-700">
-                <Plus className="w-4 h-4 mr-2" /> Add User
-              </Button>
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-slate-900">Users</h1>
+              <p className="text-sm text-slate-500 mt-1">Manage school members and invitations</p>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <Tabs defaultValue="members" className="space-y-6">
+              <TabsList className="bg-white border border-slate-200">
+                <TabsTrigger value="members">
+                  <Users className="w-4 h-4 mr-2" />
+                  Members
+                </TabsTrigger>
+                <TabsTrigger value="invitations">
+                  <Mail className="w-4 h-4 mr-2" />
+                  Invitations
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="members">
+                <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="p-4 border-b border-slate-100 flex items-center gap-4 flex-wrap">
                 <div className="relative flex-1 min-w-[200px]">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -145,9 +155,14 @@ export default function SchoolAdminUsers() {
                     ))}
                   </tbody>
                 </table>
-              )}
-            </div>
-          </div>
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="invitations">
+              <InvitationsManager schoolId={schoolId} schoolName={school?.name} />
+            </TabsContent>
+          </Tabs>
         </main>
 
         <Dialog open={showCreate} onOpenChange={setShowCreate}>
