@@ -93,7 +93,7 @@ export default function SuperAdminPlans() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <Button
-          onClick={() => navigate('/super-admin-dashboard')}
+          onClick={() => navigate('/SuperAdminDashboard')}
           variant="outline"
           className="mb-6 text-xs md:text-sm"
         >
@@ -216,7 +216,7 @@ export default function SuperAdminPlans() {
                     <tr
                       key={school.id}
                       className="border-b hover:bg-slate-50 cursor-pointer"
-                      onClick={() => navigate(`/super-admin-school/${school.id}`)}
+                      onClick={() => navigate(`/SuperAdminSchoolDetail/${school.id}`)}
                     >
                       <td className="py-2 md:py-3 px-2">
                         <span className="font-semibold text-slate-900 truncate block">{school.name}</span>

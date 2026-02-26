@@ -115,8 +115,8 @@ export default function SuperAdminSchools() {
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Management</h1>
             <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage all schools and their lifecycle</p>
           </div>
-          <Button onClick={() => navigate('/super-admin-dashboard')} variant="outline" className="text-xs md:text-sm">
-            Back to Dashboard
+          <Button onClick={() => navigate('/SuperAdminDashboard')} variant="outline" className="text-xs md:text-sm">
+          Back to Dashboard
           </Button>
         </div>
 
@@ -296,8 +296,8 @@ export default function SuperAdminSchools() {
                               <Edit2 className="w-4 h-4" />
                             </Button>
                             <button
-                              onClick={() => navigate(`/super-admin-school/${school.id}`)}
-                              className="text-slate-400 hover:text-slate-600"
+                            onClick={() => navigate(`/SuperAdminSchoolDetail/${school.id}`)}
+                            className="text-slate-400 hover:text-slate-600"
                             >
                               <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
                             </button>
