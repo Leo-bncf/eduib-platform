@@ -130,9 +130,6 @@ export default function SuperAdminUsers() {
     reloadUsers();
   };
 
-  // Filter to only show super_admin users
-  const superAdminFilteredUsers = filteredUsers.filter(u => u.role === 'super_admin');
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
