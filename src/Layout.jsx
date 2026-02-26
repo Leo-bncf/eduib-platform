@@ -5,6 +5,7 @@ import NotificationBell from '@/components/notifications/NotificationBell';
 
 const publicPages = ['Landing', 'Features', 'Pricing', 'Security', 'Contact', 'Demo', 'AcceptInvitation', 'FirstLogin', 'PasswordReset'];
 const fullScreenPages = ['ClassWorkspace', 'AssignmentDetail', 'SubmissionReview', 'ClassGradebook', 'Messages', 'SchoolOnboarding'];
+const adminPages = ['SuperAdminProduction'];
 
 function NotificationWrapper({ children }) {
   const { user, schoolId } = useUser();
