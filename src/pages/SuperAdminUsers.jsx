@@ -108,8 +108,8 @@ export default function SuperAdminUsers() {
     setManageDialogOpen(false);
     // Reload users
     const reloadUsers = async () => {
-      try {
-        const allUsers = await base44.entities.User.list();
+       try {
+         const allUsers = await base44.asServiceRole.entities.User.list();
         const usersWithSchools = await Promise.all(
           allUsers.map(async (u) => {
             if (u.active_school_id) {
