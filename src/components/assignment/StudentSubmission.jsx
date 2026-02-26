@@ -179,9 +179,39 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
   const isSubmitted = existingSubmission?.status === 'submitted' || existingSubmission?.status === 'late';
   const isReturned = existingSubmission?.status === 'returned';
   const isEditable = !isSubmitted || isReturned;
+  const hasGoogleFormats = assignment.primary_submission_format?.includes('google') || assignment.alternative_formats?.some(f => f.includes('google'));
 
   return (
     <div className="space-y-6">
+      {googleConnectionAlert && (
+        <Alert className="bg-amber-50 border-amber-200">
+          <AlertCircle className="w-4 h-4 text-amber-600" />
+          <AlertDescription className="text-amber-800 ml-3">
+            <div className="font-semibold">Google Connection Required</div>
+            <div className="text-sm text-amber-700 mt-1">{googleConnectionAlert.message}</div>
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-3 bg-white border-amber-300 hover:bg-amber-50"
+              onClick={() => {
+                setGoogleConnectionAlert(null);
+                window.location.href = '/reconnect-google';
+              }}
+            >
+              Reconnect Google Account
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {hasGoogleFormats && isEditable && (
+        <GoogleConnectionStatus 
+          schoolId={school?.id}
+          userId={studentId}
+          onReconnect={() => window.location.href = '/reconnect-google'}
+          compact={true}
+        />
+      )}
       {existingSubmission && (
         <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
           <div className="flex items-center justify-between mb-2">
@@ -342,7 +372,7 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
                   })}
                   {allowedFormats.some(f => ['google_doc', 'google_slides', 'google_sheet'].includes(f)) && (
                     <Button
-                      onClick={() => setGoogleDrivePickerOpen(true)}
+                      onClick={handleGoogleDrivePickerOpen}
                       variant="outline"
                       size="sm"
                       className="border-indigo-200 text-indigo-700"
