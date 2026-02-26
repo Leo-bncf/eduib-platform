@@ -9,6 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import PlanUsageCard from '@/components/plan/PlanUsageCard';
+import TrialBanner from '@/components/plan/TrialBanner';
+import { usePlan } from '@/components/plan/PlanProvider';
+import { PLAN_LIMITS } from '@/components/plan/PlanConfig';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SchoolAdminDashboard', icon: LayoutDashboard },
@@ -40,6 +44,7 @@ const PLAN_DETAILS = {
 
 export default function SchoolAdminBilling() {
   const { user, school, schoolId } = useUser();
+  const plan = usePlan();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -50,6 +55,19 @@ export default function SchoolAdminBilling() {
       return schools[0];
     },
     enabled: !!schoolId,
+  });
+
+  const { data: usageCounts } = useQuery({
+    queryKey: ['usage-counts', schoolId],
+    queryFn: async () => {
+      const [memberships, classes] = await Promise.all([
+        base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' }),
+        base44.entities.Class.filter({ school_id: schoolId, status: 'active' }),
+      ]);
+      return { userCount: memberships.length, classCount: classes.length };
+    },
+    enabled: !!schoolId,
+    initialData: { userCount: 0, classCount: 0 },
   });
 
   useEffect(() => {
@@ -116,6 +134,8 @@ export default function SchoolAdminBilling() {
               <p className="text-sm text-slate-500 mt-1">Manage your school's subscription and billing</p>
             </div>
 
+            <TrialBanner />
+
             {message && (
               <Alert className={`mb-6 ${message.type === 'success' ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
                 {message.type === 'success' ? (
@@ -129,7 +149,8 @@ export default function SchoolAdminBilling() {
               </Alert>
             )}
 
-            <div className="grid gap-6 mb-8">
+            <div className="grid lg:grid-cols-3 gap-6 mb-8">
+              <div className="lg:col-span-2">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
@@ -204,9 +225,30 @@ export default function SchoolAdminBilling() {
                   </div>
                 </CardContent>
               </Card>
-
-              {!hasActiveSubscription && (
+              </div>
+              <div className="space-y-6">
+                <PlanUsageCard userCount={usageCounts.userCount} classCount={usageCounts.classCount} />
+                
                 <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Plan Features</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      {PLAN_LIMITS[currentPlan]?.modules.map((mod) => (
+                        <li key={mod} className="flex items-center gap-2 text-slate-600">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                          <span className="capitalize">{mod.replace(/_/g, ' ')}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {!hasActiveSubscription && (
+              <Card>
                   <CardHeader>
                     <CardTitle>Upgrade Your Plan</CardTitle>
                     <CardDescription>Choose a plan that fits your school's needs</CardDescription>
@@ -243,8 +285,7 @@ export default function SchoolAdminBilling() {
                     </div>
                   </CardContent>
                 </Card>
-              )}
-            </div>
+            )}
           </div>
         </main>
       </div>

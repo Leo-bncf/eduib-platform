@@ -86,6 +86,7 @@ import SchoolOnboarding from './pages/SchoolOnboarding';
 import SchoolAdminBilling from './pages/SchoolAdminBilling';
 import SuperAdminBilling from './pages/SuperAdminBilling';
 import Plans from './pages/Plans';
+import SuperAdminPlanManagement from './pages/SuperAdminPlanManagement';
 import __Layout from './Layout.jsx';
 
 
@@ -129,6 +130,7 @@ export const PAGES = {
     "SchoolAdminBilling": SchoolAdminBilling,
     "SuperAdminBilling": SuperAdminBilling,
     "Plans": Plans,
+    "SuperAdminPlanManagement": SuperAdminPlanManagement,
 }
 
 export const pagesConfig = {

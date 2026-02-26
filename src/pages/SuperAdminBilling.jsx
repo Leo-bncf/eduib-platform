@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
-import { LayoutDashboard, Building2, Shield, DollarSign, Loader2, Search, TrendingUp } from 'lucide-react';
+import { LayoutDashboard, Building2, Shield, DollarSign, Settings, Loader2, Search, TrendingUp } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +14,7 @@ const sidebarLinks = [
   { label: 'Dashboard', page: 'SuperAdminDashboard', icon: LayoutDashboard },
   { label: 'Schools', page: 'SuperAdminSchools', icon: Building2 },
   { label: 'Billing', page: 'SuperAdminBilling', icon: DollarSign },
+  { label: 'Plan Management', page: 'SuperAdminPlanManagement', icon: Settings },
   { label: 'Audit Logs', page: 'SuperAdminAuditLogs', icon: Shield },
 ];
 
