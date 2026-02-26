@@ -78,6 +78,8 @@ import StudentCAS from './pages/StudentCAS';
 import StudentEE from './pages/StudentEE';
 import StudentTOK from './pages/StudentTOK';
 import CoordinatorIBCore from './pages/CoordinatorIBCore';
+import SchoolAdminReports from './pages/SchoolAdminReports';
+import SuperAdminAuditLogs from './pages/SuperAdminAuditLogs';
 import __Layout from './Layout.jsx';
 
 
@@ -113,6 +115,8 @@ export const PAGES = {
     "StudentEE": StudentEE,
     "StudentTOK": StudentTOK,
     "CoordinatorIBCore": CoordinatorIBCore,
+    "SchoolAdminReports": SchoolAdminReports,
+    "SuperAdminAuditLogs": SuperAdminAuditLogs,
 }
 
 export const pagesConfig = {
