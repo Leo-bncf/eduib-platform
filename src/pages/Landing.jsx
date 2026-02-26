@@ -40,9 +40,9 @@ function HeroSection() {
                 Book a Demo <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
-            <Link to={createPageUrl('Features')}>
+            <Link to={createPageUrl('Plans')}>
               <Button size="lg" variant="outline" className="rounded-xl px-8 h-12 text-base border-slate-200">
-                Explore Features
+                View Pricing
               </Button>
             </Link>
           </div>
@@ -202,7 +202,7 @@ function CTASection() {
                   Book a Demo <ChevronRight className="ml-1 w-4 h-4" />
                 </Button>
               </Link>
-              <Link to={createPageUrl('Pricing')}>
+              <Link to={createPageUrl('Plans')}>
                 <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-xl px-8 h-12 text-base">
                   View Pricing
                 </Button>
