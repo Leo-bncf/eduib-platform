@@ -26,11 +26,11 @@ export default function ParentDashboard() {
       <div className="min-h-screen bg-slate-50">
         <AppSidebar links={sidebarLinks} role="parent" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         
-        <main className="ml-64 p-8">
+        <main className="ml-0 md:ml-64 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">Parent Portal</h1>
-              <p className="text-slate-600 mb-6">Monitor your child's academic progress and school activities</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Parent Portal</h1>
+              <p className="text-xs md:text-sm text-slate-600 mb-6">Monitor your child's academic progress and school activities</p>
               
               <ChildSelector
                 parentId={user?.id}
@@ -42,81 +42,81 @@ export default function ParentDashboard() {
 
             {selectedChildId ? (
               <Tabs defaultValue="overview" className="space-y-6">
-                <TabsList className="bg-white border border-slate-200">
-                  <TabsTrigger value="overview">
-                    <LayoutDashboard className="w-4 h-4 mr-2" />
-                    Overview
+                <TabsList className="bg-white border border-slate-200 w-full justify-start overflow-x-auto flex-wrap md:flex-nowrap">
+                  <TabsTrigger value="overview" className="text-xs md:text-sm">
+                    <LayoutDashboard className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Overview</span>
                   </TabsTrigger>
-                  <TabsTrigger value="grades">
-                    <BarChart3 className="w-4 h-4 mr-2" />
-                    Grades
+                  <TabsTrigger value="grades" className="text-xs md:text-sm">
+                    <BarChart3 className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Grades</span>
                   </TabsTrigger>
-                  <TabsTrigger value="predicted">
-                    <BarChart3 className="w-4 h-4 mr-2" />
-                    Predicted Grades
+                  <TabsTrigger value="predicted" className="text-xs md:text-sm">
+                    <BarChart3 className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Predicted</span>
                   </TabsTrigger>
-                  <TabsTrigger value="assignments">
-                    <ClipboardCheck className="w-4 h-4 mr-2" />
-                    Assignments
+                  <TabsTrigger value="assignments" className="text-xs md:text-sm">
+                    <ClipboardCheck className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Assignments</span>
                   </TabsTrigger>
-                  <TabsTrigger value="attendance">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Attendance
+                  <TabsTrigger value="attendance" className="text-xs md:text-sm">
+                    <Calendar className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Attendance</span>
                   </TabsTrigger>
-                  <TabsTrigger value="messages">
-                    <MessageSquare className="w-4 h-4 mr-2" />
-                    Messages
+                  <TabsTrigger value="messages" className="text-xs md:text-sm">
+                    <MessageSquare className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Messages</span>
                   </TabsTrigger>
-                  <TabsTrigger value="behavior">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Behavior
+                  <TabsTrigger value="behavior" className="text-xs md:text-sm">
+                    <FileText className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Behavior</span>
                   </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-xl border border-slate-200 p-6">
-                      <h2 className="text-lg font-bold text-slate-900 mb-4">Recent Grades</h2>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+                    <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
+                      <h2 className="text-base md:text-lg font-bold text-slate-900 mb-4">Recent Grades</h2>
                       <ChildGradesOverview schoolId={schoolId} studentId={selectedChildId} />
                     </div>
-                    <div className="bg-white rounded-xl border border-slate-200 p-6">
-                      <h2 className="text-lg font-bold text-slate-900 mb-4">Assignments</h2>
+                    <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
+                      <h2 className="text-base md:text-lg font-bold text-slate-900 mb-4">Assignments</h2>
                       <ChildAssignmentsOverview schoolId={schoolId} studentId={selectedChildId} />
                     </div>
                   </div>
                 </TabsContent>
 
                 <TabsContent value="grades">
-                  <div className="bg-white rounded-xl border border-slate-200 p-6">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6">Grades & Feedback</h2>
+                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Grades & Feedback</h2>
                     <ChildGradesOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="predicted">
-                  <div className="bg-white rounded-xl border border-slate-200 p-6">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6">Predicted IB Grades</h2>
+                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Predicted IB Grades</h2>
                     <ChildPredictedGrades schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="assignments">
-                  <div className="bg-white rounded-xl border border-slate-200 p-6">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6">Assignments Overview</h2>
+                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Assignments Overview</h2>
                     <ChildAssignmentsOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="attendance">
-                  <div className="bg-white rounded-xl border border-slate-200 p-6">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6">Attendance Records</h2>
+                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Attendance Records</h2>
                     <ChildAttendanceOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="messages">
-                  <div className="bg-white rounded-xl border border-slate-200 p-6">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6">Teacher Communication</h2>
+                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Teacher Communication</h2>
                     <ParentMessaging
                       parentId={user?.id}
                       parentName={user?.full_name}
@@ -127,17 +127,17 @@ export default function ParentDashboard() {
                 </TabsContent>
 
                 <TabsContent value="behavior">
-                  <div className="bg-white rounded-xl border border-slate-200 p-6">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6">Behavior & Notes</h2>
+                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Behavior & Notes</h2>
                     <ChildBehaviorOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
               </Tabs>
             ) : (
-              <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
-                <Users className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-slate-900 mb-2">Select a Child</h2>
-                <p className="text-slate-600">Choose a child from the dropdown above to view their information</p>
+              <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-8 md:p-12 text-center">
+                <Users className="w-12 md:w-16 h-12 md:h-16 text-slate-300 mx-auto mb-4" />
+                <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-2">Select a Child</h2>
+                <p className="text-xs md:text-sm text-slate-600">Choose a child from the dropdown above to view their information</p>
               </div>
             )}
           </div>
