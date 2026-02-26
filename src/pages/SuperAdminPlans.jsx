@@ -89,79 +89,79 @@ export default function SuperAdminPlans() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <Button
           onClick={() => navigate('/super-admin-dashboard')}
           variant="outline"
-          className="mb-6"
+          className="mb-6 text-xs md:text-sm"
         >
-          <ChevronLeft className="w-4 h-4 mr-2" />
+          <ChevronLeft className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
           Back to Dashboard
         </Button>
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Plan Management</h1>
-          <p className="text-slate-600 mt-2">Manage school plans and subscriptions</p>
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Plan Management</h1>
+          <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage school plans and subscriptions</p>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-6 md:mb-8">
           <Card className="bg-gradient-to-br from-purple-50 to-purple-50 border-purple-200">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-slate-600 text-sm font-semibold">Est. MRR</p>
-                  <p className="text-3xl font-bold text-slate-900 mt-2">
+            <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-slate-600 text-xs md:text-sm font-semibold">Est. MRR</p>
+                  <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">
                     ${metrics?.mrrEstimate || 0}
                   </p>
                 </div>
-                <TrendingUp className="w-8 h-8 text-purple-600 opacity-20" />
+                <TrendingUp className="w-6 md:w-8 h-6 md:h-8 text-purple-600 opacity-20 flex-shrink-0" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-blue-50 to-blue-50 border-blue-200">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-slate-600 text-sm font-semibold">Paid Schools</p>
-                  <p className="text-3xl font-bold text-slate-900 mt-2">
+            <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-slate-600 text-xs md:text-sm font-semibold">Paid Schools</p>
+                  <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">
                     {schools.filter(s => s.billing_status === 'active').length}
                   </p>
                 </div>
-                <Zap className="w-8 h-8 text-blue-600 opacity-20" />
+                <Zap className="w-6 md:w-8 h-6 md:h-8 text-blue-600 opacity-20 flex-shrink-0" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-amber-50 to-amber-50 border-amber-200">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-slate-600 text-sm font-semibold">On Trial</p>
-                  <p className="text-3xl font-bold text-slate-900 mt-2">
+            <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-slate-600 text-xs md:text-sm font-semibold">On Trial</p>
+                  <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">
                     {schools.filter(s => s.billing_status === 'trial').length}
                   </p>
                 </div>
-                <Users className="w-8 h-8 text-amber-600 opacity-20" />
+                <Users className="w-6 md:w-8 h-6 md:h-8 text-amber-600 opacity-20 flex-shrink-0" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Plans Distribution */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
           <Card>
-            <CardHeader>
-              <CardTitle>Schools by Plan</CardTitle>
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="text-base md:text-lg">Schools by Plan</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-2 md:space-y-3 p-4 md:p-6 pt-0 md:pt-0">
               {Object.entries(metrics?.byPlan || {}).map(([plan, count]) => (
-                <div key={plan} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                  <span className="font-semibold text-slate-900 capitalize">{plan}</span>
-                  <Badge>{count}</Badge>
+                <div key={plan} className="flex items-center justify-between p-2 md:p-3 bg-slate-50 rounded-lg text-xs md:text-sm gap-2">
+                  <span className="font-semibold text-slate-900 capitalize truncate">{plan}</span>
+                  <Badge className="flex-shrink-0">{count}</Badge>
                 </div>
               ))}
             </CardContent>
@@ -169,10 +169,10 @@ export default function SuperAdminPlans() {
 
           {/* Billing Status Distribution */}
           <Card>
-            <CardHeader>
-              <CardTitle>Billing Status</CardTitle>
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="text-base md:text-lg">Billing Status</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-2 md:space-y-3 p-4 md:p-6 pt-0 md:pt-0">
               {Object.entries(metrics?.byBilling || {}).map(([status, count]) => {
                 const colors = {
                   'active': 'bg-emerald-50 text-emerald-900',
@@ -184,9 +184,9 @@ export default function SuperAdminPlans() {
                 };
 
                 return (
-                  <div key={status} className={`flex items-center justify-between p-3 ${colors[status] || 'bg-slate-50'} rounded-lg`}>
-                    <span className="font-semibold capitalize">{status || 'None'}</span>
-                    <Badge>{count}</Badge>
+                  <div key={status} className={`flex items-center justify-between p-2 md:p-3 ${colors[status] || 'bg-slate-50'} rounded-lg text-xs md:text-sm gap-2`}>
+                    <span className="font-semibold capitalize truncate">{status || 'None'}</span>
+                    <Badge className="flex-shrink-0">{count}</Badge>
                   </div>
                 );
               })}
@@ -196,19 +196,19 @@ export default function SuperAdminPlans() {
 
         {/* Schools by Billing Status */}
         <Card>
-          <CardHeader>
-            <CardTitle>All Schools with Billing Status</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">All Schools with Billing Status</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-xs md:text-sm">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-2 px-2 font-semibold">School Name</th>
+                    <th className="text-left py-2 px-2 font-semibold">School</th>
                     <th className="text-left py-2 px-2 font-semibold">Plan</th>
-                    <th className="text-left py-2 px-2 font-semibold">Billing Status</th>
-                    <th className="text-left py-2 px-2 font-semibold">Trial End Date</th>
-                    <th className="text-left py-2 px-2 font-semibold">Period End</th>
+                    <th className="text-left py-2 px-2 font-semibold">Status</th>
+                    <th className="text-left py-2 px-2 font-semibold hidden sm:table-cell">Trial End</th>
+                    <th className="text-left py-2 px-2 font-semibold hidden md:table-cell">Period End</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -218,24 +218,24 @@ export default function SuperAdminPlans() {
                       className="border-b hover:bg-slate-50 cursor-pointer"
                       onClick={() => navigate(`/super-admin-school/${school.id}`)}
                     >
-                      <td className="py-3 px-2">
-                        <span className="font-semibold text-slate-900">{school.name}</span>
+                      <td className="py-2 md:py-3 px-2">
+                        <span className="font-semibold text-slate-900 truncate block">{school.name}</span>
                       </td>
-                      <td className="py-3 px-2 capitalize">{school.plan || 'None'}</td>
-                      <td className="py-3 px-2">
+                      <td className="py-2 md:py-3 px-2 capitalize text-xs">{school.plan || 'None'}</td>
+                      <td className="py-2 md:py-3 px-2">
                         <Badge className="text-xs">
                           {school.billing_status || 'none'}
                         </Badge>
                       </td>
-                      <td className="py-3 px-2 text-slate-600">
+                      <td className="py-2 md:py-3 px-2 text-slate-600 hidden sm:table-cell text-xs">
                         {school.trial_end_date
-                          ? new Date(school.trial_end_date).toLocaleDateString()
+                          ? new Date(school.trial_end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                           : '—'
                         }
                       </td>
-                      <td className="py-3 px-2 text-slate-600">
+                      <td className="py-2 md:py-3 px-2 text-slate-600 hidden md:table-cell text-xs">
                         {school.subscription_current_period_end
-                          ? new Date(school.subscription_current_period_end).toLocaleDateString()
+                          ? new Date(school.subscription_current_period_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                           : '—'
                         }
                       </td>
