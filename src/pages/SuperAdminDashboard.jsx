@@ -1,130 +1,279 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import RoleGuard from '@/components/auth/RoleGuard';
-import AppSidebar from '@/components/app/AppSidebar';
-import StatCard from '@/components/app/StatCard';
-import { useUser } from '@/components/auth/UserContext';
-import { 
-  LayoutDashboard, Building2, Users, CreditCard, BarChart3, 
-  LifeBuoy, FileText, Loader2, Plus, ExternalLink
-} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { format } from 'date-fns';
-import { createPageUrl } from '@/utils';
+import { Loader2, TrendingUp, Users, Building2, DollarSign, AlertCircle } from 'lucide-react';
 
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'SuperAdminDashboard', icon: LayoutDashboard },
-  { label: 'Schools', page: 'SuperAdminSchools', icon: Building2 },
-  { label: 'Platform Analytics', page: 'SuperAdminDashboard', icon: BarChart3 },
-];
-
+/**
+ * Super admin operations dashboard
+ * Shows platform-wide metrics and school lifecycle overview
+ */
 export default function SuperAdminDashboard() {
-  const { user } = useUser();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [schools, setSchools] = useState([]);
+  const [metrics, setMetrics] = useState(null);
 
-  const { data: schools = [], isLoading: loadingSchools } = useQuery({
-    queryKey: ['schools'],
-    queryFn: () => base44.entities.School.list('-created_date'),
-  });
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      try {
+        const authed = await base44.auth.isAuthenticated();
+        if (!authed) {
+          navigate('/');
+          return;
+        }
 
-  const { data: memberships = [] } = useQuery({
-    queryKey: ['all-memberships'],
-    queryFn: () => base44.entities.SchoolMembership.list(),
-  });
+        const user = await base44.auth.me();
 
-  const { data: demoRequests = [] } = useQuery({
-    queryKey: ['demo-requests'],
-    queryFn: () => base44.entities.DemoRequest.filter({ status: 'new' }),
-  });
+        // Check if user is super admin
+        if (user.role !== 'admin') {
+          navigate('/dashboard');
+          return;
+        }
 
-  const activeSchools = schools.filter(s => s.status === 'active').length;
-  const totalUsers = memberships.length;
+        // Load all schools
+        const allSchools = await base44.entities.School.list();
+        setSchools(allSchools);
 
-  const statusColors = {
-    active: 'bg-emerald-50 text-emerald-700',
-    onboarding: 'bg-amber-50 text-amber-700',
-    suspended: 'bg-red-50 text-red-700',
-    cancelled: 'bg-slate-100 text-slate-600',
-  };
+        // Calculate metrics
+        const activeSchools = allSchools.filter(s => s.status === 'active').length;
+        const onboardingSchools = allSchools.filter(s => s.status === 'onboarding').length;
+        const trialSchools = allSchools.filter(s => s.billing_status === 'trial').length;
+        const paidSchools = allSchools.filter(s => 
+          s.billing_status === 'active' || s.billing_status === 'past_due'
+        ).length;
+        const atRiskSchools = allSchools.filter(s => 
+          s.billing_status === 'past_due' || s.billing_status === 'canceled'
+        ).length;
+
+        setMetrics({
+          total: allSchools.length,
+          active: activeSchools,
+          onboarding: onboardingSchools,
+          trial: trialSchools,
+          paid: paidSchools,
+          atRisk: atRiskSchools,
+          suspended: allSchools.filter(s => s.status === 'suspended').length
+        });
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading dashboard:', error);
+        setLoading(false);
+      }
+    };
+
+    loadDashboardData();
+  }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   return (
-    <RoleGuard allowedRoles={['super_admin', 'admin']}>
-      <div className="min-h-screen bg-slate-50">
-        <AppSidebar links={sidebarLinks} role="super_admin" userName={user?.full_name} />
-        
-        <main className="ml-64 p-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-8">
-              <h1 className="text-2xl font-bold text-slate-900">Platform Overview</h1>
-              <p className="text-sm text-slate-500 mt-1">Manage all schools and monitor the platform</p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-slate-900">Platform Operations</h1>
+          <p className="text-slate-600 mt-2">Manage schools, billing, and platform health</p>
+        </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <StatCard label="Total Schools" value={schools.length} icon={Building2} color="indigo" />
-              <StatCard label="Active Schools" value={activeSchools} icon={Building2} color="emerald" />
-              <StatCard label="Total Users" value={totalUsers} icon={Users} color="blue" />
-              <StatCard label="New Demo Requests" value={demoRequests.length} icon={FileText} color="amber" />
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-white rounded-xl border border-slate-100 overflow-hidden">
-                <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                  <h2 className="font-semibold text-slate-900">Schools</h2>
-                  <a href={createPageUrl('SuperAdminSchools')}>
-                    <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 h-8">
-                      <Plus className="w-3.5 h-3.5 mr-1.5" /> Add School
-                    </Button>
-                  </a>
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-50 border-blue-200">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-slate-600 text-sm font-semibold">Total Schools</p>
+                  <p className="text-3xl font-bold text-slate-900 mt-2">{metrics?.total || 0}</p>
                 </div>
-                {loadingSchools ? (
-                  <div className="p-12 text-center">
-                    <Loader2 className="w-6 h-6 animate-spin text-slate-300 mx-auto" />
-                  </div>
-                ) : schools.length === 0 ? (
-                  <div className="p-12 text-center text-slate-400 text-sm">No schools yet</div>
-                ) : (
-                  <div className="divide-y divide-slate-50">
-                    {schools.slice(0, 8).map(school => (
-                      <div key={school.id} className="px-6 py-3.5 flex items-center justify-between hover:bg-slate-50 transition-colors">
-                        <div>
-                          <p className="font-medium text-slate-900 text-sm">{school.name}</p>
-                          <p className="text-xs text-slate-400">{school.city}{school.country ? `, ${school.country}` : ''}</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Badge className={`${statusColors[school.status]} border-0 text-xs`}>
-                            {school.status}
-                          </Badge>
-                          <span className="text-xs text-slate-400">{school.plan}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <Building2 className="w-8 h-8 text-blue-600 opacity-20" />
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-                <div className="px-6 py-4 border-b border-slate-100">
-                  <h2 className="font-semibold text-slate-900">Recent Demo Requests</h2>
+          <Card className="bg-gradient-to-br from-emerald-50 to-emerald-50 border-emerald-200">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-slate-600 text-sm font-semibold">Active Schools</p>
+                  <p className="text-3xl font-bold text-slate-900 mt-2">{metrics?.active || 0}</p>
                 </div>
-                {demoRequests.length === 0 ? (
-                  <div className="p-12 text-center text-slate-400 text-sm">No pending requests</div>
-                ) : (
-                  <div className="divide-y divide-slate-50">
-                    {demoRequests.slice(0, 6).map(req => (
-                      <div key={req.id} className="px-6 py-3.5">
-                        <p className="font-medium text-slate-900 text-sm">{req.school_name}</p>
-                        <p className="text-xs text-slate-400">{req.contact_name} · {req.email}</p>
-                        <p className="text-xs text-slate-400 mt-0.5">{req.created_date ? format(new Date(req.created_date), 'MMM d, yyyy') : ''}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <TrendingUp className="w-8 h-8 text-emerald-600 opacity-20" />
               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-50 border-purple-200">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-slate-600 text-sm font-semibold">Paid Schools</p>
+                  <p className="text-3xl font-bold text-slate-900 mt-2">{metrics?.paid || 0}</p>
+                  <p className="text-xs text-slate-500 mt-1">{metrics?.trial || 0} on trial</p>
+                </div>
+                <DollarSign className="w-8 h-8 text-purple-600 opacity-20" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-red-50 to-red-50 border-red-200">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-slate-600 text-sm font-semibold">At Risk</p>
+                  <p className="text-3xl font-bold text-slate-900 mt-2">{metrics?.atRisk || 0}</p>
+                  <p className="text-xs text-slate-500 mt-1">Billing or suspended</p>
+                </div>
+                <AlertCircle className="w-8 h-8 text-red-600 opacity-20" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* School Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Onboarding Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Onboarding Status</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm font-semibold text-slate-700">In Setup</span>
+                <Badge variant="outline">{metrics?.onboarding || 0}</Badge>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm font-semibold text-slate-700">Fully Onboarded</span>
+                <Badge className="bg-emerald-100 text-emerald-800">
+                  {metrics?.active || 0}
+                </Badge>
+              </div>
+              <Button
+                onClick={() => navigate('/super-admin-schools')}
+                className="w-full mt-4"
+                variant="outline"
+              >
+                View All Schools
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Subscription Health */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Subscription Health</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm font-semibold text-slate-700">Trial Active</span>
+                <Badge className="bg-blue-100 text-blue-800">
+                  {metrics?.trial || 0}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm font-semibold text-slate-700">Paying Customers</span>
+                <Badge className="bg-emerald-100 text-emerald-800">
+                  {metrics?.paid || 0}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm font-semibold text-slate-700">Suspended</span>
+                <Badge className="bg-red-100 text-red-800">
+                  {metrics?.suspended || 0}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Button
+                onClick={() => navigate('/super-admin-schools')}
+                variant="outline"
+                className="w-full justify-start"
+              >
+                Manage Schools
+              </Button>
+              <Button
+                onClick={() => navigate('/super-admin-billing')}
+                variant="outline"
+                className="w-full justify-start"
+              >
+                View Billing
+              </Button>
+              <Button
+                onClick={() => navigate('/super-admin-audit-logs')}
+                variant="outline"
+                className="w-full justify-start"
+              >
+                Audit Logs
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Recent Schools Overview */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Schools Needing Attention</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {schools
+                .filter(s => 
+                  s.status === 'onboarding' || 
+                  s.billing_status === 'past_due' || 
+                  s.billing_status === 'incomplete'
+                )
+                .slice(0, 5)
+                .map((school) => (
+                  <div
+                    key={school.id}
+                    className="flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer"
+                    onClick={() => navigate(`/super-admin-school/${school.id}`)}
+                  >
+                    <div>
+                      <p className="font-semibold text-slate-900">{school.name}</p>
+                      <p className="text-xs text-slate-600 mt-0.5">
+                        {school.city}, {school.country}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-xs">
+                        {school.status}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        {school.billing_status || 'no-plan'}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+
+              {schools.filter(s => 
+                s.status === 'onboarding' || 
+                s.billing_status === 'past_due' || 
+                s.billing_status === 'incomplete'
+              ).length === 0 && (
+                <p className="text-center text-slate-600 py-4 text-sm">
+                  All schools are in good standing
+                </p>
+              )}
             </div>
-          </div>
-        </main>
+          </CardContent>
+        </Card>
       </div>
-    </RoleGuard>
+    </div>
   );
 }
