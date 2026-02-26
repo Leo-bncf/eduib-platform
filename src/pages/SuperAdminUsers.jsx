@@ -145,7 +145,7 @@ export default function SuperAdminUsers() {
         <div className="mb-6 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Button onClick={() => navigate('/super-admin-dashboard')} variant="ghost" size="icon" className="h-8 w-8">
+              <Button onClick={() => navigate('/SuperAdminDashboard')} variant="ghost" size="icon" className="h-8 w-8">
                 <ChevronLeft className="w-4 h-4" />
               </Button>
               <h1 className="text-2xl md:text-3xl font-bold text-slate-900">User Management</h1>
