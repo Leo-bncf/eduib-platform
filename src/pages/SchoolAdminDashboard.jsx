@@ -35,9 +35,19 @@ export default function SchoolAdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Admin Dashboard</h1>
-          <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Welcome, {user.full_name}</p>
+        <div className="mb-6 md:mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Admin Dashboard</h1>
+            <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Welcome, {user.full_name}</p>
+          </div>
+          <Button 
+            variant="outline" 
+            onClick={() => base44.auth.logout()}
+            className="gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="hidden sm:inline">Logout</span>
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
