@@ -47,76 +47,78 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Landing from './pages/Landing';
-import Features from './pages/Features';
-import Pricing from './pages/Pricing';
-import Security from './pages/Security';
-import Contact from './pages/Contact';
-import Demo from './pages/Demo';
 import AppHome from './pages/AppHome';
-import NoSchool from './pages/NoSchool';
-import SuperAdminDashboard from './pages/SuperAdminDashboard';
-import SuperAdminSchools from './pages/SuperAdminSchools';
-import SchoolAdminDashboard from './pages/SchoolAdminDashboard';
-import SchoolAdminUsers from './pages/SchoolAdminUsers';
-import SchoolAdminClasses from './pages/SchoolAdminClasses';
-import SchoolAdminSubjects from './pages/SchoolAdminSubjects';
-import TeacherDashboard from './pages/TeacherDashboard';
-import TeacherClasses from './pages/TeacherClasses';
-import StudentDashboard from './pages/StudentDashboard';
-import ParentDashboard from './pages/ParentDashboard';
-import CoordinatorDashboard from './pages/CoordinatorDashboard';
-import ClassWorkspace from './pages/ClassWorkspace';
 import AssignmentDetail from './pages/AssignmentDetail';
-import SubmissionReview from './pages/SubmissionReview';
 import ClassGradebook from './pages/ClassGradebook';
+import ClassWorkspace from './pages/ClassWorkspace';
+import Contact from './pages/Contact';
+import CoordinatorDashboard from './pages/CoordinatorDashboard';
+import CoordinatorIBCore from './pages/CoordinatorIBCore';
+import Demo from './pages/Demo';
+import Features from './pages/Features';
+import Landing from './pages/Landing';
 import Messages from './pages/Messages';
-import StudentBehavior from './pages/StudentBehavior';
+import NoSchool from './pages/NoSchool';
+import ParentDashboard from './pages/ParentDashboard';
+import Pricing from './pages/Pricing';
 import SchoolAdminAttendance from './pages/SchoolAdminAttendance';
+import SchoolAdminClasses from './pages/SchoolAdminClasses';
+import SchoolAdminDashboard from './pages/SchoolAdminDashboard';
+import SchoolAdminReports from './pages/SchoolAdminReports';
+import SchoolAdminSubjects from './pages/SchoolAdminSubjects';
 import SchoolAdminTimetable from './pages/SchoolAdminTimetable';
+import SchoolAdminUsers from './pages/SchoolAdminUsers';
+import Security from './pages/Security';
+import StudentBehavior from './pages/StudentBehavior';
 import StudentCAS from './pages/StudentCAS';
+import StudentDashboard from './pages/StudentDashboard';
 import StudentEE from './pages/StudentEE';
 import StudentTOK from './pages/StudentTOK';
-import CoordinatorIBCore from './pages/CoordinatorIBCore';
-import SchoolAdminReports from './pages/SchoolAdminReports';
+import SubmissionReview from './pages/SubmissionReview';
 import SuperAdminAuditLogs from './pages/SuperAdminAuditLogs';
+import SuperAdminDashboard from './pages/SuperAdminDashboard';
+import SuperAdminSchools from './pages/SuperAdminSchools';
+import TeacherClasses from './pages/TeacherClasses';
+import TeacherDashboard from './pages/TeacherDashboard';
+import CoordinatorPredictedGrades from './pages/CoordinatorPredictedGrades';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Landing": Landing,
-    "Features": Features,
-    "Pricing": Pricing,
-    "Security": Security,
-    "Contact": Contact,
-    "Demo": Demo,
     "AppHome": AppHome,
-    "NoSchool": NoSchool,
-    "SuperAdminDashboard": SuperAdminDashboard,
-    "SuperAdminSchools": SuperAdminSchools,
-    "SchoolAdminDashboard": SchoolAdminDashboard,
-    "SchoolAdminUsers": SchoolAdminUsers,
-    "SchoolAdminClasses": SchoolAdminClasses,
-    "SchoolAdminSubjects": SchoolAdminSubjects,
-    "TeacherDashboard": TeacherDashboard,
-    "TeacherClasses": TeacherClasses,
-    "StudentDashboard": StudentDashboard,
-    "ParentDashboard": ParentDashboard,
-    "CoordinatorDashboard": CoordinatorDashboard,
-    "ClassWorkspace": ClassWorkspace,
     "AssignmentDetail": AssignmentDetail,
-    "SubmissionReview": SubmissionReview,
     "ClassGradebook": ClassGradebook,
+    "ClassWorkspace": ClassWorkspace,
+    "Contact": Contact,
+    "CoordinatorDashboard": CoordinatorDashboard,
+    "CoordinatorIBCore": CoordinatorIBCore,
+    "Demo": Demo,
+    "Features": Features,
+    "Landing": Landing,
     "Messages": Messages,
-    "StudentBehavior": StudentBehavior,
+    "NoSchool": NoSchool,
+    "ParentDashboard": ParentDashboard,
+    "Pricing": Pricing,
     "SchoolAdminAttendance": SchoolAdminAttendance,
+    "SchoolAdminClasses": SchoolAdminClasses,
+    "SchoolAdminDashboard": SchoolAdminDashboard,
+    "SchoolAdminReports": SchoolAdminReports,
+    "SchoolAdminSubjects": SchoolAdminSubjects,
     "SchoolAdminTimetable": SchoolAdminTimetable,
+    "SchoolAdminUsers": SchoolAdminUsers,
+    "Security": Security,
+    "StudentBehavior": StudentBehavior,
     "StudentCAS": StudentCAS,
+    "StudentDashboard": StudentDashboard,
     "StudentEE": StudentEE,
     "StudentTOK": StudentTOK,
-    "CoordinatorIBCore": CoordinatorIBCore,
-    "SchoolAdminReports": SchoolAdminReports,
+    "SubmissionReview": SubmissionReview,
     "SuperAdminAuditLogs": SuperAdminAuditLogs,
+    "SuperAdminDashboard": SuperAdminDashboard,
+    "SuperAdminSchools": SuperAdminSchools,
+    "TeacherClasses": TeacherClasses,
+    "TeacherDashboard": TeacherDashboard,
+    "CoordinatorPredictedGrades": CoordinatorPredictedGrades,
 }
 
 export const pagesConfig = {
