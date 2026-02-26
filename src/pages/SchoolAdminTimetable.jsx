@@ -7,7 +7,10 @@ import AppSidebar from '@/components/app/AppSidebar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LayoutDashboard, Users, BookOpen, GraduationCap, Settings, Calendar, Loader2, Clock, MapPin, Plus, RefreshCw, FileText } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, GraduationCap, Settings, Calendar, Loader2, Clock, MapPin, Plus, RefreshCw, FileText, Activity } from 'lucide-react';
+import TimetableIntegrationStatus from '@/components/timetable/TimetableIntegrationStatus';
+import TimetableSyncHistory from '@/components/timetable/TimetableSyncHistory';
+import TimetableImportDialog from '@/components/timetable/TimetableImportDialog';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'SchoolAdminDashboard', icon: LayoutDashboard },
@@ -23,6 +26,7 @@ const sidebarLinks = [
 export default function SchoolAdminTimetable() {
   const { user, school, schoolId } = useUser();
   const [selectedDay, setSelectedDay] = useState(1); // Monday
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
 
   const { data: scheduleEntries = [], isLoading } = useQuery({
     queryKey: ['school-schedule', schoolId, selectedDay],
@@ -60,14 +64,21 @@ export default function SchoolAdminTimetable() {
                 <h1 className="text-3xl font-bold text-slate-900 mb-2">Timetable Management</h1>
                 <p className="text-slate-600">Manage school schedule and sync with external systems</p>
               </div>
-              <Button variant="outline" className="gap-2">
+              <Button 
+                onClick={() => setImportDialogOpen(true)}
+                className="gap-2 bg-indigo-600 hover:bg-indigo-700"
+              >
                 <RefreshCw className="w-4 h-4" />
-                Sync with External System
+                Import from External System
               </Button>
             </div>
 
-            <Tabs defaultValue="schedule" className="space-y-6">
+            <Tabs defaultValue="integration" className="space-y-6">
               <TabsList className="bg-white border border-slate-200">
+                <TabsTrigger value="integration">
+                  <Activity className="w-4 h-4 mr-2" />
+                  Integration
+                </TabsTrigger>
                 <TabsTrigger value="schedule">
                   <Calendar className="w-4 h-4 mr-2" />
                   Schedule
@@ -85,6 +96,17 @@ export default function SchoolAdminTimetable() {
                   Settings
                 </TabsTrigger>
               </TabsList>
+
+              <TabsContent value="integration">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="lg:col-span-1">
+                    <TimetableIntegrationStatus schoolId={schoolId} />
+                  </div>
+                  <div className="lg:col-span-2">
+                    <TimetableSyncHistory schoolId={schoolId} />
+                  </div>
+                </div>
+              </TabsContent>
 
               <TabsContent value="schedule">
                 <div className="bg-white rounded-xl border border-slate-200 p-6">
@@ -116,9 +138,16 @@ export default function SchoolAdminTimetable() {
                       {scheduleEntries.sort((a, b) => a.start_time.localeCompare(b.start_time)).map(entry => (
                         <div key={entry.id} className="border border-slate-200 rounded-lg p-4 hover:bg-slate-50">
                           <div className="flex items-start justify-between">
-                            <div>
-                              <h4 className="font-semibold text-slate-900">{entry.class_name}</h4>
-                              <div className="flex items-center gap-4 mt-2 text-sm text-slate-600">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <h4 className="font-semibold text-slate-900">{entry.class_name}</h4>
+                                {entry.external_sync_id && (
+                                  <Badge className="bg-indigo-50 text-indigo-700 border-0 text-xs">
+                                    Synced
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-4 text-sm text-slate-600">
                                 <span className="flex items-center gap-1">
                                   <Clock className="w-4 h-4" />
                                   {entry.start_time} - {entry.end_time}
@@ -165,9 +194,16 @@ export default function SchoolAdminTimetable() {
                       {periods.sort((a, b) => (a.period_order || 0) - (b.period_order || 0)).map(period => (
                         <div key={period.id} className="border border-slate-200 rounded-lg p-4">
                           <div className="flex items-center justify-between">
-                            <div>
-                              <h4 className="font-semibold text-slate-900">{period.name}</h4>
-                              <p className="text-sm text-slate-600 mt-1">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-semibold text-slate-900">{period.name}</h4>
+                                {period.external_sync_id && (
+                                  <Badge className="bg-indigo-50 text-indigo-700 border-0 text-xs">
+                                    Synced
+                                  </Badge>
+                                )}
+                              </div>
+                              <p className="text-sm text-slate-600">
                                 {period.start_time} - {period.end_time}
                                 {period.is_break && <Badge className="ml-2 bg-amber-50 text-amber-700 border-0">Break</Badge>}
                               </p>
@@ -199,7 +235,16 @@ export default function SchoolAdminTimetable() {
                       {rooms.map(room => (
                         <div key={room.id} className="border border-slate-200 rounded-lg p-4">
                           <div className="flex items-start justify-between mb-2">
-                            <h4 className="font-semibold text-slate-900">{room.name}</h4>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-semibold text-slate-900">{room.name}</h4>
+                                {room.external_sync_id && (
+                                  <Badge className="bg-indigo-50 text-indigo-700 border-0 text-xs">
+                                    Synced
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
                             <Badge variant="outline" className="capitalize">{room.room_type}</Badge>
                           </div>
                           {room.building && (
@@ -263,6 +308,12 @@ export default function SchoolAdminTimetable() {
             </Tabs>
           </div>
         </main>
+
+        <TimetableImportDialog
+          open={importDialogOpen}
+          onClose={() => setImportDialogOpen(false)}
+          schoolId={schoolId}
+        />
       </div>
     </RoleGuard>
   );
