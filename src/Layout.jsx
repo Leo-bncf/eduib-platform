@@ -3,8 +3,8 @@ import { UserProvider, useUser } from '@/components/auth/UserContext';
 import { PlanProvider } from '@/components/plan/PlanProvider';
 import NotificationBell from '@/components/notifications/NotificationBell';
 
-const publicPages = ['Landing', 'Features', 'Pricing', 'Security', 'Contact', 'Demo'];
-const fullScreenPages = ['ClassWorkspace', 'AssignmentDetail', 'SubmissionReview', 'ClassGradebook', 'Messages'];
+const publicPages = ['Landing', 'Features', 'Pricing', 'Security', 'Contact', 'Demo', 'AcceptInvitation', 'FirstLogin', 'PasswordReset'];
+const fullScreenPages = ['ClassWorkspace', 'AssignmentDetail', 'SubmissionReview', 'ClassGradebook', 'Messages', 'SchoolOnboarding'];
 
 function NotificationWrapper({ children }) {
   const { user, schoolId } = useUser();
