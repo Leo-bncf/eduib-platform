@@ -4,6 +4,7 @@ import PublicFooter from '@/components/public/PublicFooter';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
+import { base44 } from '@/api/base44Client';
 import { 
   ArrowRight, BookOpen, Users, BarChart3, Shield, 
   MessageSquare, Calendar, ClipboardCheck, Star,
@@ -35,17 +36,19 @@ function HeroSection() {
           </p>
           
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to={createPageUrl('Demo')}>
-              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 h-12 text-base shadow-lg shadow-indigo-200">
-                Book a Demo <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </Link>
-            <Link to={createPageUrl('Plans')}>
-              <Button size="lg" variant="outline" className="rounded-xl px-8 h-12 text-base border-slate-200">
-                View Pricing
-              </Button>
-            </Link>
-          </div>
+             <Button 
+               size="lg" 
+               className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 h-12 text-base shadow-lg shadow-indigo-200"
+               onClick={() => base44.auth.redirectToLogin()}
+             >
+               Sign In <ArrowRight className="ml-2 w-4 h-4" />
+             </Button>
+             <Link to={createPageUrl('Demo')}>
+               <Button size="lg" variant="outline" className="rounded-xl px-8 h-12 text-base border-slate-200">
+                 Book a Demo
+               </Button>
+             </Link>
+           </div>
         </div>
         
         <div className="mt-20 relative">
