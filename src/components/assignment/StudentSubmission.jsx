@@ -3,18 +3,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Upload, Link2, FileText, X, Send, Save } from 'lucide-react';
+import { Loader2, Send, Save, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
+import DocumentCard from './DocumentCard';
+import DocumentPicker from './DocumentPicker';
 
 export default function StudentSubmission({ assignment, studentId, studentName, existingSubmission }) {
   const queryClient = useQueryClient();
   const [content, setContent] = useState(existingSubmission?.content || '');
-  const [linkUrl, setLinkUrl] = useState(existingSubmission?.link_url || '');
-  const [files, setFiles] = useState(existingSubmission?.file_urls || []);
-  const [uploading, setUploading] = useState(false);
+  const [documents, setDocuments] = useState(existingSubmission?.documents || []);
+  const [documentPickerOpen, setDocumentPickerOpen] = useState(false);
 
   const submitMutation = useMutation({
     mutationFn: (data) => {
@@ -29,17 +29,17 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
     },
   });
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setFiles([...files, file_url]);
-    } catch (error) {
-      console.error('Upload failed:', error);
-    }
-    setUploading(false);
+  const handleAddDocuments = (newDocs) => {
+    setDocuments([...documents, ...newDocs]);
+    setDocumentPickerOpen(false);
+  };
+
+  const handleRemoveDocument = (doc) => {
+    setDocuments(documents.filter(d => d.id !== doc.id));
+  };
+
+  const handleOpenDocument = (doc) => {
+    window.open(doc.url, '_blank', 'noopener,noreferrer');
   };
 
   const handleSubmit = (status) => {
@@ -51,16 +51,16 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
       student_id: studentId,
       student_name: studentName,
       content,
-      link_url: linkUrl,
-      file_urls: files,
+      documents,
       status: isLate && status === 'submitted' ? 'late' : status,
-      submitted_at: status === 'submitted' ? new Date().toISOString() : null,
+      submitted_at: status === 'submitted' ? new Date().toISOString() : existingSubmission?.submitted_at,
     });
   };
 
-  const canSubmit = content.trim() || linkUrl.trim() || files.length > 0;
+  const canSubmit = content.trim() || documents.length > 0;
   const isSubmitted = existingSubmission?.status === 'submitted' || existingSubmission?.status === 'late';
   const isReturned = existingSubmission?.status === 'returned';
+  const isEditable = !isSubmitted || isReturned;
 
   return (
     <div className="space-y-6">
@@ -99,51 +99,55 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
           placeholder="Type your response or notes here..."
           rows={8}
           className="mt-1.5"
-          disabled={isSubmitted && !isReturned}
+          disabled={!isEditable}
         />
       </div>
 
       <div>
-        <Label className="text-sm font-semibold">Add Link</Label>
-        <div className="flex gap-2 mt-1.5">
-          <Input
-            value={linkUrl}
-            onChange={e => setLinkUrl(e.target.value)}
-            placeholder="https://..."
-            disabled={isSubmitted && !isReturned}
-          />
-          <Link2 className="w-5 h-5 text-slate-400 mt-2.5" />
-        </div>
-      </div>
-
-      <div>
-        <Label className="text-sm font-semibold mb-2 block">Attachments</Label>
-        <div className="space-y-2">
-          {files.map((url, i) => (
-            <div key={i} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
-              <FileText className="w-4 h-4 text-slate-400" />
-              <span className="text-sm flex-1 truncate">File {i + 1}</span>
-              {(!isSubmitted || isReturned) && (
-                <button onClick={() => setFiles(files.filter((_, idx) => idx !== i))}>
-                  <X className="w-4 h-4 text-slate-400 hover:text-red-600" />
-                </button>
-              )}
-            </div>
-          ))}
-          {(!isSubmitted || isReturned) && (
-            <label className="flex items-center gap-2 p-3 border-2 border-dashed border-slate-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50/50 cursor-pointer transition-colors">
-              <Upload className="w-4 h-4 text-slate-400" />
-              <span className="text-sm text-slate-600">
-                {uploading ? 'Uploading...' : 'Upload file'}
-              </span>
-              <input type="file" className="hidden" onChange={handleFileUpload} disabled={uploading} />
-            </label>
+        <div className="flex items-center justify-between mb-3">
+          <Label className="text-sm font-semibold">Documents & Links</Label>
+          {isEditable && (
+            <Button 
+              onClick={() => setDocumentPickerOpen(true)}
+              variant="outline" 
+              size="sm"
+              className="border-indigo-200 text-indigo-700"
+            >
+              <Plus className="w-4 h-4 mr-1.5" /> Add Document
+            </Button>
           )}
         </div>
+
+        {documents.length === 0 ? (
+          <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center">
+            <p className="text-sm text-slate-400 mb-3">No documents attached yet</p>
+            {isEditable && (
+              <Button 
+                onClick={() => setDocumentPickerOpen(true)}
+                variant="outline"
+                size="sm"
+              >
+                <Plus className="w-4 h-4 mr-2" /> Add Your First Document
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {documents.map(doc => (
+              <DocumentCard
+                key={doc.id}
+                document={doc}
+                onRemove={isEditable ? handleRemoveDocument : null}
+                onOpen={handleOpenDocument}
+                compact={false}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="flex gap-3 pt-4">
-        {(!isSubmitted || isReturned) && (
+      <div className="flex gap-3 pt-4 border-t">
+        {isEditable && (
           <>
             <Button
               onClick={() => handleSubmit('draft')}
@@ -170,6 +174,12 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
           </div>
         )}
       </div>
+
+      <DocumentPicker
+        open={documentPickerOpen}
+        onClose={() => setDocumentPickerOpen(false)}
+        onAddDocuments={handleAddDocuments}
+      />
     </div>
   );
 }
