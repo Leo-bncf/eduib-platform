@@ -43,11 +43,11 @@ export default function TeacherDashboard() {
     <RoleGuard allowedRoles={['teacher', 'school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
         <AppSidebar links={sidebarLinks} role="teacher" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
-        <main className="ml-64 p-8">
+        <main className="ml-0 md:ml-64 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-8">
-              <h1 className="text-2xl font-bold text-slate-900">Good {new Date().getHours() < 12 ? 'morning' : 'afternoon'}, {user?.full_name?.split(' ')[0] || 'Teacher'}</h1>
-              <p className="text-sm text-slate-500 mt-1">{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+            <div className="mb-6 md:mb-8">
+              <h1 className="text-xl md:text-2xl font-bold text-slate-900">Good {new Date().getHours() < 12 ? 'morning' : 'afternoon'}, {user?.full_name?.split(' ')[0] || 'Teacher'}</h1>
+              <p className="text-xs md:text-sm text-slate-500 mt-1">{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
             </div>
 
             {isLoading ? (
@@ -61,31 +61,31 @@ export default function TeacherDashboard() {
                   <StatCard label="To Grade" value={0} icon={AlertCircle} color="rose" />
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="bg-white rounded-xl border border-slate-100">
-                    <div className="px-6 py-4 border-b border-slate-100">
-                      <h2 className="font-semibold text-slate-900 flex items-center gap-2">
-                        <Clock className="w-5 h-5 text-indigo-600" />
-                        Today's Teaching Schedule
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-100">
+                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-100">
+                      <h2 className="font-semibold text-sm md:text-base text-slate-900 flex items-center gap-2">
+                        <Clock className="w-4 md:w-5 h-4 md:h-5 text-indigo-600 flex-shrink-0" />
+                        <span>Today's Teaching Schedule</span>
                       </h2>
                     </div>
-                    <div className="p-6">
+                    <div className="p-4 md:p-6">
                       <TodaySchedule schoolId={schoolId} userId={user?.id} userRole="teacher" />
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl border border-slate-100">
-                    <div className="px-6 py-4 border-b border-slate-100">
-                      <h2 className="font-semibold text-slate-900">Recent Assignments</h2>
+                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-100">
+                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-100">
+                      <h2 className="font-semibold text-sm md:text-base text-slate-900">Recent Assignments</h2>
                     </div>
                     {assignments.length === 0 ? (
-                      <div className="p-12 text-center text-slate-400 text-sm">No assignments yet</div>
+                      <div className="p-6 md:p-12 text-center text-slate-400 text-xs md:text-sm">No assignments yet</div>
                     ) : (
-                      <div className="divide-y divide-slate-50">
+                      <div className="divide-y divide-slate-50 max-h-96 overflow-y-auto">
                         {assignments.slice(0, 6).map(a => (
-                          <div key={a.id} className="px-6 py-4">
-                            <p className="font-medium text-slate-900 text-sm">{a.title}</p>
-                            <p className="text-xs text-slate-400 mt-0.5">
+                          <div key={a.id} className="px-4 md:px-6 py-3 md:py-4">
+                            <p className="font-medium text-slate-900 text-xs md:text-sm truncate">{a.title}</p>
+                            <p className="text-xs text-slate-400 mt-0.5 truncate">
                               {a.type?.replace('_', ' ')} · Due {a.due_date ? format(new Date(a.due_date), 'MMM d') : 'TBD'}
                             </p>
                           </div>
