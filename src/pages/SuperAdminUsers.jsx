@@ -213,8 +213,8 @@ export default function SuperAdminUsers() {
         </Card>
 
         {/* Users List */}
-        <div className="space-y-2 md:space-y-3">
-          {filteredUsers.length === 0 ? (
+         <div className="space-y-2 md:space-y-3">
+           {superAdminFilteredUsers.length === 0 ? (
             <Card>
               <CardContent className="pt-6 p-4 md:p-6">
                 <p className="text-center text-xs md:text-sm text-slate-600">No users found</p>
