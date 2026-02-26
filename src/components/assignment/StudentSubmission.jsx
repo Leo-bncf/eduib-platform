@@ -11,6 +11,8 @@ import { FileText, Presentation, Table, Upload as UploadIcon, Link as LinkIcon }
 import DocumentCard from './DocumentCard';
 import DocumentPicker from './DocumentPicker';
 import GoogleDocCreator from './GoogleDocCreator';
+import GoogleDrivePicker from './GoogleDrivePicker';
+import SubmissionDocumentsView from './SubmissionDocumentsView';
 
 export default function StudentSubmission({ assignment, studentId, studentName, existingSubmission }) {
   const queryClient = useQueryClient();
@@ -18,6 +20,7 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
   const [documents, setDocuments] = useState(existingSubmission?.documents || []);
   const [documentPickerOpen, setDocumentPickerOpen] = useState(false);
   const [googleDocCreator, setGoogleDocCreator] = useState({ open: false, type: null });
+  const [googleDrivePickerOpen, setGoogleDrivePickerOpen] = useState(false);
 
   const submitMutation = useMutation({
     mutationFn: (data) => {
@@ -43,6 +46,20 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
 
   const handleGoogleDocCreated = (doc) => {
     setDocuments([...documents, doc]);
+  };
+
+  const handleGoogleDriveFilesSelected = (newDocs) => {
+    setDocuments([...documents, ...newDocs]);
+  };
+
+  const handleRemoveDocument = (docId) => {
+    setDocuments(documents.filter(d => d.id !== docId));
+  };
+
+  const handleOpenDocument = (doc) => {
+    if (doc.url) {
+      window.open(doc.url, '_blank');
+    }
   };
 
   const primaryFormat = assignment.primary_submission_format;
@@ -250,44 +267,51 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-              {documents.map(doc => (
-                <DocumentCard
-                  key={doc.id}
-                  document={doc}
-                  onRemove={isEditable ? handleRemoveDocument : null}
-                  onOpen={handleOpenDocument}
-                  compact={false}
-                />
-              ))}
-            </div>
+            <SubmissionDocumentsView
+              documents={documents}
+              onRemove={isEditable ? handleRemoveDocument : null}
+              onOpen={handleOpenDocument}
+            />
             {isEditable && hasFormatGuidance && (
-              <div className="flex gap-2 flex-wrap">
-                {allowedFormats.map((format, idx) => {
-                  const action = formatActions[format];
-                  if (!action) return null;
-                  const Icon = action.icon;
-                  const isPrimary = format === primaryFormat;
-                  return (
+              <>
+                <div className="flex gap-2 flex-wrap">
+                  {allowedFormats.map((format, idx) => {
+                    const action = formatActions[format];
+                    if (!action) return null;
+                    const Icon = action.icon;
+                    const isPrimary = format === primaryFormat;
+                    return (
+                      <Button
+                        key={format}
+                        onClick={action.action}
+                        variant={isPrimary ? "default" : "outline"}
+                        size="sm"
+                        className={isPrimary ? "bg-indigo-600 hover:bg-indigo-700" : "border-indigo-200 text-indigo-700"}
+                      >
+                        <Icon className="w-4 h-4 mr-1.5" />
+                        {action.label}
+                        {isPrimary && <span className="ml-1.5 text-xs opacity-75">(recommended)</span>}
+                      </Button>
+                    );
+                  })}
+                  {allowedFormats.some(f => ['google_doc', 'google_slides', 'google_sheet'].includes(f)) && (
                     <Button
-                      key={format}
-                      onClick={action.action}
-                      variant={isPrimary ? "default" : "outline"}
+                      onClick={() => setGoogleDrivePickerOpen(true)}
+                      variant="outline"
                       size="sm"
-                      className={isPrimary ? "bg-indigo-600 hover:bg-indigo-700" : "border-indigo-200 text-indigo-700"}
+                      className="border-indigo-200 text-indigo-700"
                     >
-                      <Icon className="w-4 h-4 mr-1.5" />
-                      {action.label}
-                      {isPrimary && <span className="ml-1.5 text-xs opacity-75">(recommended)</span>}
+                      <FileText className="w-4 h-4 mr-1.5" />
+                      Link Existing
                     </Button>
-                  );
-                })}
-                {!allowAlternatives && (
-                  <span className="text-xs text-slate-500 self-center">
-                    Only {formatActions[primaryFormat]?.shortLabel} allowed
-                  </span>
-                )}
-              </div>
+                  )}
+                  {!allowAlternatives && (
+                    <span className="text-xs text-slate-500 self-center">
+                      Only {formatActions[primaryFormat]?.shortLabel} allowed
+                    </span>
+                  )}
+                </div>
+              </>
             )}
           </>
         )}
@@ -334,6 +358,12 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
         onClose={() => setGoogleDocCreator({ open: false, type: null })}
         onDocumentCreated={handleGoogleDocCreated}
         defaultTitle={assignment.title}
+      />
+
+      <GoogleDrivePicker
+        open={googleDrivePickerOpen}
+        onClose={() => setGoogleDrivePickerOpen(false)}
+        onFilesSelected={handleGoogleDriveFilesSelected}
       />
     </div>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Loader2, CheckCircle, Clock, XCircle, AlertCircle, Eye, FileText, Presentation, Table, Upload, Link as LinkIcon } from 'lucide-react';
+import { Loader2, CheckCircle, Clock, XCircle, AlertCircle, Eye, FileText, Presentation, Table, Upload, Link as LinkIcon, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
@@ -131,20 +131,33 @@ export default function TeacherSubmissions({ assignment, classData }) {
                 </td>
                 <td className="px-6 py-4">
                   {student.submission?.documents && student.submission.documents.length > 0 ? (
-                    <div className="flex items-center gap-1.5">
-                      {student.submission.documents.map((doc, idx) => {
+                    <div className="space-y-1.5">
+                      {student.submission.documents.map((doc) => {
                         let Icon = FileText;
                         let color = 'text-slate-600';
-                        if (doc.type === 'google_doc') { Icon = FileText; color = 'text-blue-600'; }
-                        else if (doc.type === 'google_slides') { Icon = Presentation; color = 'text-amber-600'; }
-                        else if (doc.type === 'google_sheet') { Icon = Table; color = 'text-emerald-600'; }
-                        else if (doc.type === 'uploaded_file') { Icon = Upload; color = 'text-slate-600'; }
-                        else if (doc.type === 'external_link') { Icon = LinkIcon; color = 'text-indigo-600'; }
-                        return <Icon key={idx} className={`w-4 h-4 ${color}`} />;
+                        let label = 'File';
+                        if (doc.type === 'google_doc') { Icon = FileText; color = 'text-blue-600'; label = 'Doc'; }
+                        else if (doc.type === 'google_slides') { Icon = Presentation; color = 'text-amber-600'; label = 'Slides'; }
+                        else if (doc.type === 'google_sheet') { Icon = Table; color = 'text-emerald-600'; label = 'Sheet'; }
+                        else if (doc.type === 'uploaded_file') { Icon = Upload; color = 'text-slate-600'; label = 'File'; }
+                        else if (doc.type === 'external_link') { Icon = LinkIcon; color = 'text-indigo-600'; label = 'Link'; }
+                        return (
+                          <div key={doc.id} className="flex items-center gap-2 text-xs">
+                            <Icon className={`w-3.5 h-3.5 ${color}`} />
+                            <span className="text-slate-700 max-w-xs truncate">{doc.name}</span>
+                            {doc.url && (
+                              <a
+                                href={doc.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`${color} hover:opacity-70`}
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            )}
+                          </div>
+                        );
                       })}
-                      <span className="text-sm font-medium text-slate-700">
-                        ({student.submission.documents.length})
-                      </span>
                     </div>
                   ) : (
                     <span className="text-slate-400 text-sm">—</span>
