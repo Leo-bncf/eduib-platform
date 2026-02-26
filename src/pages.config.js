@@ -67,6 +67,8 @@ import StudentDashboard from './pages/StudentDashboard';
 import ParentDashboard from './pages/ParentDashboard';
 import CoordinatorDashboard from './pages/CoordinatorDashboard';
 import ClassWorkspace from './pages/ClassWorkspace';
+import AssignmentDetail from './pages/AssignmentDetail';
+import SubmissionReview from './pages/SubmissionReview';
 import __Layout from './Layout.jsx';
 
 
@@ -91,6 +93,8 @@ export const PAGES = {
     "ParentDashboard": ParentDashboard,
     "CoordinatorDashboard": CoordinatorDashboard,
     "ClassWorkspace": ClassWorkspace,
+    "AssignmentDetail": AssignmentDetail,
+    "SubmissionReview": SubmissionReview,
 }
 
 export const pagesConfig = {
