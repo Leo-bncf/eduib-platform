@@ -66,6 +66,7 @@ import TeacherClasses from './pages/TeacherClasses';
 import StudentDashboard from './pages/StudentDashboard';
 import ParentDashboard from './pages/ParentDashboard';
 import CoordinatorDashboard from './pages/CoordinatorDashboard';
+import ClassWorkspace from './pages/ClassWorkspace';
 import __Layout from './Layout.jsx';
 
 
@@ -89,6 +90,7 @@ export const PAGES = {
     "StudentDashboard": StudentDashboard,
     "ParentDashboard": ParentDashboard,
     "CoordinatorDashboard": CoordinatorDashboard,
+    "ClassWorkspace": ClassWorkspace,
 }
 
 export const pagesConfig = {

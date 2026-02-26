@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
+import { createPageUrl } from '@/utils';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
@@ -108,12 +109,14 @@ export default function StudentDashboard() {
                     ) : (
                       <div className="divide-y divide-slate-50">
                         {classes.map(c => (
-                          <div key={c.id} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
-                            <div>
-                              <p className="font-medium text-slate-900 text-sm">{c.name}</p>
-                              <p className="text-xs text-slate-400">{c.room ? `Room ${c.room}` : ''}</p>
+                          <a key={c.id} href={createPageUrl('ClassWorkspace') + `?class_id=${c.id}`}>
+                            <div className="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer">
+                              <div>
+                                <p className="font-medium text-slate-900 text-sm">{c.name}</p>
+                                <p className="text-xs text-slate-400">{c.room ? `Room ${c.room}` : ''}</p>
+                              </div>
                             </div>
-                          </div>
+                          </a>
                         ))}
                       </div>
                     )}

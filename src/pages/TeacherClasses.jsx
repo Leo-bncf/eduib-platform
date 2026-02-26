@@ -5,6 +5,7 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
 import { LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, MessageSquare, Loader2, Users } from 'lucide-react';
+import { createPageUrl } from '@/utils';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'TeacherDashboard', icon: LayoutDashboard },
@@ -49,17 +50,19 @@ export default function TeacherClasses() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {classes.map((c, i) => (
-                  <div key={c.id} className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
-                    <div className={`h-2 ${colors[i % colors.length]}`} />
-                    <div className="p-6">
-                      <h3 className="font-bold text-slate-900 text-lg">{c.name}</h3>
-                      <p className="text-sm text-slate-400 mt-1">{c.section ? `Section ${c.section}` : ''} {c.room ? `· Room ${c.room}` : ''}</p>
-                      <div className="flex items-center gap-2 mt-4 text-sm text-slate-500">
-                        <Users className="w-4 h-4" />
-                        <span>{c.student_ids?.length || 0} students</span>
+                  <a key={c.id} href={createPageUrl('ClassWorkspace') + `?class_id=${c.id}`}>
+                    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+                      <div className={`h-2 ${colors[i % colors.length]}`} />
+                      <div className="p-6">
+                        <h3 className="font-bold text-slate-900 text-lg">{c.name}</h3>
+                        <p className="text-sm text-slate-400 mt-1">{c.section ? `Section ${c.section}` : ''} {c.room ? `· Room ${c.room}` : ''}</p>
+                        <div className="flex items-center gap-2 mt-4 text-sm text-slate-500">
+                          <Users className="w-4 h-4" />
+                          <span>{c.student_ids?.length || 0} students</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
             )}
