@@ -1,0 +1,114 @@
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
+import RoleGuard from '@/components/auth/RoleGuard';
+import AppSidebar from '@/components/app/AppSidebar';
+import StatCard from '@/components/app/StatCard';
+import { useUser } from '@/components/auth/UserContext';
+import { 
+  LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, 
+  MessageSquare, Users, Loader2, Clock, AlertCircle
+} from 'lucide-react';
+import { format } from 'date-fns';
+
+const sidebarLinks = [
+  { label: 'Dashboard', page: 'TeacherDashboard', icon: LayoutDashboard },
+  { label: 'My Classes', page: 'TeacherClasses', icon: BookOpen },
+  { label: 'Assignments', page: 'TeacherDashboard', icon: ClipboardCheck },
+  { label: 'Gradebook', page: 'TeacherDashboard', icon: BarChart3 },
+  { label: 'Messages', page: 'TeacherDashboard', icon: MessageSquare },
+];
+
+export default function TeacherDashboard() {
+  const { user, school, schoolId } = useUser();
+
+  const { data: classes = [], isLoading } = useQuery({
+    queryKey: ['teacher-classes', schoolId, user?.id],
+    queryFn: async () => {
+      const all = await base44.entities.Class.filter({ school_id: schoolId, status: 'active' });
+      return all.filter(c => c.teacher_ids?.includes(user.id));
+    },
+    enabled: !!schoolId && !!user?.id,
+  });
+
+  const { data: assignments = [] } = useQuery({
+    queryKey: ['teacher-assignments', schoolId, user?.id],
+    queryFn: () => base44.entities.Assignment.filter({ school_id: schoolId, teacher_id: user.id }),
+    enabled: !!schoolId && !!user?.id,
+  });
+
+  const pendingAssignments = assignments.filter(a => a.status === 'published');
+  const totalStudents = classes.reduce((sum, c) => sum + (c.student_ids?.length || 0), 0);
+
+  return (
+    <RoleGuard allowedRoles={['teacher', 'school_admin', 'super_admin', 'admin']}>
+      <div className="min-h-screen bg-slate-50">
+        <AppSidebar links={sidebarLinks} role="teacher" schoolName={school?.name} userName={user?.full_name} />
+        <main className="ml-64 p-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-slate-900">Good {new Date().getHours() < 12 ? 'morning' : 'afternoon'}, {user?.full_name?.split(' ')[0] || 'Teacher'}</h1>
+              <p className="text-sm text-slate-500 mt-1">{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+            </div>
+
+            {isLoading ? (
+              <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-indigo-600" /></div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                  <StatCard label="My Classes" value={classes.length} icon={BookOpen} color="indigo" />
+                  <StatCard label="Total Students" value={totalStudents} icon={Users} color="emerald" />
+                  <StatCard label="Active Assignments" value={pendingAssignments.length} icon={ClipboardCheck} color="amber" />
+                  <StatCard label="To Grade" value={0} icon={AlertCircle} color="rose" />
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-xl border border-slate-100">
+                    <div className="px-6 py-4 border-b border-slate-100">
+                      <h2 className="font-semibold text-slate-900">Today's Classes</h2>
+                    </div>
+                    {classes.length === 0 ? (
+                      <div className="p-12 text-center text-slate-400 text-sm">No classes assigned yet</div>
+                    ) : (
+                      <div className="divide-y divide-slate-50">
+                        {classes.map(c => (
+                          <div key={c.id} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                            <div>
+                              <p className="font-medium text-slate-900 text-sm">{c.name}</p>
+                              <p className="text-xs text-slate-400">{c.room ? `Room ${c.room}` : ''} · {c.student_ids?.length || 0} students</p>
+                            </div>
+                            <Clock className="w-4 h-4 text-slate-300" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="bg-white rounded-xl border border-slate-100">
+                    <div className="px-6 py-4 border-b border-slate-100">
+                      <h2 className="font-semibold text-slate-900">Recent Assignments</h2>
+                    </div>
+                    {assignments.length === 0 ? (
+                      <div className="p-12 text-center text-slate-400 text-sm">No assignments yet</div>
+                    ) : (
+                      <div className="divide-y divide-slate-50">
+                        {assignments.slice(0, 6).map(a => (
+                          <div key={a.id} className="px-6 py-4">
+                            <p className="font-medium text-slate-900 text-sm">{a.title}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">
+                              {a.type?.replace('_', ' ')} · Due {a.due_date ? format(new Date(a.due_date), 'MMM d') : 'TBD'}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </main>
+      </div>
+    </RoleGuard>
+  );
+}

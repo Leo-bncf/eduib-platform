@@ -55,6 +55,14 @@ import Contact from './pages/Contact';
 import Demo from './pages/Demo';
 import AppHome from './pages/AppHome';
 import NoSchool from './pages/NoSchool';
+import SuperAdminDashboard from './pages/SuperAdminDashboard';
+import SuperAdminSchools from './pages/SuperAdminSchools';
+import SchoolAdminDashboard from './pages/SchoolAdminDashboard';
+import SchoolAdminUsers from './pages/SchoolAdminUsers';
+import SchoolAdminClasses from './pages/SchoolAdminClasses';
+import SchoolAdminSubjects from './pages/SchoolAdminSubjects';
+import TeacherDashboard from './pages/TeacherDashboard';
+import TeacherClasses from './pages/TeacherClasses';
 
 
 export const PAGES = {
@@ -66,6 +74,14 @@ export const PAGES = {
     "Demo": Demo,
     "AppHome": AppHome,
     "NoSchool": NoSchool,
+    "SuperAdminDashboard": SuperAdminDashboard,
+    "SuperAdminSchools": SuperAdminSchools,
+    "SchoolAdminDashboard": SchoolAdminDashboard,
+    "SchoolAdminUsers": SchoolAdminUsers,
+    "SchoolAdminClasses": SchoolAdminClasses,
+    "SchoolAdminSubjects": SchoolAdminSubjects,
+    "TeacherDashboard": TeacherDashboard,
+    "TeacherClasses": TeacherClasses,
 }
 
 export const pagesConfig = {
