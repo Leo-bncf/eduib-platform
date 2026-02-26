@@ -5,49 +5,49 @@ import { GraduationCap } from 'lucide-react';
 
 export default function PublicFooter() {
   return (
-    <footer className="bg-slate-900 text-slate-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 bg-indigo-500 rounded-xl flex items-center justify-center">
+    <footer className="bg-slate-900 text-slate-300 py-12 mt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">Atlas<span className="text-indigo-400">IB</span></span>
+              <span className="text-lg font-bold text-white">Atlas<span className="text-indigo-400">IB</span></span>
             </div>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              The modern platform for IB schools. Manage teaching, grading, communication, and administration in one place.
+            <p className="text-sm text-slate-400">
+              The all-in-one IB platform for modern schools.
             </p>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Product</h4>
-            <div className="space-y-2.5">
-              <Link to={createPageUrl('Features')} className="block text-sm hover:text-white transition-colors">Features</Link>
-              <Link to={createPageUrl('Pricing')} className="block text-sm hover:text-white transition-colors">Pricing</Link>
-              <Link to={createPageUrl('Security')} className="block text-sm hover:text-white transition-colors">Security</Link>
-            </div>
+            <h3 className="font-semibold text-white mb-3">Product</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link to={createPageUrl('Features')} className="hover:text-white transition-colors">Features</Link></li>
+              <li><Link to={createPageUrl('Pricing')} className="hover:text-white transition-colors">Pricing</Link></li>
+              <li><Link to={createPageUrl('Security')} className="hover:text-white transition-colors">Security</Link></li>
+            </ul>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h4>
-            <div className="space-y-2.5">
-              <Link to={createPageUrl('Contact')} className="block text-sm hover:text-white transition-colors">Contact</Link>
-              <Link to={createPageUrl('Demo')} className="block text-sm hover:text-white transition-colors">Book a Demo</Link>
-            </div>
+            <h3 className="font-semibold text-white mb-3">Company</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link to={createPageUrl('Contact')} className="hover:text-white transition-colors">Contact</Link></li>
+              <li><Link to={createPageUrl('Demo')} className="hover:text-white transition-colors">Book a Demo</Link></li>
+            </ul>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Legal</h4>
-            <div className="space-y-2.5">
-              <Link to={createPageUrl('Security')} className="block text-sm hover:text-white transition-colors">Privacy Policy</Link>
-              <Link to={createPageUrl('Security')} className="block text-sm hover:text-white transition-colors">Terms of Service</Link>
-            </div>
+            <h3 className="font-semibold text-white mb-3">Legal</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-12 pt-8 text-center">
-          <p className="text-sm text-slate-500">&copy; {new Date().getFullYear()} AtlasIB. All rights reserved.</p>
+        <div className="pt-8 border-t border-slate-800 text-sm text-center text-slate-500">
+          © {new Date().getFullYear()} AtlasIB. All rights reserved.
         </div>
       </div>
     </footer>

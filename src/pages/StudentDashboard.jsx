@@ -23,6 +23,13 @@ const sidebarLinks = [
   { label: 'IB Core', page: 'StudentCAS', icon: Star },
 ];
 
+const sidebarLinks = [
+  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
+  { label: 'My Grades', page: 'StudentDashboard', icon: BarChart3 },
+  { label: 'IB Core', page: 'StudentDashboard', icon: GraduationCap },
+  { label: 'Messages', page: 'Messages', icon: MessageSquare },
+];
+
 export default function StudentDashboard() {
   const { user, school, schoolId } = useUser();
 
