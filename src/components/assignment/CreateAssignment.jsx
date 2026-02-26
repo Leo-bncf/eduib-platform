@@ -22,7 +22,9 @@ export default function CreateAssignment({ classData, userId, onClose, trigger }
     max_score: 100,
     allow_late: true,
     status: 'draft',
-    expected_submission_formats: [],
+    primary_submission_format: null,
+    allow_alternative_formats: false,
+    alternative_formats: [],
   });
   const [attachments, setAttachments] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -42,7 +44,9 @@ export default function CreateAssignment({ classData, userId, onClose, trigger }
         max_score: 100,
         allow_late: true,
         status: 'draft',
-        expected_submission_formats: [],
+        primary_submission_format: null,
+        allow_alternative_formats: false,
+        alternative_formats: [],
       });
       setAttachments([]);
     },
@@ -169,9 +173,17 @@ export default function CreateAssignment({ classData, userId, onClose, trigger }
             </div>
 
             <div className="pt-4 border-t">
+              <h3 className="text-base font-semibold text-slate-900 mb-4">Submission Settings</h3>
               <SubmissionFormatSelector
-                selectedFormats={form.expected_submission_formats}
-                onChange={(formats) => setForm({ ...form, expected_submission_formats: formats })}
+                primaryFormat={form.primary_submission_format}
+                allowAlternatives={form.allow_alternative_formats}
+                alternativeFormats={form.alternative_formats}
+                onChange={(settings) => setForm({ 
+                  ...form, 
+                  primary_submission_format: settings.primaryFormat,
+                  allow_alternative_formats: settings.allowAlternatives,
+                  alternative_formats: settings.alternativeFormats,
+                })}
               />
             </div>
 

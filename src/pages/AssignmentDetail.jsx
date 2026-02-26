@@ -204,26 +204,56 @@ export default function AssignmentDetail() {
                   <p className="text-slate-500">Late Submissions</p>
                   <p className="font-medium text-slate-900">{assignment.allow_late ? 'Allowed' : 'Not Allowed'}</p>
                 </div>
-                {assignment.expected_submission_formats && assignment.expected_submission_formats.length > 0 && (
+                {assignment.primary_submission_format && (
                   <div>
-                    <p className="text-slate-500 mb-2">Expected Format</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {assignment.expected_submission_formats.map(format => {
-                        let Icon = FileText;
-                        let color = 'bg-slate-100 text-slate-700';
-                        let label = format;
-                        if (format === 'google_doc') { Icon = FileText; color = 'bg-blue-50 text-blue-700'; label = 'Doc'; }
-                        else if (format === 'google_slides') { Icon = Presentation; color = 'bg-amber-50 text-amber-700'; label = 'Slides'; }
-                        else if (format === 'google_sheet') { Icon = Table; color = 'bg-emerald-50 text-emerald-700'; label = 'Sheet'; }
-                        else if (format === 'file_upload') { Icon = Upload; color = 'bg-slate-100 text-slate-700'; label = 'File'; }
-                        else if (format === 'link') { Icon = LinkIcon; color = 'bg-indigo-50 text-indigo-700'; label = 'Link'; }
-                        return (
-                          <Badge key={format} className={`${color} border-0 text-xs flex items-center gap-1`}>
-                            <Icon className="w-3 h-3" />
-                            {label}
-                          </Badge>
-                        );
-                      })}
+                    <p className="text-slate-500 mb-2">Submission Format</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        {(() => {
+                          const format = assignment.primary_submission_format;
+                          let Icon = FileText;
+                          let color = 'bg-blue-50 text-blue-700';
+                          let label = format;
+                          if (format === 'google_doc') { Icon = FileText; color = 'bg-blue-50 text-blue-700'; label = 'Google Doc'; }
+                          else if (format === 'google_slides') { Icon = Presentation; color = 'bg-amber-50 text-amber-700'; label = 'Google Slides'; }
+                          else if (format === 'google_sheet') { Icon = Table; color = 'bg-emerald-50 text-emerald-700'; label = 'Google Sheet'; }
+                          else if (format === 'file_upload') { Icon = Upload; color = 'bg-slate-100 text-slate-700'; label = 'File Upload'; }
+                          else if (format === 'link') { Icon = LinkIcon; color = 'bg-indigo-50 text-indigo-700'; label = 'Link'; }
+                          return (
+                            <Badge className={`${color} border-0 text-xs flex items-center gap-1`}>
+                              <Icon className="w-3 h-3" />
+                              {label}
+                            </Badge>
+                          );
+                        })()}
+                        <span className="text-xs font-medium text-slate-600">Primary</span>
+                      </div>
+                      {assignment.allow_alternative_formats && assignment.alternative_formats && assignment.alternative_formats.length > 0 && (
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Also accepts:</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {assignment.alternative_formats.map(format => {
+                              let Icon = FileText;
+                              let color = 'bg-slate-100 text-slate-600';
+                              let label = format;
+                              if (format === 'google_doc') { Icon = FileText; color = 'bg-blue-50 text-blue-600'; label = 'Doc'; }
+                              else if (format === 'google_slides') { Icon = Presentation; color = 'bg-amber-50 text-amber-600'; label = 'Slides'; }
+                              else if (format === 'google_sheet') { Icon = Table; color = 'bg-emerald-50 text-emerald-600'; label = 'Sheet'; }
+                              else if (format === 'file_upload') { Icon = Upload; color = 'bg-slate-100 text-slate-600'; label = 'File'; }
+                              else if (format === 'link') { Icon = LinkIcon; color = 'bg-indigo-50 text-indigo-600'; label = 'Link'; }
+                              return (
+                                <Badge key={format} className={`${color} border-0 text-xs flex items-center gap-1`}>
+                                  <Icon className="w-3 h-3" />
+                                  {label}
+                                </Badge>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                      {!assignment.allow_alternative_formats && (
+                        <p className="text-xs text-slate-500 italic">Only this format accepted</p>
+                      )}
                     </div>
                   </div>
                 )}

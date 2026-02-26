@@ -45,37 +45,45 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
     setDocuments([...documents, doc]);
   };
 
-  const expectedFormats = assignment.expected_submission_formats || [];
-  const hasFormatGuidance = expectedFormats.length > 0;
+  const primaryFormat = assignment.primary_submission_format;
+  const allowAlternatives = assignment.allow_alternative_formats;
+  const alternativeFormats = assignment.alternative_formats || [];
+  const hasFormatGuidance = !!primaryFormat;
+  const allowedFormats = primaryFormat ? [primaryFormat, ...(allowAlternatives ? alternativeFormats : [])] : [];
 
   const formatActions = {
     google_doc: {
       icon: FileText,
       label: 'Create Google Doc',
+      shortLabel: 'Google Doc',
       color: 'bg-blue-600 hover:bg-blue-700',
       action: () => handleCreateGoogleDoc('google_doc'),
     },
     google_slides: {
       icon: Presentation,
       label: 'Create Google Slides',
+      shortLabel: 'Presentation',
       color: 'bg-amber-600 hover:bg-amber-700',
       action: () => handleCreateGoogleDoc('google_slides'),
     },
     google_sheet: {
       icon: Table,
       label: 'Create Google Sheet',
+      shortLabel: 'Spreadsheet',
       color: 'bg-emerald-600 hover:bg-emerald-700',
       action: () => handleCreateGoogleDoc('google_sheet'),
     },
     file_upload: {
       icon: UploadIcon,
       label: 'Upload File',
+      shortLabel: 'File Upload',
       color: 'bg-slate-600 hover:bg-slate-700',
       action: () => setDocumentPickerOpen(true),
     },
     link: {
       icon: LinkIcon,
       label: 'Add Link',
+      shortLabel: 'Link',
       color: 'bg-indigo-600 hover:bg-indigo-700',
       action: () => setDocumentPickerOpen(true),
     },
@@ -159,11 +167,13 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
 
         {hasFormatGuidance && isEditable && documents.length === 0 && (
           <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-4">
-            <p className="text-sm font-semibold text-indigo-900 mb-1">Expected Format</p>
+            <p className="text-sm font-semibold text-indigo-900 mb-1">
+              {allowAlternatives ? 'Submission Format' : 'Required Format'}
+            </p>
             <p className="text-sm text-indigo-700">
-              {expectedFormats.length === 1
-                ? `Your teacher expects you to submit this assignment as a ${formatActions[expectedFormats[0]]?.label || expectedFormats[0]}.`
-                : `Your teacher accepts: ${expectedFormats.map(f => formatActions[f]?.label || f).join(', ')}.`}
+              {allowAlternatives
+                ? `Your teacher expects a ${formatActions[primaryFormat]?.shortLabel || primaryFormat}, but also accepts: ${alternativeFormats.map(f => formatActions[f]?.shortLabel || f).join(', ')}.`
+                : `Your teacher requires this assignment to be submitted as a ${formatActions[primaryFormat]?.shortLabel || primaryFormat}.`}
             </p>
           </div>
         )}
@@ -173,34 +183,54 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
             {isEditable ? (
               hasFormatGuidance ? (
                 <div className="space-y-3">
-                  <p className="text-sm text-slate-600 text-center mb-4">Start your work:</p>
-                  <div className={`grid ${expectedFormats.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-3`}>
-                    {expectedFormats.map(format => {
-                      const action = formatActions[format];
-                      if (!action) return null;
-                      const Icon = action.icon;
-                      return (
-                        <Button
-                          key={format}
-                          onClick={action.action}
-                          className={`${action.color} text-white h-auto py-4`}
-                        >
-                          <Icon className="w-5 h-5 mr-2" />
-                          {action.label}
-                        </Button>
-                      );
-                    })}
-                  </div>
-                  <div className="pt-3 text-center">
-                    <Button 
-                      onClick={() => setDocumentPickerOpen(true)}
-                      variant="ghost"
-                      size="sm"
-                      className="text-slate-500"
-                    >
-                      or add another format
-                    </Button>
-                  </div>
+                  <p className="text-sm text-slate-600 text-center mb-4">
+                    {allowAlternatives ? 'Start your work (recommended format):' : 'Start your work:'}
+                  </p>
+                  {/* Primary format - always prominent */}
+                  <Button
+                    onClick={formatActions[primaryFormat]?.action}
+                    className={`${formatActions[primaryFormat]?.color} text-white h-auto py-4 w-full`}
+                  >
+                    {React.createElement(formatActions[primaryFormat]?.icon, { className: "w-5 h-5 mr-2" })}
+                    {formatActions[primaryFormat]?.label}
+                  </Button>
+                  
+                  {allowAlternatives && alternativeFormats.length > 0 && (
+                    <>
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-slate-200" />
+                        </div>
+                        <div className="relative flex justify-center text-xs">
+                          <span className="bg-white px-2 text-slate-500">or use alternative format</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        {alternativeFormats.map(format => {
+                          const action = formatActions[format];
+                          if (!action) return null;
+                          const Icon = action.icon;
+                          return (
+                            <Button
+                              key={format}
+                              onClick={action.action}
+                              variant="outline"
+                              className="h-auto py-3"
+                            >
+                              <Icon className="w-4 h-4 mr-2" />
+                              {action.label}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+                  
+                  {!allowAlternatives && (
+                    <p className="text-xs text-center text-slate-500 pt-2">
+                      Only {formatActions[primaryFormat]?.shortLabel} submissions are accepted for this assignment.
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div className="text-center">
@@ -233,31 +263,30 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
             </div>
             {isEditable && hasFormatGuidance && (
               <div className="flex gap-2 flex-wrap">
-                {expectedFormats.map(format => {
+                {allowedFormats.map((format, idx) => {
                   const action = formatActions[format];
                   if (!action) return null;
                   const Icon = action.icon;
+                  const isPrimary = format === primaryFormat;
                   return (
                     <Button
                       key={format}
                       onClick={action.action}
-                      variant="outline"
+                      variant={isPrimary ? "default" : "outline"}
                       size="sm"
-                      className="border-indigo-200 text-indigo-700"
+                      className={isPrimary ? "bg-indigo-600 hover:bg-indigo-700" : "border-indigo-200 text-indigo-700"}
                     >
                       <Icon className="w-4 h-4 mr-1.5" />
                       {action.label}
+                      {isPrimary && <span className="ml-1.5 text-xs opacity-75">(recommended)</span>}
                     </Button>
                   );
                 })}
-                <Button 
-                  onClick={() => setDocumentPickerOpen(true)}
-                  variant="ghost"
-                  size="sm"
-                  className="text-slate-500"
-                >
-                  <Plus className="w-4 h-4 mr-1.5" /> More
-                </Button>
+                {!allowAlternatives && (
+                  <span className="text-xs text-slate-500 self-center">
+                    Only {formatActions[primaryFormat]?.shortLabel} allowed
+                  </span>
+                )}
               </div>
             )}
           </>
