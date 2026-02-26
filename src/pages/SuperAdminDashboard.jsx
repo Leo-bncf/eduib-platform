@@ -207,11 +207,11 @@ export default function SuperAdminDashboard() {
                 Manage Schools
               </Button>
               <Button
-                onClick={() => navigate('/super-admin-billing')}
+                onClick={() => navigate('/super-admin-plans')}
                 variant="outline"
                 className="w-full justify-start"
               >
-                View Billing
+                View Plans & Billing
               </Button>
               <Button
                 onClick={() => navigate('/super-admin-audit-logs')}
