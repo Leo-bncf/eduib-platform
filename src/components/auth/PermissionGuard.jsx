@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useUser } from './UserContext';
-import { hasPermission, hasAllPermissions, hasAnyPermission } from '@/lib/permissions';
+import { hasPermission, hasAllPermissions, hasAnyPermission } from './PermissionsModule';
 import { Card } from '@/components/ui/card';
 import { Lock } from 'lucide-react';
 

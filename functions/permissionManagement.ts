@@ -4,13 +4,6 @@
  */
 
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import {
-  DEFAULT_ROLES,
-  RESOURCES,
-  ACTIONS,
-  createCustomRole,
-  hasPermission,
-} from '../lib/permissions.js';
 
 /**
  * Main handler

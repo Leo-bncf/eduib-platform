@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { hasPermission, hasAllPermissions } from '@/lib/PageNotFound';
+import { hasPermission, hasAllPermissions } from '@/components/auth/PermissionsModule';
 
 const UserContext = createContext(null);
 

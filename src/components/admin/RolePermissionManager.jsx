@@ -14,7 +14,7 @@ import {
   DEFAULT_ROLES,
   getAllRoles,
   formatPermission,
-} from '@/lib/permissions';
+} from '@/components/auth/PermissionsModule';
 import { CheckCircle2, Shield, Lock, Plus } from 'lucide-react';
 
 export default function RolePermissionManager() {
