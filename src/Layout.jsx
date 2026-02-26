@@ -1,5 +1,6 @@
 import React from 'react';
 import { UserProvider, useUser } from '@/components/auth/UserContext';
+import { PlanProvider } from '@/components/plan/PlanProvider';
 import NotificationBell from '@/components/notifications/NotificationBell';
 
 const publicPages = ['Landing', 'Features', 'Pricing', 'Security', 'Contact', 'Demo'];
@@ -30,11 +31,13 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <UserProvider>
-      {isFullScreen ? (
-        <NotificationWrapper>{children}</NotificationWrapper>
-      ) : (
-        children
-      )}
+      <PlanProvider>
+        {isFullScreen ? (
+          <NotificationWrapper>{children}</NotificationWrapper>
+        ) : (
+          children
+        )}
+      </PlanProvider>
     </UserProvider>
   );
 }
