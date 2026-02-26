@@ -81,6 +81,8 @@ import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import SuperAdminSchools from './pages/SuperAdminSchools';
 import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
+import AcceptInvitation from './pages/AcceptInvitation';
+import SchoolOnboarding from './pages/SchoolOnboarding';
 import __Layout from './Layout.jsx';
 
 
@@ -119,6 +121,8 @@ export const PAGES = {
     "SuperAdminSchools": SuperAdminSchools,
     "TeacherClasses": TeacherClasses,
     "TeacherDashboard": TeacherDashboard,
+    "AcceptInvitation": AcceptInvitation,
+    "SchoolOnboarding": SchoolOnboarding,
 }
 
 export const pagesConfig = {
