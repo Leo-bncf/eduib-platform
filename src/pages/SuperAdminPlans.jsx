@@ -26,8 +26,8 @@ export default function SuperAdminPlans() {
         }
 
         const user = await base44.auth.me();
-        if (user.role !== 'admin') {
-          navigate('/dashboard');
+        if (user.role !== 'super_admin') {
+          navigate('/super-admin-dashboard');
           return;
         }
 
