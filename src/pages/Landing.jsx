@@ -235,9 +235,9 @@ export default function Landing() {
 
   React.useEffect(() => {
     base44.auth.isAuthenticated().then(authed => {
-      if (authed) navigate(createPageUrl('AppHome'));
+      if (authed) window.location.href = createPageUrl('AppHome');
     });
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
