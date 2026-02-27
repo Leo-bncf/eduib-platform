@@ -29,12 +29,12 @@ const sidebarLinks = [
 ];
 
 const MODULE_LINKS = [
-  { label: 'User Directory', sub: 'Staff, students & parents', page: 'SchoolAdminUsers', icon: Users, accent: '#6366f1' },
-  { label: 'Class Setup', sub: 'Courses & sections', page: 'SchoolAdminClasses', icon: BookOpen, accent: '#0ea5e9' },
-  { label: 'Enrollments', sub: 'Rosters & teachers', page: 'SchoolAdminEnrollments', icon: UserCheck, accent: '#ec4899' },
-  { label: 'Subject Catalogue', sub: 'IB subjects & levels', page: 'SchoolAdminSubjects', icon: GraduationCap, accent: '#10b981' },
-  { label: 'Attendance', sub: 'Daily records', page: 'SchoolAdminAttendance', icon: Calendar, accent: '#f59e0b' },
-  { label: 'Reports & Exports', sub: 'Analytics & grades', page: 'SchoolAdminReports', icon: BarChart3, accent: '#8b5cf6' },
+  { label: 'User Directory', sub: 'Staff, students & parents', page: 'SchoolAdminUsers', icon: Users },
+  { label: 'Class Setup', sub: 'Courses & sections', page: 'SchoolAdminClasses', icon: BookOpen },
+  { label: 'Enrollments', sub: 'Rosters & teachers', page: 'SchoolAdminEnrollments', icon: UserCheck },
+  { label: 'Subject Catalogue', sub: 'IB subjects & levels', page: 'SchoolAdminSubjects', icon: GraduationCap },
+  { label: 'Attendance', sub: 'Daily records', page: 'SchoolAdminAttendance', icon: Calendar },
+  { label: 'Reports & Exports', sub: 'Analytics & grades', page: 'SchoolAdminReports', icon: BarChart3 },
 ];
 
 const SETUP_STEPS = [
@@ -135,7 +135,7 @@ export default function SchoolAdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f1f5f9]">
+    <div className="min-h-screen bg-slate-50">
       <AppSidebar
         links={sidebarLinks}
         role="school_admin"
@@ -253,28 +253,22 @@ export default function SchoolAdminDashboard() {
               {/* Module access grid */}
               <div className="space-y-3">
                 <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <LayoutDashboard className="w-4 h-4 text-indigo-500" />
+                  <LayoutDashboard className="w-4 h-4 text-slate-400" />
                   Platform Modules
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {MODULE_LINKS.map(({ label, sub, page, icon: Icon, accent }) => (
+                  {MODULE_LINKS.map(({ label, sub, page, icon: Icon }) => (
                     <Link
                       key={page}
                       to={createPageUrl(page)}
-                      className="group bg-white border border-slate-200 rounded-xl p-4 hover:border-slate-300 hover:shadow-md transition-all flex items-center gap-4"
+                      className="group bg-white border border-slate-200 rounded-md p-4 hover:border-blue-600 hover:shadow-sm transition-all flex items-center gap-4"
                     >
-                      <div
-                        className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: accent + '18' }}
-                      >
-                        <Icon className="w-5 h-5" style={{ color: accent }} />
+                      <div className="w-10 h-10 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors">
+                        <Icon className="w-5 h-5 text-slate-500 group-hover:text-blue-600 transition-colors" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-slate-800 group-hover:text-slate-900">{label}</p>
+                        <p className="text-sm font-bold text-slate-800 group-hover:text-blue-700 transition-colors">{label}</p>
                         <p className="text-xs text-slate-500 mt-0.5 truncate">{sub}</p>
-                      </div>
-                      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-slate-100 flex items-center justify-center transition-colors">
-                        <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
                       </div>
                     </Link>
                   ))}
@@ -285,9 +279,9 @@ export default function SchoolAdminDashboard() {
             {/* Right column */}
             <div className="space-y-6">
               {/* Quick actions */}
-              <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                <div className="px-5 py-4 border-b border-slate-100 bg-slate-50">
-                  <h3 className="font-bold text-slate-900">Director Actions</h3>
+              <div className="bg-white border border-slate-200 rounded-md shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-slate-200 bg-slate-50">
+                  <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Director Actions</h3>
                 </div>
                 <div className="divide-y divide-slate-100">
                   {[
@@ -303,9 +297,9 @@ export default function SchoolAdminDashboard() {
                       to={createPageUrl(page)}
                       className="flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 transition-colors group"
                     >
-                      <Icon className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                      <Icon className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
                       <span className="text-sm font-medium text-slate-700 group-hover:text-slate-900">{label}</span>
-                      <ChevronRight className="w-4 h-4 text-slate-300 ml-auto group-hover:text-indigo-500 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-slate-300 ml-auto group-hover:text-blue-600 transition-colors" />
                     </Link>
                   ))}
                 </div>
