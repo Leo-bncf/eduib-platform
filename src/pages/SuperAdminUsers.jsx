@@ -42,7 +42,7 @@ export default function SuperAdminUsers() {
 
       const [allSchools, allUsers] = await Promise.all([
         base44.entities.School.list(),
-        base44.asServiceRole.entities.User.filter({}, '', 10000),
+        base44.asServiceRole.entities.User.filter({}, '-created_date', 10000),
       ]);
 
       setSchools(allSchools);
