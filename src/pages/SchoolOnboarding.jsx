@@ -101,7 +101,7 @@ export default function SchoolOnboarding() {
       setCurrentStep(stepIndex + 1);
     } else {
       // Onboarding complete
-      navigate('/school-admin-dashboard');
+      navigate(createPageUrl('SchoolAdminDashboard'));
     }
   };
 
@@ -126,7 +126,7 @@ export default function SchoolOnboarding() {
           </div>
           <Button
             variant="ghost"
-            onClick={() => navigate('/school-admin-dashboard')}
+            onClick={() => navigate(createPageUrl('SchoolAdminDashboard'))}
             className="text-slate-600"
           >
             Exit Setup
