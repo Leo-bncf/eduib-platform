@@ -75,48 +75,48 @@ export default function ParentDashboard() {
 
                 <TabsContent value="overview">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-                    <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
-                      <h2 className="text-base md:text-lg font-bold text-slate-900 mb-4">Recent Grades</h2>
+                    <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                      <h2 className="text-base md:text-lg font-bold text-slate-900 mb-4 uppercase tracking-wide">Recent Grades</h2>
                       <ChildGradesOverview schoolId={schoolId} studentId={selectedChildId} />
                     </div>
-                    <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
-                      <h2 className="text-base md:text-lg font-bold text-slate-900 mb-4">Assignments</h2>
+                    <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                      <h2 className="text-base md:text-lg font-bold text-slate-900 mb-4 uppercase tracking-wide">Assignments</h2>
                       <ChildAssignmentsOverview schoolId={schoolId} studentId={selectedChildId} />
                     </div>
                   </div>
                 </TabsContent>
 
                 <TabsContent value="grades">
-                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Grades & Feedback</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6 uppercase tracking-wide">Grades & Feedback</h2>
                     <ChildGradesOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="predicted">
-                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Predicted IB Grades</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6 uppercase tracking-wide">Predicted IB Grades</h2>
                     <ChildPredictedGrades schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="assignments">
-                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Assignments Overview</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6 uppercase tracking-wide">Assignments Overview</h2>
                     <ChildAssignmentsOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="attendance">
-                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Attendance Records</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6 uppercase tracking-wide">Attendance Records</h2>
                     <ChildAttendanceOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="messages">
-                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Teacher Communication</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6 uppercase tracking-wide">Teacher Communication</h2>
                     <ParentMessaging
                       parentId={user?.id}
                       parentName={user?.full_name}
@@ -127,16 +127,16 @@ export default function ParentDashboard() {
                 </TabsContent>
 
                 <TabsContent value="behavior">
-                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-4 md:p-6">
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6">Behavior & Notes</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6 uppercase tracking-wide">Behavior & Notes</h2>
                     <ChildBehaviorOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
               </Tabs>
             ) : (
-              <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 p-8 md:p-12 text-center">
+              <div className="bg-white rounded-md border border-slate-200 shadow-sm p-8 md:p-12 text-center">
                 <Users className="w-12 md:w-16 h-12 md:h-16 text-slate-300 mx-auto mb-4" />
-                <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-2">Select a Child</h2>
+                <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-2 uppercase tracking-wide">Select a Child</h2>
                 <p className="text-xs md:text-sm text-slate-600">Choose a child from the dropdown above to view their information</p>
               </div>
             )}
