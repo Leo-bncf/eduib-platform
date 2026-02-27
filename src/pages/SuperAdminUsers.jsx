@@ -40,10 +40,11 @@ export default function SuperAdminUsers() {
       const user = await base44.auth.me();
       if (user.role !== 'super_admin') { navigate('/'); return; }
 
-      const [allSchools, allUsers] = await Promise.all([
+      const [allSchools, usersRes] = await Promise.all([
         base44.entities.School.list(),
-        base44.asServiceRole.entities.User.filter({}, '-created_date', 10000),
+        base44.functions.invoke('listAllUsers', {}),
       ]);
+      const allUsers = usersRes.data?.users || [];
 
       setSchools(allSchools);
 
