@@ -19,13 +19,15 @@ export default function SchoolAdminDashboard() {
   const { data: school, isLoading: schoolLoading } = useSchoolData(schoolId);
   const { data: metrics, isLoading: metricsLoading } = useSchoolMetrics(schoolId);
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
+  const { loading: userLoading } = useUser();
 
-  if (!user || schoolLoading || metricsLoading) {
+  useEffect(() => {
+    if (!userLoading && !user) {
+      base44.auth.redirectToLogin(createPageUrl('AppHome'));
+    }
+  }, [user, userLoading]);
+
+  if (userLoading || !user || schoolLoading || metricsLoading) {
     return <LoadingStateBase />;
   }
 
