@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { createPageUrl } from '@/utils';
 import { Loader2, ChevronRight, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import OnboardingProgress from '@/components/school/OnboardingProgress';
@@ -62,6 +61,7 @@ export default function SchoolOnboarding() {
         // Get user's school
         const memberships = await base44.entities.SchoolMembership.filter({
           user_id: currentUser.id,
+          role: 'admin'
         });
 
         if (!memberships || memberships.length === 0) {
@@ -100,7 +100,7 @@ export default function SchoolOnboarding() {
       setCurrentStep(stepIndex + 1);
     } else {
       // Onboarding complete
-      navigate(createPageUrl('SchoolAdminDashboard'));
+      navigate('/school-admin-dashboard');
     }
   };
 
@@ -125,7 +125,7 @@ export default function SchoolOnboarding() {
           </div>
           <Button
             variant="ghost"
-            onClick={() => navigate(createPageUrl('SchoolAdminDashboard'))}
+            onClick={() => navigate('/school-admin-dashboard')}
             className="text-slate-600"
           >
             Exit Setup
