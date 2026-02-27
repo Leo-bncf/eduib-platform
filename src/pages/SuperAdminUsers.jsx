@@ -65,6 +65,8 @@ export default function SuperAdminUsers() {
     }
   };
 
+  // Also update the reloadUsers to use the same backend function
+
   useEffect(() => { loadData(); }, [navigate]);
 
   useEffect(() => {
