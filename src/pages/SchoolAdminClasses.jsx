@@ -115,7 +115,7 @@ export default function SchoolAdminClasses() {
 
   return (
     <RoleGuard allowedRoles={['school_admin', 'super_admin', 'admin']}>
-      <div className="min-h-screen bg-[#f1f5f9]">
+      <div className="min-h-screen bg-slate-50">
         <AppSidebar links={sidebarLinks} role="school_admin" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
 
         <main className="md:ml-64 min-h-screen flex flex-col">

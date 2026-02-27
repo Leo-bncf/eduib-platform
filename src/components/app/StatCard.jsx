@@ -11,16 +11,16 @@ export default function StatCard({ label, value, icon: Icon, color = 'indigo', t
   };
 
   return (
-    <div className="bg-white rounded-lg md:rounded-xl border border-slate-100 p-3 md:p-5 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-xs md:text-sm text-slate-500 font-medium">{label}</p>
-          <p className="text-xl md:text-3xl font-bold text-slate-900 mt-0.5 md:mt-1">{value}</p>
-          {trend && <p className="text-xs text-emerald-600 mt-0.5 md:mt-1">{trend}</p>}
+    <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-5 hover:border-blue-400 hover:shadow-md transition-all flex flex-col justify-between">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-xs md:text-sm text-slate-600 font-semibold uppercase tracking-wide">{label}</p>
+        <div className={`w-8 h-8 rounded-md ${colors[color]} flex items-center justify-center flex-shrink-0`}>
+          <Icon className="w-4 h-4" />
         </div>
-        <div className={`w-8 md:w-10 h-8 md:h-10 rounded-lg md:rounded-xl ${colors[color]} flex items-center justify-center flex-shrink-0`}>
-          <Icon className="w-4 md:w-5 h-4 md:h-5" />
-        </div>
+      </div>
+      <div>
+        <p className="text-2xl md:text-3xl font-bold text-slate-900">{value}</p>
+        {trend && <p className="text-xs font-medium text-emerald-600 mt-1">{trend}</p>}
       </div>
     </div>
   );
