@@ -190,20 +190,20 @@ export default function SchoolAdminDashboard() {
           {/* Welcome + Stats row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Welcome panel */}
-            <div className="lg:col-span-1 bg-gradient-to-br from-slate-900 to-indigo-900 rounded-xl p-5 text-white flex flex-col justify-between min-h-[160px]">
+            <div className="lg:col-span-1 bg-white border border-slate-200 rounded-xl p-5 flex flex-col justify-between min-h-[160px]" style={{borderTop: '3px solid #1e3a8a'}}>
               <div>
-                <p className="text-xs text-indigo-300 uppercase tracking-widest font-medium mb-1">Good day</p>
-                <h2 className="text-lg font-bold leading-tight">{user.full_name}</h2>
-                <p className="text-xs text-slate-400 mt-1">School Administrator</p>
+                <p className="text-xs text-blue-900 uppercase tracking-widest font-medium mb-1">Good day</p>
+                <h2 className="text-lg font-bold text-slate-900 leading-tight">{user.full_name}</h2>
+                <p className="text-xs text-slate-500 mt-1">School Administrator</p>
               </div>
-              <div className="mt-4 pt-4 border-t border-white/10 grid grid-cols-2 gap-3">
+              <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
                 <div>
                   <p className="text-[10px] text-slate-400 uppercase tracking-wide">Plan</p>
-                  <p className="text-sm font-semibold mt-0.5 capitalize">{school?.plan || 'Starter'}</p>
+                  <p className="text-sm font-semibold text-slate-800 mt-0.5 capitalize">{school?.plan || 'Starter'}</p>
                 </div>
                 <div>
                   <p className="text-[10px] text-slate-400 uppercase tracking-wide">Status</p>
-                  <p className="text-sm font-semibold mt-0.5 capitalize">{school?.status || 'Onboarding'}</p>
+                  <p className="text-sm font-semibold text-slate-800 mt-0.5 capitalize">{school?.status || 'Onboarding'}</p>
                 </div>
               </div>
             </div>
