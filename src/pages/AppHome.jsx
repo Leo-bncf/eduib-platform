@@ -33,9 +33,7 @@ export default function AppHome() {
       return;
     }
 
-    const membership = user.active_school_id 
-      ? memberships.find(m => m.school_id === user.active_school_id) || memberships[0]
-      : memberships[0];
+    const membership = memberships[0];
 
     // Save active school
     if (!user.active_school_id || user.active_school_id !== membership.school_id) {
