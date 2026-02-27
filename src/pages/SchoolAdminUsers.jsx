@@ -5,7 +5,7 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
 import { logAudit, AuditActions, AuditLevels } from '@/components/utils/auditLogger';
-import { LayoutDashboard, Users, BookOpen, Calendar, Shield, ClipboardList, CreditCard, Plus, Loader2, Search, Mail } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Calendar, Shield, ClipboardList, CreditCard, Plus, Loader2, Search, Mail, FileText, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -21,7 +21,7 @@ const sidebarLinks = [
   { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
   { label: 'Subjects', page: 'SchoolAdminSubjects', icon: ClipboardList },
   { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
-  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Shield },
+  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Calendar },
   { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
   { label: 'Billing', page: 'SchoolAdminBilling', icon: CreditCard },
   { label: 'Settings', page: 'SchoolAdminSettings', icon: Settings },

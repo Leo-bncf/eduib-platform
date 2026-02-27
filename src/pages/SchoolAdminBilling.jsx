@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
-import { LayoutDashboard, Users, BookOpen, Calendar, Shield, ClipboardList, CreditCard, CheckCircle2, AlertCircle, Loader2, ExternalLink } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Calendar, Shield, ClipboardList, CreditCard, CheckCircle2, AlertCircle, Loader2, ExternalLink, FileText, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,9 +21,9 @@ const sidebarLinks = [
   { label: 'Subjects', page: 'SchoolAdminSubjects', icon: ClipboardList },
   { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
   { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Shield },
-  { label: 'Reports', page: 'SchoolAdminReports', icon: CreditCard },
+  { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
   { label: 'Billing', page: 'SchoolAdminBilling', icon: CreditCard },
-  { label: 'Settings', page: 'SchoolAdminSettings', icon: Shield },
+  { label: 'Settings', page: 'SchoolAdminSettings', icon: Settings },
 ];
 
 const PLAN_DETAILS = {
