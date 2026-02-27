@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Search, ChevronLeft, Shield, AlertCircle } from 'lucide-react';
+import {
+  Loader2, Search, Users, Building2, ChevronLeft,
+  User, Activity, School, BookOpen, CreditCard, FileText
+} from 'lucide-react';
 import ManageUserDialog from '@/components/admin/ManageUserDialog';
 
 const roleColors = {
-  super_admin: 'bg-red-100 text-red-800',
-  school_admin: 'bg-purple-100 text-purple-800',
-  ib_coordinator: 'bg-blue-100 text-blue-800',
-  teacher: 'bg-green-100 text-green-800',
-  student: 'bg-indigo-100 text-indigo-800',
-  parent: 'bg-amber-100 text-amber-800',
-  user: 'bg-slate-100 text-slate-800',
+  super_admin: 'bg-red-900/50 text-red-300 border-red-800',
+  school_admin: 'bg-purple-900/50 text-purple-300 border-purple-800',
+  ib_coordinator: 'bg-blue-900/50 text-blue-300 border-blue-800',
+  teacher: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
+  student: 'bg-indigo-900/50 text-indigo-300 border-indigo-800',
+  parent: 'bg-amber-900/50 text-amber-300 border-amber-800',
+  user: 'bg-slate-700/50 text-slate-400 border-slate-600',
 };
 
 export default function SuperAdminUsers() {
@@ -31,265 +33,253 @@ export default function SuperAdminUsers() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [manageDialogOpen, setManageDialogOpen] = useState(false);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const authed = await base44.auth.isAuthenticated();
-        if (!authed) {
-          navigate('/');
-          return;
-        }
+  const loadData = async () => {
+    try {
+      const authed = await base44.auth.isAuthenticated();
+      if (!authed) { navigate('/'); return; }
+      const user = await base44.auth.me();
+      if (user.role !== 'super_admin') { navigate('/'); return; }
 
-        const user = await base44.auth.me();
-        if (user.role !== 'super_admin') {
-          navigate('/super-admin-dashboard');
-          return;
-        }
+      const [allSchools, allUsers] = await Promise.all([
+        base44.entities.School.list(),
+        base44.asServiceRole.entities.User.filter({}, '', 10000),
+      ]);
 
-        // Load all schools
-        const allSchools = await base44.entities.School.list();
-        setSchools(allSchools);
+      setSchools(allSchools);
 
-        // Load all users - use filter with empty query to get all users
-         const allUsers = await base44.asServiceRole.entities.User.filter({}, '', 10000);
-        
-        // Enhance users with school info
-        const usersWithSchools = await Promise.all(
-          allUsers.map(async (u) => {
-            if (u.active_school_id) {
-              const schoolList = await base44.entities.School.filter({ id: u.active_school_id });
-              return {
-                ...u,
-                school_name: schoolList.length > 0 ? schoolList[0].name : 'Unknown',
-              };
-            }
-            return { ...u, school_name: 'N/A' };
-          })
-        );
+      const schoolMap = {};
+      allSchools.forEach(s => { schoolMap[s.id] = s.name; });
 
-        setUsers(usersWithSchools);
-        setFilteredUsers(usersWithSchools);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error loading users:', error);
-        setLoading(false);
-      }
-    };
+      const usersWithSchools = allUsers.map(u => ({
+        ...u,
+        school_name: u.active_school_id ? (schoolMap[u.active_school_id] || 'Unknown') : '—',
+      }));
 
-    loadData();
-  }, [navigate]);
+      setUsers(usersWithSchools);
+      setFilteredUsers(usersWithSchools);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading users:', error);
+      setLoading(false);
+    }
+  };
 
-  // Filter users
+  useEffect(() => { loadData(); }, [navigate]);
+
   useEffect(() => {
     let filtered = users;
-
-    // Search filter
     if (searchQuery) {
       filtered = filtered.filter(u =>
         u.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         u.email?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-
-    // Role filter
-    if (filterRole !== 'all') {
-      filtered = filtered.filter(u => u.role === filterRole);
-    }
-
-    // School filter
-    if (filterSchool !== 'all') {
-      filtered = filtered.filter(u => u.active_school_id === filterSchool);
-    }
-
+    if (filterRole !== 'all') filtered = filtered.filter(u => u.role === filterRole);
+    if (filterSchool !== 'all') filtered = filtered.filter(u => u.active_school_id === filterSchool);
     setFilteredUsers(filtered);
   }, [searchQuery, filterRole, filterSchool, users]);
 
   const handleUserUpdated = () => {
     setManageDialogOpen(false);
-    // Reload users
-    const reloadUsers = async () => {
-       try {
-         const allUsers = await base44.asServiceRole.entities.User.filter({}, '', 10000);
-        const usersWithSchools = await Promise.all(
-          allUsers.map(async (u) => {
-            if (u.active_school_id) {
-              const schoolList = await base44.entities.School.filter({ id: u.active_school_id });
-              return {
-                ...u,
-                school_name: schoolList.length > 0 ? schoolList[0].name : 'Unknown',
-              };
-            }
-            return { ...u, school_name: 'N/A' };
-          })
-        );
-        setUsers(usersWithSchools);
-      } catch (error) {
-        console.error('Error reloading users:', error);
-      }
-    };
-    reloadUsers();
+    loadData();
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-white" />
       </div>
     );
   }
 
+  const ROLES = ['all', 'super_admin', 'school_admin', 'ib_coordinator', 'teacher', 'student', 'parent', 'user'];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Button onClick={() => navigate('/SuperAdminDashboard')} variant="ghost" size="icon" className="h-8 w-8">
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              <h1 className="text-2xl md:text-3xl font-bold text-slate-900">User Management</h1>
+    <div className="min-h-screen bg-slate-950 text-white flex flex-col">
+      {/* Top Nav */}
+      <div className="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <Building2 className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-white font-semibold text-sm">IB Platform</span>
+          <span className="text-slate-400 text-xs">Super Admin Console</span>
+        </div>
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <div className="w-56 bg-slate-900 border-r border-slate-800 p-4 flex flex-col gap-1 flex-shrink-0">
+          <Link to={createPageUrl('SuperAdminDashboard')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <Activity className="w-4 h-4" /> Overview
+          </Link>
+          <Link to={createPageUrl('SuperAdminSchools')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <School className="w-4 h-4" /> Schools
+          </Link>
+          <Link to={createPageUrl('SuperAdminUsers')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800 text-white text-sm font-medium">
+            <Users className="w-4 h-4" /> Users
+          </Link>
+          <Link to={createPageUrl('SuperAdminBilling')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <CreditCard className="w-4 h-4" /> Billing
+          </Link>
+          <Link to={createPageUrl('SuperAdminPlans')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <BookOpen className="w-4 h-4" /> Plans
+          </Link>
+          <Link to={createPageUrl('SuperAdminAuditLogs')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <FileText className="w-4 h-4" /> Audit Logs
+          </Link>
+        </div>
+
+        {/* Main */}
+        <div className="flex-1 overflow-auto p-6">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-2xl font-bold text-white">User Management</h1>
+              <p className="text-slate-400 text-sm mt-1">{users.length} total users across all schools</p>
             </div>
-            <p className="text-xs md:text-sm text-slate-600 ml-10">Manage all users across schools</p>
+          </div>
+
+          {/* Filters */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 mb-5 space-y-3">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
+              <input
+                type="text"
+                placeholder="Search by name or email..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              {/* Role filter */}
+              <div>
+                <p className="text-xs text-slate-500 mb-1 font-medium">Role</p>
+                <div className="flex flex-wrap gap-1">
+                  {ROLES.map(role => (
+                    <button
+                      key={role}
+                      onClick={() => setFilterRole(role)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                        filterRole === role
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'
+                      }`}
+                    >
+                      {role === 'all' ? 'All Roles' : role.replace('_', ' ')}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* School filter */}
+              <div>
+                <p className="text-xs text-slate-500 mb-1 font-medium">School</p>
+                <select
+                  value={filterSchool}
+                  onChange={(e) => setFilterSchool(e.target.value)}
+                  className="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="all">All Schools</option>
+                  {schools.map(s => (
+                    <option key={s.id} value={s.id}>{s.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Users Table */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+            <div className="px-5 py-3 border-b border-slate-800 flex items-center justify-between">
+              <span className="text-sm text-slate-400">
+                Showing <strong className="text-white">{filteredUsers.length}</strong> of <strong className="text-white">{users.length}</strong> users
+              </span>
+            </div>
+
+            {filteredUsers.length === 0 ? (
+              <div className="text-center py-16 text-slate-500">
+                <Users className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                <p className="text-sm">No users found</p>
+              </div>
+            ) : (
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-slate-800">
+                    <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide px-5 py-3">User</th>
+                    <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide px-4 py-3 hidden md:table-cell">School</th>
+                    <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide px-4 py-3">Role</th>
+                    <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide px-4 py-3 hidden lg:table-cell">Joined</th>
+                    <th className="px-4 py-3"></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  {filteredUsers.map((user) => (
+                    <tr key={user.id} className="hover:bg-slate-800/40 transition-colors">
+                      <td className="px-5 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center flex-shrink-0">
+                            <span className="text-xs font-semibold text-slate-300">
+                              {(user.full_name || user.email || '?')[0].toUpperCase()}
+                            </span>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-white truncate">{user.full_name || '—'}</p>
+                            <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 hidden md:table-cell">
+                        <span className="text-sm text-slate-400">{user.school_name}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${roleColors[user.role] || roleColors.user}`}>
+                          {user.role || 'user'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 hidden lg:table-cell">
+                        <span className="text-xs text-slate-500">
+                          {user.created_date
+                            ? new Date(user.created_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+                            : '—'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <Button
+                          onClick={() => { setSelectedUser(user); setManageDialogOpen(true); }}
+                          variant="outline"
+                          size="sm"
+                          className="text-xs bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700"
+                        >
+                          Manage
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
-
-        {/* Filters */}
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
-                <Input
-                  placeholder="Search by name or email..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              {/* Filters */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-semibold text-slate-600 mb-2 block">Filter by Role</label>
-                  <select
-                    value={filterRole}
-                    onChange={(e) => setFilterRole(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    <option value="all">All Roles</option>
-                    <option value="super_admin">Super Admin</option>
-                    <option value="school_admin">School Admin</option>
-                    <option value="ib_coordinator">IB Coordinator</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="student">Student</option>
-                    <option value="parent">Parent</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-slate-600 mb-2 block">Filter by School</label>
-                  <select
-                    value={filterSchool}
-                    onChange={(e) => setFilterSchool(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    <option value="all">All Schools</option>
-                    {schools.map(school => (
-                      <option key={school.id} value={school.id}>
-                        {school.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Users List */}
-         <div className="space-y-2 md:space-y-3">
-           {filteredUsers.length === 0 ? (
-            <Card>
-              <CardContent className="pt-6 p-4 md:p-6">
-                <p className="text-center text-xs md:text-sm text-slate-600">No users found</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid grid-cols-1 gap-3">
-              {filteredUsers.map((user) => (
-                <Card
-                  key={user.id}
-                  className="cursor-pointer hover:shadow-md transition-shadow"
-                >
-                  <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2 flex-wrap">
-                          <h3 className="text-base md:text-lg font-bold text-slate-900 truncate">
-                            {user.full_name || user.email}
-                          </h3>
-                          <Badge className={roleColors[user.role] || 'bg-slate-100 text-slate-800'}>
-                            {user.role}
-                          </Badge>
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 text-xs md:text-sm mt-3">
-                          <div className="min-w-0">
-                            <p className="text-slate-600">Email</p>
-                            <p className="font-semibold text-slate-900 truncate">{user.email}</p>
-                          </div>
-                          <div>
-                            <p className="text-slate-600">School</p>
-                            <p className="font-semibold text-slate-900 truncate">{user.school_name}</p>
-                          </div>
-                          <div className="hidden md:block">
-                            <p className="text-slate-600">Joined</p>
-                            <p className="font-semibold text-slate-900">
-                              {user.created_date
-                                ? new Date(user.created_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-                                : 'N/A'
-                              }
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <Button
-                        onClick={() => {
-                          setSelectedUser(user);
-                          setManageDialogOpen(true);
-                        }}
-                        variant="outline"
-                        size="sm"
-                        className="text-xs md:text-sm flex-shrink-0"
-                      >
-                        Manage
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Summary */}
-         <div className="mt-8 text-center text-sm text-slate-600">
-           Showing {filteredUsers.length} of {users.length} users
-         </div>
-
-        {/* Manage User Dialog */}
-        {selectedUser && (
-          <ManageUserDialog
-            open={manageDialogOpen}
-            onOpenChange={setManageDialogOpen}
-            user={selectedUser}
-            onUserUpdated={handleUserUpdated}
-          />
-        )}
       </div>
+
+      {selectedUser && (
+        <ManageUserDialog
+          open={manageDialogOpen}
+          onOpenChange={setManageDialogOpen}
+          user={selectedUser}
+          onUserUpdated={handleUserUpdated}
+        />
+      )}
     </div>
   );
 }
