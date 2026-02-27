@@ -100,7 +100,7 @@ export default function SchoolOnboarding() {
       setCurrentStep(stepIndex + 1);
     } else {
       // Onboarding complete
-      navigate('/school-admin-dashboard');
+      navigate(createPageUrl('SchoolAdminDashboard'));
     }
   };
 
