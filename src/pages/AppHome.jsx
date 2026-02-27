@@ -20,7 +20,7 @@ export default function AppHome() {
     const user = await base44.auth.me();
 
     // Super admin goes directly to platform dashboard
-    if (user.role === 'super_admin') {
+    if (user.role === 'super_admin' || user.role === 'admin') {
       window.location.href = createPageUrl('SuperAdminDashboard');
       return;
     }
