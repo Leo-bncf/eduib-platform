@@ -23,7 +23,7 @@ export default function ParentDashboard() {
 
   return (
     <RoleGuard allowedRoles={['parent', 'super_admin', 'admin']}>
-      <div className="min-h-screen bg-slate-100">
+      <div className="min-h-screen bg-slate-50">
         <AppSidebar links={sidebarLinks} role="parent" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         
         <main className="ml-0 md:ml-64 p-4 md:p-8">

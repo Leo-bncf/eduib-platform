@@ -202,15 +202,17 @@ export default function SchoolAdminDashboard() {
             {kpiCards.map(({ label, value, sub, icon: Icon }) => (
               <div
                 key={label}
-                className="bg-white border-l-4 border-l-blue-600 border-y border-r border-slate-200 rounded-r-md p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                className="bg-white border-l-[3px] border-l-blue-600 border-y border-r border-slate-200 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-xs md:text-sm font-semibold text-slate-600 uppercase tracking-wide">{label}</p>
-                  <Icon className="w-5 h-5 text-slate-400" />
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">{label}</p>
+                  <div className="w-10 h-10 bg-blue-600 rounded flex items-center justify-center shadow-sm">
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-slate-900 tabular-nums">{value}</p>
-                  <p className="text-xs text-slate-500 mt-1">{sub}</p>
+                  <p className="text-3xl font-black text-slate-900 tabular-nums tracking-tight">{value}</p>
+                  <p className="text-xs text-slate-500 mt-1 font-medium">{sub}</p>
                 </div>
               </div>
             ))}
