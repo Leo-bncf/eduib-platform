@@ -61,7 +61,6 @@ export default function SchoolOnboarding() {
         // Get user's school
         const memberships = await base44.entities.SchoolMembership.filter({
           user_id: currentUser.id,
-          role: 'admin'
         });
 
         if (!memberships || memberships.length === 0) {
