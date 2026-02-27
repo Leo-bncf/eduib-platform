@@ -62,10 +62,10 @@ export default function TeacherDashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-100">
-                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-100">
-                      <h2 className="font-semibold text-sm md:text-base text-slate-900 flex items-center gap-2">
-                        <Clock className="w-4 md:w-5 h-4 md:h-5 text-indigo-600 flex-shrink-0" />
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm">
+                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-200 bg-slate-50 rounded-t-md">
+                      <h2 className="font-bold text-sm md:text-base text-slate-900 flex items-center gap-2 uppercase tracking-wide">
+                        <Clock className="w-4 md:w-5 h-4 md:h-5 text-blue-600 flex-shrink-0" />
                         <span>Today's Teaching Schedule</span>
                       </h2>
                     </div>
@@ -74,9 +74,9 @@ export default function TeacherDashboard() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-lg md:rounded-xl border border-slate-100">
-                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-100">
-                      <h2 className="font-semibold text-sm md:text-base text-slate-900">Recent Assignments</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm">
+                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-200 bg-slate-50 rounded-t-md">
+                      <h2 className="font-bold text-sm md:text-base text-slate-900 uppercase tracking-wide">Recent Assignments</h2>
                     </div>
                     {assignments.length === 0 ? (
                       <div className="p-6 md:p-12 text-center text-slate-400 text-xs md:text-sm">No assignments yet</div>
