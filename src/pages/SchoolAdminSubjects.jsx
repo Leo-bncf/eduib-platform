@@ -20,7 +20,8 @@ const sidebarLinks = [
   { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
   { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Clock },
   { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
-  { label: 'Settings', page: 'SchoolAdminDashboard', icon: Settings },
+  { label: 'Billing', page: 'SchoolAdminBilling', icon: FileText },
+  { label: 'Settings', page: 'SchoolAdminSettings', icon: Settings },
 ];
 
 export default function SchoolAdminSubjects() {

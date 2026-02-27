@@ -19,9 +19,11 @@ const sidebarLinks = [
   { label: 'Users', page: 'SchoolAdminUsers', icon: Users },
   { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
   { label: 'Subjects', page: 'SchoolAdminSubjects', icon: ClipboardList },
+  { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
+  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Shield },
+  { label: 'Reports', page: 'SchoolAdminReports', icon: CreditCard },
   { label: 'Billing', page: 'SchoolAdminBilling', icon: CreditCard },
-  { label: 'Academic Years', page: 'SchoolAdminDashboard', icon: Calendar },
-  { label: 'Audit Logs', page: 'SchoolAdminDashboard', icon: Shield },
+  { label: 'Settings', page: 'SchoolAdminSettings', icon: Shield },
 ];
 
 const PLAN_DETAILS = {
