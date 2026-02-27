@@ -1,26 +1,44 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '@/components/auth/UserContext';
 import { useSchoolData, useSchoolMetrics } from '@/components/hooks/useDashboardData';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, Users, Settings, FileText, BookOpen, LogOut } from 'lucide-react';
-import SetupChecklist from '@/components/school/SetupChecklist';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Users, BookOpen, GraduationCap, Calendar, Clock, FileText,
+  CreditCard, Settings, ArrowRight, CheckCircle2, AlertCircle,
+  LayoutDashboard, TrendingUp, Activity
+} from 'lucide-react';
+import AppSidebar from '@/components/app/AppSidebar';
 import LoadingStateBase from '@/components/common/LoadingStateBase';
 
-/**
- * School admin dashboard with onboarding awareness
- */
+const sidebarLinks = [
+  { label: 'Dashboard', page: 'SchoolAdminDashboard', icon: LayoutDashboard },
+  { label: 'Users', page: 'SchoolAdminUsers', icon: Users },
+  { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
+  { label: 'Subjects', page: 'SchoolAdminSubjects', icon: GraduationCap },
+  { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
+  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Clock },
+  { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
+  { label: 'Billing', page: 'SchoolAdminBilling', icon: CreditCard },
+  { label: 'Settings', page: 'SchoolAdminSettings', icon: Settings },
+];
+
+const quickActions = [
+  { label: 'Manage Users', description: 'Add staff, students & parents', page: 'SchoolAdminUsers', icon: Users, color: 'text-violet-600', bg: 'bg-violet-50' },
+  { label: 'Classes', description: 'Create and manage classes', page: 'SchoolAdminClasses', icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
+  { label: 'Subjects', description: 'Configure IB subjects', page: 'SchoolAdminSubjects', icon: GraduationCap, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  { label: 'Attendance', description: 'View attendance records', page: 'SchoolAdminAttendance', icon: Calendar, color: 'text-amber-600', bg: 'bg-amber-50' },
+  { label: 'Timetable', description: 'Manage schedules', page: 'SchoolAdminTimetable', icon: Clock, color: 'text-rose-600', bg: 'bg-rose-50' },
+  { label: 'Reports', description: 'Export and generate reports', page: 'SchoolAdminReports', icon: FileText, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+];
+
 export default function SchoolAdminDashboard() {
   const navigate = useNavigate();
-  const { user, schoolId } = useUser();
-
+  const { user, schoolId, loading: userLoading } = useUser();
   const { data: school, isLoading: schoolLoading } = useSchoolData(schoolId);
   const { data: metrics, isLoading: metricsLoading } = useSchoolMetrics(schoolId);
-
-  const { loading: userLoading } = useUser();
 
   useEffect(() => {
     if (!userLoading && !user) {
@@ -33,159 +51,123 @@ export default function SchoolAdminDashboard() {
   }
 
   const isSetupComplete = metrics && metrics.setupProgress.completed === metrics.setupProgress.total;
+  const setupPct = metrics ? Math.round((metrics.setupProgress.completed / metrics.setupProgress.total) * 100) : 0;
+
+  const statCards = [
+    { label: 'Academic Years', value: metrics?.academicYears ?? 0, icon: TrendingUp, color: 'text-indigo-600', border: 'border-l-indigo-500' },
+    { label: 'Subjects', value: metrics?.subjects ?? 0, icon: GraduationCap, color: 'text-emerald-600', border: 'border-l-emerald-500' },
+    { label: 'Classes', value: metrics?.classes ?? 0, icon: BookOpen, color: 'text-blue-600', border: 'border-l-blue-500' },
+    { label: 'Staff Members', value: metrics?.staff ?? 0, icon: Users, color: 'text-violet-600', border: 'border-l-violet-500' },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 md:mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">School Admin Dashboard</h1>
-            <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Welcome, {user.full_name}</p>
-          </div>
-          <Button 
-            variant="outline" 
-            onClick={() => base44.auth.logout()}
-            className="gap-2"
-          >
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Logout</span>
-          </Button>
-        </div>
+    <div className="min-h-screen bg-slate-50">
+      <AppSidebar
+        links={sidebarLinks}
+        role="school_admin"
+        schoolName={school?.name}
+        userName={user?.full_name}
+        userId={user?.id}
+        schoolId={schoolId}
+      />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-4 md:space-y-6">
-            {/* Setup Status Card */}
-            {!isSetupComplete && (
-              <Card className="bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
-                <CardHeader className="p-4 md:p-6">
-                  <CardTitle className="flex items-center gap-2 text-amber-900 text-base md:text-lg">
-                    <AlertCircle className="w-4 md:w-5 h-4 md:h-5 flex-shrink-0" />
-                    School Setup In Progress
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
-                    <p className="text-xs md:text-sm text-amber-800">
-                      Complete your school setup to unlock all features. You're {metrics.setupProgress.completed} of {metrics.setupProgress.total} steps complete.
-                    </p>
-                    <div className="w-full bg-amber-200 rounded-full h-2">
-                      <div
-                        className="bg-amber-600 h-2 rounded-full transition-all"
-                        style={{ width: `${(metrics.setupProgress.completed / metrics.setupProgress.total) * 100}%` }}
-                      />
-                    </div>
-                  <Button
-                    onClick={() => navigate('/school-onboarding')}
-                    className="w-full bg-amber-600 hover:bg-amber-700 gap-2 text-sm"
-                  >
-                    Continue Setup
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-2 md:gap-4">
-              <Card>
-                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-                  <div className="text-center">
-                    <BookOpen className="w-6 md:w-8 h-6 md:h-8 text-indigo-600 mx-auto mb-2" />
-                    <p className="text-xl md:text-2xl font-bold text-slate-900">{metrics.academicYears}</p>
-                    <p className="text-xs md:text-sm text-slate-600 mt-1">Academic Years</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-                  <div className="text-center">
-                    <FileText className="w-6 md:w-8 h-6 md:h-8 text-green-600 mx-auto mb-2" />
-                    <p className="text-xl md:text-2xl font-bold text-slate-900">{metrics.subjects}</p>
-                    <p className="text-xs md:text-sm text-slate-600 mt-1">Subjects</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-                  <div className="text-center">
-                    <BookOpen className="w-6 md:w-8 h-6 md:h-8 text-blue-600 mx-auto mb-2" />
-                    <p className="text-xl md:text-2xl font-bold text-slate-900">{metrics.classes}</p>
-                    <p className="text-xs md:text-sm text-slate-600 mt-1">Classes</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-                  <div className="text-center">
-                    <Users className="w-6 md:w-8 h-6 md:h-8 text-purple-600 mx-auto mb-2" />
-                    <p className="text-xl md:text-2xl font-bold text-slate-900">{metrics.staff}</p>
-                    <p className="text-xs md:text-sm text-slate-600 mt-1">Staff Members</p>
-                  </div>
-                </CardContent>
-              </Card>
+      <main className="md:ml-64 min-h-screen">
+        {/* Top bar */}
+        <div className="bg-white border-b border-slate-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-slate-900">{school?.name || 'School Dashboard'}</h1>
+              <p className="text-sm text-slate-500 mt-0.5">Welcome back, {user.full_name}</p>
             </div>
-
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader className="p-4 md:p-6">
-                <CardTitle className="text-base md:text-lg">Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
-                <div className="grid grid-cols-2 gap-2 md:gap-3">
-                  <Button variant="outline" className="gap-1 md:gap-2 text-xs md:text-sm">
-                    <Users className="w-3 md:w-4 h-3 md:h-4" />
-                    <span>Invite Staff</span>
-                  </Button>
-                  <Button variant="outline" className="gap-1 md:gap-2 text-xs md:text-sm">
-                    <Settings className="w-3 md:w-4 h-3 md:h-4" />
-                    <span>Settings</span>
-                  </Button>
-                  <Button variant="outline" className="gap-1 md:gap-2 text-xs md:text-sm">
-                    <FileText className="w-3 md:w-4 h-3 md:h-4" />
-                    <span>Classes</span>
-                  </Button>
-                  <Button variant="outline" className="gap-1 md:gap-2 text-xs md:text-sm">
-                    <BookOpen className="w-3 md:w-4 h-3 md:h-4" />
-                    <span>Subjects</span>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-4 md:space-y-6">
-            {/* Setup Checklist */}
-              {metrics && !isSetupComplete && (
-                <SetupChecklist schoolId={schoolId} />
-              )}
-
-            {/* School Info Card */}
-            <Card>
-              <CardHeader className="p-4 md:p-6">
-                <CardTitle className="text-base md:text-lg">School Info</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-xs md:text-sm p-4 md:p-6 pt-0 md:pt-0">
-                <div>
-                  <p className="text-slate-600">Name</p>
-                  <p className="font-semibold text-slate-900 truncate">{school.name}</p>
-                </div>
-                <div>
-                  <p className="text-slate-600">Plan</p>
-                  <p className="font-semibold text-slate-900 capitalize">{school.plan}</p>
-                </div>
-                <div>
-                  <p className="text-slate-600">Status</p>
-                  <p className="font-semibold text-slate-900 capitalize">{school.status}</p>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="flex items-center gap-2">
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                school?.status === 'active' ? 'bg-emerald-50 text-emerald-700' :
+                school?.status === 'onboarding' ? 'bg-amber-50 text-amber-700' :
+                'bg-slate-100 text-slate-600'
+              }`}>
+                <Activity className="w-3 h-3" />
+                {school?.status || 'onboarding'}
+              </span>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 capitalize">
+                {school?.plan || 'starter'} plan
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+
+        <div className="p-6 space-y-6">
+          {/* Setup banner */}
+          {!isSetupComplete && (
+            <div className="bg-white border border-amber-200 rounded-xl p-5 flex items-center justify-between gap-4">
+              <div className="flex items-start gap-3 flex-1">
+                <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="font-medium text-slate-900 text-sm">Complete your school setup</p>
+                  <p className="text-xs text-slate-500 mt-0.5">{metrics.setupProgress.completed} of {metrics.setupProgress.total} steps done — {setupPct}% complete</p>
+                  <div className="mt-2 w-full max-w-xs bg-slate-200 rounded-full h-1.5">
+                    <div className="bg-amber-500 h-1.5 rounded-full transition-all" style={{ width: `${setupPct}%` }} />
+                  </div>
+                </div>
+              </div>
+              <Link
+                to={createPageUrl('SchoolOnboarding')}
+                className="flex items-center gap-1.5 text-sm font-medium text-amber-700 hover:text-amber-800 whitespace-nowrap"
+              >
+                Continue setup <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
+
+          {isSetupComplete && (
+            <div className="bg-white border border-emerald-200 rounded-xl p-4 flex items-center gap-3">
+              <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+              <p className="text-sm font-medium text-slate-700">School setup is complete. All features are available.</p>
+            </div>
+          )}
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {statCards.map(({ label, value, icon: Icon, color, border }) => (
+              <Card key={label} className={`border-l-4 ${border} shadow-none`}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{label}</p>
+                      <p className="text-3xl font-bold text-slate-900 mt-1">{value}</p>
+                    </div>
+                    <div className={`w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center ${color}`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Quick actions */}
+          <div>
+            <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Quick Access</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {quickActions.map(({ label, description, page, icon: Icon, color, bg }) => (
+                <Link
+                  key={page}
+                  to={createPageUrl(page)}
+                  className="group bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-sm transition-all flex items-center gap-4"
+                >
+                  <div className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center flex-shrink-0 ${color}`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-slate-900 text-sm">{label}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{description}</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors flex-shrink-0" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
