@@ -115,7 +115,7 @@ export default function SchoolAdminReports() {
       <div className="min-h-screen bg-slate-50">
         <AppSidebar links={sidebarLinks} role="school_admin" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         
-        <main className="ml-64 p-8">
+        <main className="md:ml-64 p-8">
           <div className="max-w-7xl mx-auto">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-slate-900 mb-2">Reports & Exports</h1>

@@ -79,7 +79,7 @@ export default function SchoolAdminAttendance() {
       <div className="min-h-screen bg-slate-50">
         <AppSidebar links={sidebarLinks} role="school_admin" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         
-        <main className="ml-64 p-8">
+        <main className="md:ml-64 p-8">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl font-bold text-slate-900 mb-2">Attendance Overview</h1>
             <p className="text-slate-600 mb-8">Monitor school-wide attendance</p>
