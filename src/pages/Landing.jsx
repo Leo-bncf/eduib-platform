@@ -168,26 +168,25 @@ function FeaturesGrid() {
 
 function RolesSection() {
   const roles = [
-    { name: 'Students', color: 'bg-blue-500', desc: 'Personal dashboards, assignments, grades, timetables, and IB Core tracking.' },
-    { name: 'Teachers', color: 'bg-emerald-500', desc: 'Class management, gradebook, submissions review, attendance, and analytics.' },
-    { name: 'Parents', color: 'bg-violet-500', desc: 'Child progress monitoring, grades visibility, assignments, and messaging.' },
-    { name: 'Coordinators', color: 'bg-amber-500', desc: 'Cohort oversight, predicted grades, reporting cycles, and IB Core supervision.' },
-    { name: 'Administrators', color: 'bg-rose-500', desc: 'Full school management, users, classes, policies, and audit logs.' },
+    { name: 'Students', desc: 'Personal dashboards, assignments, grades, timetables, and IB Core tracking.' },
+    { name: 'Teachers', desc: 'Class management, gradebook, submissions review, attendance, and analytics.' },
+    { name: 'Parents', desc: 'Child progress monitoring, grades visibility, assignments, and messaging.' },
+    { name: 'Coordinators', desc: 'Cohort oversight, predicted grades, reporting cycles, and IB Core supervision.' },
+    { name: 'Administrators', desc: 'Full school management, users, classes, policies, and audit logs.' },
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
+    <section className="py-24 bg-slate-50 border-y border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">One platform, every role</h2>
-          <p className="mt-3 text-lg text-slate-500">Each user sees exactly what they need — nothing more</p>
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-bold text-slate-900">Unified Access Control</h2>
+          <p className="mt-3 text-lg text-slate-500">Secure, role-based interfaces ensuring data privacy and operational efficiency.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {roles.map((r, i) => (
-            <div key={i} className="relative p-6 bg-white rounded-2xl border border-slate-100 hover:shadow-lg transition-shadow">
-              <div className={`w-3 h-3 rounded-full ${r.color} mb-4`} />
-              <h3 className="font-semibold text-slate-900 mb-2">{r.name}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{r.desc}</p>
+            <div key={i} className="relative p-6 bg-white border-t-2 border-t-blue-600 shadow-sm rounded-b-md">
+              <h3 className="font-bold text-slate-900 mb-3">{r.name}</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">{r.desc}</p>
             </div>
           ))}
         </div>
@@ -198,23 +197,21 @@ function RolesSection() {
 
 function CTASection() {
   return (
-    <section className="py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-10 sm:p-16 text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-2xl" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
-          <div className="relative">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Ready to transform your IB school?</h2>
-            <p className="text-lg text-indigo-100 mb-8 max-w-xl mx-auto">Join forward-thinking IB schools using AtlasIB to streamline teaching, grading, and communication.</p>
+    <section className="py-24 bg-white">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#0f172a] rounded-xl p-12 sm:p-16 text-center relative overflow-hidden shadow-2xl border border-[#1e293b]">
+          <div className="relative z-10">
+            <h2 className="text-3xl font-bold text-white mb-4">Ready to modernize your institution?</h2>
+            <p className="text-lg text-slate-300 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={createPageUrl('Demo')}>
-                <Button size="lg" className="bg-white text-indigo-700 hover:bg-indigo-50 rounded-xl px-8 h-12 text-base font-semibold">
-                  Book a Demo <ChevronRight className="ml-1 w-4 h-4" />
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
+                  Request Demonstration <ChevronRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
               <Link to={createPageUrl('Plans')}>
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-xl px-8 h-12 text-base">
-                  View Pricing
+                <Button size="lg" variant="outline" className="border-slate-600 text-white hover:bg-[#1e293b] rounded-md px-8 h-12 text-base font-medium">
+                  View Licensing
                 </Button>
               </Link>
             </div>

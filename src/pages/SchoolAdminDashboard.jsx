@@ -128,10 +128,10 @@ export default function SchoolAdminDashboard() {
   }
 
   const kpiCards = [
-    { label: 'Students', value: students.length, sub: 'Active enrollments', icon: Users, color: 'from-blue-500 to-blue-600' },
-    { label: 'Teachers', value: teachers.length, sub: 'Faculty & admins', icon: UserCheck, color: 'from-violet-500 to-violet-600' },
-    { label: 'Classes', value: classes.length, sub: 'Configured this year', icon: BookOpen, color: 'from-emerald-500 to-emerald-600' },
-    { label: 'Subjects', value: metrics?.subjects ?? 0, sub: 'In catalogue', icon: GraduationCap, color: 'from-amber-500 to-amber-600' },
+    { label: 'Enrolled Students', value: students.length, sub: 'Active accounts', icon: Users },
+    { label: 'Faculty & Staff', value: teachers.length, sub: 'Active accounts', icon: UserCheck },
+    { label: 'Active Classes', value: classes.length, sub: 'Current academic year', icon: BookOpen },
+    { label: 'Subject Catalogue', value: metrics?.subjects ?? 0, sub: 'Configured courses', icon: GraduationCap },
   ];
 
   return (
@@ -199,19 +199,19 @@ export default function SchoolAdminDashboard() {
 
           {/* KPI Cards */}
           <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-            {kpiCards.map(({ label, value, sub, icon: Icon, color }) => (
+            {kpiCards.map(({ label, value, sub, icon: Icon }) => (
               <div
                 key={label}
-                className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white border-l-4 border-l-blue-600 border-y border-r border-slate-200 rounded-r-md p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${color} flex items-center justify-center shadow-sm`}>
-                    <Icon className="w-5 h-5 text-white" />
-                  </div>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-semibold text-slate-600">{label}</p>
+                  <Icon className="w-5 h-5 text-slate-400" />
                 </div>
-                <p className="text-3xl font-bold text-slate-900 tabular-nums">{value}</p>
-                <p className="text-sm font-medium text-slate-500 mt-0.5">{label}</p>
-                <p className="text-xs text-slate-400 mt-1">{sub}</p>
+                <div>
+                  <p className="text-3xl font-bold text-slate-900 tabular-nums">{value}</p>
+                  <p className="text-xs text-slate-500 mt-1">{sub}</p>
+                </div>
               </div>
             ))}
           </div>
