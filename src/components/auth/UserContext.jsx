@@ -27,7 +27,7 @@ export function UserProvider({ children }) {
       setUser(me);
 
       // Load membership
-      if (me.role !== 'super_admin') {
+      if (me.role !== 'super_admin' && me.role !== 'admin') {
         const memberships = await base44.entities.SchoolMembership.filter({ user_id: me.id, status: 'active' });
         if (memberships.length > 0) {
           const activeMembership = me.active_school_id
