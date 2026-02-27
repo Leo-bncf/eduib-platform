@@ -1,270 +1,288 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useAllSchools, usePlatformMetrics } from '@/components/hooks/useDashboardData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, Users, Building2, DollarSign, AlertCircle, Plus } from 'lucide-react';
-import LoadingStateBase from '@/components/common/LoadingStateBase';
+import {
+  Building2, Users, DollarSign, AlertTriangle, Plus,
+  ArrowRight, TrendingUp, Activity, ChevronRight,
+  School, BookOpen, CreditCard, FileText, Settings,
+  CheckCircle, Clock, XCircle, Loader2
+} from 'lucide-react';
 import CreateSchoolDialog from '@/components/admin/CreateSchoolDialog';
 
-/**
- * Super admin operations dashboard
- * Shows platform-wide metrics and school lifecycle overview
- */
+const statusConfig = {
+  active: { label: 'Active', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
+  onboarding: { label: 'Onboarding', color: 'bg-blue-100 text-blue-700 border-blue-200' },
+  suspended: { label: 'Suspended', color: 'bg-red-100 text-red-700 border-red-200' },
+  cancelled: { label: 'Cancelled', color: 'bg-slate-100 text-slate-600 border-slate-200' },
+};
+
+const billingConfig = {
+  trial: { label: 'Trial', color: 'bg-amber-100 text-amber-700' },
+  active: { label: 'Paid', color: 'bg-emerald-100 text-emerald-700' },
+  past_due: { label: 'Past Due', color: 'bg-red-100 text-red-700' },
+  incomplete: { label: 'Incomplete', color: 'bg-orange-100 text-orange-700' },
+  canceled: { label: 'Canceled', color: 'bg-slate-100 text-slate-600' },
+};
+
 export default function SuperAdminDashboard() {
   const navigate = useNavigate();
   const { data: schools = [], isLoading, refetch } = useAllSchools();
   const metrics = usePlatformMetrics(schools);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
       const authed = await base44.auth.isAuthenticated();
-      if (!authed) {
-        navigate('/');
-        return;
-      }
-      
+      if (!authed) { navigate('/'); return; }
       const user = await base44.auth.me();
-      if (user?.role !== 'super_admin') {
-        navigate('/');
-        return;
-      }
+      if (user?.role !== 'super_admin') { navigate('/'); return; }
+      setCurrentUser(user);
     };
     checkAuth();
   }, [navigate]);
 
-  const handleSchoolCreated = () => {
-    refetch();
-  };
-
   if (isLoading) {
-    return <LoadingStateBase />;
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-white" />
+      </div>
+    );
   }
 
+  const recentSchools = [...schools].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).slice(0, 8);
+  const atRiskSchools = schools.filter(s => s.billing_status === 'past_due' || s.billing_status === 'incomplete' || s.status === 'suspended');
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 md:mb-8 flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-2xl md:text-4xl font-bold text-slate-900">Platform Operations</h1>
-            <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">Manage schools, billing, and platform health</p>
+    <div className="min-h-screen bg-slate-950 text-white">
+      {/* Top Nav */}
+      <div className="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <Building2 className="w-4 h-4 text-white" />
           </div>
+          <div>
+            <span className="text-white font-semibold text-sm">IB Platform</span>
+            <span className="text-slate-400 text-xs ml-2">Super Admin Console</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-slate-400 text-sm">{currentUser?.email}</span>
           <Button
-            onClick={() => setCreateDialogOpen(true)}
-            className="bg-indigo-600 hover:bg-indigo-700 gap-2"
+            onClick={() => base44.auth.logout()}
+            variant="ghost"
+            size="sm"
+            className="text-slate-400 hover:text-white hover:bg-slate-800 text-xs"
           >
-            <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Create School</span>
+            Sign out
           </Button>
         </div>
+      </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 mb-6 md:mb-8">
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-50 border-blue-200">
-          <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <p className="text-slate-600 text-xs md:text-sm font-semibold">Total Schools</p>
-                <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">{metrics.total}</p>
-              </div>
-              <Building2 className="w-6 md:w-8 h-6 md:h-8 text-blue-600 opacity-20 flex-shrink-0" />
-            </div>
-          </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-emerald-50 to-emerald-50 border-emerald-200">
-          <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <p className="text-slate-600 text-xs md:text-sm font-semibold">Active Schools</p>
-                <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">{metrics.active}</p>
-              </div>
-              <TrendingUp className="w-6 md:w-8 h-6 md:h-8 text-emerald-600 opacity-20 flex-shrink-0" />
-            </div>
-          </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-50 border-purple-200">
-          <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <p className="text-slate-600 text-xs md:text-sm font-semibold">Paid Schools</p>
-                <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">{metrics.paid}</p>
-                <p className="text-xs text-slate-500 mt-0.5 md:mt-1">{metrics.trial} on trial</p>
-              </div>
-              <DollarSign className="w-6 md:w-8 h-6 md:h-8 text-purple-600 opacity-20 flex-shrink-0" />
-            </div>
-          </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-red-50 to-red-50 border-red-200">
-          <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <p className="text-slate-600 text-xs md:text-sm font-semibold">At Risk</p>
-                <p className="text-2xl md:text-3xl font-bold text-slate-900 mt-1 md:mt-2">{metrics.atRisk}</p>
-                <p className="text-xs text-slate-500 mt-0.5 md:mt-1">Billing or suspended</p>
-              </div>
-              <AlertCircle className="w-6 md:w-8 h-6 md:h-8 text-red-600 opacity-20 flex-shrink-0" />
-            </div>
-          </CardContent>
-          </Card>
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="w-56 min-h-screen bg-slate-900 border-r border-slate-800 p-4 flex flex-col gap-1">
+          <Link to={createPageUrl('SuperAdminDashboard')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800 text-white text-sm font-medium">
+            <Activity className="w-4 h-4" /> Overview
+          </Link>
+          <Link to={createPageUrl('SuperAdminSchools')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <School className="w-4 h-4" /> Schools
+          </Link>
+          <Link to={createPageUrl('SuperAdminUsers')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <Users className="w-4 h-4" /> Users
+          </Link>
+          <Link to={createPageUrl('SuperAdminBilling')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <CreditCard className="w-4 h-4" /> Billing
+          </Link>
+          <Link to={createPageUrl('SuperAdminPlans')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <BookOpen className="w-4 h-4" /> Plans
+          </Link>
+          <Link to={createPageUrl('SuperAdminAuditLogs')}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            <FileText className="w-4 h-4" /> Audit Logs
+          </Link>
         </div>
 
-        {/* School Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
-          {/* Onboarding Status */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Onboarding Status</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                <span className="text-sm font-semibold text-slate-700">In Setup</span>
-                <Badge variant="outline">{metrics.onboarding}</Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                <span className="text-sm font-semibold text-slate-700">Fully Onboarded</span>
-                <Badge className="bg-emerald-100 text-emerald-800">
-                  {metrics.active}
-                </Badge>
-              </div>
-              <Button
-                onClick={() => navigate('/SuperAdminSchools')}
-                className="w-full mt-4"
-                variant="outline"
-              >
-                View All Schools
-              </Button>
-            </CardContent>
-          </Card>
+        {/* Main Content */}
+        <div className="flex-1 p-6 overflow-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-2xl font-bold text-white">Platform Overview</h1>
+              <p className="text-slate-400 text-sm mt-1">Monitor and manage your IB platform</p>
+            </div>
+            <Button
+              onClick={() => setCreateDialogOpen(true)}
+              className="bg-indigo-600 hover:bg-indigo-500 text-white gap-2"
+            >
+              <Plus className="w-4 h-4" /> New School
+            </Button>
+          </div>
 
-          {/* Subscription Health */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Subscription Health</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                <span className="text-sm font-semibold text-slate-700">Trial Active</span>
-                <Badge className="bg-blue-100 text-blue-800">
-                  {metrics.trial}
-                </Badge>
+          {/* Metric Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Total Schools</span>
+                <Building2 className="w-4 h-4 text-slate-500" />
               </div>
-              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                <span className="text-sm font-semibold text-slate-700">Paying Customers</span>
-                <Badge className="bg-emerald-100 text-emerald-800">
-                  {metrics.paid}
-                </Badge>
+              <p className="text-3xl font-bold text-white">{metrics.total}</p>
+              <p className="text-slate-500 text-xs mt-1">{metrics.onboarding} in setup</p>
+            </div>
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Active</span>
+                <CheckCircle className="w-4 h-4 text-emerald-500" />
               </div>
-              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                <span className="text-sm font-semibold text-slate-700">Suspended</span>
-                <Badge className="bg-red-100 text-red-800">
-                  {metrics.suspended}
-                </Badge>
+              <p className="text-3xl font-bold text-white">{metrics.active}</p>
+              <p className="text-slate-500 text-xs mt-1">fully onboarded</p>
+            </div>
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Paying</span>
+                <DollarSign className="w-4 h-4 text-indigo-400" />
               </div>
-            </CardContent>
-          </Card>
+              <p className="text-3xl font-bold text-white">{metrics.paid}</p>
+              <p className="text-slate-500 text-xs mt-1">{metrics.trial} on trial</p>
+            </div>
+            <div className="bg-slate-900 border border-red-900 rounded-xl p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">At Risk</span>
+                <AlertTriangle className="w-4 h-4 text-red-400" />
+              </div>
+              <p className="text-3xl font-bold text-red-400">{metrics.atRisk}</p>
+              <p className="text-slate-500 text-xs mt-1">billing or suspended</p>
+            </div>
+          </div>
 
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Button
-                onClick={() => navigate('/SuperAdminSchools')}
-                variant="outline"
-                className="w-full justify-start"
-              >
-                Manage Schools
-              </Button>
-              <Button
-                onClick={() => navigate('/SuperAdminUsers')}
-                variant="outline"
-                className="w-full justify-start"
-              >
-                Manage Users
-              </Button>
-              <Button
-                onClick={() => navigate('/SuperAdminPlans')}
-                variant="outline"
-                className="w-full justify-start"
-              >
-                View Plans & Billing
-              </Button>
-              <Button
-                onClick={() => navigate('/SuperAdminAuditLogs')}
-                variant="outline"
-                className="w-full justify-start"
-              >
-                Audit Logs
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Recent Schools Overview */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Schools Needing Attention</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {schools
-                .filter(s => 
-                  s.status === 'onboarding' || 
-                  s.billing_status === 'past_due' || 
-                  s.billing_status === 'incomplete'
-                )
-                .slice(0, 5)
-                .map((school) => (
-                  <div
-                    key={school.id}
-                    className="flex items-center justify-between p-2 md:p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer gap-2"
-                    onClick={() => navigate(`/SuperAdminSchoolDetail/${school.id}`)}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-slate-900 text-xs md:text-sm truncate">{school.name}</p>
-                      <p className="text-xs text-slate-600 mt-0.5 truncate">
-                        {school.city}, {school.country}
-                      </p>
+          {/* Two column layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Recent Schools Table */}
+            <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+                <h2 className="text-sm font-semibold text-white">Recent Schools</h2>
+                <Link to={createPageUrl('SuperAdminSchools')}
+                  className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                  View all <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+              <div className="divide-y divide-slate-800">
+                {recentSchools.length === 0 ? (
+                  <p className="text-slate-500 text-sm text-center py-8">No schools yet</p>
+                ) : recentSchools.map(school => (
+                  <div key={school.id}
+                    className="flex items-center gap-4 px-5 py-3 hover:bg-slate-800/50 cursor-pointer transition-colors"
+                    onClick={() => navigate(createPageUrl(`SuperAdminSchoolDetail`) + `/${school.id}`)}>
+                    <div className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Building2 className="w-4 h-4 text-slate-400" />
                     </div>
-                    <div className="flex items-center gap-1 flex-shrink-0">
-                      <Badge variant="outline" className="text-xs">
-                        {school.status}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs hidden sm:inline-block">
-                        {school.billing_status || 'no-plan'}
-                      </Badge>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-white truncate">{school.name}</p>
+                      <p className="text-xs text-slate-500">{school.city || '–'}, {school.country || '–'}</p>
                     </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {school.status && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${statusConfig[school.status]?.color || 'bg-slate-700 text-slate-300 border-slate-600'}`}>
+                          {statusConfig[school.status]?.label || school.status}
+                        </span>
+                      )}
+                      {school.billing_status && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${billingConfig[school.billing_status]?.color || 'bg-slate-700 text-slate-300'}`}>
+                          {billingConfig[school.billing_status]?.label || school.billing_status}
+                        </span>
+                      )}
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-600" />
                   </div>
                 ))}
-
-              {schools.filter(s => 
-                s.status === 'onboarding' || 
-                s.billing_status === 'past_due' || 
-                s.billing_status === 'incomplete'
-              ).length === 0 && (
-                <p className="text-center text-slate-600 py-4 text-sm">
-                  All schools are in good standing
-                </p>
-              )}
+              </div>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Create School Dialog */}
-        <CreateSchoolDialog
-          open={createDialogOpen}
-          onOpenChange={setCreateDialogOpen}
-          onSchoolCreated={handleSchoolCreated}
-        />
+            {/* Right Column */}
+            <div className="space-y-4">
+              {/* At Risk */}
+              {atRiskSchools.length > 0 && (
+                <div className="bg-red-950/40 border border-red-900/50 rounded-xl overflow-hidden">
+                  <div className="flex items-center gap-2 px-5 py-3 border-b border-red-900/50">
+                    <AlertTriangle className="w-4 h-4 text-red-400" />
+                    <h3 className="text-sm font-semibold text-red-300">Needs Attention ({atRiskSchools.length})</h3>
+                  </div>
+                  <div className="divide-y divide-red-900/30 max-h-48 overflow-auto">
+                    {atRiskSchools.map(school => (
+                      <div key={school.id}
+                        className="px-5 py-3 cursor-pointer hover:bg-red-900/20 transition-colors"
+                        onClick={() => navigate(createPageUrl(`SuperAdminSchoolDetail`) + `/${school.id}`)}>
+                        <p className="text-sm font-medium text-white truncate">{school.name}</p>
+                        <p className="text-xs text-red-400 mt-0.5">
+                          {school.status === 'suspended' ? 'Suspended' : `Billing: ${school.billing_status}`}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Quick Actions */}
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+                <h3 className="text-sm font-semibold text-white mb-3">Quick Actions</h3>
+                <div className="space-y-2">
+                  <Link to={createPageUrl('SuperAdminSchools')}
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                    <span>Manage Schools</span> <ChevronRight className="w-4 h-4" />
+                  </Link>
+                  <Link to={createPageUrl('SuperAdminUsers')}
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                    <span>Manage Users</span> <ChevronRight className="w-4 h-4" />
+                  </Link>
+                  <Link to={createPageUrl('SuperAdminBilling')}
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                    <span>Billing Overview</span> <ChevronRight className="w-4 h-4" />
+                  </Link>
+                  <Link to={createPageUrl('SuperAdminAuditLogs')}
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                    <span>Audit Logs</span> <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Platform Health */}
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+                <h3 className="text-sm font-semibold text-white mb-3">Subscription Split</h3>
+                <div className="space-y-2">
+                  {[
+                    { label: 'Paid', value: metrics.paid, color: 'bg-emerald-500' },
+                    { label: 'Trial', value: metrics.trial, color: 'bg-amber-500' },
+                    { label: 'Onboarding', value: metrics.onboarding, color: 'bg-blue-500' },
+                    { label: 'Suspended', value: metrics.suspended, color: 'bg-red-500' },
+                  ].map(item => (
+                    <div key={item.label} className="flex items-center gap-3">
+                      <div className={`w-2 h-2 rounded-full ${item.color}`} />
+                      <span className="text-slate-400 text-xs flex-1">{item.label}</span>
+                      <span className="text-white text-sm font-semibold">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <CreateSchoolDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+        onSchoolCreated={() => refetch()}
+      />
     </div>
   );
 }
