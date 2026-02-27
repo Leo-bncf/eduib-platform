@@ -96,6 +96,7 @@ import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
 import SchoolAdminDashboard from './pages/SchoolAdminDashboard';
 import SchoolOnboarding from './pages/SchoolOnboarding';
+import SchoolAdminEnrollments from './pages/SchoolAdminEnrollments';
 import __Layout from './Layout.jsx';
 
 
@@ -149,6 +150,7 @@ export const PAGES = {
     "TeacherDashboard": TeacherDashboard,
     "SchoolAdminDashboard": SchoolAdminDashboard,
     "SchoolOnboarding": SchoolOnboarding,
+    "SchoolAdminEnrollments": SchoolAdminEnrollments,
 }
 
 export const pagesConfig = {
