@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '@/components/auth/UserContext';
 import { useSchoolData, useSchoolMetrics } from '@/components/hooks/useDashboardData';
 import { base44 } from '@/api/base44Client';
+import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, Users, Settings, FileText, BookOpen, LogOut } from 'lucide-react';
