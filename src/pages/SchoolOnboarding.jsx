@@ -125,7 +125,7 @@ export default function SchoolOnboarding() {
           </div>
           <Button
             variant="ghost"
-            onClick={() => navigate('/school-admin-dashboard')}
+            onClick={() => navigate(createPageUrl('SchoolAdminDashboard'))}
             className="text-slate-600"
           >
             Exit Setup
