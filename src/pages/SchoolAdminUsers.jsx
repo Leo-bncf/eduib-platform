@@ -21,7 +21,7 @@ const sidebarLinks = [
   { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
   { label: 'Subjects', page: 'SchoolAdminSubjects', icon: ClipboardList },
   { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
-  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Calendar },
+  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Shield },
   { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
   { label: 'Billing', page: 'SchoolAdminBilling', icon: CreditCard },
   { label: 'Settings', page: 'SchoolAdminSettings', icon: Settings },
