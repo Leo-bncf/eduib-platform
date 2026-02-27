@@ -135,7 +135,7 @@ export default function SchoolAdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-100">
       <AppSidebar
         links={sidebarLinks}
         role="school_admin"
@@ -147,20 +147,20 @@ export default function SchoolAdminDashboard() {
 
       <main className="md:ml-64 min-h-screen flex flex-col">
         {/* Top header */}
-        <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700 px-6 py-5 flex items-center justify-between sticky top-0 z-10 shadow-lg">
           <div>
-            <h1 className="text-xl font-bold text-slate-900 leading-tight">Director Overview</h1>
-            <p className="text-sm text-slate-500 mt-0.5">{school?.name} • {today}</p>
+            <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">Director Overview</h1>
+            <p className="text-sm text-slate-300 mt-1">{school?.name} • {today}</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border ${
+            <div className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider border ${
               school?.status === 'active'
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                ? 'bg-emerald-600 text-white border-emerald-500'
                 : school?.status === 'onboarding'
-                ? 'bg-amber-50 text-amber-700 border-amber-200'
-                : 'bg-slate-100 text-slate-600 border-slate-200'
+                ? 'bg-amber-600 text-white border-amber-500'
+                : 'bg-slate-600 text-white border-slate-500'
             }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${school?.status === 'active' ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+              <span className={`w-2 h-2 rounded-full ${school?.status === 'active' ? 'bg-white' : 'bg-white'}`} />
               {school?.status || 'onboarding'}
             </div>
           </div>
