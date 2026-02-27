@@ -63,7 +63,7 @@ export default function SuperAdminDashboard() {
       {/* Top Nav */}
       <div className="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-indigo-600 rounded-md flex items-center justify-center">
             <Building2 className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -88,27 +88,27 @@ export default function SuperAdminDashboard() {
         {/* Sidebar */}
         <div className="w-56 min-h-screen bg-slate-900 border-r border-slate-800 p-4 flex flex-col gap-1">
           <Link to={createPageUrl('SuperAdminDashboard')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800 text-white text-sm font-medium">
+            className="flex items-center gap-3 px-3 py-2 rounded-md bg-slate-800 text-white text-sm font-medium">
             <Activity className="w-4 h-4" /> Overview
           </Link>
           <Link to={createPageUrl('SuperAdminSchools')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
             <School className="w-4 h-4" /> Schools
           </Link>
           <Link to={createPageUrl('SuperAdminUsers')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
             <Users className="w-4 h-4" /> Users
           </Link>
           <Link to={createPageUrl('SuperAdminBilling')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
             <CreditCard className="w-4 h-4" /> Billing
           </Link>
           <Link to={createPageUrl('SuperAdminPlans')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
             <BookOpen className="w-4 h-4" /> Plans
           </Link>
           <Link to={createPageUrl('SuperAdminAuditLogs')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
             <FileText className="w-4 h-4" /> Audit Logs
           </Link>
         </div>
@@ -131,7 +131,7 @@ export default function SuperAdminDashboard() {
 
           {/* Metric Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Total Schools</span>
                 <Building2 className="w-4 h-4 text-slate-500" />
@@ -139,7 +139,7 @@ export default function SuperAdminDashboard() {
               <p className="text-3xl font-bold text-white">{metrics.total}</p>
               <p className="text-slate-500 text-xs mt-1">{metrics.onboarding} in setup</p>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Active</span>
                 <CheckCircle className="w-4 h-4 text-emerald-500" />
@@ -147,7 +147,7 @@ export default function SuperAdminDashboard() {
               <p className="text-3xl font-bold text-white">{metrics.active}</p>
               <p className="text-slate-500 text-xs mt-1">fully onboarded</p>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Paying</span>
                 <DollarSign className="w-4 h-4 text-indigo-400" />
@@ -155,7 +155,7 @@ export default function SuperAdminDashboard() {
               <p className="text-3xl font-bold text-white">{metrics.paid}</p>
               <p className="text-slate-500 text-xs mt-1">{metrics.trial} on trial</p>
             </div>
-            <div className="bg-slate-900 border border-red-900 rounded-xl p-5">
+            <div className="bg-slate-900 border border-red-900 rounded-md p-5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">At Risk</span>
                 <AlertTriangle className="w-4 h-4 text-red-400" />
@@ -168,7 +168,7 @@ export default function SuperAdminDashboard() {
           {/* Two column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Recent Schools Table */}
-            <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+            <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-md overflow-hidden">
               <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800">
                 <h2 className="text-sm font-semibold text-white">Recent Schools</h2>
                 <Link to={createPageUrl('SuperAdminSchools')}
@@ -183,7 +183,7 @@ export default function SuperAdminDashboard() {
                   <div key={school.id}
                     className="flex items-center gap-4 px-5 py-3 hover:bg-slate-800/50 cursor-pointer transition-colors"
                     onClick={() => navigate(createPageUrl(`SuperAdminSchoolDetail`) + `/${school.id}`)}>
-                    <div className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 bg-slate-800 rounded-md flex items-center justify-center flex-shrink-0">
                       <Building2 className="w-4 h-4 text-slate-400" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -212,7 +212,7 @@ export default function SuperAdminDashboard() {
             <div className="space-y-4">
               {/* At Risk */}
               {atRiskSchools.length > 0 && (
-                <div className="bg-red-950/40 border border-red-900/50 rounded-xl overflow-hidden">
+                <div className="bg-red-950/40 border border-red-900/50 rounded-md overflow-hidden">
                   <div className="flex items-center gap-2 px-5 py-3 border-b border-red-900/50">
                     <AlertTriangle className="w-4 h-4 text-red-400" />
                     <h3 className="text-sm font-semibold text-red-300">Needs Attention ({atRiskSchools.length})</h3>
@@ -233,30 +233,30 @@ export default function SuperAdminDashboard() {
               )}
 
               {/* Quick Actions */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
                 <h3 className="text-sm font-semibold text-white mb-3">Quick Actions</h3>
                 <div className="space-y-2">
                   <Link to={createPageUrl('SuperAdminSchools')}
-                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
                     <span>Manage Schools</span> <ChevronRight className="w-4 h-4" />
                   </Link>
                   <Link to={createPageUrl('SuperAdminUsers')}
-                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
                     <span>Manage Users</span> <ChevronRight className="w-4 h-4" />
                   </Link>
                   <Link to={createPageUrl('SuperAdminBilling')}
-                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
                     <span>Billing Overview</span> <ChevronRight className="w-4 h-4" />
                   </Link>
                   <Link to={createPageUrl('SuperAdminAuditLogs')}
-                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
                     <span>Audit Logs</span> <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
 
               {/* Platform Health */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
                 <h3 className="text-sm font-semibold text-white mb-3">Subscription Split</h3>
                 <div className="space-y-2">
                   {[

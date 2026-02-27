@@ -170,9 +170,9 @@ export default function SchoolAdminDashboard() {
 
           {/* Setup progress banner */}
           {!isSetupComplete && (
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div className="flex items-center gap-4 p-4 border-b border-slate-100">
-                <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+            <div className="bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm">
+              <div className="flex items-center gap-4 p-4 border-b border-slate-100 bg-slate-50">
+                <div className="w-8 h-8 rounded-md bg-amber-100 flex items-center justify-center flex-shrink-0">
                   <AlertTriangle className="w-4 h-4 text-amber-600" />
                 </div>
                 <div className="flex-1">
@@ -189,7 +189,7 @@ export default function SchoolAdminDashboard() {
                 </div>
                 <Link
                   to={createPageUrl('SchoolOnboarding')}
-                  className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg transition-colors"
+                  className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-md transition-colors uppercase tracking-wider"
                 >
                   Continue Setup <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -205,7 +205,7 @@ export default function SchoolAdminDashboard() {
                 className="bg-white border-l-4 border-l-blue-600 border-y border-r border-slate-200 rounded-r-md p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-semibold text-slate-600">{label}</p>
+                  <p className="text-xs md:text-sm font-semibold text-slate-600 uppercase tracking-wide">{label}</p>
                   <Icon className="w-5 h-5 text-slate-400" />
                 </div>
                 <div>
@@ -222,13 +222,13 @@ export default function SchoolAdminDashboard() {
               {/* Action Center */}
               {alerts.length > 0 && (
                 <div className="space-y-3">
-                  <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-indigo-500" />
+                  <h2 className="text-xs md:text-sm font-bold text-slate-900 flex items-center gap-2 uppercase tracking-wide">
+                    <Activity className="w-4 h-4 text-blue-600" />
                     Action Center
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {alerts.map((alert, i) => (
-                      <div key={i} className={`p-4 rounded-xl border ${alert.bg} ${alert.border} flex flex-col`}>
+                      <div key={i} className={`p-4 rounded-md border ${alert.bg} ${alert.border} flex flex-col shadow-sm`}>
                         <div className="flex items-start gap-3 mb-3">
                           <alert.icon className={`w-5 h-5 ${alert.color} flex-shrink-0 mt-0.5`} />
                           <div>
@@ -252,7 +252,7 @@ export default function SchoolAdminDashboard() {
 
               {/* Module access grid */}
               <div className="space-y-3">
-                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <h2 className="text-xs md:text-sm font-bold text-slate-900 flex items-center gap-2 uppercase tracking-wide">
                   <LayoutDashboard className="w-4 h-4 text-slate-400" />
                   Platform Modules
                 </h2>

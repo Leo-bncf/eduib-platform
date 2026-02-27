@@ -66,9 +66,9 @@ export default function CoordinatorDashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="bg-white rounded-xl border border-slate-100">
-                    <div className="px-6 py-4 border-b border-slate-100">
-                      <h2 className="font-semibold text-slate-900">Student Cohorts</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm">
+                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-200 bg-slate-50 rounded-t-md">
+                      <h2 className="font-bold text-sm md:text-base text-slate-900 uppercase tracking-wide">Student Cohorts</h2>
                     </div>
                     {students.length === 0 ? (
                       <div className="p-12 text-center text-slate-400 text-sm">No students enrolled</div>
@@ -88,9 +88,9 @@ export default function CoordinatorDashboard() {
                     )}
                   </div>
 
-                  <div className="bg-white rounded-xl border border-slate-100">
-                    <div className="px-6 py-4 border-b border-slate-100">
-                      <h2 className="font-semibold text-slate-900">Subjects Overview</h2>
+                  <div className="bg-white rounded-md border border-slate-200 shadow-sm">
+                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-200 bg-slate-50 rounded-t-md">
+                      <h2 className="font-bold text-sm md:text-base text-slate-900 uppercase tracking-wide">Subjects Overview</h2>
                     </div>
                     {subjects.length === 0 ? (
                       <div className="p-12 text-center text-slate-400 text-sm">No subjects configured</div>
