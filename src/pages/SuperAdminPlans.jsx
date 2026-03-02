@@ -29,7 +29,7 @@ export default function SuperAdminPlans() {
       const authed = await base44.auth.isAuthenticated();
       if (!authed) { navigate('/'); return; }
       const user = await base44.auth.me();
-      if (user?.role !== 'super_admin') { navigate('/'); return; }
+      if (user?.role !== 'super_admin' && user?.role !== 'admin') { navigate('/'); return; }
 
       const allSchools = await base44.entities.School.list();
       setSchools(allSchools);
