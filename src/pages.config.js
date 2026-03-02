@@ -70,11 +70,14 @@ import Pricing from './pages/Pricing';
 import SchoolAdminAttendance from './pages/SchoolAdminAttendance';
 import SchoolAdminBilling from './pages/SchoolAdminBilling';
 import SchoolAdminClasses from './pages/SchoolAdminClasses';
+import SchoolAdminDashboard from './pages/SchoolAdminDashboard';
+import SchoolAdminEnrollments from './pages/SchoolAdminEnrollments';
 import SchoolAdminReports from './pages/SchoolAdminReports';
 import SchoolAdminSettings from './pages/SchoolAdminSettings';
 import SchoolAdminSubjects from './pages/SchoolAdminSubjects';
 import SchoolAdminTimetable from './pages/SchoolAdminTimetable';
 import SchoolAdminUsers from './pages/SchoolAdminUsers';
+import SchoolOnboarding from './pages/SchoolOnboarding';
 import Security from './pages/Security';
 import StudentBehavior from './pages/StudentBehavior';
 import StudentCAS from './pages/StudentCAS';
@@ -94,9 +97,6 @@ import SuperAdminSchools from './pages/SuperAdminSchools';
 import SuperAdminUsers from './pages/SuperAdminUsers';
 import TeacherClasses from './pages/TeacherClasses';
 import TeacherDashboard from './pages/TeacherDashboard';
-import SchoolAdminDashboard from './pages/SchoolAdminDashboard';
-import SchoolOnboarding from './pages/SchoolOnboarding';
-import SchoolAdminEnrollments from './pages/SchoolAdminEnrollments';
 import __Layout from './Layout.jsx';
 
 
@@ -124,11 +124,14 @@ export const PAGES = {
     "SchoolAdminAttendance": SchoolAdminAttendance,
     "SchoolAdminBilling": SchoolAdminBilling,
     "SchoolAdminClasses": SchoolAdminClasses,
+    "SchoolAdminDashboard": SchoolAdminDashboard,
+    "SchoolAdminEnrollments": SchoolAdminEnrollments,
     "SchoolAdminReports": SchoolAdminReports,
     "SchoolAdminSettings": SchoolAdminSettings,
     "SchoolAdminSubjects": SchoolAdminSubjects,
     "SchoolAdminTimetable": SchoolAdminTimetable,
     "SchoolAdminUsers": SchoolAdminUsers,
+    "SchoolOnboarding": SchoolOnboarding,
     "Security": Security,
     "StudentBehavior": StudentBehavior,
     "StudentCAS": StudentCAS,
@@ -148,9 +151,6 @@ export const PAGES = {
     "SuperAdminUsers": SuperAdminUsers,
     "TeacherClasses": TeacherClasses,
     "TeacherDashboard": TeacherDashboard,
-    "SchoolAdminDashboard": SchoolAdminDashboard,
-    "SchoolOnboarding": SchoolOnboarding,
-    "SchoolAdminEnrollments": SchoolAdminEnrollments,
 }
 
 export const pagesConfig = {
