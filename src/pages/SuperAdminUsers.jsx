@@ -101,13 +101,13 @@ export default function SuperAdminUsers() {
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* Top Nav */}
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
-        <div className="flex items-center gap-3">
+        <Link to={createPageUrl('Landing')} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <Building2 className="w-4 h-4 text-white" />
           </div>
           <span className="text-slate-900 font-semibold text-sm">IB Platform</span>
           <span className="text-slate-500 text-xs">Super Admin Console</span>
-        </div>
+        </Link>
       </div>
 
       <div className="flex flex-1 overflow-hidden">

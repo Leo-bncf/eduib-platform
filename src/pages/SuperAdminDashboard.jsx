@@ -62,7 +62,7 @@ export default function SuperAdminDashboard() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Top Nav */}
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link to={createPageUrl('Landing')} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
           <div className="w-8 h-8 bg-indigo-600 rounded-md flex items-center justify-center">
             <Building2 className="w-4 h-4 text-white" />
           </div>
@@ -70,7 +70,7 @@ export default function SuperAdminDashboard() {
             <span className="text-slate-900 font-semibold text-sm">IB Platform</span>
             <span className="text-slate-500 text-xs ml-2">Super Admin Console</span>
           </div>
-        </div>
+        </Link>
         <div className="flex items-center gap-3">
           <span className="text-slate-500 text-sm">{currentUser?.email}</span>
           <Button

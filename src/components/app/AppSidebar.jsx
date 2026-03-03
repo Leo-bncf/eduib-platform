@@ -21,12 +21,12 @@ export default function AppSidebar({ links, role, schoolName, userName, userId, 
     <aside className="hidden md:fixed md:left-0 md:top-0 md:bottom-0 md:w-64 bg-white text-slate-900 flex flex-col z-40 md:flex border-r border-slate-200">
       <div className="p-3 md:p-5 border-b border-slate-200">
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 md:gap-2.5 flex-1 min-w-0">
+          <Link to={createPageUrl('Landing')} className="flex items-center gap-2 md:gap-2.5 flex-1 min-w-0 hover:opacity-90 transition-opacity cursor-pointer">
             <div className="w-7 md:w-8 h-7 md:h-8 bg-blue-50 rounded-md flex items-center justify-center flex-shrink-0">
               <GraduationCap className="w-3.5 md:w-4.5 h-3.5 md:h-4.5 text-blue-600" />
             </div>
             <span className="text-base md:text-lg font-bold truncate text-sm md:text-base tracking-tight text-slate-900">Atlas<span className="text-blue-600 font-normal">IB</span></span>
-          </div>
+          </Link>
           {userId && schoolId && (
             <div className="hidden md:block">
               <NotificationBell userId={userId} schoolId={schoolId} />
