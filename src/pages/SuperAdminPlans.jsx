@@ -55,50 +55,50 @@ export default function SuperAdminPlans() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-white" />
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-slate-900" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* Top Nav */}
-      <div className="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between flex-shrink-0">
+      <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <Building2 className="w-4 h-4 text-white" />
           </div>
-          <span className="text-white font-semibold text-sm">IB Platform</span>
-          <span className="text-slate-400 text-xs">Super Admin Console</span>
+          <span className="text-slate-900 font-semibold text-sm">IB Platform</span>
+          <span className="text-slate-500 text-xs">Super Admin Console</span>
         </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <div className="w-56 bg-slate-900 border-r border-slate-800 p-4 flex flex-col gap-1 flex-shrink-0">
+        <div className="w-56 bg-white border-r border-slate-200 p-4 flex flex-col gap-1 flex-shrink-0">
           <Link to={createPageUrl('SuperAdminDashboard')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <Activity className="w-4 h-4" /> Overview
           </Link>
           <Link to={createPageUrl('SuperAdminSchools')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <School className="w-4 h-4" /> Schools
           </Link>
           <Link to={createPageUrl('SuperAdminUsers')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <Users className="w-4 h-4" /> Users
           </Link>
           <Link to={createPageUrl('SuperAdminBilling')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <CreditCard className="w-4 h-4" /> Billing
           </Link>
           <Link to={createPageUrl('SuperAdminPlans')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800 text-white text-sm font-medium">
+            className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-100 text-slate-900 text-sm font-medium">
             <BookOpen className="w-4 h-4" /> Plans
           </Link>
           <Link to={createPageUrl('SuperAdminAuditLogs')}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <FileText className="w-4 h-4" /> Audit Logs
           </Link>
         </div>
@@ -106,63 +106,63 @@ export default function SuperAdminPlans() {
         {/* Main */}
         <div className="flex-1 overflow-auto p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-white">Plan Management</h1>
-            <p className="text-slate-400 text-sm mt-1">Manage school plans and subscriptions</p>
+            <h1 className="text-2xl font-bold text-slate-900">Plan Management</h1>
+            <p className="text-slate-500 text-sm mt-1">Manage school plans and subscriptions</p>
           </div>
 
           {/* Stat Cards */}
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-5">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Est. MRR</span>
-                <TrendingUp className="w-4 h-4 text-indigo-400" />
+                <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">Est. MRR</span>
+                <TrendingUp className="w-4 h-4 text-indigo-500" />
               </div>
-              <p className="text-3xl font-bold text-white">${metrics?.mrrEstimate || 0}</p>
+              <p className="text-3xl font-bold text-slate-900">${metrics?.mrrEstimate || 0}</p>
               <p className="text-slate-500 text-xs mt-1">from active plans</p>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-5">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Paid Schools</span>
+                <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">Paid Schools</span>
                 <Zap className="w-4 h-4 text-emerald-500" />
               </div>
-              <p className="text-3xl font-bold text-white">{schools.filter(s => s.billing_status === 'active').length}</p>
+              <p className="text-3xl font-bold text-slate-900">{schools.filter(s => s.billing_status === 'active').length}</p>
               <p className="text-slate-500 text-xs mt-1">active subscriptions</p>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-5">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">On Trial</span>
-                <DollarSign className="w-4 h-4 text-amber-400" />
+                <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">On Trial</span>
+                <DollarSign className="w-4 h-4 text-amber-500" />
               </div>
-              <p className="text-3xl font-bold text-white">{schools.filter(s => s.billing_status === 'trial').length}</p>
+              <p className="text-3xl font-bold text-slate-900">{schools.filter(s => s.billing_status === 'trial').length}</p>
               <p className="text-slate-500 text-xs mt-1">trial accounts</p>
             </div>
           </div>
 
           {/* Distribution Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-            <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-              <div className="px-5 py-4 border-b border-slate-800">
-                <h2 className="text-sm font-semibold text-white">Schools by Plan</h2>
+            <div className="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
+              <div className="px-5 py-4 border-b border-slate-200">
+                <h2 className="text-sm font-semibold text-slate-900">Schools by Plan</h2>
               </div>
               <div className="p-4 space-y-2">
                 {Object.entries(metrics?.byPlan || {}).map(([plan, count]) => (
-                  <div key={plan} className="flex items-center justify-between px-3 py-2.5 bg-slate-800/50 rounded-lg">
-                    <span className="text-sm text-slate-300 capitalize font-medium">{plan}</span>
-                    <span className="text-sm font-bold text-white">{count}</span>
+                  <div key={plan} className="flex items-center justify-between px-3 py-2.5 bg-slate-50 rounded-lg">
+                    <span className="text-sm text-slate-700 capitalize font-medium">{plan}</span>
+                    <span className="text-sm font-bold text-slate-900">{count}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-              <div className="px-5 py-4 border-b border-slate-800">
-                <h2 className="text-sm font-semibold text-white">Billing Status</h2>
+            <div className="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
+              <div className="px-5 py-4 border-b border-slate-200">
+                <h2 className="text-sm font-semibold text-slate-900">Billing Status</h2>
               </div>
               <div className="p-4 space-y-2">
                 {Object.entries(metrics?.byBilling || {}).map(([status, count]) => (
-                  <div key={status} className="flex items-center justify-between px-3 py-2.5 bg-slate-800/50 rounded-lg">
-                    <span className="text-sm text-slate-300 capitalize font-medium">{status || 'None'}</span>
-                    <span className="text-sm font-bold text-white">{count}</span>
+                  <div key={status} className="flex items-center justify-between px-3 py-2.5 bg-slate-50 rounded-lg">
+                    <span className="text-sm text-slate-700 capitalize font-medium">{status || 'None'}</span>
+                    <span className="text-sm font-bold text-slate-900">{count}</span>
                   </div>
                 ))}
               </div>
@@ -170,13 +170,13 @@ export default function SuperAdminPlans() {
           </div>
 
           {/* All Schools Table */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-800">
-              <h2 className="text-sm font-semibold text-white">All Schools</h2>
+          <div className="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-200">
+              <h2 className="text-sm font-semibold text-slate-900">All Schools</h2>
             </div>
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-800">
+                <tr className="border-b border-slate-200">
                   <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide px-5 py-3">School</th>
                   <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide px-4 py-3">Plan</th>
                   <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide px-4 py-3">Billing</th>
@@ -184,16 +184,16 @@ export default function SuperAdminPlans() {
                   <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide px-4 py-3 hidden md:table-cell">Period End</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-slate-100">
                 {schools.map(school => (
                   <tr key={school.id}
-                    className="hover:bg-slate-800/40 transition-colors cursor-pointer"
+                    className="hover:bg-slate-50 transition-colors cursor-pointer"
                     onClick={() => navigate(`/SuperAdminSchoolDetail/${school.id}`)}>
                     <td className="px-5 py-3">
-                      <p className="text-sm font-medium text-white">{school.name}</p>
+                      <p className="text-sm font-medium text-slate-900">{school.name}</p>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-xs text-slate-300 capitalize">{school.plan || 'None'}</span>
+                      <span className="text-xs text-slate-700 capitalize">{school.plan || 'None'}</span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${billingStatusColors[school.billing_status || 'none']}`}>

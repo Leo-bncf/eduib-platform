@@ -49,8 +49,8 @@ export default function SuperAdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-white" />
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-slate-900" />
       </div>
     );
   }
@@ -59,25 +59,25 @@ export default function SuperAdminDashboard() {
   const atRiskSchools = schools.filter(s => s.billing_status === 'past_due' || s.billing_status === 'incomplete' || s.status === 'suspended');
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Top Nav */}
-      <div className="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+      <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-indigo-600 rounded-md flex items-center justify-center">
             <Building2 className="w-4 h-4 text-white" />
           </div>
           <div>
-            <span className="text-white font-semibold text-sm">IB Platform</span>
-            <span className="text-slate-400 text-xs ml-2">Super Admin Console</span>
+            <span className="text-slate-900 font-semibold text-sm">IB Platform</span>
+            <span className="text-slate-500 text-xs ml-2">Super Admin Console</span>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-slate-400 text-sm">{currentUser?.email}</span>
+          <span className="text-slate-500 text-sm">{currentUser?.email}</span>
           <Button
             onClick={() => base44.auth.logout()}
             variant="ghost"
             size="sm"
-            className="text-slate-400 hover:text-white hover:bg-slate-800 text-xs"
+            className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 text-xs"
           >
             Sign out
           </Button>
@@ -86,29 +86,29 @@ export default function SuperAdminDashboard() {
 
       <div className="flex">
         {/* Sidebar */}
-        <div className="w-56 min-h-screen bg-slate-900 border-r border-slate-800 p-4 flex flex-col gap-1">
+        <div className="w-56 min-h-screen bg-white border-r border-slate-200 p-4 flex flex-col gap-1">
           <Link to={createPageUrl('SuperAdminDashboard')}
-            className="flex items-center gap-3 px-3 py-2 rounded-md bg-slate-800 text-white text-sm font-medium">
+            className="flex items-center gap-3 px-3 py-2 rounded-md bg-slate-100 text-slate-900 text-sm font-medium">
             <Activity className="w-4 h-4" /> Overview
           </Link>
           <Link to={createPageUrl('SuperAdminSchools')}
-            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <School className="w-4 h-4" /> Schools
           </Link>
           <Link to={createPageUrl('SuperAdminUsers')}
-            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <Users className="w-4 h-4" /> Users
           </Link>
           <Link to={createPageUrl('SuperAdminBilling')}
-            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <CreditCard className="w-4 h-4" /> Billing
           </Link>
           <Link to={createPageUrl('SuperAdminPlans')}
-            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <BookOpen className="w-4 h-4" /> Plans
           </Link>
           <Link to={createPageUrl('SuperAdminAuditLogs')}
-            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 text-sm transition-colors">
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-sm transition-colors">
             <FileText className="w-4 h-4" /> Audit Logs
           </Link>
         </div>
@@ -118,12 +118,12 @@ export default function SuperAdminDashboard() {
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-white">Platform Overview</h1>
-              <p className="text-slate-400 text-sm mt-1">Monitor and manage your IB platform</p>
+              <h1 className="text-2xl font-bold text-slate-900">Platform Overview</h1>
+              <p className="text-slate-500 text-sm mt-1">Monitor and manage your IB platform</p>
             </div>
             <Button
               onClick={() => setCreateDialogOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white gap-2"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 shadow-sm"
             >
               <Plus className="w-4 h-4" /> New School
             </Button>
@@ -131,78 +131,78 @@ export default function SuperAdminDashboard() {
 
           {/* Metric Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
+            <div className="bg-white border border-slate-200 rounded-md p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Total Schools</span>
-                <Building2 className="w-4 h-4 text-slate-500" />
+                <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">Total Schools</span>
+                <Building2 className="w-4 h-4 text-slate-400" />
               </div>
-              <p className="text-3xl font-bold text-white">{metrics.total}</p>
+              <p className="text-3xl font-bold text-slate-900">{metrics.total}</p>
               <p className="text-slate-500 text-xs mt-1">{metrics.onboarding} in setup</p>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
+            <div className="bg-white border border-slate-200 rounded-md p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Active</span>
+                <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">Active</span>
                 <CheckCircle className="w-4 h-4 text-emerald-500" />
               </div>
-              <p className="text-3xl font-bold text-white">{metrics.active}</p>
+              <p className="text-3xl font-bold text-slate-900">{metrics.active}</p>
               <p className="text-slate-500 text-xs mt-1">fully onboarded</p>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
+            <div className="bg-white border border-slate-200 rounded-md p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">Paying</span>
-                <DollarSign className="w-4 h-4 text-indigo-400" />
+                <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">Paying</span>
+                <DollarSign className="w-4 h-4 text-indigo-500" />
               </div>
-              <p className="text-3xl font-bold text-white">{metrics.paid}</p>
+              <p className="text-3xl font-bold text-slate-900">{metrics.paid}</p>
               <p className="text-slate-500 text-xs mt-1">{metrics.trial} on trial</p>
             </div>
-            <div className="bg-slate-900 border border-red-900 rounded-md p-5">
+            <div className="bg-red-50 border border-red-200 rounded-md p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">At Risk</span>
-                <AlertTriangle className="w-4 h-4 text-red-400" />
+                <span className="text-red-700 text-xs font-medium uppercase tracking-wide">At Risk</span>
+                <AlertTriangle className="w-4 h-4 text-red-500" />
               </div>
-              <p className="text-3xl font-bold text-red-400">{metrics.atRisk}</p>
-              <p className="text-slate-500 text-xs mt-1">billing or suspended</p>
+              <p className="text-3xl font-bold text-red-700">{metrics.atRisk}</p>
+              <p className="text-red-600 text-xs mt-1">billing or suspended</p>
             </div>
           </div>
 
           {/* Two column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Recent Schools Table */}
-            <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-md overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800">
-                <h2 className="text-sm font-semibold text-white">Recent Schools</h2>
+            <div className="lg:col-span-2 bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+                <h2 className="text-sm font-semibold text-slate-900">Recent Schools</h2>
                 <Link to={createPageUrl('SuperAdminSchools')}
-                  className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                  className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
                   View all <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
-              <div className="divide-y divide-slate-800">
+              <div className="divide-y divide-slate-100">
                 {recentSchools.length === 0 ? (
                   <p className="text-slate-500 text-sm text-center py-8">No schools yet</p>
                 ) : recentSchools.map(school => (
                   <div key={school.id}
-                    className="flex items-center gap-4 px-5 py-3 hover:bg-slate-800/50 cursor-pointer transition-colors"
+                    className="flex items-center gap-4 px-5 py-3 hover:bg-slate-50 cursor-pointer transition-colors"
                     onClick={() => navigate(createPageUrl(`SuperAdminSchoolDetail`) + `/${school.id}`)}>
-                    <div className="w-8 h-8 bg-slate-800 rounded-md flex items-center justify-center flex-shrink-0">
-                      <Building2 className="w-4 h-4 text-slate-400" />
+                    <div className="w-8 h-8 bg-slate-100 rounded-md flex items-center justify-center flex-shrink-0">
+                      <Building2 className="w-4 h-4 text-slate-500" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white truncate">{school.name}</p>
+                      <p className="text-sm font-medium text-slate-900 truncate">{school.name}</p>
                       <p className="text-xs text-slate-500">{school.city || '–'}, {school.country || '–'}</p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {school.status && (
-                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${statusConfig[school.status]?.color || 'bg-slate-700 text-slate-300 border-slate-600'}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${statusConfig[school.status]?.color || 'bg-slate-100 text-slate-600 border-slate-200'}`}>
                           {statusConfig[school.status]?.label || school.status}
                         </span>
                       )}
                       {school.billing_status && (
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${billingConfig[school.billing_status]?.color || 'bg-slate-700 text-slate-300'}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${billingConfig[school.billing_status]?.color || 'bg-slate-100 text-slate-600'}`}>
                           {billingConfig[school.billing_status]?.label || school.billing_status}
                         </span>
                       )}
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-600" />
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
                   </div>
                 ))}
               </div>
@@ -212,18 +212,18 @@ export default function SuperAdminDashboard() {
             <div className="space-y-4">
               {/* At Risk */}
               {atRiskSchools.length > 0 && (
-                <div className="bg-red-950/40 border border-red-900/50 rounded-md overflow-hidden">
-                  <div className="flex items-center gap-2 px-5 py-3 border-b border-red-900/50">
-                    <AlertTriangle className="w-4 h-4 text-red-400" />
-                    <h3 className="text-sm font-semibold text-red-300">Needs Attention ({atRiskSchools.length})</h3>
+                <div className="bg-red-50 border border-red-200 rounded-md overflow-hidden shadow-sm">
+                  <div className="flex items-center gap-2 px-5 py-3 border-b border-red-200">
+                    <AlertTriangle className="w-4 h-4 text-red-600" />
+                    <h3 className="text-sm font-semibold text-red-800">Needs Attention ({atRiskSchools.length})</h3>
                   </div>
-                  <div className="divide-y divide-red-900/30 max-h-48 overflow-auto">
+                  <div className="divide-y divide-red-100 max-h-48 overflow-auto">
                     {atRiskSchools.map(school => (
                       <div key={school.id}
-                        className="px-5 py-3 cursor-pointer hover:bg-red-900/20 transition-colors"
+                        className="px-5 py-3 cursor-pointer hover:bg-red-100/50 transition-colors"
                         onClick={() => navigate(createPageUrl(`SuperAdminSchoolDetail`) + `/${school.id}`)}>
-                        <p className="text-sm font-medium text-white truncate">{school.name}</p>
-                        <p className="text-xs text-red-400 mt-0.5">
+                        <p className="text-sm font-medium text-red-900 truncate">{school.name}</p>
+                        <p className="text-xs text-red-600 mt-0.5">
                           {school.status === 'suspended' ? 'Suspended' : `Billing: ${school.billing_status}`}
                         </p>
                       </div>
@@ -233,31 +233,31 @@ export default function SuperAdminDashboard() {
               )}
 
               {/* Quick Actions */}
-              <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
-                <h3 className="text-sm font-semibold text-white mb-3">Quick Actions</h3>
+              <div className="bg-white border border-slate-200 rounded-md p-5 shadow-sm">
+                <h3 className="text-sm font-semibold text-slate-900 mb-3">Quick Actions</h3>
                 <div className="space-y-2">
                   <Link to={createPageUrl('SuperAdminSchools')}
-                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-md text-sm text-slate-700 hover:text-slate-900 transition-colors">
                     <span>Manage Schools</span> <ChevronRight className="w-4 h-4" />
                   </Link>
                   <Link to={createPageUrl('SuperAdminUsers')}
-                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-md text-sm text-slate-700 hover:text-slate-900 transition-colors">
                     <span>Manage Users</span> <ChevronRight className="w-4 h-4" />
                   </Link>
                   <Link to={createPageUrl('SuperAdminBilling')}
-                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-md text-sm text-slate-700 hover:text-slate-900 transition-colors">
                     <span>Billing Overview</span> <ChevronRight className="w-4 h-4" />
                   </Link>
                   <Link to={createPageUrl('SuperAdminAuditLogs')}
-                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
+                    className="flex items-center justify-between w-full px-3 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-md text-sm text-slate-700 hover:text-slate-900 transition-colors">
                     <span>Audit Logs</span> <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
 
               {/* Platform Health */}
-              <div className="bg-slate-900 border border-slate-800 rounded-md p-5">
-                <h3 className="text-sm font-semibold text-white mb-3">Subscription Split</h3>
+              <div className="bg-white border border-slate-200 rounded-md p-5 shadow-sm">
+                <h3 className="text-sm font-semibold text-slate-900 mb-3">Subscription Split</h3>
                 <div className="space-y-2">
                   {[
                     { label: 'Paid', value: metrics.paid, color: 'bg-emerald-500' },
@@ -267,8 +267,8 @@ export default function SuperAdminDashboard() {
                   ].map(item => (
                     <div key={item.label} className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${item.color}`} />
-                      <span className="text-slate-400 text-xs flex-1">{item.label}</span>
-                      <span className="text-white text-sm font-semibold">{item.value}</span>
+                      <span className="text-slate-600 text-xs flex-1">{item.label}</span>
+                      <span className="text-slate-900 text-sm font-semibold">{item.value}</span>
                     </div>
                   ))}
                 </div>
