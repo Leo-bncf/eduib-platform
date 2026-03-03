@@ -21,7 +21,7 @@ export default function AppHome() {
 
     // Super admin goes directly to platform dashboard
     if (user.role === 'super_admin' || user.role === 'admin') {
-      window.location.href = createPageUrl('SuperAdminDashboard');
+      navigate(createPageUrl('SuperAdminDashboard'));
       return;
     }
 
@@ -29,7 +29,7 @@ export default function AppHome() {
     const memberships = await base44.entities.SchoolMembership.filter({ user_id: user.id, status: 'active' });
     
     if (memberships.length === 0) {
-      window.location.href = createPageUrl('NoSchool');
+      navigate(createPageUrl('NoSchool'));
       return;
     }
 
@@ -51,7 +51,7 @@ export default function AppHome() {
     };
 
     const target = routes[role] || 'StudentDashboard';
-    window.location.href = createPageUrl(target);
+    navigate(createPageUrl(target));
   };
 
   return (
