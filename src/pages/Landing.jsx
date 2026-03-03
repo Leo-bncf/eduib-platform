@@ -225,12 +225,6 @@ function CTASection() {
 export default function Landing() {
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    base44.auth.isAuthenticated().then(authed => {
-      if (authed) window.location.href = createPageUrl('AppHome');
-    });
-  }, []);
-
   return (
     <div className="min-h-screen bg-white">
       <PublicNavbar />
