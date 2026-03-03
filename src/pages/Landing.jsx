@@ -62,36 +62,36 @@ function HeroSection() {
         </div>
         
         <div className="mt-20 relative">
-          <div className="bg-[#0f172a] rounded-xl shadow-2xl border border-slate-800 overflow-hidden mx-auto max-w-5xl">
-            <div className="flex items-center gap-1.5 px-4 py-3 bg-[#1e293b] border-b border-slate-800">
-              <div className="w-3 h-3 rounded-full bg-slate-600" />
-              <div className="w-3 h-3 rounded-full bg-slate-600" />
-              <div className="w-3 h-3 rounded-full bg-slate-600" />
+          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden mx-auto max-w-5xl">
+            <div className="flex items-center gap-1.5 px-4 py-3 bg-slate-50 border-b border-slate-200">
+              <div className="w-3 h-3 rounded-full bg-slate-300" />
+              <div className="w-3 h-3 rounded-full bg-slate-300" />
+              <div className="w-3 h-3 rounded-full bg-slate-300" />
             </div>
             <div className="p-8">
               <div className="grid grid-cols-3 gap-6">
-                <div className="bg-[#1e293b] rounded-lg p-5 border border-slate-700">
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-2">Active Students</div>
-                  <div className="text-3xl font-bold text-white">1,248</div>
+                <div className="bg-white rounded-lg p-5 border border-slate-100 shadow-sm">
+                  <div className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2">Active Students</div>
+                  <div className="text-3xl font-bold text-slate-900">1,248</div>
                   <div className="mt-4 space-y-2">
-                    <div className="h-1.5 bg-slate-700 rounded-full w-full" />
-                    <div className="h-1.5 bg-slate-700 rounded-full w-3/4" />
+                    <div className="h-1.5 bg-slate-100 rounded-full w-full" />
+                    <div className="h-1.5 bg-slate-100 rounded-full w-3/4" />
                   </div>
                 </div>
-                <div className="bg-[#1e293b] rounded-lg p-5 border border-slate-700">
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-2">Pending Reports</div>
-                  <div className="text-3xl font-bold text-white">42</div>
+                <div className="bg-white rounded-lg p-5 border border-slate-100 shadow-sm">
+                  <div className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2">Pending Reports</div>
+                  <div className="text-3xl font-bold text-slate-900">42</div>
                   <div className="mt-4 space-y-2">
                      <div className="h-1.5 bg-blue-500 rounded-full w-1/2" />
-                     <div className="h-1.5 bg-slate-700 rounded-full w-full" />
+                     <div className="h-1.5 bg-slate-100 rounded-full w-full" />
                   </div>
                 </div>
-                <div className="bg-[#1e293b] rounded-lg p-5 border border-slate-700">
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-2">Attendance Rate</div>
-                  <div className="text-3xl font-bold text-white">98.2%</div>
+                <div className="bg-white rounded-lg p-5 border border-slate-100 shadow-sm">
+                  <div className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2">Attendance Rate</div>
+                  <div className="text-3xl font-bold text-slate-900">98.2%</div>
                   <div className="mt-4 space-y-2">
                     <div className="h-1.5 bg-emerald-500 rounded-full w-[98%]" />
-                    <div className="h-1.5 bg-slate-700 rounded-full w-full" />
+                    <div className="h-1.5 bg-slate-100 rounded-full w-full" />
                   </div>
                 </div>
               </div>
@@ -199,10 +199,10 @@ function CTASection() {
   return (
     <section className="py-24 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#0f172a] rounded-xl p-12 sm:p-16 text-center relative overflow-hidden shadow-2xl border border-[#1e293b]">
+        <div className="bg-slate-50 rounded-xl p-12 sm:p-16 text-center relative overflow-hidden shadow-sm border border-slate-200">
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-white mb-4">Ready to modernize your institution?</h2>
-            <p className="text-lg text-slate-300 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to modernize your institution?</h2>
+            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={createPageUrl('Demo')}>
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
@@ -210,7 +210,7 @@ function CTASection() {
                 </Button>
               </Link>
               <Link to={createPageUrl('Plans')}>
-                <Button size="lg" variant="outline" className="border-slate-600 text-white hover:bg-[#1e293b] rounded-md px-8 h-12 text-base font-medium">
+                <Button size="lg" variant="outline" className="border-slate-300 text-slate-700 hover:bg-white rounded-md px-8 h-12 text-base font-medium">
                   View Licensing
                 </Button>
               </Link>
