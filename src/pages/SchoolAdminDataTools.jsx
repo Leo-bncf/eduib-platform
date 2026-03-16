@@ -21,6 +21,7 @@ const sidebarLinks = [
   { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
   { label: 'Billing', page: 'SchoolAdminBilling', icon: CreditCard },
   { label: 'Settings', page: 'SchoolAdminSettings', icon: Settings },
+  { label: 'Data Tools', page: 'SchoolAdminDataTools', icon: Database },
 ];
 
 const TABS = [
