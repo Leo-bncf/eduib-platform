@@ -384,7 +384,7 @@ export default function SuperAdminSettings() {
       </ConfigSectionCard>
       </>}
 
-      {activeTab === 'operational' && (
+      {activeTab === 'operational' && ( (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <ConfigSectionCard
             title="Integration Management"
