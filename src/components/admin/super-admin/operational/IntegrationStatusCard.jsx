@@ -36,7 +36,7 @@ export default function IntegrationStatusCard() {
               <div className="flex items-center gap-2 flex-wrap">
                 <p className="text-sm font-semibold text-slate-900">{integration.name}</p>
                 <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
-                  <Icon className={`w-3 h-3 ${cfg.iconColor}`} />
+                  <cfg.Icon className={`w-3 h-3 ${cfg.iconColor}`} />
                   {cfg.label}
                 </span>
               </div>
