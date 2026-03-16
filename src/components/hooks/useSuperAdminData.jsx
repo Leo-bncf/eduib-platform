@@ -142,6 +142,25 @@ export function useSuperAdminSchoolDetailQuery(schoolId, options = {}) {
   });
 }
 
+export function useSuperAdminConfigurationQuery(options = {}) {
+  return useQuery({
+    queryKey: ['super-admin', 'configuration'],
+    queryFn: async () => {
+      const [schools, configs] = await Promise.all([
+        fetchSchools(),
+        base44.entities.PlatformConfig.list('-updated_date', 1),
+      ]);
+
+      return {
+        schools,
+        config: configs[0] || null,
+      };
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    ...options,
+  });
+}
+
 export function useSuperAdminAnalyticsQuery(options = {}) {
   return useQuery({
     queryKey: ['super-admin', 'analytics'],
