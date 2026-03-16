@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
-  FileText, CreditCard, Settings, Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell
+  FileText, CreditCard, Settings, Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell, Database
 } from 'lucide-react';
 
 const sidebarLinks = [
