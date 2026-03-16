@@ -6,6 +6,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   Legend,
   Line,
   LineChart,
@@ -347,7 +348,7 @@ export default function SuperAdminAnalytics() {
               <PieChart>
                 <Pie data={analytics.billingMix} dataKey="value" nameKey="name" outerRadius={110} label>
                   {analytics.billingMix.map((entry, index) => (
-                    <cell key={entry.name} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                    <Cell key={entry.name} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
