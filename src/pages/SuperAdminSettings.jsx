@@ -218,6 +218,7 @@ export default function SuperAdminSettings() {
         </Alert>
       )}
 
+      {activeTab === 'config' && <>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
         <ConfigSectionCard
           title="Global Settings"
