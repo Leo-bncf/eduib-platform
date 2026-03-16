@@ -82,6 +82,11 @@ function mergeConfig(config) {
   };
 }
 
+const TABS = [
+  { key: 'config', label: 'Configuration' },
+  { key: 'operational', label: 'Operational Tools' },
+];
+
 export default function SuperAdminSettings() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -89,6 +94,7 @@ export default function SuperAdminSettings() {
   const { data, isLoading } = useSuperAdminConfigurationQuery({ enabled: !!currentUser });
   const [formData, setFormData] = useState(DEFAULT_CONFIG);
   const [saved, setSaved] = useState(false);
+  const [activeTab, setActiveTab] = useState('config');
 
   const schools = data?.schools || [];
   const existingConfig = data?.config || null;
