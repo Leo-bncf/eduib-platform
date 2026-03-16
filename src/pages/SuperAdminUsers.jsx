@@ -25,6 +25,7 @@ export default function SuperAdminUsers() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [users, setUsers] = useState([]);
   const [schools, setSchools] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -35,26 +36,33 @@ export default function SuperAdminUsers() {
   const [manageDialogOpen, setManageDialogOpen] = useState(false);
 
   const loadData = async () => {
-    const [allSchools, usersRes] = await Promise.all([
-      base44.entities.School.list(),
-      base44.functions.invoke('listAllUsers', {}),
-    ]);
+    setError('');
+    try {
+      const [allSchools, usersRes] = await Promise.all([
+        base44.entities.School.list(),
+        base44.functions.invoke('listAllUsers', {}),
+      ]);
 
-    const allUsers = usersRes.data?.users || [];
-    const schoolMap = {};
-    allSchools.forEach((school) => {
-      schoolMap[school.id] = school.name;
-    });
+      const allUsers = usersRes.data?.users || [];
+      const schoolMap = {};
+      allSchools.forEach((school) => {
+        schoolMap[school.id] = school.name;
+      });
 
-    const usersWithSchools = allUsers.map((user) => ({
-      ...user,
-      school_name: user.active_school_id ? schoolMap[user.active_school_id] || 'Unknown' : '—',
-    }));
+      const usersWithSchools = allUsers.map((user) => ({
+        ...user,
+        school_name: user.active_school_id ? schoolMap[user.active_school_id] || 'Unknown' : '—',
+      }));
 
-    setSchools(allSchools);
-    setUsers(usersWithSchools);
-    setFilteredUsers(usersWithSchools);
-    setLoading(false);
+      setSchools(allSchools);
+      setUsers(usersWithSchools);
+      setFilteredUsers(usersWithSchools);
+    } catch (err) {
+      console.error('Error loading users:', err);
+      setError(err?.response?.data?.error || err.message || 'Failed to load users');
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -96,6 +104,12 @@ export default function SuperAdminUsers() {
           title="User Management"
           subtitle={`${users.length} total users across all schools`}
         />
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-5">
+            {error}
+          </div>
+        )}
 
         <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 mb-5 space-y-3">
           <div className="relative">
