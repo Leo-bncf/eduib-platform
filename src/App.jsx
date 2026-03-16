@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import SuperAdminAnalytics from './pages/SuperAdminAnalytics';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
+import SuperAdminSettings from './pages/SuperAdminSettings';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -64,6 +65,14 @@ const AuthenticatedApp = () => {
         element={
           <LayoutWrapper currentPageName="SuperAdminAnalytics">
             <SuperAdminAnalytics />
+          </LayoutWrapper>
+        }
+      />
+      <Route
+        path="/SuperAdminSettings"
+        element={
+          <LayoutWrapper currentPageName="SuperAdminSettings">
+            <SuperAdminSettings />
           </LayoutWrapper>
         }
       />

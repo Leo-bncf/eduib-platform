@@ -11,6 +11,7 @@ import {
   CreditCard,
   FileText,
   School,
+  Settings,
   Users,
 } from 'lucide-react';
 
@@ -20,6 +21,7 @@ const navItems = [
   { key: 'users', label: 'Users', page: 'SuperAdminUsers', icon: Users },
   { key: 'billing', label: 'Billing', page: 'SuperAdminBilling', icon: CreditCard },
   { key: 'analytics', label: 'Analytics', page: 'SuperAdminAnalytics', icon: BarChart3 },
+  { key: 'settings', label: 'Settings', page: 'SuperAdminSettings', icon: Settings },
   { key: 'plans', label: 'Plans', page: 'SuperAdminPlans', icon: BookOpen },
   { key: 'audit-logs', label: 'Audit Logs', page: 'SuperAdminAuditLogs', icon: FileText },
 ];
