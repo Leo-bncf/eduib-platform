@@ -1,64 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
+...
 import {
-  DollarSign,
-  TrendingUp,
-  Zap,
-} from 'lucide-react';
-import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
-import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
-import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
-import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
-
-const planPrices = { starter: 0, professional: 99, enterprise: 299 };
-
-const billingStatusColors = {
-  active: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
-  trial: 'bg-amber-900/50 text-amber-300 border-amber-800',
-  past_due: 'bg-red-900/50 text-red-300 border-red-800',
-  canceled: 'bg-slate-700/50 text-slate-400 border-slate-600',
-  incomplete: 'bg-orange-900/50 text-orange-300 border-orange-800',
-  none: 'bg-slate-700/50 text-slate-400 border-slate-600',
-};
-
+  getSuperAdminPlanMetrics,
+  useSuperAdminSchoolsQuery,
+} from '@/components/hooks/useSuperAdminData';
+...
 export default function SuperAdminPlans() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);
-  const [loading, setLoading] = useState(true);
-  const [schools, setSchools] = useState([]);
+  const { data: schools = [], isLoading } = useSuperAdminSchoolsQuery({ enabled: !!currentUser });
+  const metrics = getSuperAdminPlanMetrics(schools);
 
-  useEffect(() => {
-    if (!currentUser) return;
-
-    const loadData = async () => {
-      const allSchools = await base44.entities.School.list();
-      setSchools(allSchools);
-      setLoading(false);
-    };
-
-    loadData();
-  }, [currentUser]);
-
-  const metrics = useMemo(() => {
-    const byPlan = {};
-    const byBilling = {};
-
-    schools.forEach((school) => {
-      const plan = school.plan || 'unknown';
-      const billing = school.billing_status || 'none';
-      byPlan[plan] = (byPlan[plan] || 0) + 1;
-      byBilling[billing] = (byBilling[billing] || 0) + 1;
-    });
-
-    const mrrEstimate = schools
-      .filter((school) => school.billing_status === 'active')
-      .reduce((sum, school) => sum + (planPrices[school.plan] || 99), 0);
-
-    return { byPlan, byBilling, mrrEstimate };
-  }, [schools]);
-
-  if (isChecking || loading) {
+  if (isChecking || isLoading) {
     return <SuperAdminLoadingState />;
   }
 
@@ -87,7 +41,7 @@ export default function SuperAdminPlans() {
             <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">Paid Schools</span>
             <Zap className="w-4 h-4 text-emerald-500" />
           </div>
-          <p className="text-3xl font-bold text-slate-900">{schools.filter((school) => school.billing_status === 'active').length}</p>
+          <p className="text-3xl font-bold text-slate-900">{metrics.paidSchools}</p>
           <p className="text-slate-500 text-xs mt-1">active subscriptions</p>
         </div>
         <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-5">
@@ -95,7 +49,7 @@ export default function SuperAdminPlans() {
             <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">On Trial</span>
             <DollarSign className="w-4 h-4 text-amber-500" />
           </div>
-          <p className="text-3xl font-bold text-slate-900">{schools.filter((school) => school.billing_status === 'trial').length}</p>
+          <p className="text-3xl font-bold text-slate-900">{metrics.trialSchools}</p>
           <p className="text-slate-500 text-xs mt-1">trial accounts</p>
         </div>
       </div>

@@ -1,83 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  AlertCircle,
-  ChevronLeft,
-  DollarSign,
-  Edit2,
-  Loader2,
-  Lock,
-  Unlock,
-  Users,
-  Zap,
-} from 'lucide-react';
-import EditSchoolDialog from '@/components/admin/EditSchoolDialog';
-import ManageBillingDialog from '@/components/admin/ManageBillingDialog';
-import AddSchoolAdminDialog from '@/components/admin/super-admin/AddSchoolAdminDialog';
-import SchoolOnboardingProgress from '@/components/admin/SchoolOnboardingProgress';
-import SchoolStatusBadge from '@/components/admin/SchoolStatusBadge';
-import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
-import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
-import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
+...
+import { useSuperAdminSchoolDetailQuery } from '@/components/hooks/useSuperAdminData';
 
 export default function SuperAdminSchoolDetail() {
   const navigate = useNavigate();
   const { schoolId } = useParams();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate, ['super_admin', 'admin']);
+  const { data, isLoading, refetch } = useSuperAdminSchoolDetailQuery(schoolId, { enabled: !!currentUser });
 
-  const [loading, setLoading] = useState(true);
-  const [school, setSchool] = useState(null);
-  const [stats, setStats] = useState(null);
-  const [members, setMembers] = useState([]);
+  const school = data?.school || null;
+  const stats = data?.stats || null;
+  const members = data?.members || [];
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [billingDialogOpen, setBillingDialogOpen] = useState(false);
   const [addAdminDialogOpen, setAddAdminDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
-  useEffect(() => {
-    if (!currentUser) return;
-
-    const loadSchoolDetail = async () => {
-      const schools = await base44.entities.School.filter({ id: schoolId });
-      if (schools.length === 0) {
-        navigate('/SuperAdminSchools');
-        return;
-      }
-
-      setSchool(schools[0]);
-
-      const [academicYears, terms, subjects, classes, schoolMembers] = await Promise.all([
-        base44.entities.AcademicYear.filter({ school_id: schoolId }),
-        base44.entities.Term.filter({ school_id: schoolId }),
-        base44.entities.Subject.filter({ school_id: schoolId }),
-        base44.entities.Class.filter({ school_id: schoolId }),
-        base44.entities.SchoolMembership.filter({ school_id: schoolId }),
-      ]);
-
-      setStats({
-        academicYears: academicYears.length,
-        terms: terms.length,
-        subjects: subjects.length,
-        classes: classes.length,
-        staff: schoolMembers.length,
-      });
-      setMembers(schoolMembers);
-      setLoading(false);
-    };
-
-    loadSchoolDetail();
-  }, [currentUser, navigate, schoolId]);
-
   const reloadSchool = async () => {
-    const schools = await base44.entities.School.filter({ id: schoolId });
-    if (schools.length > 0) {
-      setSchool(schools[0]);
-    }
+    await refetch();
   };
 
   const handleSuspendSchool = async () => {
@@ -98,7 +40,7 @@ export default function SuperAdminSchoolDetail() {
     setActionLoading(false);
   };
 
-  if (isChecking || loading) {
+  if (isChecking || isLoading) {
     return <SuperAdminLoadingState />;
   }
 

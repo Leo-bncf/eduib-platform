@@ -1,46 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+...
 import {
-  AlertTriangle,
-  Building2,
-  DollarSign,
-  Search,
-  TrendingUp,
-} from 'lucide-react';
-import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
-import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
-import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
-import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
-
-const planPrices = { starter: 99, professional: 299, enterprise: 799 };
-
-const billingColors = {
-  trial: 'bg-amber-900/50 text-amber-300 border-amber-800',
-  active: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
-  past_due: 'bg-red-900/50 text-red-300 border-red-800',
-  incomplete: 'bg-orange-900/50 text-orange-300 border-orange-800',
-  canceled: 'bg-slate-700/50 text-slate-400 border-slate-600',
-  unpaid: 'bg-red-900/50 text-red-300 border-red-800',
-};
-
-const planColors = {
-  starter: 'bg-blue-900/50 text-blue-300 border-blue-800',
-  professional: 'bg-indigo-900/50 text-indigo-300 border-indigo-800',
-  enterprise: 'bg-violet-900/50 text-violet-300 border-violet-800',
-};
-
+  getSuperAdminBillingMetrics,
+  useSuperAdminSchoolsQuery,
+} from '@/components/hooks/useSuperAdminData';
+...
 export default function SuperAdminBilling() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);
   const [search, setSearch] = useState('');
 
-  const { data: schools = [], isLoading } = useQuery({
-    queryKey: ['schools-billing'],
-    queryFn: () => base44.entities.School.list('-created_date'),
-    enabled: !!currentUser,
-  });
+  const { data: schools = [], isLoading } = useSuperAdminSchoolsQuery({ enabled: !!currentUser });
 
   if (isChecking || isLoading) {
     return <SuperAdminLoadingState />;
@@ -51,15 +22,7 @@ export default function SuperAdminBilling() {
   }
 
   const filtered = schools.filter((school) => school.name?.toLowerCase().includes(search.toLowerCase()));
-  const totalMRR = schools
-    .filter((school) => school.billing_status === 'active')
-    .reduce((sum, school) => sum + (planPrices[school.plan] || 99), 0);
-
-  const stats = {
-    active: schools.filter((school) => school.billing_status === 'active').length,
-    trial: schools.filter((school) => school.billing_status === 'trial').length,
-    pastDue: schools.filter((school) => school.billing_status === 'past_due').length,
-  };
+  const { totalMRR, stats } = getSuperAdminBillingMetrics(schools);
 
   return (
     <SuperAdminShell activeItem="billing" currentUser={currentUser}>

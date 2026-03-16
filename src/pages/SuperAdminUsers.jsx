@@ -1,76 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
-import { Search, Users } from 'lucide-react';
-import ManageUserDialog from '@/components/admin/ManageUserDialog';
-import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
-import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
-import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
-import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
-
-const roleColors = {
-  super_admin: 'bg-red-900/50 text-red-300 border-red-800',
-  school_admin: 'bg-purple-900/50 text-purple-300 border-purple-800',
-  ib_coordinator: 'bg-blue-900/50 text-blue-300 border-blue-800',
-  teacher: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
-  student: 'bg-indigo-900/50 text-indigo-300 border-indigo-800',
-  parent: 'bg-amber-900/50 text-amber-300 border-amber-800',
-  user: 'bg-slate-700/50 text-slate-400 border-slate-600',
-};
-
-const ROLES = ['all', 'super_admin', 'school_admin', 'ib_coordinator', 'teacher', 'student', 'parent', 'user'];
+...
+import { useSuperAdminUsersQuery } from '@/components/hooks/useSuperAdminData';
 
 export default function SuperAdminUsers() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [users, setUsers] = useState([]);
-  const [schools, setSchools] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const { data, isLoading, error, refetch } = useSuperAdminUsersQuery({ enabled: !!currentUser });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterRole, setFilterRole] = useState('all');
   const [filterSchool, setFilterSchool] = useState('all');
   const [selectedUser, setSelectedUser] = useState(null);
   const [manageDialogOpen, setManageDialogOpen] = useState(false);
 
-  const loadData = async () => {
-    setError('');
-    try {
-      const [allSchools, usersRes] = await Promise.all([
-        base44.entities.School.list(),
-        base44.functions.invoke('listAllUsers', {}),
-      ]);
+  const schools = data?.schools || [];
+  const users = data?.users || [];
 
-      const allUsers = usersRes.data?.users || [];
-      const schoolMap = {};
-      allSchools.forEach((school) => {
-        schoolMap[school.id] = school.name;
-      });
-
-      const usersWithSchools = allUsers.map((user) => ({
-        ...user,
-        school_name: user.active_school_id ? schoolMap[user.active_school_id] || 'Unknown' : '—',
-      }));
-
-      setSchools(allSchools);
-      setUsers(usersWithSchools);
-      setFilteredUsers(usersWithSchools);
-    } catch (err) {
-      console.error('Error loading users:', err);
-      setError(err?.response?.data?.error || err.message || 'Failed to load users');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!currentUser) return;
-    loadData();
-  }, [currentUser]);
-
-  useEffect(() => {
+  const filteredUsers = useMemo(() => {
     let filtered = users;
     if (searchQuery) {
       filtered = filtered.filter(
@@ -81,15 +27,15 @@ export default function SuperAdminUsers() {
     }
     if (filterRole !== 'all') filtered = filtered.filter((user) => user.role === filterRole);
     if (filterSchool !== 'all') filtered = filtered.filter((user) => user.active_school_id === filterSchool);
-    setFilteredUsers(filtered);
+    return filtered;
   }, [filterRole, filterSchool, searchQuery, users]);
 
   const handleUserUpdated = async () => {
     setManageDialogOpen(false);
-    await loadData();
+    await refetch();
   };
 
-  if (isChecking || loading) {
+  if (isChecking || isLoading) {
     return <SuperAdminLoadingState />;
   }
 
@@ -107,7 +53,7 @@ export default function SuperAdminUsers() {
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-5">
-            {error}
+            {error?.response?.data?.error || error.message || 'Failed to load users'}
           </div>
         )}
 
