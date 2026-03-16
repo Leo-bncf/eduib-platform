@@ -382,6 +382,39 @@ export default function SuperAdminSettings() {
           Use this for staged rollouts, pilot groups, and temporary school-specific experiments.
         </div>
       </ConfigSectionCard>
+      </>}
+
+      {activeTab === 'operational' && (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <ConfigSectionCard
+            title="Integration Management"
+            description="Monitor external integrations across the platform."
+          >
+            <IntegrationStatusCard />
+          </ConfigSectionCard>
+
+          <ConfigSectionCard
+            title="System Health"
+            description="Live metrics for API performance, errors, and uptime."
+          >
+            <SystemHealthPanel />
+          </ConfigSectionCard>
+
+          <ConfigSectionCard
+            title="Announcements & Communications"
+            description="Send platform-wide or targeted messages to school admins."
+          >
+            <AnnouncementsPanel schools={schools} />
+          </ConfigSectionCard>
+
+          <ConfigSectionCard
+            title="Maintenance Mode"
+            description="Put the platform or individual schools into maintenance mode."
+          >
+            <MaintenanceModePanel schools={schools} />
+          </ConfigSectionCard>
+        </div>
+      )}
     </SuperAdminShell>
   );
 }
