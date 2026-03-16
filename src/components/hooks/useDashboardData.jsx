@@ -53,11 +53,12 @@ export function useSchoolData(schoolId) {
   });
 }
 
-export function useAllSchools() {
+export function useAllSchools(options = {}) {
   return useQuery({
     queryKey: ['schools'],
     queryFn: () => base44.entities.School.list('-updated_date', 100),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    ...options,
   });
 }
 
