@@ -1,7 +1,10 @@
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 
 const DEFAULT_STALE_TIME = 5 * 60 * 1000;
+const ENTITY_LIMIT = 2000;
+
 export const SUPER_ADMIN_PLAN_PRICES = {
   starter: 99,
   professional: 299,
@@ -9,13 +12,68 @@ export const SUPER_ADMIN_PLAN_PRICES = {
 };
 
 async function fetchSchools() {
-  return base44.entities.School.list('-updated_date', 100);
+  return base44.entities.School.list('-updated_date', 200);
+}
+
+function buildCountMap(records) {
+  return records.reduce((acc, record) => {
+    if (!record.school_id) return acc;
+    acc[record.school_id] = (acc[record.school_id] || 0) + 1;
+    return acc;
+  }, {});
+}
+
+function buildOnboardingSummary(schoolId, counts) {
+  const items = [
+    { label: 'School Profile', completed: true },
+    { label: 'Academic Years', completed: (counts.academicYears[schoolId] || 0) > 0 },
+    { label: 'Terms', completed: (counts.terms[schoolId] || 0) > 0 },
+    { label: 'Subjects', completed: (counts.subjects[schoolId] || 0) > 0 },
+    { label: 'Classes', completed: (counts.classes[schoolId] || 0) > 0 },
+  ];
+
+  const completedCount = items.filter((item) => item.completed).length;
+
+  return {
+    progress: (completedCount / items.length) * 100,
+    items,
+  };
 }
 
 export function useSuperAdminSchoolsQuery(options = {}) {
   return useQuery({
     queryKey: ['super-admin', 'schools'],
     queryFn: fetchSchools,
+    staleTime: DEFAULT_STALE_TIME,
+    ...options,
+  });
+}
+
+export function useSuperAdminSchoolOverviewQuery(options = {}) {
+  return useQuery({
+    queryKey: ['super-admin', 'school-overview'],
+    queryFn: async () => {
+      const [schools, academicYears, terms, subjects, classes] = await Promise.all([
+        fetchSchools(),
+        base44.entities.AcademicYear.list('-created_date', ENTITY_LIMIT),
+        base44.entities.Term.list('-created_date', ENTITY_LIMIT),
+        base44.entities.Subject.list('-created_date', ENTITY_LIMIT),
+        base44.entities.Class.list('-created_date', ENTITY_LIMIT),
+      ]);
+
+      const counts = {
+        academicYears: buildCountMap(academicYears),
+        terms: buildCountMap(terms),
+        subjects: buildCountMap(subjects),
+        classes: buildCountMap(classes),
+      };
+
+      const onboardingBySchool = Object.fromEntries(
+        schools.map((school) => [school.id, buildOnboardingSummary(school.id, counts)])
+      );
+
+      return { schools, onboardingBySchool };
+    },
     staleTime: DEFAULT_STALE_TIME,
     ...options,
   });
@@ -82,6 +140,22 @@ export function useSuperAdminSchoolDetailQuery(schoolId, options = {}) {
     enabled: !!schoolId && (options.enabled ?? true),
     ...options,
   });
+}
+
+export function usePaginatedItems(items, pageSize, page) {
+  return useMemo(() => {
+    const totalItems = items.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const safePage = Math.min(page, totalPages);
+    const start = (safePage - 1) * pageSize;
+
+    return {
+      page: safePage,
+      totalItems,
+      totalPages,
+      paginatedItems: items.slice(start, start + pageSize),
+    };
+  }, [items, page, pageSize]);
 }
 
 export function getSuperAdminPlatformMetrics(schools) {

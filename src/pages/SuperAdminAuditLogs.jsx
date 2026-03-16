@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AlertCircle,
@@ -10,12 +10,16 @@ import {
 import { format } from 'date-fns';
 import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
 import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminPagination from '@/components/admin/super-admin/SuperAdminPagination';
 import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
 import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 import {
+  usePaginatedItems,
   useSuperAdminAuditLogsQuery,
   useSuperAdminSchoolsQuery,
 } from '@/components/hooks/useSuperAdminData';
+
+const PAGE_SIZE = 50;
 
 const levelColors = {
   info: 'bg-blue-900/50 text-blue-300 border-blue-800',
@@ -31,9 +35,28 @@ export default function SuperAdminAuditLogs() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterLevel, setFilterLevel] = useState('all');
   const [filterSchool, setFilterSchool] = useState('all');
+  const [page, setPage] = useState(1);
 
   const { data: logs = [], isLoading } = useSuperAdminAuditLogsQuery({ enabled: !!currentUser });
   const { data: schools = [], isLoading: isLoadingSchools } = useSuperAdminSchoolsQuery({ enabled: !!currentUser });
+
+  const filteredLogs = useMemo(() => {
+    return logs.filter((log) => {
+      const matchesSearch = !searchQuery ||
+        log.action?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        log.user_email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        log.details?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesLevel = filterLevel === 'all' || log.level === filterLevel;
+      const matchesSchool = filterSchool === 'all' || log.school_id === filterSchool;
+      return matchesSearch && matchesLevel && matchesSchool;
+    });
+  }, [filterLevel, filterSchool, logs, searchQuery]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, filterLevel, filterSchool]);
+
+  const { paginatedItems, totalItems, totalPages, page: safePage } = usePaginatedItems(filteredLogs, PAGE_SIZE, page);
 
   if (isChecking || isLoading || isLoadingSchools) {
     return <SuperAdminLoadingState />;
@@ -42,16 +65,6 @@ export default function SuperAdminAuditLogs() {
   if (!currentUser) {
     return null;
   }
-
-  const filteredLogs = logs.filter((log) => {
-    const matchesSearch = !searchQuery ||
-      log.action?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.user_email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.details?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesLevel = filterLevel === 'all' || log.level === filterLevel;
-    const matchesSchool = filterSchool === 'all' || log.school_id === filterSchool;
-    return matchesSearch && matchesLevel && matchesSchool;
-  });
 
   return (
     <SuperAdminShell activeItem="audit-logs" currentUser={currentUser}>
@@ -125,18 +138,18 @@ export default function SuperAdminAuditLogs() {
       <div className="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
         <div className="px-5 py-3 border-b border-slate-200">
           <span className="text-sm text-slate-500">
-            <strong className="text-slate-900">{filteredLogs.length}</strong> log entries
+            <strong className="text-slate-900">{totalItems}</strong> matching log entries
           </span>
         </div>
 
-        {filteredLogs.length === 0 ? (
+        {paginatedItems.length === 0 ? (
           <div className="text-center py-16 text-slate-500">
             <Shield className="w-10 h-10 mx-auto mb-3 opacity-30" />
             <p className="text-sm">No audit logs found</p>
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
-            {filteredLogs.map((log) => {
+            {paginatedItems.map((log) => {
               const LevelIcon = levelIcons[log.level] || Info;
 
               return (
@@ -171,6 +184,14 @@ export default function SuperAdminAuditLogs() {
             })}
           </div>
         )}
+
+        <SuperAdminPagination
+          page={safePage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          pageSize={PAGE_SIZE}
+          onPageChange={setPage}
+        />
       </div>
     </SuperAdminShell>
   );

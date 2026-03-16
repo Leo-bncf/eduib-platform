@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, Edit2, Plus, School, Search } from 'lucide-react';
@@ -7,9 +7,15 @@ import SchoolOnboardingProgress from '@/components/admin/SchoolOnboardingProgres
 import SchoolQuickEdit from '@/components/admin/SchoolQuickEdit';
 import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
 import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminPagination from '@/components/admin/super-admin/SuperAdminPagination';
 import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
 import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
-import { useSuperAdminSchoolsQuery } from '@/components/hooks/useSuperAdminData';
+import {
+  usePaginatedItems,
+  useSuperAdminSchoolOverviewQuery,
+} from '@/components/hooks/useSuperAdminData';
+
+const PAGE_SIZE = 12;
 
 const statusConfig = {
   active: { label: 'Active', color: 'bg-emerald-900/50 text-emerald-300 border-emerald-800' },
@@ -32,12 +38,16 @@ const BILLING_FILTERS = ['all', 'trial', 'active', 'past_due'];
 export default function SuperAdminSchools() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);
-  const { data: schools = [], isLoading, refetch } = useSuperAdminSchoolsQuery({ enabled: !!currentUser });
+  const { data, isLoading, refetch } = useSuperAdminSchoolOverviewQuery({ enabled: !!currentUser });
+  const schools = data?.schools || [];
+  const onboardingBySchool = data?.onboardingBySchool || {};
+
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterBilling, setFilterBilling] = useState('all');
   const [editingSchoolId, setEditingSchoolId] = useState(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   const handleSchoolUpdated = async () => {
     await refetch();
@@ -58,6 +68,12 @@ export default function SuperAdminSchools() {
     if (filterBilling !== 'all') filtered = filtered.filter((school) => school.billing_status === filterBilling);
     return filtered;
   }, [filterBilling, filterStatus, schools, searchQuery]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, filterStatus, filterBilling]);
+
+  const { paginatedItems, totalItems, totalPages, page: safePage } = usePaginatedItems(filteredSchools, PAGE_SIZE, page);
 
   if (isChecking || isLoading) {
     return <SuperAdminLoadingState />;
@@ -139,19 +155,18 @@ export default function SuperAdminSchools() {
         <div className="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
           <div className="px-5 py-3 border-b border-slate-200">
             <span className="text-sm text-slate-500">
-              Showing <strong className="text-slate-900">{filteredSchools.length}</strong> of{' '}
-              <strong className="text-slate-900">{schools.length}</strong> schools
+              Showing <strong className="text-slate-900">{totalItems}</strong> matching schools
             </span>
           </div>
 
-          {filteredSchools.length === 0 ? (
+          {paginatedItems.length === 0 ? (
             <div className="text-center py-16 text-slate-500">
               <School className="w-10 h-10 mx-auto mb-3 opacity-30" />
               <p className="text-sm">No schools found</p>
             </div>
           ) : (
             <div className="divide-y divide-slate-100">
-              {filteredSchools.map((school) => {
+              {paginatedItems.map((school) => {
                 const isEditing = editingSchoolId === school.id;
 
                 return (
@@ -203,7 +218,7 @@ export default function SuperAdminSchools() {
                           </div>
 
                           <div className="pt-3 border-t border-slate-100">
-                            <SchoolOnboardingProgress schoolId={school.id} />
+                            <SchoolOnboardingProgress schoolId={school.id} summary={onboardingBySchool[school.id]} />
                           </div>
                         </div>
 
@@ -228,6 +243,14 @@ export default function SuperAdminSchools() {
               })}
             </div>
           )}
+
+          <SuperAdminPagination
+            page={safePage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+          />
         </div>
       </SuperAdminShell>
 

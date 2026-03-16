@@ -1,13 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Search, Users } from 'lucide-react';
 import ManageUserDialog from '@/components/admin/ManageUserDialog';
 import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
 import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminPagination from '@/components/admin/super-admin/SuperAdminPagination';
 import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
 import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
-import { useSuperAdminUsersQuery } from '@/components/hooks/useSuperAdminData';
+import { usePaginatedItems, useSuperAdminUsersQuery } from '@/components/hooks/useSuperAdminData';
+
+const PAGE_SIZE = 25;
 
 const roleColors = {
   super_admin: 'bg-red-900/50 text-red-300 border-red-800',
@@ -30,6 +33,7 @@ export default function SuperAdminUsers() {
   const [filterSchool, setFilterSchool] = useState('all');
   const [selectedUser, setSelectedUser] = useState(null);
   const [manageDialogOpen, setManageDialogOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   const schools = data?.schools || [];
   const users = data?.users || [];
@@ -47,6 +51,12 @@ export default function SuperAdminUsers() {
     if (filterSchool !== 'all') filtered = filtered.filter((user) => user.active_school_id === filterSchool);
     return filtered;
   }, [filterRole, filterSchool, searchQuery, users]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, filterRole, filterSchool]);
+
+  const { paginatedItems, totalItems, totalPages, page: safePage } = usePaginatedItems(filteredUsers, PAGE_SIZE, page);
 
   const handleUserUpdated = async () => {
     setManageDialogOpen(false);
@@ -126,12 +136,11 @@ export default function SuperAdminUsers() {
         <div className="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
           <div className="px-5 py-3 border-b border-slate-200 flex items-center justify-between">
             <span className="text-sm text-slate-500">
-              Showing <strong className="text-slate-900">{filteredUsers.length}</strong> of{' '}
-              <strong className="text-slate-900">{users.length}</strong> users
+              Showing <strong className="text-slate-900">{totalItems}</strong> matching users
             </span>
           </div>
 
-          {filteredUsers.length === 0 ? (
+          {paginatedItems.length === 0 ? (
             <div className="text-center py-16 text-slate-500">
               <Users className="w-10 h-10 mx-auto mb-3 opacity-30" />
               <p className="text-sm">No users found</p>
@@ -148,7 +157,7 @@ export default function SuperAdminUsers() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {filteredUsers.map((user) => (
+                {paginatedItems.map((user) => (
                   <tr key={user.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
@@ -196,6 +205,14 @@ export default function SuperAdminUsers() {
               </tbody>
             </table>
           )}
+
+          <SuperAdminPagination
+            page={safePage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+          />
         </div>
       </SuperAdminShell>
 
