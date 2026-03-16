@@ -13,6 +13,13 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertCircle } from 'lucide-react';
+import {
+  DEFAULT_BILLING_STATUS,
+  DEFAULT_SCHOOL_PLAN,
+  DEFAULT_SCHOOL_STATUS,
+  SCHOOL_PLAN_OPTIONS,
+  SCHOOL_TRIAL_DURATION_DAYS,
+} from '@/components/admin/super-admin/superAdminConfig';
 
 export default function CreateSchoolDialog({ open, onOpenChange, onSchoolCreated }) {
   const [loading, setLoading] = useState(false);
@@ -25,7 +32,7 @@ export default function CreateSchoolDialog({ open, onOpenChange, onSchoolCreated
     address: '',
     city: '',
     country: '',
-    plan: 'starter',
+    plan: DEFAULT_SCHOOL_PLAN,
   });
 
   const handleChange = (e) => {
@@ -57,9 +64,9 @@ export default function CreateSchoolDialog({ open, onOpenChange, onSchoolCreated
         city: formData.city || undefined,
         country: formData.country || undefined,
         plan: formData.plan,
-        status: 'onboarding',
-        billing_status: 'trial',
-        trial_end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        status: DEFAULT_SCHOOL_STATUS,
+        billing_status: DEFAULT_BILLING_STATUS,
+        trial_end_date: new Date(Date.now() + SCHOOL_TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000).toISOString(),
       });
 
       // Reset form
@@ -70,7 +77,7 @@ export default function CreateSchoolDialog({ open, onOpenChange, onSchoolCreated
         address: '',
         city: '',
         country: '',
-        plan: 'starter',
+        plan: DEFAULT_SCHOOL_PLAN,
       });
 
       onOpenChange(false);
@@ -176,9 +183,9 @@ export default function CreateSchoolDialog({ open, onOpenChange, onSchoolCreated
               disabled={loading}
               className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="starter">Starter</option>
-              <option value="professional">Professional</option>
-              <option value="enterprise">Enterprise</option>
+              {SCHOOL_PLAN_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
             </select>
           </div>
 

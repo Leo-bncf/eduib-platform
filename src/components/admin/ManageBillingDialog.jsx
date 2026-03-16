@@ -11,21 +11,27 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertCircle } from 'lucide-react';
+import {
+  BILLING_STATUS_OPTIONS,
+  DEFAULT_BILLING_STATUS,
+  DEFAULT_SCHOOL_PLAN,
+  SCHOOL_PLAN_OPTIONS,
+} from '@/components/admin/super-admin/superAdminConfig';
 
 export default function ManageBillingDialog({ open, onOpenChange, school, onUpdated }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const [billingData, setBillingData] = useState({
-    plan: 'starter',
-    billing_status: 'trial',
+    plan: DEFAULT_SCHOOL_PLAN,
+    billing_status: DEFAULT_BILLING_STATUS,
   });
 
   useEffect(() => {
     if (school) {
       setBillingData({
-        plan: school.plan || 'starter',
-        billing_status: school.billing_status || 'trial',
+        plan: school.plan || DEFAULT_SCHOOL_PLAN,
+        billing_status: school.billing_status || DEFAULT_BILLING_STATUS,
       });
     }
   }, [school, open]);
@@ -90,9 +96,9 @@ export default function ManageBillingDialog({ open, onOpenChange, school, onUpda
               disabled={loading}
               className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="starter">Starter</option>
-              <option value="professional">Professional</option>
-              <option value="enterprise">Enterprise</option>
+              {SCHOOL_PLAN_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
             </select>
           </div>
 
@@ -105,11 +111,9 @@ export default function ManageBillingDialog({ open, onOpenChange, school, onUpda
               disabled={loading}
               className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="trial">Trial</option>
-              <option value="active">Active</option>
-              <option value="past_due">Past Due</option>
-              <option value="cancelled">Cancelled</option>
-              <option value="incomplete">Incomplete</option>
+              {BILLING_STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
             </select>
           </div>
 

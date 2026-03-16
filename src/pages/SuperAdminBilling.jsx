@@ -13,24 +13,13 @@ import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
 import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 import {
   getSuperAdminBillingMetrics,
-  SUPER_ADMIN_PLAN_PRICES,
   useSuperAdminSchoolsQuery,
 } from '@/components/hooks/useSuperAdminData';
-
-const billingColors = {
-  trial: 'bg-amber-900/50 text-amber-300 border-amber-800',
-  active: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
-  past_due: 'bg-red-900/50 text-red-300 border-red-800',
-  incomplete: 'bg-orange-900/50 text-orange-300 border-orange-800',
-  canceled: 'bg-slate-700/50 text-slate-400 border-slate-600',
-  unpaid: 'bg-red-900/50 text-red-300 border-red-800',
-};
-
-const planColors = {
-  starter: 'bg-blue-900/50 text-blue-300 border-blue-800',
-  professional: 'bg-indigo-900/50 text-indigo-300 border-indigo-800',
-  enterprise: 'bg-violet-900/50 text-violet-300 border-violet-800',
-};
+import {
+  getBillingStatusMeta,
+  getPlanMeta,
+  getPlanPrice,
+} from '@/components/admin/super-admin/superAdminConfig';
 
 export default function SuperAdminBilling() {
   const navigate = useNavigate();
@@ -124,7 +113,7 @@ export default function SuperAdminBilling() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filtered.map((school) => {
-                const mrr = SUPER_ADMIN_PLAN_PRICES[school.plan] || SUPER_ADMIN_PLAN_PRICES.starter;
+                const mrr = getPlanPrice(school.plan);
 
                 return (
                   <tr
@@ -137,14 +126,14 @@ export default function SuperAdminBilling() {
                       <p className="text-xs text-slate-500">{school.city}{school.country ? `, ${school.country}` : ''}</p>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${planColors[school.plan] || 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                        {school.plan || 'N/A'}
+                      <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${getPlanMeta(school.plan, 'dark').color}`}>
+                        {getPlanMeta(school.plan, 'dark').label}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       {school.billing_status ? (
-                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${billingColors[school.billing_status] || 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                          {school.billing_status}
+                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${getBillingStatusMeta(school.billing_status, 'dark').color}`}>
+                          {getBillingStatusMeta(school.billing_status, 'dark').label}
                         </span>
                       ) : (
                         <span className="text-xs text-slate-500">—</span>

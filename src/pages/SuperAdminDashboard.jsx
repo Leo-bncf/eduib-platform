@@ -15,26 +15,15 @@ import {
   DollarSign,
   Plus,
 } from 'lucide-react';
+import {
+  getBillingStatusMeta,
+  getSchoolStatusMeta,
+} from '@/components/admin/super-admin/superAdminConfig';
 import CreateSchoolDialog from '@/components/admin/CreateSchoolDialog';
 import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
 import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
 import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
 import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
-
-const statusConfig = {
-  active: { label: 'Active', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
-  onboarding: { label: 'Onboarding', color: 'bg-blue-100 text-blue-700 border-blue-200' },
-  suspended: { label: 'Suspended', color: 'bg-red-100 text-red-700 border-red-200' },
-  cancelled: { label: 'Cancelled', color: 'bg-slate-100 text-slate-600 border-slate-200' },
-};
-
-const billingConfig = {
-  trial: { label: 'Trial', color: 'bg-amber-100 text-amber-700' },
-  active: { label: 'Paid', color: 'bg-emerald-100 text-emerald-700' },
-  past_due: { label: 'Past Due', color: 'bg-red-100 text-red-700' },
-  incomplete: { label: 'Incomplete', color: 'bg-orange-100 text-orange-700' },
-  canceled: { label: 'Canceled', color: 'bg-slate-100 text-slate-600' },
-};
 
 export default function SuperAdminDashboard() {
   const navigate = useNavigate();
@@ -135,13 +124,13 @@ export default function SuperAdminDashboard() {
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {school.status && (
-                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${statusConfig[school.status]?.color || 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                          {statusConfig[school.status]?.label || school.status}
+                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${getSchoolStatusMeta(school.status, 'light').color}`}>
+                          {getSchoolStatusMeta(school.status, 'light').label}
                         </span>
                       )}
                       {school.billing_status && (
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${billingConfig[school.billing_status]?.color || 'bg-slate-100 text-slate-600'}`}>
-                          {billingConfig[school.billing_status]?.label || school.billing_status}
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getBillingStatusMeta(school.billing_status, 'light').color}`}>
+                          {getBillingStatusMeta(school.billing_status, 'light').label}
                         </span>
                       )}
                     </div>

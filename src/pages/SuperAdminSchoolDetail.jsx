@@ -24,6 +24,7 @@ import SchoolStatusBadge from '@/components/admin/SchoolStatusBadge';
 import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
 import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
 import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
+import { getSchoolHealthIssues } from '@/components/admin/super-admin/superAdminConfig';
 import { useSuperAdminSchoolDetailQuery } from '@/components/hooks/useSuperAdminData';
 
 export default function SuperAdminSchoolDetail() {
@@ -86,11 +87,7 @@ export default function SuperAdminSchoolDetail() {
     );
   }
 
-  const healthIssues = [];
-  if (school.status === 'suspended') healthIssues.push('School is suspended');
-  if (school.billing_status === 'past_due') healthIssues.push('Payment is past due');
-  if (school.billing_status === 'incomplete') healthIssues.push('Billing setup incomplete');
-  if (school.status === 'onboarding') healthIssues.push('School is still in setup phase');
+  const healthIssues = getSchoolHealthIssues(school);
   const isAtRisk = healthIssues.length > 0;
 
   return (

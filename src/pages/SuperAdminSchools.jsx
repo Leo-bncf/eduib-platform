@@ -14,23 +14,12 @@ import {
   usePaginatedItems,
   useSuperAdminSchoolOverviewQuery,
 } from '@/components/hooks/useSuperAdminData';
+import {
+  getBillingStatusMeta,
+  getSchoolStatusMeta,
+} from '@/components/admin/super-admin/superAdminConfig';
 
 const PAGE_SIZE = 12;
-
-const statusConfig = {
-  active: { label: 'Active', color: 'bg-emerald-900/50 text-emerald-300 border-emerald-800' },
-  onboarding: { label: 'Onboarding', color: 'bg-blue-900/50 text-blue-300 border-blue-800' },
-  suspended: { label: 'Suspended', color: 'bg-red-900/50 text-red-300 border-red-800' },
-  cancelled: { label: 'Cancelled', color: 'bg-slate-700/50 text-slate-400 border-slate-600' },
-};
-
-const billingConfig = {
-  trial: { label: 'Trial', color: 'bg-amber-900/50 text-amber-300 border-amber-800' },
-  active: { label: 'Paid', color: 'bg-emerald-900/50 text-emerald-300 border-emerald-800' },
-  past_due: { label: 'Past Due', color: 'bg-red-900/50 text-red-300 border-red-800' },
-  incomplete: { label: 'Incomplete', color: 'bg-orange-900/50 text-orange-300 border-orange-800' },
-  canceled: { label: 'Canceled', color: 'bg-slate-700/50 text-slate-400 border-slate-600' },
-};
 
 const STATUS_FILTERS = ['all', 'active', 'onboarding', 'suspended'];
 const BILLING_FILTERS = ['all', 'trial', 'active', 'past_due'];
@@ -183,13 +172,13 @@ export default function SuperAdminSchools() {
                           <div className="flex items-center gap-2 flex-wrap mb-2">
                             <h3 className="text-base font-semibold text-slate-900">{school.name}</h3>
                             {school.status && (
-                              <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${statusConfig[school.status]?.color || 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                                {statusConfig[school.status]?.label || school.status}
+                              <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${getSchoolStatusMeta(school.status, 'dark').color}`}>
+                                {getSchoolStatusMeta(school.status, 'dark').label}
                               </span>
                             )}
                             {school.billing_status && (
-                              <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${billingConfig[school.billing_status]?.color || 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                                {billingConfig[school.billing_status]?.label || school.billing_status}
+                              <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${getBillingStatusMeta(school.billing_status, 'dark').color}`}>
+                                {getBillingStatusMeta(school.billing_status, 'dark').label}
                               </span>
                             )}
                           </div>

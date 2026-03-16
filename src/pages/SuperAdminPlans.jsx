@@ -13,15 +13,7 @@ import {
   getSuperAdminPlanMetrics,
   useSuperAdminSchoolsQuery,
 } from '@/components/hooks/useSuperAdminData';
-
-const billingStatusColors = {
-  active: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
-  trial: 'bg-amber-900/50 text-amber-300 border-amber-800',
-  past_due: 'bg-red-900/50 text-red-300 border-red-800',
-  canceled: 'bg-slate-700/50 text-slate-400 border-slate-600',
-  incomplete: 'bg-orange-900/50 text-orange-300 border-orange-800',
-  none: 'bg-slate-700/50 text-slate-400 border-slate-600',
-};
+import { getBillingStatusMeta, getPlanMeta } from '@/components/admin/super-admin/superAdminConfig';
 
 export default function SuperAdminPlans() {
   const navigate = useNavigate();
@@ -126,11 +118,11 @@ export default function SuperAdminPlans() {
                   <p className="text-sm font-medium text-slate-900">{school.name}</p>
                 </td>
                 <td className="px-4 py-3">
-                  <span className="text-xs text-slate-700 capitalize">{school.plan || 'None'}</span>
+                  <span className={`text-xs border px-2 py-0.5 rounded-full ${getPlanMeta(school.plan, 'dark').color}`}>{getPlanMeta(school.plan, 'dark').label}</span>
                 </td>
                 <td className="px-4 py-3">
-                  <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${billingStatusColors[school.billing_status || 'none']}`}>
-                    {school.billing_status || 'none'}
+                  <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${getBillingStatusMeta(school.billing_status || 'none', 'dark').color}`}>
+                    {getBillingStatusMeta(school.billing_status || 'none', 'dark').label}
                   </span>
                 </td>
                 <td className="px-4 py-3 hidden sm:table-cell">

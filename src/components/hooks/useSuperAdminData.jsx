@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import {
+  getPlanPrice,
+  getSchoolHealthIssues,
+  isAtRiskSchool,
+  isPaidSchool,
+} from '@/components/admin/super-admin/superAdminConfig';
 
 const DEFAULT_STALE_TIME = 5 * 60 * 1000;
 const ENTITY_LIMIT = 2000;
-
-export const SUPER_ADMIN_PLAN_PRICES = {
-  starter: 99,
-  professional: 299,
-  enterprise: 799,
-};
 
 async function fetchSchools() {
   return base44.entities.School.list('-updated_date', 200);
@@ -164,8 +164,8 @@ export function getSuperAdminPlatformMetrics(schools) {
     active: schools.filter((school) => school.status === 'active').length,
     onboarding: schools.filter((school) => school.status === 'onboarding').length,
     trial: schools.filter((school) => school.billing_status === 'trial').length,
-    paid: schools.filter((school) => school.billing_status === 'active' || school.billing_status === 'past_due').length,
-    atRisk: schools.filter((school) => school.billing_status === 'past_due' || school.billing_status === 'canceled').length,
+    paid: schools.filter((school) => isPaidSchool(school)).length,
+    atRisk: schools.filter((school) => isAtRiskSchool(school)).length,
     suspended: schools.filter((school) => school.status === 'suspended').length,
   };
 }
@@ -173,7 +173,7 @@ export function getSuperAdminPlatformMetrics(schools) {
 export function getSuperAdminBillingMetrics(schools) {
   const totalMRR = schools
     .filter((school) => school.billing_status === 'active')
-    .reduce((sum, school) => sum + (SUPER_ADMIN_PLAN_PRICES[school.plan] || SUPER_ADMIN_PLAN_PRICES.starter), 0);
+    .reduce((sum, school) => sum + getPlanPrice(school.plan), 0);
 
   return {
     totalMRR,
@@ -198,7 +198,7 @@ export function getSuperAdminPlanMetrics(schools) {
 
   const mrrEstimate = schools
     .filter((school) => school.billing_status === 'active')
-    .reduce((sum, school) => sum + (SUPER_ADMIN_PLAN_PRICES[school.plan] || SUPER_ADMIN_PLAN_PRICES.starter), 0);
+    .reduce((sum, school) => sum + getPlanPrice(school.plan), 0);
 
   return {
     byPlan,
@@ -206,5 +206,13 @@ export function getSuperAdminPlanMetrics(schools) {
     mrrEstimate,
     paidSchools: schools.filter((school) => school.billing_status === 'active').length,
     trialSchools: schools.filter((school) => school.billing_status === 'trial').length,
+  };
+}
+
+export function getSuperAdminSchoolHealth(school) {
+  const issues = getSchoolHealthIssues(school);
+  return {
+    issues,
+    isAtRisk: issues.length > 0,
   };
 }
