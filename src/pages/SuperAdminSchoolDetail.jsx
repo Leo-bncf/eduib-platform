@@ -27,7 +27,7 @@ import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 export default function SuperAdminSchoolDetail() {
   const navigate = useNavigate();
   const { schoolId } = useParams();
-  const { currentUser, isChecking } = useSuperAdminAccess(navigate, ['super_admin']);
+  const { currentUser, isChecking } = useSuperAdminAccess(navigate, ['super_admin', 'admin']);
 
   const [loading, setLoading] = useState(true);
   const [school, setSchool] = useState(null);
