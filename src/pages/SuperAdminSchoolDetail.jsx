@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import EditSchoolDialog from '@/components/admin/EditSchoolDialog';
 import ManageBillingDialog from '@/components/admin/ManageBillingDialog';
+import AddSchoolAdminDialog from '@/components/admin/super-admin/AddSchoolAdminDialog';
 import SchoolOnboardingProgress from '@/components/admin/SchoolOnboardingProgress';
 import SchoolStatusBadge from '@/components/admin/SchoolStatusBadge';
 import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
@@ -35,6 +36,7 @@ export default function SuperAdminSchoolDetail() {
   const [members, setMembers] = useState([]);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [billingDialogOpen, setBillingDialogOpen] = useState(false);
+  const [addAdminDialogOpen, setAddAdminDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {
@@ -310,6 +312,11 @@ export default function SuperAdminSchoolDetail() {
                   Manage Billing
                 </Button>
 
+                <Button onClick={() => setAddAdminDialogOpen(true)} disabled={actionLoading} className="w-full justify-start text-xs md:text-sm" variant="outline">
+                  <Users className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
+                  Add School Admin
+                </Button>
+
                 {school.status === 'onboarding' && (
                   <Button onClick={handleActivateSchool} disabled={actionLoading} className="w-full justify-start text-xs md:text-sm" variant="outline">
                     {actionLoading && <Loader2 className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2 animate-spin" />}
@@ -367,6 +374,12 @@ export default function SuperAdminSchoolDetail() {
         onOpenChange={setBillingDialogOpen}
         school={school}
         onUpdated={reloadSchool}
+      />
+
+      <AddSchoolAdminDialog
+        open={addAdminDialogOpen}
+        onOpenChange={setAddAdminDialogOpen}
+        school={school}
       />
     </>
   );
