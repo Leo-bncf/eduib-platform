@@ -5,7 +5,38 @@ import {
   getSuperAdminPlatformMetrics,
   useSuperAdminSchoolsQuery,
 } from '@/components/hooks/useSuperAdminData';
-...
+import { Button } from '@/components/ui/button';
+import {
+  AlertTriangle,
+  ArrowRight,
+  Building2,
+  CheckCircle,
+  ChevronRight,
+  DollarSign,
+  Plus,
+} from 'lucide-react';
+import CreateSchoolDialog from '@/components/admin/CreateSchoolDialog';
+import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
+import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
+import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
+
+const statusConfig = {
+  active: { label: 'Active', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
+  onboarding: { label: 'Onboarding', color: 'bg-blue-100 text-blue-700 border-blue-200' },
+  suspended: { label: 'Suspended', color: 'bg-red-100 text-red-700 border-red-200' },
+  cancelled: { label: 'Cancelled', color: 'bg-slate-100 text-slate-600 border-slate-200' },
+};
+
+const billingConfig = {
+  trial: { label: 'Trial', color: 'bg-amber-100 text-amber-700' },
+  active: { label: 'Paid', color: 'bg-emerald-100 text-emerald-700' },
+  past_due: { label: 'Past Due', color: 'bg-red-100 text-red-700' },
+  incomplete: { label: 'Incomplete', color: 'bg-orange-100 text-orange-700' },
+  canceled: { label: 'Canceled', color: 'bg-slate-100 text-slate-600' },
+};
+
+export default function SuperAdminDashboard() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);
   const { data: schools = [], isLoading, refetch } = useSuperAdminSchoolsQuery({ enabled: !!currentUser });

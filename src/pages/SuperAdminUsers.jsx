@@ -1,7 +1,25 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-...
+import { Button } from '@/components/ui/button';
+import { Search, Users } from 'lucide-react';
+import ManageUserDialog from '@/components/admin/ManageUserDialog';
+import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
+import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
+import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 import { useSuperAdminUsersQuery } from '@/components/hooks/useSuperAdminData';
+
+const roleColors = {
+  super_admin: 'bg-red-900/50 text-red-300 border-red-800',
+  school_admin: 'bg-purple-900/50 text-purple-300 border-purple-800',
+  ib_coordinator: 'bg-blue-900/50 text-blue-300 border-blue-800',
+  teacher: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
+  student: 'bg-indigo-900/50 text-indigo-300 border-indigo-800',
+  parent: 'bg-amber-900/50 text-amber-300 border-amber-800',
+  user: 'bg-slate-700/50 text-slate-400 border-slate-600',
+};
+
+const ROLES = ['all', 'super_admin', 'school_admin', 'ib_coordinator', 'teacher', 'student', 'parent', 'user'];
 
 export default function SuperAdminUsers() {
   const navigate = useNavigate();

@@ -1,11 +1,28 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-...
+import {
+  DollarSign,
+  TrendingUp,
+  Zap,
+} from 'lucide-react';
+import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
+import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
+import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 import {
   getSuperAdminPlanMetrics,
   useSuperAdminSchoolsQuery,
 } from '@/components/hooks/useSuperAdminData';
-...
+
+const billingStatusColors = {
+  active: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
+  trial: 'bg-amber-900/50 text-amber-300 border-amber-800',
+  past_due: 'bg-red-900/50 text-red-300 border-red-800',
+  canceled: 'bg-slate-700/50 text-slate-400 border-slate-600',
+  incomplete: 'bg-orange-900/50 text-orange-300 border-orange-800',
+  none: 'bg-slate-700/50 text-slate-400 border-slate-600',
+};
+
 export default function SuperAdminPlans() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);

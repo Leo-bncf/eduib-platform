@@ -1,7 +1,33 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-...
+import { Button } from '@/components/ui/button';
+import { ChevronRight, Edit2, Plus, School, Search } from 'lucide-react';
+import CreateSchoolDialog from '@/components/admin/CreateSchoolDialog';
+import SchoolOnboardingProgress from '@/components/admin/SchoolOnboardingProgress';
+import SchoolQuickEdit from '@/components/admin/SchoolQuickEdit';
+import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
+import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
+import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 import { useSuperAdminSchoolsQuery } from '@/components/hooks/useSuperAdminData';
+
+const statusConfig = {
+  active: { label: 'Active', color: 'bg-emerald-900/50 text-emerald-300 border-emerald-800' },
+  onboarding: { label: 'Onboarding', color: 'bg-blue-900/50 text-blue-300 border-blue-800' },
+  suspended: { label: 'Suspended', color: 'bg-red-900/50 text-red-300 border-red-800' },
+  cancelled: { label: 'Cancelled', color: 'bg-slate-700/50 text-slate-400 border-slate-600' },
+};
+
+const billingConfig = {
+  trial: { label: 'Trial', color: 'bg-amber-900/50 text-amber-300 border-amber-800' },
+  active: { label: 'Paid', color: 'bg-emerald-900/50 text-emerald-300 border-emerald-800' },
+  past_due: { label: 'Past Due', color: 'bg-red-900/50 text-red-300 border-red-800' },
+  incomplete: { label: 'Incomplete', color: 'bg-orange-900/50 text-orange-300 border-orange-800' },
+  canceled: { label: 'Canceled', color: 'bg-slate-700/50 text-slate-400 border-slate-600' },
+};
+
+const STATUS_FILTERS = ['all', 'active', 'onboarding', 'suspended'];
+const BILLING_FILTERS = ['all', 'trial', 'active', 'past_due'];
 
 export default function SuperAdminSchools() {
   const navigate = useNavigate();

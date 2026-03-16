@@ -1,11 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-...
+import {
+  AlertCircle,
+  AlertTriangle,
+  Info,
+  Search,
+  Shield,
+} from 'lucide-react';
+import { format } from 'date-fns';
+import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
+import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
+import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 import {
   useSuperAdminAuditLogsQuery,
   useSuperAdminSchoolsQuery,
 } from '@/components/hooks/useSuperAdminData';
-...
+
+const levelColors = {
+  info: 'bg-blue-900/50 text-blue-300 border-blue-800',
+  warning: 'bg-amber-900/50 text-amber-300 border-amber-800',
+  critical: 'bg-red-900/50 text-red-300 border-red-800',
+};
+
+const levelIcons = { info: Info, warning: AlertTriangle, critical: AlertCircle };
+
 export default function SuperAdminAuditLogs() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);

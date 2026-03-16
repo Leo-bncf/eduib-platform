@@ -1,16 +1,41 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-...
+import {
+  AlertTriangle,
+  Building2,
+  DollarSign,
+  Search,
+  TrendingUp,
+} from 'lucide-react';
+import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
+import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
+import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
+import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 import {
   getSuperAdminBillingMetrics,
+  SUPER_ADMIN_PLAN_PRICES,
   useSuperAdminSchoolsQuery,
 } from '@/components/hooks/useSuperAdminData';
-...
+
+const billingColors = {
+  trial: 'bg-amber-900/50 text-amber-300 border-amber-800',
+  active: 'bg-emerald-900/50 text-emerald-300 border-emerald-800',
+  past_due: 'bg-red-900/50 text-red-300 border-red-800',
+  incomplete: 'bg-orange-900/50 text-orange-300 border-orange-800',
+  canceled: 'bg-slate-700/50 text-slate-400 border-slate-600',
+  unpaid: 'bg-red-900/50 text-red-300 border-red-800',
+};
+
+const planColors = {
+  starter: 'bg-blue-900/50 text-blue-300 border-blue-800',
+  professional: 'bg-indigo-900/50 text-indigo-300 border-indigo-800',
+  enterprise: 'bg-violet-900/50 text-violet-300 border-violet-800',
+};
+
 export default function SuperAdminBilling() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);
   const [search, setSearch] = useState('');
-
   const { data: schools = [], isLoading } = useSuperAdminSchoolsQuery({ enabled: !!currentUser });
 
   if (isChecking || isLoading) {
@@ -99,7 +124,7 @@ export default function SuperAdminBilling() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filtered.map((school) => {
-                const mrr = planPrices[school.plan] || 99;
+                const mrr = SUPER_ADMIN_PLAN_PRICES[school.plan] || SUPER_ADMIN_PLAN_PRICES.starter;
 
                 return (
                   <tr
