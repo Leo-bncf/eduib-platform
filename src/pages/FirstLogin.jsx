@@ -30,6 +30,37 @@ export default function FirstLogin() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
+  const ensureSchoolMembership = async (currentUser, state) => {
+    if (!state?.school_id || !state?.role) return;
+
+    const memberships = await base44.entities.SchoolMembership.filter({
+      user_id: currentUser.id,
+      school_id: state.school_id,
+    });
+
+    if (memberships.length > 0) {
+      await base44.entities.SchoolMembership.update(memberships[0].id, {
+        user_email: currentUser.email,
+        user_name: currentUser.full_name,
+        role: state.role,
+        status: 'active',
+      });
+    } else {
+      await base44.entities.SchoolMembership.create({
+        user_id: currentUser.id,
+        user_email: currentUser.email,
+        user_name: currentUser.full_name,
+        school_id: state.school_id,
+        role: state.role,
+        status: 'active',
+      });
+    }
+
+    if (currentUser.active_school_id !== state.school_id) {
+      await base44.auth.updateMe({ active_school_id: state.school_id });
+    }
+  };
+
   useEffect(() => {
     const initializeFirstLogin = async () => {
       try {
@@ -49,6 +80,7 @@ export default function FirstLogin() {
 
         if (states.length > 0) {
           setAccountState(states[0]);
+          await ensureSchoolMembership(currentUser, states[0]);
           
           // Determine next step based on account state
           if (!states[0].password_set_at && states[0].account_status !== 'active') {

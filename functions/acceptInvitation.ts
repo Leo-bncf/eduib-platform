@@ -76,6 +76,33 @@ Deno.serve(async (req) => {
       });
     }
 
+    const existingMemberships = await base44.entities.SchoolMembership.filter({
+      user_id: user.id,
+      school_id: invitation.school_id,
+    });
+
+    if (existingMemberships.length > 0) {
+      await base44.entities.SchoolMembership.update(existingMemberships[0].id, {
+        user_email: user.email,
+        user_name: user.full_name,
+        role: invitation.role,
+        status: 'active',
+      });
+    } else {
+      await base44.entities.SchoolMembership.create({
+        user_id: user.id,
+        user_email: user.email,
+        user_name: user.full_name,
+        school_id: invitation.school_id,
+        role: invitation.role,
+        status: 'active',
+      });
+    }
+
+    await base44.auth.updateMe({
+      active_school_id: invitation.school_id,
+    });
+
     console.log(`User ${user.id} accepted invitation for school ${invitation.school_id}`);
 
     return Response.json({
