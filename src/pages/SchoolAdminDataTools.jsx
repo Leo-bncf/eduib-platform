@@ -4,7 +4,7 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import {
   LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
-  FileText, CreditCard, Settings, Download, ShieldCheck, Shield
+  FileText, CreditCard, Settings, Database, Download, ShieldCheck, Shield
 } from 'lucide-react';
 import DataExportImport from '@/components/data-tools/DataExportImport';
 import DataIntegrityChecks from '@/components/data-tools/DataIntegrityChecks';
