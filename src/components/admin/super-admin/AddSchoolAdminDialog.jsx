@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { AlertCircle, CheckCircle2, Loader2, Mail, UserPlus } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Copy, Loader2, Mail, UserPlus } from 'lucide-react';
 
 const EMPTY_FORM = {
   email: '',
@@ -25,6 +26,7 @@ export default function AddSchoolAdminDialog({ open, onOpenChange, school }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [inviteUrl, setInviteUrl] = useState('');
 
   useEffect(() => {
     if (!open) return;
@@ -32,6 +34,7 @@ export default function AddSchoolAdminDialog({ open, onOpenChange, school }) {
     setLoading(false);
     setError('');
     setSuccess('');
+    setInviteUrl('');
   }, [open, school?.id]);
 
   const handleSubmit = async (e) => {
@@ -91,27 +94,40 @@ export default function AddSchoolAdminDialog({ open, onOpenChange, school }) {
 
     const inviteUrl = `${window.location.origin}?page=AcceptInvitation&token=${invitationToken}`;
 
-    await base44.integrations.Core.SendEmail({
-      to: normalizedEmail,
-      from_name: school.name,
-      subject: `You're invited to join ${school.name} as a School Admin`,
-      body: `
-        <h2>You're invited to join ${school.name}</h2>
-        <p>You've been invited to join <strong>${school.name}</strong> as an additional <strong>School Admin</strong>.</p>
-        ${form.custom_message ? `<p><em>"${form.custom_message}"</em></p>` : ''}
-        <p>Click below to accept your invitation:</p>
-        <p><a href="${inviteUrl}" style="display:inline-block;padding:12px 24px;background:#4F46E5;color:white;text-decoration:none;border-radius:8px;font-weight:600;">Accept Invitation</a></p>
-        <p>Or copy this link: ${inviteUrl}</p>
-        <p style="color:#666;font-size:14px;">This invitation expires in 7 days.</p>
-      `,
-    });
+    let emailSent = true;
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: normalizedEmail,
+        from_name: school.name,
+        subject: `You're invited to join ${school.name} as a School Admin`,
+        body: `
+          <h2>You're invited to join ${school.name}</h2>
+          <p>You've been invited to join <strong>${school.name}</strong> as an additional <strong>School Admin</strong>.</p>
+          ${form.custom_message ? `<p><em>"${form.custom_message}"</em></p>` : ''}
+          <p>Click below to accept your invitation:</p>
+          <p><a href="${inviteUrl}" style="display:inline-block;padding:12px 24px;background:#4F46E5;color:white;text-decoration:none;border-radius:8px;font-weight:600;">Accept Invitation</a></p>
+          <p>Or copy this link: ${inviteUrl}</p>
+          <p style="color:#666;font-size:14px;">This invitation expires in 7 days.</p>
+        `,
+      });
+    } catch (sendError) {
+      console.error('Error sending school admin invitation email:', sendError);
+      emailSent = false;
+    }
 
-    setSuccess('School admin invitation sent successfully.');
+    setInviteUrl(inviteUrl);
+    setSuccess(
+      emailSent
+        ? 'School admin invitation sent successfully.'
+        : 'Invitation created successfully. Email could not be sent here, so copy the invite link below.'
+    );
     setLoading(false);
 
-    setTimeout(() => {
-      onOpenChange(false);
-    }, 900);
+    if (emailSent) {
+      setTimeout(() => {
+        onOpenChange(false);
+      }, 900);
+    }
   };
 
   return (
@@ -122,6 +138,9 @@ export default function AddSchoolAdminDialog({ open, onOpenChange, school }) {
             <UserPlus className="w-5 h-5" />
             Add School Admin
           </DialogTitle>
+          <DialogDescription>
+            Invite an additional school admin for this school.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -135,7 +154,23 @@ export default function AddSchoolAdminDialog({ open, onOpenChange, school }) {
           {success && (
             <Alert className="bg-green-50 border-green-200">
               <CheckCircle2 className="w-4 h-4 text-green-600" />
-              <AlertDescription className="text-green-800 ml-3 text-sm">{success}</AlertDescription>
+              <AlertDescription className="text-green-800 ml-3 text-sm">
+                <div className="space-y-3">
+                  <p>{success}</p>
+                  {inviteUrl && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigator.clipboard.writeText(inviteUrl)}
+                      className="bg-white"
+                    >
+                      <Copy className="w-3.5 h-3.5 mr-2" />
+                      Copy Invite Link
+                    </Button>
+                  )}
+                </div>
+              </AlertDescription>
             </Alert>
           )}
 
