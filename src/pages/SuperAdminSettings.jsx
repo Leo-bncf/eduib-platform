@@ -218,7 +218,8 @@ export default function SuperAdminSettings() {
         </Alert>
       )}
 
-      {activeTab === 'config' && <>
+      {activeTab === 'config' && (
+        <div className="space-y-6">
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
         <ConfigSectionCard
           title="Global Settings"
@@ -382,9 +383,10 @@ export default function SuperAdminSettings() {
           Use this for staged rollouts, pilot groups, and temporary school-specific experiments.
         </div>
       </ConfigSectionCard>
-      </>}
+        </div>
+      )}
 
-      {activeTab === 'operational' && ( (
+      {activeTab === 'operational' && (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <ConfigSectionCard
             title="Integration Management"
