@@ -85,6 +85,14 @@ const AuthenticatedApp = () => {
           </LayoutWrapper>
         }
       />
+      <Route
+        path="/SchoolAdminDataTools"
+        element={
+          <LayoutWrapper currentPageName="SchoolAdminDataTools">
+            <SchoolAdminDataTools />
+          </LayoutWrapper>
+        }
+      />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
