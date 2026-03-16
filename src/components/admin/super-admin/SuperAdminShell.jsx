@@ -5,6 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import {
   Activity,
+  BarChart3,
   BookOpen,
   Building2,
   CreditCard,
@@ -18,6 +19,7 @@ const navItems = [
   { key: 'schools', label: 'Schools', page: 'SuperAdminSchools', icon: School },
   { key: 'users', label: 'Users', page: 'SuperAdminUsers', icon: Users },
   { key: 'billing', label: 'Billing', page: 'SuperAdminBilling', icon: CreditCard },
+  { key: 'analytics', label: 'Analytics', page: 'SuperAdminAnalytics', icon: BarChart3 },
   { key: 'plans', label: 'Plans', page: 'SuperAdminPlans', icon: BookOpen },
   { key: 'audit-logs', label: 'Audit Logs', page: 'SuperAdminAuditLogs', icon: FileText },
 ];

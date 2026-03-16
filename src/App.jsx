@@ -4,6 +4,7 @@ import { queryClientInstance } from '@/lib/query-client'
 import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
+import SuperAdminAnalytics from './pages/SuperAdminAnalytics';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -58,6 +59,14 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
+      <Route
+        path="/SuperAdminAnalytics"
+        element={
+          <LayoutWrapper currentPageName="SuperAdminAnalytics">
+            <SuperAdminAnalytics />
+          </LayoutWrapper>
+        }
+      />
       <Route
         path="/SuperAdminSchoolDetail/:schoolId"
         element={

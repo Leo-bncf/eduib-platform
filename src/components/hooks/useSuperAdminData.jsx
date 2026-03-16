@@ -142,6 +142,49 @@ export function useSuperAdminSchoolDetailQuery(schoolId, options = {}) {
   });
 }
 
+export function useSuperAdminAnalyticsQuery(options = {}) {
+  return useQuery({
+    queryKey: ['super-admin', 'analytics'],
+    queryFn: async () => {
+      const [
+        schools,
+        memberships,
+        auditLogs,
+        classes,
+        subjects,
+        messages,
+        attendanceRecords,
+        behaviorRecords,
+        casExperiences,
+      ] = await Promise.all([
+        fetchSchools(),
+        base44.entities.SchoolMembership.list('-created_date', ENTITY_LIMIT),
+        base44.entities.AuditLog.list('-created_date', ENTITY_LIMIT),
+        base44.entities.Class.list('-created_date', ENTITY_LIMIT),
+        base44.entities.Subject.list('-created_date', ENTITY_LIMIT),
+        base44.entities.Message.list('-created_date', ENTITY_LIMIT),
+        base44.entities.AttendanceRecord.list('-created_date', ENTITY_LIMIT),
+        base44.entities.BehaviorRecord.list('-created_date', ENTITY_LIMIT),
+        base44.entities.CASExperience.list('-created_date', ENTITY_LIMIT),
+      ]);
+
+      return {
+        schools,
+        memberships,
+        auditLogs,
+        classes,
+        subjects,
+        messages,
+        attendanceRecords,
+        behaviorRecords,
+        casExperiences,
+      };
+    },
+    staleTime: 10 * 60 * 1000,
+    ...options,
+  });
+}
+
 export function usePaginatedItems(items, pageSize, page) {
   return useMemo(() => {
     const totalItems = items.length;
