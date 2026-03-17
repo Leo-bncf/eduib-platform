@@ -98,6 +98,9 @@ export default function SchoolAdminReports() {
                 <TabsTrigger value="exports" className="gap-1.5 text-sm">
                   <FileSpreadsheet className="w-3.5 h-3.5" /> CSV Exports
                 </TabsTrigger>
+                <TabsTrigger value="class-reports" className="gap-1.5 text-sm">
+                  <Users className="w-3.5 h-3.5" /> Class Reports
+                </TabsTrigger>
                 <TabsTrigger value="pdf" className="gap-1.5 text-sm">
                   <Printer className="w-3.5 h-3.5" /> PDF Reports
                 </TabsTrigger>
