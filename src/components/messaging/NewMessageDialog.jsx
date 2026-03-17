@@ -30,8 +30,8 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
     enabled: userRole === 'teacher' && !!schoolId && !!userId,
   });
 
-  const { data: classMembers = [] } = useQuery({
-    queryKey: ['class-members-messaging', form.recipient_type],
+  const { data: students = [] } = useQuery({
+    queryKey: ['class-students-messaging', form.recipient_type],
     queryFn: async () => {
       const members = await base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' });
       const cls = teacherClasses.find(c => c.id === form.recipient_type.replace('class_', ''));
@@ -40,40 +40,36 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
     enabled: form.recipient_type?.startsWith('class_') && teacherClasses.length > 0,
   });
 
-  // Parents linked to students in selected class
-  const { data: parentLinks = [] } = useQuery({
-    queryKey: ['class-parents-messaging', form.recipient_type],
-    queryFn: async () => {
-      const studentIds = classMembers.map(m => m.user_id);
-      if (studentIds.length === 0) return [];
-      const links = await base44.entities.ParentStudentLink.filter({ school_id: schoolId });
-      const parentUserIds = [...new Set(links.filter(l => studentIds.includes(l.student_id)).map(l => l.parent_id))];
-      if (parentUserIds.length === 0) return [];
-      const allMembers = await base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' });
-      return allMembers.filter(m => parentUserIds.includes(m.user_id));
-    },
-    enabled: form.recipient_type?.startsWith('class_') && classMembers.length > 0 && userRole === 'teacher',
-  });
-
-  const students = classMembers;
-
   const { data: studentClasses = [] } = useQuery({
     queryKey: ['student-classes-messaging', schoolId, userId],
     queryFn: async () => {
       const all = await base44.entities.Class.filter({ school_id: schoolId, status: 'active' });
       return all.filter(c => c.student_ids?.includes(userId));
     },
-    enabled: userRole === 'student' && !!schoolId && !!userId,
+    enabled: (userRole === 'student' || userRole === 'parent') && !!schoolId && !!userId,
+  });
+
+  // For parents: load children's classes via ParentStudentLink
+  const { data: parentChildClasses = [] } = useQuery({
+    queryKey: ['parent-child-classes-messaging', schoolId, userId],
+    queryFn: async () => {
+      const links = await base44.entities.ParentStudentLink.filter({ parent_id: userId });
+      const childIds = links.map(l => l.student_id);
+      const all = await base44.entities.Class.filter({ school_id: schoolId, status: 'active' });
+      return all.filter(c => childIds.some(id => c.student_ids?.includes(id)));
+    },
+    enabled: userRole === 'parent' && !!schoolId && !!userId,
   });
 
   const { data: teachers = [] } = useQuery({
     queryKey: ['class-teachers-messaging', form.recipient_type],
     queryFn: async () => {
       const members = await base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' });
-      const cls = studentClasses.find(c => c.id === form.recipient_type.replace('class_', ''));
+      const allClasses = userRole === 'parent' ? parentChildClasses : studentClasses;
+      const cls = allClasses.find(c => c.id === form.recipient_type.replace('class_', ''));
       return members.filter(m => cls?.teacher_ids?.includes(m.user_id));
     },
-    enabled: form.recipient_type?.startsWith('class_') && studentClasses.length > 0,
+    enabled: form.recipient_type?.startsWith('class_') && (studentClasses.length > 0 || parentChildClasses.length > 0),
   });
 
   const sendMutation = useMutation({
@@ -169,29 +165,16 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
             {form.recipient_type && (
               <div>
                 <Label className="text-sm font-semibold">
-                  {userRole === 'teacher' ? 'Select Recipient' : 'Select Teacher'}
+                  {userRole === 'teacher' ? 'Select Student' : 'Select Teacher'}
                 </Label>
                 <Select value={form.recipient_id} onValueChange={v => setForm({ ...form, recipient_id: v })}>
                   <SelectTrigger className="mt-1.5">
                     <SelectValue placeholder="Choose recipient..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {userRole === 'teacher' && students.length > 0 && (
-                      <>
-                        <div className="px-2 py-1 text-xs text-slate-400 font-semibold uppercase">Students</div>
-                        {students.map(s => (
-                          <SelectItem key={s.user_id} value={s.user_id}>{s.user_name || s.user_email}</SelectItem>
-                        ))}
-                      </>
-                    )}
-                    {userRole === 'teacher' && parentLinks.length > 0 && (
-                      <>
-                        <div className="px-2 py-1 text-xs text-slate-400 font-semibold uppercase mt-1">Parents / Guardians</div>
-                        {parentLinks.map(p => (
-                          <SelectItem key={p.user_id} value={p.user_id}>{p.user_name || p.user_email}</SelectItem>
-                        ))}
-                      </>
-                    )}
+                    {userRole === 'teacher' && students.map(s => (
+                      <SelectItem key={s.user_id} value={s.user_id}>{s.user_name || s.user_email}</SelectItem>
+                    ))}
                     {userRole === 'student' && teachers.map(t => (
                       <SelectItem key={t.user_id} value={t.user_id}>{t.user_name || t.user_email}</SelectItem>
                     ))}
