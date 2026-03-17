@@ -63,17 +63,18 @@ export default function SchoolAdminDashboard() {
     return <LoadingStateBase />;
   }
 
-  const { school } = data;
+  const school = data?.school;
   const today = format(new Date(), 'EEEE, d MMMM yyyy');
   const statusKey = school?.status || 'onboarding';
   const sm = statusMeta[statusKey] || statusMeta.onboarding;
 
-  const alertCount =
+  const alertCount = data ? (
     (data.classesWithoutTeachers.length > 0 ? 1 : 0) +
     (data.studentsWithoutClasses.length > 0 ? 1 : 0) +
     ((data.failedSyncs?.length ?? 0) > 0 ? 1 : 0) +
     (['past_due', 'unpaid', 'incomplete'].includes(school?.billing_status) ? 1 : 0) +
-    (data.setupDone < data.setupTotal ? 1 : 0);
+    (data.setupDone < data.setupTotal ? 1 : 0)
+  ) : 0;
 
   return (
     <div className="min-h-screen bg-slate-50">
