@@ -10,14 +10,14 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, 
-  MessageSquare, Star, Plus, Loader2, Filter
+  MessageSquare, Star, Plus, Loader2, Filter, CalendarDays, ClipboardList
 } from 'lucide-react';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
   { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
-  { label: 'Timetable', page: 'StudentTimetable', icon: Star },
-  { label: 'Attendance', page: 'StudentAttendance', icon: Star },
+  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
+  { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
   { label: 'IB Core', page: 'StudentIBCore', icon: Star },
   { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
 ];
