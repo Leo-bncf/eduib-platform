@@ -1,74 +1,121 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { GraduationCap, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { base44 } from '@/api/base44Client';
+import { GraduationCap, Menu, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function PublicNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const handler = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handler);
+    return () => window.removeEventListener('scroll', handler);
   }, []);
 
+  const handleSignIn = async () => {
+    const isAuthed = await base44.auth.isAuthenticated();
+    if (isAuthed) {
+      navigate(createPageUrl('AppHome'));
+    } else {
+      base44.auth.redirectToLogin(createPageUrl('AppHome'));
+    }
+  };
+
+  const navLinks = [
+    { label: 'Features', page: 'Features' },
+    { label: 'Pricing', page: 'Plans' },
+    { label: 'Security', page: 'Security' },
+  ];
+
   return (
-    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
-      <nav className={`w-full max-w-5xl rounded-full border border-white/30 bg-white/40 backdrop-blur-md shadow-lg px-5 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'bg-white/60 shadow-xl' : ''}`}>
+    <nav className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl transition-all duration-300 rounded-full border ${
+      scrolled
+        ? 'bg-white/80 backdrop-blur-md border-slate-200 shadow-lg'
+        : 'bg-white/40 backdrop-blur-md border-white/30'
+    }`}>
+      <div className="px-4 sm:px-6 h-14 flex items-center justify-between">
         {/* Logo */}
         <Link to={createPageUrl('Landing')} className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+          <div className="w-7 h-7 bg-blue-50 rounded-md flex items-center justify-center flex-shrink-0">
             <GraduationCap className="w-4 h-4 text-blue-600" />
           </div>
           <span className="text-base font-bold tracking-tight text-slate-900">
-            Atlas<span className="text-blue-600 font-normal">IB</span>
+            Scho<span className="text-blue-600 font-normal">lr</span>
           </span>
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-1">
-          <Link to={createPageUrl('Features')} className="px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-white/50 rounded-full transition-colors font-medium">Features</Link>
-          <Link to={createPageUrl('Pricing')} className="px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-white/50 rounded-full transition-colors font-medium">Pricing</Link>
-          <Link to={createPageUrl('Security')} className="px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-white/50 rounded-full transition-colors font-medium">Security</Link>
+        <div className="hidden md:flex items-center gap-6">
+          {navLinks.map((link) => (
+            <Link
+              key={link.page}
+              to={createPageUrl(link.page)}
+              className={`text-sm font-medium transition-colors ${
+                location.pathname.includes(link.page)
+                  ? 'text-blue-600'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-3">
           <Link to={createPageUrl('Demo')}>
-            <Button variant="outline" size="sm" className="rounded-full border-slate-200/80 text-slate-700 hover:bg-white/50 text-xs font-medium">
+            <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 text-sm font-medium">
               Contact Sales
             </Button>
           </Link>
-          <Link to={createPageUrl('AppHome')}>
-            <Button size="sm" className="rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium">
-              Sign In
-            </Button>
-          </Link>
+          <Button
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-5 text-sm font-medium"
+            onClick={handleSignIn}
+          >
+            Sign In
+          </Button>
         </div>
 
-        {/* Mobile toggle */}
-        <button className="md:hidden p-1.5 rounded-full text-slate-600 hover:bg-white/50" onClick={() => setMobileOpen(!mobileOpen)}>
+        {/* Mobile Menu Toggle */}
+        <button
+          className="md:hidden p-2 text-slate-600 hover:text-slate-900"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
-      </nav>
+      </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="absolute top-16 left-4 right-4 bg-white/80 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl p-4 flex flex-col gap-2">
-          <Link to={createPageUrl('Features')} onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm text-slate-700 hover:bg-white/50 rounded-full font-medium">Features</Link>
-          <Link to={createPageUrl('Pricing')} onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm text-slate-700 hover:bg-white/50 rounded-full font-medium">Pricing</Link>
-          <Link to={createPageUrl('Security')} onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm text-slate-700 hover:bg-white/50 rounded-full font-medium">Security</Link>
-          <hr className="border-slate-100" />
+        <div className="md:hidden px-4 pb-4 pt-2 border-t border-slate-100 space-y-1">
+          {navLinks.map((link) => (
+            <Link
+              key={link.page}
+              to={createPageUrl(link.page)}
+              onClick={() => setMobileOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50"
+            >
+              {link.label}
+            </Link>
+          ))}
           <Link to={createPageUrl('Demo')} onClick={() => setMobileOpen(false)}>
-            <Button variant="outline" size="sm" className="w-full rounded-full">Contact Sales</Button>
+            <div className="px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50">Contact Sales</div>
           </Link>
-          <Link to={createPageUrl('AppHome')} onClick={() => setMobileOpen(false)}>
-            <Button size="sm" className="w-full rounded-full bg-blue-600 hover:bg-blue-700 text-white">Sign In</Button>
-          </Link>
+          <Button
+            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium"
+            onClick={handleSignIn}
+          >
+            Sign In
+          </Button>
         </div>
       )}
-    </div>
+    </nav>
   );
 }
