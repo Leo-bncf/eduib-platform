@@ -1,82 +1,76 @@
 import React, { useEffect, useRef } from 'react';
 
-const orbs = [
-  { cx: '15%', cy: '20%', r: 320, color: '#1e3a8a', delay: 0 },
-  { cx: '80%', cy: '15%', r: 280, color: '#1d4ed8', delay: 0.3 },
-  { cx: '60%', cy: '60%', r: 360, color: '#1e3a8a', delay: 0.6 },
-  { cx: '10%', cy: '75%', r: 240, color: '#2563eb', delay: 0.2 },
-  { cx: '85%', cy: '80%', r: 300, color: '#1e40af', delay: 0.5 },
-];
-
 export default function AnimatedBackground() {
-  const containerRef = useRef(null);
+  const bloom1Ref = useRef(null);
+  const bloom2Ref = useRef(null);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (!containerRef.current) return;
-      const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
-      const xRatio = (clientX / innerWidth - 0.5) * 2;
-      const yRatio = (clientY / innerHeight - 0.5) * 2;
+    let frame;
+    let t = 0;
 
-      const orbEls = containerRef.current.querySelectorAll('.parallax-orb');
-      orbEls.forEach((orb, i) => {
-        const strength = (i % 3 + 1) * 12;
-        orb.style.transform = `translate(${xRatio * strength}px, ${yRatio * strength}px)`;
-      });
+    const animate = () => {
+      t += 0.005;
+      if (bloom1Ref.current) {
+        const scale = 1 + Math.sin(t) * 0.04;
+        bloom1Ref.current.style.transform = `scale(${scale})`;
+      }
+      if (bloom2Ref.current) {
+        const scale = 1 + Math.sin(t + 1.5) * 0.04;
+        bloom2Ref.current.style.transform = `scale(${scale})`;
+      }
+      frame = requestAnimationFrame(animate);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    animate();
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   return (
     <div
-      ref={containerRef}
-      className="fixed inset-0 overflow-hidden pointer-events-none"
+      className="fixed inset-0 pointer-events-none overflow-hidden"
       style={{ zIndex: 0 }}
       aria-hidden="true"
     >
-      {/* Base gradient */}
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #060e1e 0%, #0d1b3e 50%, #060e1e 100%)' }} />
+      {/* White base */}
+      <div className="absolute inset-0 bg-white" />
 
-      {/* Flowering orbs */}
-      {orbs.map((orb, i) => (
-        <div
-          key={i}
-          className="parallax-orb absolute rounded-full"
-          style={{
-            left: orb.cx,
-            top: orb.cy,
-            width: orb.r * 2,
-            height: orb.r * 2,
-            transform: 'translate(-50%, -50%)',
-            background: `radial-gradient(circle, ${orb.color}55 0%, ${orb.color}22 50%, transparent 75%)`,
-            filter: 'blur(40px)',
-            animation: `flowerIn 1.4s ease-out ${orb.delay}s both, orbFloat ${7 + i * 1.5}s ease-in-out ${orb.delay}s infinite alternate`,
-            transition: 'transform 0.15s ease-out',
-          }}
-        />
-      ))}
-
-      {/* Subtle grid */}
+      {/* Yellow/gold bloom — top left */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        ref={bloom1Ref}
         style={{
-          backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
+          position: 'absolute',
+          top: '-10%',
+          left: '-5%',
+          width: '55%',
+          height: '80%',
+          background: 'radial-gradient(ellipse at center, rgba(251, 211, 100, 0.55) 0%, rgba(251, 211, 100, 0.2) 45%, transparent 75%)',
+          filter: 'blur(60px)',
+          animation: 'bloomIn 1.6s ease-out both',
+          transformOrigin: 'center center',
+        }}
+      />
+
+      {/* Pink/lavender bloom — top right / center */}
+      <div
+        ref={bloom2Ref}
+        style={{
+          position: 'absolute',
+          top: '-15%',
+          right: '-10%',
+          width: '65%',
+          height: '90%',
+          background: 'radial-gradient(ellipse at center, rgba(216, 155, 210, 0.5) 0%, rgba(196, 130, 200, 0.2) 45%, transparent 72%)',
+          filter: 'blur(70px)',
+          animation: 'bloomIn 1.8s ease-out 0.2s both',
+          transformOrigin: 'center center',
         }}
       />
 
       <style>{`
-        @keyframes flowerIn {
-          0% { opacity: 0; transform: translate(-50%, -50%) scale(0.1); }
-          60% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-          100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        }
-        @keyframes orbFloat {
-          0% { transform: translate(-50%, -50%) translateY(0px); }
-          100% { transform: translate(-50%, -50%) translateY(-30px); }
+        @keyframes bloomIn {
+          0%   { opacity: 0; transform: scale(0.3); }
+          60%  { opacity: 1; transform: scale(1.08); }
+          100% { opacity: 1; transform: scale(1); }
         }
       `}</style>
     </div>
