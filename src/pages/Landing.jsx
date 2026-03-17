@@ -172,20 +172,20 @@ function RolesSection() {
 
 function CTASection() {
   return (
-    <section className="py-24 bg-[#060e1e]/90 backdrop-blur-sm">
+    <section className="py-24 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white/5 rounded-xl p-12 sm:p-16 text-center relative overflow-hidden border border-white/10">
+        <div className="bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-50 rounded-2xl p-12 sm:p-16 text-center relative overflow-hidden border border-slate-200">
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-white mb-4">Ready to modernize your institution?</h2>
-            <p className="text-lg text-blue-100/60 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to modernize your institution?</h2>
+            <p className="text-lg text-slate-500 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={createPageUrl('Demo')}>
-                <Button size="lg" className="bg-blue-500 hover:bg-blue-400 text-white rounded-md px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
+                <Button size="lg" className="bg-slate-900 hover:bg-slate-700 text-white rounded-full px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
                   Request Demonstration <ChevronRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
               <Link to={createPageUrl('Plans')}>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-md px-8 h-12 text-base font-medium">
+                <Button size="lg" variant="outline" className="border-slate-300 text-slate-800 hover:bg-slate-50 rounded-full px-8 h-12 text-base font-medium">
                   View Licensing
                 </Button>
               </Link>
