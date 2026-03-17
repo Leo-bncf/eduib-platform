@@ -75,16 +75,7 @@ export default function ParentDashboard() {
                 </TabsList>
 
                 <TabsContent value="overview">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-                    <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
-                      <h2 className="text-base md:text-lg font-bold text-slate-900 mb-4 uppercase tracking-wide">Recent Grades</h2>
-                      <ChildGradesOverview schoolId={schoolId} studentId={selectedChildId} />
-                    </div>
-                    <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
-                      <h2 className="text-base md:text-lg font-bold text-slate-900 mb-4 uppercase tracking-wide">Assignments</h2>
-                      <ChildAssignmentsOverview schoolId={schoolId} studentId={selectedChildId} />
-                    </div>
-                  </div>
+                  <ChildOverviewHub schoolId={schoolId} studentId={selectedChildId} />
                 </TabsContent>
 
                 <TabsContent value="grades">
