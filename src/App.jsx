@@ -78,6 +78,14 @@ const AuthenticatedApp = () => {
         }
       />
       <Route
+        path="/SuperAdminAutomation"
+        element={
+          <LayoutWrapper currentPageName="SuperAdminAutomation">
+            <SuperAdminAutomation />
+          </LayoutWrapper>
+        }
+      />
+      <Route
         path="/SuperAdminSchoolDetail/:schoolId"
         element={
           <LayoutWrapper currentPageName="SuperAdminSchoolDetail">
