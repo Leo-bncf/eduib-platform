@@ -232,6 +232,11 @@ export default function ClassLifecycleTab({ schoolId, classes, memberships, acad
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['school-classes', schoolId] }),
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Class.delete(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['school-classes', schoolId] }),
+  });
+
   const activeClasses   = classes.filter(c => c.status === 'active');
   const archivedClasses = classes.filter(c => c.status === 'archived');
 
