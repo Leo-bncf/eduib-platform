@@ -55,7 +55,7 @@ function HeroSection() {
              </Button>
              <Link to={createPageUrl('Demo')}>
                <Button size="lg" variant="outline" className="rounded-md px-8 h-12 text-base font-medium border-slate-200 hover:bg-slate-50 text-slate-700">
-                 Book a Consultation
+                 Contact Sales for a Free Demo
                </Button>
              </Link>
            </div>
