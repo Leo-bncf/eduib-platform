@@ -221,19 +221,28 @@ export default function SuperAdminSchools() {
                         </div>
 
                         <div className="flex items-center gap-2 flex-shrink-0">
-                          <button
-                            onClick={() => setEditingSchoolId(school.id)}
-                            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => navigate(`/SuperAdminSchoolDetail/${school.id}`)}
-                            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-                          >
-                            <ChevronRight className="w-5 h-5" />
-                          </button>
-                        </div>
+                           <button
+                             onClick={() => setEditingSchoolId(school.id)}
+                             className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                           >
+                             <Edit2 className="w-4 h-4" />
+                           </button>
+                           <button
+                             onClick={() => handleDeleteSchool(school)}
+                             disabled={deletingSchoolId === school.id}
+                             className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40"
+                           >
+                             {deletingSchoolId === school.id
+                               ? <Loader2 className="w-4 h-4 animate-spin" />
+                               : <Trash2 className="w-4 h-4" />}
+                           </button>
+                           <button
+                             onClick={() => navigate(`/SuperAdminSchoolDetail/${school.id}`)}
+                             className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                           >
+                             <ChevronRight className="w-5 h-5" />
+                           </button>
+                         </div>
                       </div>
                     )}
                   </div>
