@@ -95,7 +95,7 @@ function ProblemSection() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
           {problems.map((p, i) => (
-            <div key={i} className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div key={i} className="flex items-start gap-4 p-5 bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm">
               <span className="text-2xl">{p.icon}</span>
               <p className="text-sm text-slate-600 leading-relaxed">{p.text}</p>
             </div>
