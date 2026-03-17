@@ -5,10 +5,10 @@ import { useSchoolOperationsData } from '@/components/hooks/useSchoolOperationsD
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import {
-  LayoutDashboard, Users, BookOpen, Calendar, Clock,
-  FileText, CreditCard, Settings, Activity, ShieldCheck, Zap, CalendarDays, Sparkles,
+  Activity, ShieldCheck, Zap, Sparkles,
 } from 'lucide-react';
 import AppSidebar from '@/components/app/AppSidebar';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import LoadingStateBase from '@/components/common/LoadingStateBase';
 import SchoolHealthOverview from '@/components/dashboard/SchoolHealthOverview';
 import OperationalAlerts from '@/components/dashboard/OperationalAlerts';

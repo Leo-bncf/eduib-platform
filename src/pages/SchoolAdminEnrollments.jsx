@@ -5,10 +5,9 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
 import {
-  LayoutDashboard, Users, BookOpen, Calendar, Clock, GraduationCap,
-  Settings, FileText, Plus, Loader2, Search, CreditCard, ChevronDown,
-  Eye, Pencil, Trash2, MoreVertical
+  Plus, Loader2, Search, ChevronDown, Trash2
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';

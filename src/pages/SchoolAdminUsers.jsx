@@ -5,9 +5,9 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
 import {
-  LayoutDashboard, Users, BookOpen, Calendar, Clock, GraduationCap,
-  Settings, FileText, CreditCard, UserCheck, Mail, Upload, ShieldCheck
+  UserCheck, Mail, Upload, ShieldCheck
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import UserDirectoryTab    from '@/components/users/UserDirectoryTab';

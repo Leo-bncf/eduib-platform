@@ -4,10 +4,9 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
-  LayoutDashboard, Users, BookOpen, GraduationCap, Settings,
-  Calendar, Clock, FileText, CreditCard, CalendarDays,
-  BarChart2, Tag, PenLine, Download, ShieldCheck,
+  Calendar, BarChart2, Tag, PenLine, Download, ShieldCheck,
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 
 import AttendanceDashboard from '@/components/attendance-admin/AttendanceDashboard';
 import AttendanceCodeConfig from '@/components/attendance-admin/AttendanceCodeConfig';
