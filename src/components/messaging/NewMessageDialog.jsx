@@ -100,7 +100,7 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
   const quietHour = isQuietHour();
   const quietBlocked = quietHour && (policy?.quiet_hours?.block_send_during_quiet ?? false) && (policy?.quiet_hours?.applies_to_roles || []).includes(userRole);
 
-  const canSend = form.recipient_id && form.subject.trim() && form.body.trim() && !policyBlocked && !quietBlocked;
+  const canSubmit = form.recipient_id && form.subject.trim() && form.body.trim() && !policyBlocked && !quietBlocked;
 
   return (
     <>
@@ -199,7 +199,7 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
 
             <Button
               onClick={handleSend}
-              disabled={!canSend || sendMutation.isPending}
+              disabled={!canSubmit || sendMutation.isPending}
               className="w-full bg-indigo-600 hover:bg-indigo-700"
             >
               {sendMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
