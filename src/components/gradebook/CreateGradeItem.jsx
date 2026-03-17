@@ -8,9 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2, Plus } from 'lucide-react';
+import { useGradebookPolicy } from '@/hooks/useGradebookPolicy';
 
 export default function CreateGradeItem({ classData, assignments = [], onClose, trigger }) {
   const queryClient = useQueryClient();
+  const { policy } = useGradebookPolicy(classData?.school_id);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -18,8 +20,8 @@ export default function CreateGradeItem({ classData, assignments = [], onClose, 
     assignment_id: '',
     max_score: 100,
     description: '',
-    visible_to_student: false,
-    visible_to_parent: false,
+    visible_to_student: policy.default_visible_to_student ?? false,
+    visible_to_parent: policy.default_visible_to_parent ?? false,
     grading_method: 'points',
   });
 
