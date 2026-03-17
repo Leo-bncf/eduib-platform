@@ -39,7 +39,7 @@ export default function TeacherClasses() {
         <AppSidebar links={sidebarLinks} role="teacher" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         <main className="ml-64 p-8">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-8">
+            <div className="mb-6">
               <h1 className="text-2xl font-bold text-slate-900">My Classes</h1>
               <p className="text-sm text-slate-500 mt-1">Classes you're teaching</p>
             </div>
@@ -52,8 +52,25 @@ export default function TeacherClasses() {
                 <p className="text-slate-500">No classes assigned yet</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {classes.map((c, i) => (
+              <>
+                <div className="flex items-center gap-2 mb-6 flex-wrap">
+                  {[
+                    { key: 'active', label: 'Active', count: activeCount, color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+                    { key: 'archived', label: 'Archived', count: archivedCount, color: 'bg-slate-100 text-slate-500 border-slate-200' },
+                    { key: 'all', label: 'All', count: classes.length, color: 'bg-white text-slate-600 border-slate-200' },
+                  ].map(({ key, label, count, color }) => (
+                    <button
+                      key={key}
+                      onClick={() => setStatusFilter(key)}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${color} ${statusFilter === key ? 'ring-2 ring-indigo-400 ring-offset-1' : ''}`}
+                    >
+                      {label} <span className="font-bold">{count}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {filteredClasses.map((c, i) => (
                   <a key={c.id} href={createPageUrl('ClassWorkspace') + `?class_id=${c.id}`}>
                     <div className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
                       <div className={`h-2 ${colors[i % colors.length]}`} />
