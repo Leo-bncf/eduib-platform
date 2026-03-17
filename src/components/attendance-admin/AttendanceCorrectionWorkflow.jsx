@@ -134,6 +134,26 @@ export default function AttendanceCorrectionWorkflow({ schoolId }) {
           <label className="text-xs font-semibold text-slate-600 block mb-1">To</label>
           <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm" />
         </div>
+        <div>
+          <label className="text-xs font-semibold text-slate-600 block mb-1">Class</label>
+          <select value={filterClass} onChange={e => setFilterClass(e.target.value)} className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm bg-white">
+            <option value="all">All Classes</option>
+            {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="text-xs font-semibold text-slate-600 block mb-1">Status</label>
+          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm bg-white">
+            <option value="all">All Statuses</option>
+            <option value="present">Present</option>
+            <option value="absent">Absent</option>
+            <option value="late">Late</option>
+            <option value="excused">Excused</option>
+          </select>
+        </div>
+        {filtered.length > 0 && (
+          <span className="text-xs text-slate-500 self-end pb-2">{filtered.length} record{filtered.length !== 1 ? 's' : ''}</span>
+        )}
       </div>
 
       {/* Records Table */}
