@@ -24,6 +24,7 @@ import SchoolAdminMessagingPolicy from './pages/SchoolAdminMessagingPolicy';
 import SchoolAdminGovernance from './pages/SchoolAdminGovernance';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import { RLSProvider } from '@/components/security/RLSProvider';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -230,9 +231,11 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <AuthenticatedApp />
-        </Router>
+        <RLSProvider>
+          <Router>
+            <AuthenticatedApp />
+          </Router>
+        </RLSProvider>
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
