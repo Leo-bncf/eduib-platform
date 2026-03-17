@@ -57,8 +57,8 @@ export default function SuperAdminShell({ activeItem, currentUser, children }) {
         ) : null}
       </div>
 
-      <div className="lg:flex lg:min-h-[calc(100vh-73px)]">
-        <aside className="hidden lg:flex lg:w-56 bg-white border-r border-slate-200 p-4 flex-col gap-1 flex-shrink-0">
+      <div className="flex flex-1 overflow-hidden">
+        <aside className="hidden lg:flex lg:w-56 bg-white border-r border-slate-200 p-4 flex-col gap-1 flex-shrink-0 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeItem === item.key;
