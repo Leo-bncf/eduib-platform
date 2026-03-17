@@ -6,13 +6,14 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import {
   LayoutDashboard, Users, BookOpen, Calendar, Clock,
-  FileText, CreditCard, Settings, Activity, ShieldCheck, Zap, CalendarDays,
+  FileText, CreditCard, Settings, Activity, ShieldCheck, Zap, CalendarDays, Sparkles,
 } from 'lucide-react';
 import AppSidebar from '@/components/app/AppSidebar';
 import LoadingStateBase from '@/components/common/LoadingStateBase';
 import SchoolHealthOverview from '@/components/dashboard/SchoolHealthOverview';
 import OperationalAlerts from '@/components/dashboard/OperationalAlerts';
 import QuickActionsHub from '@/components/dashboard/QuickActionsHub';
+import OnboardingChecklist from '@/components/onboarding/OnboardingChecklist';
 import { format } from 'date-fns';
 
 const sidebarLinks = [
@@ -117,6 +118,25 @@ export default function SchoolAdminDashboard() {
 
         {/* Main content */}
         <div className="flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full space-y-8">
+
+          {/* Setup Checklist — only visible until complete */}
+          {data.setupDone < data.setupTotal && (
+            <section>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-md flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest">Getting Started</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">{data.setupDone} of {data.setupTotal} setup steps complete</p>
+                </div>
+              </div>
+              <OnboardingChecklist
+                schoolId={schoolId}
+                showWizard={() => navigate('/SchoolAdminOnboarding')}
+              />
+            </section>
+          )}
 
           {/* Quick Actions */}
           <section>
