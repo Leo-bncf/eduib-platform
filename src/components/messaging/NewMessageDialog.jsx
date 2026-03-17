@@ -13,7 +13,7 @@ import { useMessagingPolicy } from '@/hooks/useMessagingPolicy';
 export default function NewMessageDialog({ userId, userName, userRole, schoolId, onClose, trigger }) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const { canSend, canBroadcast, isQuietHour, policy } = useMessagingPolicy(schoolId);
+  const { canSend: policyCanSend, isQuietHour, policy } = useMessagingPolicy(schoolId);
   const [form, setForm] = useState({
     recipient_type: '',
     recipient_id: '',
@@ -21,7 +21,6 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
     body: '',
   });
 
-  // Get classes for teachers to message their students
   const { data: teacherClasses = [] } = useQuery({
     queryKey: ['teacher-classes-messaging', schoolId, userId],
     queryFn: async () => {
@@ -31,21 +30,16 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
     enabled: userRole === 'teacher' && !!schoolId && !!userId,
   });
 
-  // Get students from selected class
   const { data: students = [] } = useQuery({
     queryKey: ['class-students-messaging', form.recipient_type],
     queryFn: async () => {
-      const members = await base44.entities.SchoolMembership.filter({
-        school_id: schoolId,
-        status: 'active'
-      });
-      const cls = teacherClasses.find(c => c.id === form.recipient_type);
+      const members = await base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' });
+      const cls = teacherClasses.find(c => c.id === form.recipient_type.replace('class_', ''));
       return members.filter(m => cls?.student_ids?.includes(m.user_id));
     },
     enabled: form.recipient_type?.startsWith('class_') && teacherClasses.length > 0,
   });
 
-  // Get teachers for students
   const { data: studentClasses = [] } = useQuery({
     queryKey: ['student-classes-messaging', schoolId, userId],
     queryFn: async () => {
@@ -58,11 +52,8 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
   const { data: teachers = [] } = useQuery({
     queryKey: ['class-teachers-messaging', form.recipient_type],
     queryFn: async () => {
-      const members = await base44.entities.SchoolMembership.filter({
-        school_id: schoolId,
-        status: 'active'
-      });
-      const cls = studentClasses.find(c => c.id === form.recipient_type);
+      const members = await base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' });
+      const cls = studentClasses.find(c => c.id === form.recipient_type.replace('class_', ''));
       return members.filter(m => cls?.teacher_ids?.includes(m.user_id));
     },
     enabled: form.recipient_type?.startsWith('class_') && studentClasses.length > 0,
@@ -92,14 +83,15 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
     });
   };
 
-  // Determine recipient role from selected membership for policy check
+  // Policy checks
   const allRecipients = [...students, ...teachers];
   const selectedRecipient = allRecipients.find(m => m.user_id === form.recipient_id);
   const recipientRole = selectedRecipient?.role || (userRole === 'teacher' ? 'student' : 'teacher');
-  const policyBlocked = form.recipient_id ? !canSend(userRole, recipientRole) : false;
+  const policyBlocked = form.recipient_id ? !policyCanSend(userRole, recipientRole) : false;
   const quietHour = isQuietHour();
-  const quietBlocked = quietHour && (policy?.quiet_hours?.block_send_during_quiet ?? false) && (policy?.quiet_hours?.applies_to_roles || []).includes(userRole);
-
+  const quietBlocked = quietHour
+    && (policy?.quiet_hours?.block_send_during_quiet ?? false)
+    && (policy?.quiet_hours?.applies_to_roles || []).includes(userRole);
   const canSubmit = form.recipient_id && form.subject.trim() && form.body.trim() && !policyBlocked && !quietBlocked;
 
   return (
@@ -132,12 +124,14 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
                 </div>
               </div>
             )}
+
             {policyBlocked && form.recipient_id && (
               <div className="flex items-start gap-2 rounded-lg px-3 py-2.5 text-sm bg-red-50 border border-red-200 text-red-800">
                 <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <p>Your school's communication policy does not allow this type of message. Please contact your school administrator.</p>
               </div>
             )}
+
             <div>
               <Label className="text-sm font-semibold">Select Class</Label>
               <Select value={form.recipient_type} onValueChange={v => setForm({ ...form, recipient_type: v, recipient_id: '' })}>
