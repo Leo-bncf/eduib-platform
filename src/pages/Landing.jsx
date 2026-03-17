@@ -146,8 +146,8 @@ function FeaturesGrid() {
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-slate-900">Comprehensive Platform Capabilities</h2>
-          <p className="mt-3 text-lg text-slate-500">Engineered for the rigorous demands of International Baccalaureate institutions</p>
+          <h2 className="text-3xl font-bold text-slate-900">Everything an IB school needs. Only that.</h2>
+          <p className="mt-3 text-lg text-slate-500">We stripped out everything that doesn't serve the IB. What's left is fast, focused, and built around how your school actually works.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {features.map((f, i) => (
