@@ -1,98 +1,84 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+
+const orbs = [
+  { cx: '15%', cy: '20%', r: 320, color: '#1e3a8a', delay: 0 },
+  { cx: '80%', cy: '15%', r: 280, color: '#1d4ed8', delay: 0.3 },
+  { cx: '60%', cy: '60%', r: 360, color: '#1e3a8a', delay: 0.6 },
+  { cx: '10%', cy: '75%', r: 240, color: '#2563eb', delay: 0.2 },
+  { cx: '85%', cy: '80%', r: 300, color: '#1e40af', delay: 0.5 },
+];
 
 export default function AnimatedBackground() {
-  const [scrollY, setScrollY] = useState(0);
-  const [bloomed, setBloomed] = useState(false);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    // Trigger bloom animation shortly after mount
-    const t = setTimeout(() => setBloomed(true), 100);
+    const handleMouseMove = (e) => {
+      if (!containerRef.current) return;
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+      const xRatio = (clientX / innerWidth - 0.5) * 2;
+      const yRatio = (clientY / innerHeight - 0.5) * 2;
 
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener('scroll', handleScroll);
+      const orbEls = containerRef.current.querySelectorAll('.parallax-orb');
+      orbEls.forEach((orb, i) => {
+        const strength = (i % 3 + 1) * 12;
+        orb.style.transform = `translate(${xRatio * strength}px, ${yRatio * strength}px)`;
+      });
     };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Parallax: orbs move up as user scrolls down
-  const parallax = (factor) => `translateY(${-scrollY * factor}px)`;
-
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div
+      ref={containerRef}
+      className="fixed inset-0 overflow-hidden pointer-events-none"
+      style={{ zIndex: 0 }}
+      aria-hidden="true"
+    >
       {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#0a1628] to-[#0d1f3c]" />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #060e1e 0%, #0d1b3e 50%, #060e1e 100%)' }} />
 
-      {/* Bloom orb 1 — large center-left blue */}
+      {/* Flowering orbs */}
+      {orbs.map((orb, i) => (
+        <div
+          key={i}
+          className="parallax-orb absolute rounded-full"
+          style={{
+            left: orb.cx,
+            top: orb.cy,
+            width: orb.r * 2,
+            height: orb.r * 2,
+            transform: 'translate(-50%, -50%)',
+            background: `radial-gradient(circle, ${orb.color}55 0%, ${orb.color}22 50%, transparent 75%)`,
+            filter: 'blur(40px)',
+            animation: `flowerIn 1.4s ease-out ${orb.delay}s both, orbFloat ${7 + i * 1.5}s ease-in-out ${orb.delay}s infinite alternate`,
+            transition: 'transform 0.15s ease-out',
+          }}
+        />
+      ))}
+
+      {/* Subtle grid */}
       <div
-        className="absolute rounded-full"
+        className="absolute inset-0 opacity-[0.03]"
         style={{
-          width: '900px',
-          height: '900px',
-          top: '-200px',
-          left: '-150px',
-          background: 'radial-gradient(circle, rgba(37,99,235,0.35) 0%, rgba(37,99,235,0.08) 50%, transparent 75%)',
-          transform: `${parallax(0.15)} scale(${bloomed ? 1 : 0.2})`,
-          opacity: bloomed ? 1 : 0,
-          transition: 'transform 1.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.8s ease',
+          backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
         }}
       />
 
-      {/* Bloom orb 2 — medium top-right indigo */}
-      <div
-        className="absolute rounded-full"
-        style={{
-          width: '600px',
-          height: '600px',
-          top: '-100px',
-          right: '-100px',
-          background: 'radial-gradient(circle, rgba(99,102,241,0.28) 0%, rgba(99,102,241,0.06) 55%, transparent 75%)',
-          transform: `${parallax(0.1)} scale(${bloomed ? 1 : 0.2})`,
-          opacity: bloomed ? 1 : 0,
-          transition: 'transform 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s, opacity 2.2s ease 0.2s',
-        }}
-      />
-
-      {/* Bloom orb 3 — accent cyan-blue bottom-center */}
-      <div
-        className="absolute rounded-full"
-        style={{
-          width: '700px',
-          height: '700px',
-          top: '200px',
-          left: '35%',
-          background: 'radial-gradient(circle, rgba(14,165,233,0.18) 0%, rgba(14,165,233,0.05) 55%, transparent 75%)',
-          transform: `${parallax(0.08)} scale(${bloomed ? 1 : 0.15})`,
-          opacity: bloomed ? 1 : 0,
-          transition: 'transform 2.5s cubic-bezier(0.16, 1, 0.3, 1) 0.4s, opacity 2.5s ease 0.4s',
-        }}
-      />
-
-      {/* Bloom orb 4 — deep navy bottom-left anchor */}
-      <div
-        className="absolute rounded-full"
-        style={{
-          width: '500px',
-          height: '500px',
-          top: '400px',
-          left: '-80px',
-          background: 'radial-gradient(circle, rgba(29,78,216,0.22) 0%, rgba(29,78,216,0.05) 60%, transparent 80%)',
-          transform: `${parallax(0.05)} scale(${bloomed ? 1 : 0.2})`,
-          opacity: bloomed ? 1 : 0,
-          transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s, opacity 2s ease 0.6s',
-        }}
-      />
-
-      {/* Subtle noise/grain overlay for depth */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
-          opacity: 0.4,
-        }}
-      />
+      <style>{`
+        @keyframes flowerIn {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0.1); }
+          60% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+          100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes orbFloat {
+          0% { transform: translate(-50%, -50%) translateY(0px); }
+          100% { transform: translate(-50%, -50%) translateY(-30px); }
+        }
+      `}</style>
     </div>
   );
 }
