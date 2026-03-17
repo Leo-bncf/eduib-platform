@@ -1,5 +1,4 @@
-import React from 'react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
@@ -17,7 +16,7 @@ const sidebarLinks = [
 
 export default function TeacherClasses() {
   const { user, school, schoolId } = useUser();
-  const [statusFilter, setStatusFilter] = React.useState('active');
+  const [statusFilter, setStatusFilter] = useState('active');
 
   const { data: classes = [], isLoading } = useQuery({
     queryKey: ['teacher-classes', schoolId, user?.id],
