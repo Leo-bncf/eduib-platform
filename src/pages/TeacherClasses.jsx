@@ -1,10 +1,12 @@
 import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
 import { LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, MessageSquare, Loader2, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { createPageUrl } from '@/utils';
 
 const sidebarLinks = [
