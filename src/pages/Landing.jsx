@@ -44,13 +44,13 @@ function HeroSection() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
              <Button 
                size="lg" 
-               className="bg-blue-500 hover:bg-blue-400 text-white rounded-md px-8 h-12 text-base font-medium shadow-sm transition-all"
+               className="bg-slate-900 hover:bg-slate-700 text-white rounded-full px-8 h-12 text-base font-medium shadow-sm transition-all"
                onClick={handleSignIn}
              >
                Sign In <ArrowRight className="ml-2 w-4 h-4" />
              </Button>
              <Link to={createPageUrl('Demo')}>
-               <Button size="lg" variant="outline" className="rounded-md px-8 h-12 text-base font-medium border-white/20 hover:bg-white/10 text-white">
+               <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base font-medium border-slate-300 hover:bg-slate-50 text-slate-800">
                  Contact Sales for a Free Demo
                </Button>
              </Link>
