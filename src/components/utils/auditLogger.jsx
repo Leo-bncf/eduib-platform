@@ -53,6 +53,15 @@ export const AuditActions = {
   // Security
   UNAUTHORIZED_ACCESS_ATTEMPT: 'unauthorized_access_attempt',
   DATA_EXPORT: 'data_export',
+
+  // Governance
+  GRADE_LOCK_OVERRIDE: 'grade_lock_override',
+  ATTENDANCE_CORRECTION: 'attendance_correction',
+  BEHAVIOR_RECORD_DELETED: 'behavior_record_deleted',
+  PARENT_STUDENT_LINK_CHANGED: 'parent_student_link_changed',
+  PREDICTED_GRADE_EDITED: 'predicted_grade_edited',
+  PRIVACY_REQUEST_CREATED: 'privacy_request_created',
+  PRIVACY_REQUEST_RESOLVED: 'privacy_request_resolved',
 };
 
 export const AuditLevels = {
