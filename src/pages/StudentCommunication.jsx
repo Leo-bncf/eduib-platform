@@ -14,15 +14,7 @@ import {
   LayoutDashboard, BarChart3, Star, MessageSquare, CalendarDays,
   ClipboardList, Megaphone, Loader2
 } from 'lucide-react';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
-  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
-  { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
-  { label: 'IB Core', page: 'StudentCAS', icon: Star },
-  { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
-];
+import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
 
 export default function StudentCommunication() {
   const { user, school, schoolId, membership } = useUser();
