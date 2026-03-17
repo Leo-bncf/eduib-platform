@@ -3,6 +3,7 @@ import { useUser } from '@/components/auth/UserContext';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import ChildSelector from '@/components/parent/ChildSelector';
+import ChildOverviewHub from '@/components/parent/ChildOverviewHub';
 import ChildGradesOverview from '@/components/parent/ChildGradesOverview';
 import ChildAssignmentsOverview from '@/components/parent/ChildAssignmentsOverview';
 import ChildAttendanceOverview from '@/components/parent/ChildAttendanceOverview';
