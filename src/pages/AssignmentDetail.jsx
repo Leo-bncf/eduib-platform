@@ -180,6 +180,17 @@ export default function AssignmentDetail() {
                 <TeacherSubmissions assignment={assignment} classData={classData} />
               </div>
             )}
+
+            {/* Comments & Feedback — visible to both teachers and students */}
+            <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <AssignmentComments
+                assignment={assignment}
+                userId={user.id}
+                userName={user.full_name}
+                userRole={membership?.role}
+                schoolId={schoolId}
+              />
+            </div>
           </div>
 
           <div className="space-y-4">
