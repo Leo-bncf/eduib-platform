@@ -200,6 +200,92 @@ export default function ChildReporting({ schoolId, studentId, studentName }) {
           </CardContent>
         </Card>
       )}
+
+      {/* Cohort-level Insights */}
+      {hasCohortPermission && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-blue-600" />
+              Cohort Insights
+            </CardTitle>
+            <CardDescription>Contextual performance data within {studentName}'s peer group</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {cohortsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+              </div>
+            ) : cohorts.length > 0 ? (
+              <div className="space-y-3">
+                {cohorts.map((cohort) => (
+                  <div key={cohort.id} className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                    <h4 className="font-medium text-slate-900">{cohort.name}</h4>
+                    <p className="text-xs text-slate-500 mt-1">
+                      {cohort.student_count || 0} students • Avg grade: {cohort.average_grade || 'N/A'}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <Alert>
+                <AlertDescription>No cohort data available yet.</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Student Portfolio */}
+      {hasPortfolioPermission && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Briefcase className="w-5 h-5 text-purple-600" />
+              Student Portfolio
+            </CardTitle>
+            <CardDescription>Submitted work and completed assignments</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {submissionsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+              </div>
+            ) : submissions.length > 0 ? (
+              <div className="space-y-3">
+                {submissions.slice(0, 10).map((submission) => (
+                  <div key={submission.id} className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-slate-900">{submission.assignment_id}</h4>
+                        <p className="text-xs text-slate-500 mt-1">
+                          Submitted {new Date(submission.submitted_at).toLocaleDateString()}
+                        </p>
+                        {submission.score && (
+                          <p className="text-sm font-medium text-slate-900 mt-2">
+                            Score: {submission.score}{submission.max_score ? `/${submission.max_score}` : ''}
+                          </p>
+                        )}
+                      </div>
+                      {submission.documents?.[0]?.url && (
+                        <Button size="sm" variant="outline" asChild className="ml-2">
+                          <a href={submission.documents[0].url} target="_blank" rel="noopener noreferrer">
+                            <Download className="w-3 h-3 mr-1" /> View
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <Alert>
+                <AlertDescription>No submissions yet.</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
