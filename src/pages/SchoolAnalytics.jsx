@@ -381,106 +381,81 @@ export default function SchoolAnalytics() {
 
   return (
     <RoleGuard allowedRoles={['school_admin', 'ib_coordinator', 'super_admin', 'admin']}>
-      <div className="min-h-screen bg-slate-50">
-        <AppSidebar links={SCHOOL_ADMIN_SIDEBAR_LINKS} role="school_admin" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
-
-        <main className="md:ml-64 p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900">School Analytics</h1>
-                <p className="text-slate-500 mt-1 text-sm">Performance, attendance, and pastoral trends across your school.</p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <div>
-                  <p className="text-xs text-slate-500 mb-1">Cohort</p>
-                  <Select value={cohortFilter} onValueChange={setCohortFilter}>
-                    <SelectTrigger className="h-9 w-44 text-sm"><SelectValue placeholder="All cohorts" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Cohorts</SelectItem>
-                      {cohorts.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <p className="text-xs text-slate-500 mb-1">Class</p>
-                  <Select value={classFilter} onValueChange={setClassFilter}>
-                    <SelectTrigger className="h-9 w-44 text-sm"><SelectValue placeholder="All classes" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Classes</SelectItem>
-                      {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-
-            {isLoading ? (
-              <div className="flex items-center justify-center py-32">
-                <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {/* KPIs */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <KpiCard icon={Users} label="Students" value={students.length} sub={`${filteredClasses.length} classes`} color="indigo" />
-                  <KpiCard icon={TrendingUp} label="Avg Score" value={avgScore ? `${avgScore}%` : '—'} sub={`${publishedGrades.length} grades`} color="violet" />
-                  <KpiCard icon={Activity} label="Attendance Rate" value={attRate ? `${attRate}%` : '—'} sub={`${filteredAttendance.length} records`} color="emerald" />
-                  <KpiCard icon={AlertTriangle} label="Incidents" value={incidentCount} sub={`${filteredBehavior.length} total records`} color="rose" />
-                </div>
-
-                {/* Attendance trend + grade distribution */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <ChartCard title="School-Wide Attendance Trend (Weekly)">
-                    <SchoolAttendanceTrend attendance={filteredAttendance} />
-                  </ChartCard>
-                  <ChartCard title="Score Distribution (School-Wide)">
-                    <SchoolGradeDistribution grades={filteredGrades} />
-                  </ChartCard>
-                </div>
-
-                {/* Class performance comparison */}
-                {classFilter === 'all' && (
-                  <ChartCard title="Class Performance Comparison (Avg Score)">
-                    <ClassPerformanceChart classes={filteredClasses} grades={filteredGrades} />
-                  </ChartCard>
-                )}
-
-                {/* Class attendance comparison + IB predicted */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {classFilter === 'all' && (
-                    <ChartCard title="Class Attendance Comparison">
-                      <ClassAttendanceComparison classes={filteredClasses} attendance={filteredAttendance} />
-                    </ChartCard>
-                  )}
-                  <ChartCard title="IB Predicted Grade Distribution">
-                    <PredictedGradeDistribution predictedGrades={filteredPG} />
-                  </ChartCard>
-                </div>
-
-                {/* Behavior breakdown */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {[
-                    { label: 'Positive', type: 'positive', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-                    { label: 'Concerns', type: 'concern', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-                    { label: 'Incidents', type: 'incident', color: 'bg-red-50 text-red-700 border-red-200' },
-                    { label: 'Notes', type: 'note', color: 'bg-slate-50 text-slate-600 border-slate-200' },
-                  ].map(({ label, type, color }) => (
-                    <div key={type} className={`rounded-xl border p-4 text-center ${color}`}>
-                      <p className="text-2xl font-bold">{filteredBehavior.filter(b => b.type === type).length}</p>
-                      <p className="text-sm font-medium mt-1">{label} Behavior</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* At-risk students */}
-                <AtRiskStudents memberships={memberships.filter(m => filteredStudentIds.has(m.user_id))} attendance={filteredAttendance} grades={filteredGrades} classes={filteredClasses} />
-              </div>
-            )}
+      <SchoolAdminPageShell
+        title="Analytics"
+        subtitle="Performance, attendance, and pastoral trends across your school"
+        maxWidth="max-w-7xl"
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <Select value={cohortFilter} onValueChange={setCohortFilter}>
+              <SelectTrigger className="h-8 w-36 text-xs"><SelectValue placeholder="All cohorts" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Cohorts</SelectItem>
+                {cohorts.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Select value={classFilter} onValueChange={setClassFilter}>
+              <SelectTrigger className="h-8 w-36 text-xs"><SelectValue placeholder="All classes" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Classes</SelectItem>
+                {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
-        </main>
-      </div>
+        }
+      >
+        {isLoading ? (
+          <div className="flex items-center justify-center py-32">
+            <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+          </div>
+        ) : (
+          <div className="space-y-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <KpiCard icon={Users} label="Students" value={students.length} sub={`${filteredClasses.length} classes`} color="indigo" />
+              <KpiCard icon={TrendingUp} label="Avg Score" value={avgScore ? `${avgScore}%` : '—'} sub={`${publishedGrades.length} grades`} color="violet" />
+              <KpiCard icon={Activity} label="Attendance Rate" value={attRate ? `${attRate}%` : '—'} sub={`${filteredAttendance.length} records`} color="emerald" />
+              <KpiCard icon={AlertTriangle} label="Incidents" value={incidentCount} sub={`${filteredBehavior.length} total records`} color="rose" />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ChartCard title="School-Wide Attendance Trend (Weekly)">
+                <SchoolAttendanceTrend attendance={filteredAttendance} />
+              </ChartCard>
+              <ChartCard title="Score Distribution (School-Wide)">
+                <SchoolGradeDistribution grades={filteredGrades} />
+              </ChartCard>
+            </div>
+            {classFilter === 'all' && (
+              <ChartCard title="Class Performance Comparison (Avg Score)">
+                <ClassPerformanceChart classes={filteredClasses} grades={filteredGrades} />
+              </ChartCard>
+            )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {classFilter === 'all' && (
+                <ChartCard title="Class Attendance Comparison">
+                  <ClassAttendanceComparison classes={filteredClasses} attendance={filteredAttendance} />
+                </ChartCard>
+              )}
+              <ChartCard title="IB Predicted Grade Distribution">
+                <PredictedGradeDistribution predictedGrades={filteredPG} />
+              </ChartCard>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                { label: 'Positive', type: 'positive', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+                { label: 'Concerns', type: 'concern', color: 'bg-amber-50 text-amber-700 border-amber-200' },
+                { label: 'Incidents', type: 'incident', color: 'bg-red-50 text-red-700 border-red-200' },
+                { label: 'Notes', type: 'note', color: 'bg-slate-50 text-slate-600 border-slate-200' },
+              ].map(({ label, type, color }) => (
+                <div key={type} className={`rounded-xl border p-4 text-center ${color}`}>
+                  <p className="text-2xl font-bold">{filteredBehavior.filter(b => b.type === type).length}</p>
+                  <p className="text-sm font-medium mt-1">{label} Behavior</p>
+                </div>
+              ))}
+            </div>
+            <AtRiskStudents memberships={memberships.filter(m => filteredStudentIds.has(m.user_id))} attendance={filteredAttendance} grades={filteredGrades} classes={filteredClasses} />
+          </div>
+        )}
+      </SchoolAdminPageShell>
     </RoleGuard>
   );
 }
