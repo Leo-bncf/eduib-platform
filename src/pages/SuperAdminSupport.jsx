@@ -177,10 +177,7 @@ function TicketManagement() {
   );
 }
 
-// ─── Knowledge Base ───────────────────────────────────────────────────────────
 
-function KnowledgeBase() {
-  const [articles, setArticles] = useState(SAMPLE_ARTICLES);
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [editing, setEditing] = useState(null); // { id, title, category, status } | 'new'
