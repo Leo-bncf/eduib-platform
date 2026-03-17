@@ -22,7 +22,7 @@ const sidebarLinks = [
   { label: 'Users', page: 'SchoolAdminUsers', icon: Users },
   { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
   { label: 'Enrollments', page: 'SchoolAdminEnrollments', icon: Users },
-  { label: 'Subjects', page: 'SchoolAdminSubjects', icon: GraduationCap },
+  { label: 'Academic Setup', page: 'SchoolAdminAcademicSetup', icon: GraduationCap },
   { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
   { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Clock },
   { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
