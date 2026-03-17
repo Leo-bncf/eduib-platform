@@ -169,16 +169,29 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
             {form.recipient_type && (
               <div>
                 <Label className="text-sm font-semibold">
-                  {userRole === 'teacher' ? 'Select Student' : 'Select Teacher'}
+                  {userRole === 'teacher' ? 'Select Recipient' : 'Select Teacher'}
                 </Label>
                 <Select value={form.recipient_id} onValueChange={v => setForm({ ...form, recipient_id: v })}>
                   <SelectTrigger className="mt-1.5">
                     <SelectValue placeholder="Choose recipient..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {userRole === 'teacher' && students.map(s => (
-                      <SelectItem key={s.user_id} value={s.user_id}>{s.user_name || s.user_email}</SelectItem>
-                    ))}
+                    {userRole === 'teacher' && students.length > 0 && (
+                      <>
+                        <div className="px-2 py-1 text-xs text-slate-400 font-semibold uppercase">Students</div>
+                        {students.map(s => (
+                          <SelectItem key={s.user_id} value={s.user_id}>{s.user_name || s.user_email}</SelectItem>
+                        ))}
+                      </>
+                    )}
+                    {userRole === 'teacher' && parentLinks.length > 0 && (
+                      <>
+                        <div className="px-2 py-1 text-xs text-slate-400 font-semibold uppercase mt-1">Parents / Guardians</div>
+                        {parentLinks.map(p => (
+                          <SelectItem key={p.user_id} value={p.user_id}>{p.user_name || p.user_email}</SelectItem>
+                        ))}
+                      </>
+                    )}
                     {userRole === 'student' && teachers.map(t => (
                       <SelectItem key={t.user_id} value={t.user_id}>{t.user_name || t.user_email}</SelectItem>
                     ))}
