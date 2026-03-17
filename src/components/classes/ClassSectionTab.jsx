@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import {
-  Plus, Loader2, Search, BookOpen, Pencil, Archive, RotateCcw,
+  Plus, Loader2, Search, BookOpen, Pencil,
   ChevronRight, Hash, Lock
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -277,30 +277,11 @@ export default function ClassSectionTab({ schoolId, classes, subjects, academicY
                 </div>
 
                 <div className="px-4 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="sm" onClick={() => setEditingClass(c)} className="h-7 px-2 text-xs text-slate-500 hover:text-slate-800 gap-1">
-                      <Pencil className="w-3 h-3" /> Edit
-                    </Button>
-                    {c.status === 'active' ? (
-                       <Button
-                         variant="ghost" size="sm"
-                         onClick={() => updateMutation.mutate({ id: c.id, data: { status: 'archived' } })}
-                         disabled={updateMutation.isPending}
-                         className="h-7 px-2 text-xs text-slate-500 hover:text-amber-600 gap-1"
-                       >
-                         {updateMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Archive className="w-3 h-3" />} Archive
-                       </Button>
-                     ) : (
-                       <Button
-                         variant="ghost" size="sm"
-                         onClick={() => updateMutation.mutate({ id: c.id, data: { status: 'active' } })}
-                         disabled={updateMutation.isPending}
-                         className="h-7 px-2 text-xs text-slate-500 hover:text-emerald-600 gap-1"
-                       >
-                         {updateMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3" />} Restore
-                       </Button>
-                     )}
-                  </div>
+                   <div className="flex items-center gap-1">
+                     <Button variant="ghost" size="sm" onClick={() => setEditingClass(c)} className="h-7 px-2 text-xs text-slate-500 hover:text-slate-800 gap-1">
+                       <Pencil className="w-3 h-3" /> Edit
+                     </Button>
+                   </div>
                   {c.status === 'active' && (
                     <Link
                       to={`/ClassWorkspace?class_id=${c.id}`}

@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Settings, Trash2 } from 'lucide-react';
+import { Loader2, Settings, Archive } from 'lucide-react';
 
 export default function ClassSettings({ classData, isTeacher }) {
   const queryClient = useQueryClient();
@@ -22,8 +22,22 @@ export default function ClassSettings({ classData, isTeacher }) {
     },
   });
 
+  const archiveMutation = useMutation({
+    mutationFn: () => base44.functions.invoke('archiveClass', { classId: classData.id, schoolId: classData.school_id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['class-details'] });
+      queryClient.invalidateQueries({ queryKey: ['school-classes'] });
+    },
+  });
+
   const handleSave = () => {
     updateMutation.mutate(form);
+  };
+
+  const handleArchive = () => {
+    if (window.confirm('Are you sure you want to archive this class? This action can be reversed later.')) {
+      archiveMutation.mutate();
+    }
   };
 
   if (!isTeacher) {
@@ -67,11 +81,12 @@ export default function ClassSettings({ classData, isTeacher }) {
         </Button>
       </div>
 
-      <div className="bg-red-50 rounded-xl border border-red-200 p-6 mt-6">
-        <h3 className="font-semibold text-red-900 mb-2">Danger Zone</h3>
-        <p className="text-sm text-red-700 mb-4">Archive this class. This action can be reversed later.</p>
-        <Button variant="destructive" size="sm">
-          <Trash2 className="w-4 h-4 mr-2" /> Archive Class
+      <div className="bg-amber-50 rounded-xl border border-amber-200 p-6 mt-6">
+        <h3 className="font-semibold text-amber-900 mb-2">Archive Class</h3>
+        <p className="text-sm text-amber-700 mb-4">Archive this class. This action can be reversed later.</p>
+        <Button variant="outline" size="sm" onClick={handleArchive} disabled={archiveMutation.isPending} className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 border-amber-200">
+          {archiveMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Archive className="w-4 h-4 mr-2" />}
+          Archive Class
         </Button>
       </div>
     </div>
