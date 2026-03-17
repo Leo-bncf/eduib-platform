@@ -30,18 +30,14 @@ function HeroSection() {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-blue-100">
-            <Sparkles className="w-3.5 h-3.5" />
-            Built exclusively for IB World Schools — nothing else
-          </div>
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
-            The LMS built
-            <span className="text-blue-600"> only for IB.</span>
-            {' '}Nothing more.
+            The LMS designed for
+            <span className="text-blue-600"> the needs of</span>
+            {' '}IB World Schools
           </h1>
           
           <p className="mt-6 text-xl text-slate-500 leading-relaxed max-w-2xl mx-auto">
-            No bloat. No features for schools that don't run the IB. Every workflow, every screen, every tool is purpose-built for the IB framework — from PYP to DP.
+            A unified platform designed around the IB framework — from PYP to DP, grading to reporting.
           </p>
           
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -104,18 +100,18 @@ function HeroSection() {
 
 function ProblemSection() {
   const problems = [
-    { icon: '🧩', text: 'Bloated platforms stuffed with features irrelevant to IB — cluttering every screen' },
-    { icon: '📋', text: 'Grading tools that ignore the 1–7 scale, criteria bands, and SL/HL distinctions' },
-    { icon: '😤', text: 'CAS, EE, and TOK tracked in spreadsheets or separate tools with no integration' },
-    { icon: '⏳', text: 'Workarounds every step of the way — because the platform wasn't made for you' },
+    { icon: '📊', text: 'Scattered data across spreadsheets, email, and disconnected tools' },
+    { icon: '🔓', text: "Weak role-based access — teachers see data they shouldn't" },
+    { icon: '😤', text: 'Parents lack real-time visibility into their child\'s progress' },
+    { icon: '⏳', text: 'Tedious manual workflows for assignments, grading, and reporting' },
   ];
 
   return (
     <section className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Generic platforms don't work for IB</h2>
-          <p className="mt-3 text-lg text-slate-500">Most LMS tools are built for everyone — which means they're optimised for no one. IB schools pay the price.</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">IB schools deserve better tools</h2>
+          <p className="mt-3 text-lg text-slate-500">Current platforms weren't built for the IB framework's unique demands</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
           {problems.map((p, i) => (
@@ -146,8 +142,8 @@ function FeaturesGrid() {
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-slate-900">Everything an IB school needs. Only that.</h2>
-          <p className="mt-3 text-lg text-slate-500">We stripped out everything that doesn't serve the IB. What's left is fast, focused, and built around how your school actually works.</p>
+          <h2 className="text-3xl font-bold text-slate-900">Comprehensive Platform Capabilities</h2>
+          <p className="mt-3 text-lg text-slate-500">Engineered for the rigorous demands of International Baccalaureate institutions</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {features.map((f, i) => (
@@ -200,8 +196,8 @@ function CTASection() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-slate-50 rounded-xl p-12 sm:p-16 text-center relative overflow-hidden shadow-sm border border-slate-200">
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Made for IB. Mastered for IB.</h2>
-            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">If your school runs the IB, you shouldn't be making do with tools built for everyone else. See what a purpose-built platform looks like.</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to modernize your institution?</h2>
+            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={createPageUrl('Demo')}>
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
