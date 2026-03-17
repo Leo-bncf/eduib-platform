@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useUser } from '@/components/auth/UserContext';
@@ -10,22 +10,28 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
-  FileText, CreditCard, Settings, Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell
+  FileText, CreditCard, Settings, Loader2, CheckCircle2, AlertCircle,
+  Building2, Globe, Bell, Shield, HardDrive
 } from 'lucide-react';
+import { DEFAULT_POLICY } from '@/hooks/useSubmissionPolicy';
+import SubmissionRulesPanel from '@/components/settings/SubmissionRulesPanel';
+import FileSecurityPanel from '@/components/settings/FileSecurityPanel';
+import AcademicIntegrityPanel from '@/components/settings/AcademicIntegrityPanel';
 
 const sidebarLinks = [
-  { label: 'Dashboard', page: 'SchoolAdminDashboard', icon: LayoutDashboard },
-  { label: 'Users', page: 'SchoolAdminUsers', icon: Users },
-  { label: 'Classes', page: 'SchoolAdminClasses', icon: BookOpen },
-  { label: 'Enrollments', page: 'SchoolAdminEnrollments', icon: Users },
-  { label: 'Subjects', page: 'SchoolAdminSubjects', icon: GraduationCap },
-  { label: 'Attendance', page: 'SchoolAdminAttendance', icon: Calendar },
-  { label: 'Timetable', page: 'SchoolAdminTimetable', icon: Clock },
-  { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
-  { label: 'Billing', page: 'SchoolAdminBilling', icon: CreditCard },
-  { label: 'Settings', page: 'SchoolAdminSettings', icon: Settings },
+  { label: 'Dashboard',      page: 'SchoolAdminDashboard',     icon: LayoutDashboard },
+  { label: 'Users',          page: 'SchoolAdminUsers',         icon: Users },
+  { label: 'Classes',        page: 'SchoolAdminClasses',       icon: BookOpen },
+  { label: 'Enrollments',    page: 'SchoolAdminEnrollments',   icon: Users },
+  { label: 'Academic Setup', page: 'SchoolAdminAcademicSetup', icon: GraduationCap },
+  { label: 'Attendance',     page: 'SchoolAdminAttendance',    icon: Calendar },
+  { label: 'Timetable',      page: 'SchoolAdminTimetable',     icon: Clock },
+  { label: 'Reports',        page: 'SchoolAdminReports',       icon: FileText },
+  { label: 'Billing',        page: 'SchoolAdminBilling',       icon: CreditCard },
+  { label: 'Settings',       page: 'SchoolAdminSettings',      icon: Settings },
 ];
 
 const TIMEZONES = [
@@ -34,11 +40,17 @@ const TIMEZONES = [
   'Asia/Dubai', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney', 'Africa/Cairo',
 ];
 
+const MONTHS = [
+  'January','February','March','April','May','June',
+  'July','August','September','October','November','December',
+];
+
 export default function SchoolAdminSettings() {
   const { user, school: contextSchool, schoolId } = useUser();
   const queryClient = useQueryClient();
   const [message, setMessage] = useState(null);
 
+  // ── School profile ──────────────────────────────────────────────────────────
   const { data: school, isLoading } = useQuery({
     queryKey: ['school-settings', schoolId],
     queryFn: async () => {
@@ -48,11 +60,11 @@ export default function SchoolAdminSettings() {
     enabled: !!schoolId,
   });
 
-  const [form, setForm] = useState(null);
+  const [profileForm, setProfileForm] = useState(null);
 
-  React.useEffect(() => {
-    if (school && !form) {
-      setForm({
+  useEffect(() => {
+    if (school && !profileForm) {
+      setProfileForm({
         name: school.name || '',
         email: school.email || '',
         phone: school.phone || '',
@@ -66,28 +78,54 @@ export default function SchoolAdminSettings() {
     }
   }, [school]);
 
-  const updateMutation = useMutation({
+  const updateSchoolMutation = useMutation({
     mutationFn: (data) => base44.entities.School.update(schoolId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['school-settings'] });
       queryClient.invalidateQueries({ queryKey: ['school', schoolId] });
-      setMessage({ type: 'success', text: 'Settings saved successfully.' });
-      setTimeout(() => setMessage(null), 3000);
+      showMessage('success', 'School settings saved.');
     },
-    onError: () => {
-      setMessage({ type: 'error', text: 'Failed to save settings. Please try again.' });
-    },
+    onError: () => showMessage('error', 'Failed to save settings.'),
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateMutation.mutate(form);
+  // ── Submission policy ───────────────────────────────────────────────────────
+  const { data: policyRecord, isLoading: policyLoading } = useQuery({
+    queryKey: ['submission-policy', schoolId],
+    queryFn: async () => {
+      const results = await base44.entities.SubmissionPolicy.filter({ school_id: schoolId });
+      return results[0] || null;
+    },
+    enabled: !!schoolId,
+  });
+
+  const [policyForm, setPolicyForm] = useState({ ...DEFAULT_POLICY });
+
+  useEffect(() => {
+    if (policyRecord) {
+      setPolicyForm({ ...DEFAULT_POLICY, ...policyRecord });
+    }
+  }, [policyRecord?.id]);
+
+  const updatePolicyMutation = useMutation({
+    mutationFn: (data) => {
+      const payload = { ...data, school_id: schoolId };
+      return policyRecord
+        ? base44.entities.SubmissionPolicy.update(policyRecord.id, payload)
+        : base44.entities.SubmissionPolicy.create(payload);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['submission-policy', schoolId] });
+      showMessage('success', 'Governance policy saved.');
+    },
+    onError: () => showMessage('error', 'Failed to save policy.'),
+  });
+
+  const showMessage = (type, text) => {
+    setMessage({ type, text });
+    setTimeout(() => setMessage(null), 3500);
   };
 
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  const policyOnChange = (partial) => setPolicyForm(prev => ({ ...prev, ...partial }));
 
   return (
     <RoleGuard allowedRoles={['school_admin', 'super_admin', 'admin']}>
@@ -102,176 +140,196 @@ export default function SchoolAdminSettings() {
         />
 
         <main className="md:ml-64 min-h-screen">
-          <div className="bg-white border-b border-slate-200 px-6 py-4">
-            <h1 className="text-xl font-semibold text-slate-900">School Settings</h1>
-            <p className="text-sm text-slate-500 mt-0.5">Manage your school profile and preferences</p>
+          <div className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
+            <h1 className="text-base font-black text-slate-900 tracking-tight">School Settings</h1>
+            <p className="text-xs text-slate-400 mt-0.5">Manage your school profile, preferences, and governance policies</p>
           </div>
 
-          <div className="p-6 max-w-3xl space-y-6">
-            {message && (
+          {message && (
+            <div className="mx-6 mt-4">
               <Alert className={message.type === 'success' ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'}>
                 {message.type === 'success'
                   ? <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  : <AlertCircle className="w-4 h-4 text-red-600" />
-                }
+                  : <AlertCircle className="w-4 h-4 text-red-600" />}
                 <AlertDescription className={message.type === 'success' ? 'text-emerald-800' : 'text-red-800'}>
                   {message.text}
                 </AlertDescription>
               </Alert>
-            )}
+            </div>
+          )}
 
-            {isLoading || !form ? (
-              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* School Profile */}
-                <Card className="shadow-none">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
-                      <Building2 className="w-4 h-4 text-slate-500" />
-                      <CardTitle className="text-base">School Profile</CardTitle>
-                    </div>
-                    <CardDescription>Basic information about your school</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <Label className="text-sm font-medium">School Name *</Label>
-                      <Input
-                        required
-                        value={form.name}
-                        onChange={e => setForm({ ...form, name: e.target.value })}
-                        className="mt-1"
-                        placeholder="e.g. International School of Paris"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-sm font-medium">Contact Email</Label>
-                        <Input
-                          type="email"
-                          value={form.email}
-                          onChange={e => setForm({ ...form, email: e.target.value })}
-                          className="mt-1"
-                          placeholder="admin@school.edu"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-sm font-medium">Phone</Label>
-                        <Input
-                          value={form.phone}
-                          onChange={e => setForm({ ...form, phone: e.target.value })}
-                          className="mt-1"
-                          placeholder="+1 234 567 890"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium">Address</Label>
-                      <Input
-                        value={form.address}
-                        onChange={e => setForm({ ...form, address: e.target.value })}
-                        className="mt-1"
-                        placeholder="123 School Street"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-sm font-medium">City</Label>
-                        <Input
-                          value={form.city}
-                          onChange={e => setForm({ ...form, city: e.target.value })}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-sm font-medium">Country</Label>
-                        <Input
-                          value={form.country}
-                          onChange={e => setForm({ ...form, country: e.target.value })}
-                          className="mt-1"
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+          <div className="p-6 max-w-4xl">
+            <Tabs defaultValue="school">
+              <TabsList className="bg-white border border-slate-200 h-10 mb-6">
+                <TabsTrigger value="school" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <Building2 className="w-3.5 h-3.5" /> School Profile
+                </TabsTrigger>
+                <TabsTrigger value="submissions" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <FileText className="w-3.5 h-3.5" /> Submission Rules
+                </TabsTrigger>
+                <TabsTrigger value="files" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <HardDrive className="w-3.5 h-3.5" /> File & Storage
+                </TabsTrigger>
+                <TabsTrigger value="integrity" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <Shield className="w-3.5 h-3.5" /> Academic Integrity
+                </TabsTrigger>
+              </TabsList>
 
-                {/* Academic Configuration */}
-                <Card className="shadow-none">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-slate-500" />
-                      <CardTitle className="text-base">Academic Configuration</CardTitle>
-                    </div>
-                    <CardDescription>Set timezone and academic calendar preferences</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <Label className="text-sm font-medium">Timezone</Label>
-                      <Select value={form.timezone} onValueChange={v => setForm({ ...form, timezone: v })}>
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {TIMEZONES.map(tz => (
-                            <SelectItem key={tz} value={tz}>{tz}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium">Academic Year Start Month</Label>
-                      <Select
-                        value={String(form.academic_year_start_month)}
-                        onValueChange={v => setForm({ ...form, academic_year_start_month: Number(v) })}
-                      >
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {months.map((m, i) => (
-                            <SelectItem key={i + 1} value={String(i + 1)}>{m}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </CardContent>
-                </Card>
+              {/* ── SCHOOL PROFILE TAB ── */}
+              <TabsContent value="school">
+                {isLoading || !profileForm ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                ) : (
+                  <form onSubmit={e => { e.preventDefault(); updateSchoolMutation.mutate(profileForm); }} className="space-y-5 max-w-2xl">
+                    <Card className="shadow-none border-slate-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center gap-2">
+                          <Building2 className="w-4 h-4 text-slate-500" />
+                          <CardTitle className="text-sm">School Profile</CardTitle>
+                        </div>
+                        <CardDescription className="text-xs">Basic information about your school</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <Label className="text-xs font-semibold">School Name *</Label>
+                          <Input required value={profileForm.name} onChange={e => setProfileForm({ ...profileForm, name: e.target.value })} className="mt-1" placeholder="e.g. International School of Paris" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label className="text-xs font-semibold">Contact Email</Label>
+                            <Input type="email" value={profileForm.email} onChange={e => setProfileForm({ ...profileForm, email: e.target.value })} className="mt-1" placeholder="admin@school.edu" />
+                          </div>
+                          <div>
+                            <Label className="text-xs font-semibold">Phone</Label>
+                            <Input value={profileForm.phone} onChange={e => setProfileForm({ ...profileForm, phone: e.target.value })} className="mt-1" placeholder="+1 234 567 890" />
+                          </div>
+                        </div>
+                        <div>
+                          <Label className="text-xs font-semibold">Address</Label>
+                          <Input value={profileForm.address} onChange={e => setProfileForm({ ...profileForm, address: e.target.value })} className="mt-1" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label className="text-xs font-semibold">City</Label>
+                            <Input value={profileForm.city} onChange={e => setProfileForm({ ...profileForm, city: e.target.value })} className="mt-1" />
+                          </div>
+                          <div>
+                            <Label className="text-xs font-semibold">Country</Label>
+                            <Input value={profileForm.country} onChange={e => setProfileForm({ ...profileForm, country: e.target.value })} className="mt-1" />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
 
-                {/* Billing Contact */}
-                <Card className="shadow-none">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
-                      <Bell className="w-4 h-4 text-slate-500" />
-                      <CardTitle className="text-base">Billing Contact</CardTitle>
-                    </div>
-                    <CardDescription>Email for billing notifications and invoices</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div>
-                      <Label className="text-sm font-medium">Billing Email</Label>
-                      <Input
-                        type="email"
-                        value={form.billing_email}
-                        onChange={e => setForm({ ...form, billing_email: e.target.value })}
-                        className="mt-1"
-                        placeholder="billing@school.edu"
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
+                    <Card className="shadow-none border-slate-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center gap-2">
+                          <Globe className="w-4 h-4 text-slate-500" />
+                          <CardTitle className="text-sm">Academic Configuration</CardTitle>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <Label className="text-xs font-semibold">Timezone</Label>
+                          <Select value={profileForm.timezone} onValueChange={v => setProfileForm({ ...profileForm, timezone: v })}>
+                            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              {TIMEZONES.map(tz => <SelectItem key={tz} value={tz}>{tz}</SelectItem>)}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label className="text-xs font-semibold">Academic Year Start Month</Label>
+                          <Select value={String(profileForm.academic_year_start_month)} onValueChange={v => setProfileForm({ ...profileForm, academic_year_start_month: Number(v) })}>
+                            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              {MONTHS.map((m, i) => <SelectItem key={i + 1} value={String(i + 1)}>{m}</SelectItem>)}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </CardContent>
+                    </Card>
 
-                <div className="flex justify-end">
-                  <Button
-                    type="submit"
-                    disabled={updateMutation.isPending}
-                    className="bg-indigo-600 hover:bg-indigo-700 px-8"
-                  >
-                    {updateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                    Save Changes
-                  </Button>
-                </div>
-              </form>
-            )}
+                    <Card className="shadow-none border-slate-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center gap-2">
+                          <Bell className="w-4 h-4 text-slate-500" />
+                          <CardTitle className="text-sm">Billing Contact</CardTitle>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <Label className="text-xs font-semibold">Billing Email</Label>
+                        <Input type="email" value={profileForm.billing_email} onChange={e => setProfileForm({ ...profileForm, billing_email: e.target.value })} className="mt-1" placeholder="billing@school.edu" />
+                      </CardContent>
+                    </Card>
+
+                    <div className="flex justify-end">
+                      <Button type="submit" disabled={updateSchoolMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                        {updateSchoolMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                        Save School Settings
+                      </Button>
+                    </div>
+                  </form>
+                )}
+              </TabsContent>
+
+              {/* ── SUBMISSION RULES TAB ── */}
+              <TabsContent value="submissions">
+                {policyLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                ) : (
+                  <div className="max-w-2xl space-y-5">
+                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+                      <SubmissionRulesPanel form={policyForm} onChange={policyOnChange} />
+                    </div>
+                    <div className="flex justify-end">
+                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                        Save Submission Policy
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* ── FILE & STORAGE TAB ── */}
+              <TabsContent value="files">
+                {policyLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                ) : (
+                  <div className="max-w-2xl space-y-5">
+                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+                      <FileSecurityPanel form={policyForm} onChange={policyOnChange} schoolId={schoolId} plan={school?.plan} />
+                    </div>
+                    <div className="flex justify-end">
+                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                        Save File Policy
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* ── ACADEMIC INTEGRITY TAB ── */}
+              <TabsContent value="integrity">
+                {policyLoading ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                ) : (
+                  <div className="max-w-2xl space-y-5">
+                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+                      <AcademicIntegrityPanel form={policyForm} onChange={policyOnChange} />
+                    </div>
+                    <div className="flex justify-end">
+                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                        Save Integrity Policy
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
           </div>
         </main>
       </div>
