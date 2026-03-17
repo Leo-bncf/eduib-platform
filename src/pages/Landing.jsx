@@ -31,13 +31,13 @@ function HeroSection() {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1]">
             The LMS designed for
-            <span className="text-blue-600"> the needs of</span>
+            <span className="text-blue-400"> the needs of</span>
             {' '}IB World Schools
           </h1>
           
-          <p className="mt-6 text-xl text-slate-500 leading-relaxed max-w-2xl mx-auto">
+          <p className="mt-6 text-xl text-blue-100/70 leading-relaxed max-w-2xl mx-auto">
             A unified platform designed around the IB framework — from PYP to DP, grading to reporting.
           </p>
           
