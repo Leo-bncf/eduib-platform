@@ -10,17 +10,9 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, 
-  MessageSquare, Star, Plus, Loader2, Filter, CalendarDays, ClipboardList
+  MessageSquare, Star, Plus, Loader2, Filter
 } from 'lucide-react';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
-  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
-  { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
-  { label: 'IB Core', page: 'StudentIBCore', icon: Star },
-  { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
-];
+import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
 
 export default function StudentCAS() {
   const { user, school, schoolId } = useUser();
@@ -42,7 +34,7 @@ export default function StudentCAS() {
   return (
     <RoleGuard allowedRoles={['student', 'school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
-        <AppSidebar links={sidebarLinks} role="student" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
+        <AppSidebar links={STUDENT_SIDEBAR_LINKS} role="student" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         
         <main className="ml-64 p-8">
           <div className="max-w-7xl mx-auto">
