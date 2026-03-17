@@ -170,6 +170,7 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
                 <Label className="text-sm font-semibold">
                   {userRole === 'teacher' ? 'Select Student' : 'Select Teacher'}
                 </Label>
+
                 <Select value={form.recipient_id} onValueChange={v => setForm({ ...form, recipient_id: v })}>
                   <SelectTrigger className="mt-1.5">
                     <SelectValue placeholder="Choose recipient..." />
