@@ -10,6 +10,7 @@ import SuperAdminSupport from './pages/SuperAdminSupport';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSettings from './pages/SuperAdminSettings';
 import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
+import SchoolAdminOnboarding from './pages/SchoolAdminOnboarding';
 import SchoolAdminGradebookGovernance from './pages/SchoolAdminGradebookGovernance';
 import SchoolAdminBehavior from './pages/SchoolAdminBehavior';
 import SchoolAdminMessagingPolicy from './pages/SchoolAdminMessagingPolicy';
@@ -136,6 +137,14 @@ const AuthenticatedApp = () => {
         element={
           <LayoutWrapper currentPageName="SchoolAdminGovernance">
             <SchoolAdminGovernance />
+          </LayoutWrapper>
+        }
+      />
+      <Route
+        path="/SchoolAdminOnboarding"
+        element={
+          <LayoutWrapper currentPageName="SchoolAdminOnboarding">
+            <SchoolAdminOnboarding />
           </LayoutWrapper>
         }
       />
