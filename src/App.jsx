@@ -94,6 +94,14 @@ const AuthenticatedApp = () => {
           </LayoutWrapper>
         }
       />
+      <Route
+        path="/SuperAdminSupport"
+        element={
+          <LayoutWrapper currentPageName="SuperAdminSupport">
+            <SuperAdminSupport />
+          </LayoutWrapper>
+        }
+      />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

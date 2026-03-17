@@ -27,6 +27,7 @@ const navItems = [
   { key: 'settings', label: 'Settings', page: 'SuperAdminSettings', icon: Settings },
   { key: 'plans', label: 'Plans', page: 'SuperAdminPlans', icon: BookOpen },
   { key: 'audit-logs', label: 'Audit Logs', page: 'SuperAdminAuditLogs', icon: FileText },
+  { key: 'support', label: 'Support', page: 'SuperAdminSupport', icon: Headphones },
 ];
 
 export default function SuperAdminShell({ activeItem, currentUser, children }) {
