@@ -98,24 +98,24 @@ function ProblemSection() {
 function FeaturesGrid() {
   const [expandedId, setExpandedId] = React.useState(null);
   const features = [
-    { icon: BarChart3, title: 'Executive Dashboards', short: 'Role-specific insights', desc: 'Personalized dashboards for every stakeholder—students see academic progress, teachers manage their classes, coordinators oversee cohorts, parents track their children, and admins control the entire school.' },
-    { icon: ClipboardCheck, title: 'Academic Workflows', short: 'Complete assignment lifecycle', desc: 'From creation to grading—publish assignments with IB criteria alignment, students submit work (Google Docs, files, links), teachers provide criterion-based feedback, and grades sync automatically.' },
-    { icon: BookOpen, title: 'IB Gradebook', short: '1-7 scale precision', desc: 'Native 1-7 grading, predicted grade tracking, SL/HL subject management, rubric-based assessment, and comprehensive term reports that align with IB terminology and workflows.' },
-    { icon: Users, title: 'Parent Portal', short: 'Real-time family engagement', desc: 'Parents see grades, attendance, upcoming assignments, and teacher feedback—all updated in real-time. Direct messaging with teachers keeps communication secure and organized.' },
-    { icon: Calendar, title: 'Timetable Integration', short: 'Schedule synchronization', desc: 'Sync with external timetable systems, display daily class schedules, manage periods and rooms, resolve conflicts, and track historical schedule changes.' },
-    { icon: MessageSquare, title: 'Internal Messaging', short: 'Secure communication hub', desc: 'Role-aware messaging between teachers, students, and parents. Announcements, class discussions, quiet hours policies, and compliance logging all built-in.' },
-    { icon: Shield, title: 'Enterprise Security', short: 'Data protection', desc: 'Complete multi-tenant isolation, granular role-based access control, audit logging of all critical actions, GDPR compliance tools, and encrypted data storage.' },
-    { icon: Star, title: 'IB Core Modules', short: 'CAS, EE, TOK tracking', desc: 'Manage CAS experiences with strand mapping, track Extended Essay milestones from proposal to viva, manage TOK deadlines, and generate IB-compliant reports.' },
+    { icon: BarChart3, title: 'Executive Dashboards', short: 'Role-specific insights', desc: 'Personalized dashboards for every stakeholder—students see academic progress, teachers manage their classes, coordinators oversee cohorts, parents track their children, and admins control the entire school. Each role receives contextual information tailored to their responsibilities, with quick actions and performance indicators prominently displayed.' },
+    { icon: ClipboardCheck, title: 'Academic Workflows', short: 'Complete assignment lifecycle', desc: 'From creation to grading—publish assignments with IB criteria alignment, students submit work through Google Docs, files, or links, teachers provide criterion-based feedback, and grades sync automatically. Support for multiple submission formats, late submission handling, and comprehensive submission tracking ensure transparency throughout the entire workflow.' },
+    { icon: BookOpen, title: 'IB Gradebook', short: '1-7 scale precision', desc: 'Native 1-7 IB grading scale, predicted grade tracking with historical trends, SL/HL subject level management, rubric-based criterion assessment, and comprehensive term reports that align with IB terminology. Generate assessment reports by criterion, track grade distribution patterns, and lock grades for compliance with school policies.' },
+    { icon: Users, title: 'Parent Portal', short: 'Real-time family engagement', desc: 'Parents see grades, attendance records, upcoming assignments, teacher feedback, and behavioral notes—all updated in real-time with notification preferences. Direct messaging with teachers keeps communication secure, organized, and compliant with school policies. Parents can also receive progress alerts and attendance warnings.' },
+    { icon: Calendar, title: 'Timetable Integration', short: 'Schedule synchronization', desc: 'Sync with external timetable systems like Veracross or iSAMS, display daily class schedules, manage periods and rooms, resolve scheduling conflicts automatically, and track historical schedule changes. Supports multiple concurrent timetables for different academic years and handles special events and exam schedules.' },
+    { icon: MessageSquare, title: 'Internal Messaging', short: 'Secure communication hub', desc: 'Role-aware messaging between teachers, students, and parents with granular permission controls. Create class announcements, manage discussions, implement quiet hours policies, and maintain compliance logging for all communications. Thread-based conversations keep context clear and searchable.' },
+    { icon: Shield, title: 'Enterprise Security', short: 'Data protection', desc: 'Complete multi-tenant isolation ensures schools cannot access each other\'s data. Granular role-based access control with customizable permissions, audit logging of all critical actions, GDPR compliance tools including data export and deletion, encrypted data storage at rest and in transit.' },
+    { icon: Star, title: 'IB Core Modules', short: 'CAS, EE, TOK tracking', desc: 'Manage CAS experiences with strand mapping, supervisor tracking, and hourly reflection submissions. Track Extended Essay milestones from initial proposal through final viva voce with supervisor feedback integration. Manage TOK deadlines, student reflections, and coordinator approvals in one unified interface.' },
   ];
 
   return (
     <section className="py-24 bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-slate-900">Comprehensive Platform Capabilities</h2>
           <p className="mt-3 text-lg text-slate-500">Engineered for the rigorous demands of International Baccalaureate institutions</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-3">
           {features.map((f, i) => (
             <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
               <button 
@@ -132,7 +132,7 @@ function FeaturesGrid() {
                 <ChevronRight className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-300 ${expandedId === i ? 'rotate-90' : ''}`} />
               </button>
               {expandedId === i && (
-                <div className="px-6 pb-4 border-t border-slate-100 bg-slate-50/30">
+                <div className="px-6 pb-4 border-t border-slate-100 bg-slate-50/30 animate-in fade-in slide-in-from-top-2 duration-300">
                   <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
                 </div>
               )}
