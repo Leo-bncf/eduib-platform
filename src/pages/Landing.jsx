@@ -56,40 +56,19 @@ function HeroSection() {
            </div>
         </div>
         
-        <div className="mt-20 relative">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden mx-auto max-w-5xl">
-            <div className="flex items-center gap-1.5 px-4 py-3 bg-slate-50 border-b border-slate-200">
-              <div className="w-3 h-3 rounded-full bg-slate-300" />
-              <div className="w-3 h-3 rounded-full bg-slate-300" />
-              <div className="w-3 h-3 rounded-full bg-slate-300" />
+        <div className="mt-16 mx-auto max-w-4xl">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-slate-200 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+            <div className="bg-white px-8 py-7 text-center">
+              <div className="text-3xl font-bold text-blue-600 mb-2">IB-only</div>
+              <p className="text-sm text-slate-500 leading-relaxed">Built exclusively for IB World Schools — no generic features, no bloat</p>
             </div>
-            <div className="p-8">
-              <div className="grid grid-cols-3 gap-6">
-                <div className="bg-white rounded-lg p-5 border border-slate-100 shadow-sm">
-                  <div className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2">Active Students</div>
-                  <div className="text-3xl font-bold text-slate-900">1,248</div>
-                  <div className="mt-4 space-y-2">
-                    <div className="h-1.5 bg-slate-100 rounded-full w-full" />
-                    <div className="h-1.5 bg-slate-100 rounded-full w-3/4" />
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg p-5 border border-slate-100 shadow-sm">
-                  <div className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2">Pending Reports</div>
-                  <div className="text-3xl font-bold text-slate-900">42</div>
-                  <div className="mt-4 space-y-2">
-                     <div className="h-1.5 bg-blue-500 rounded-full w-1/2" />
-                     <div className="h-1.5 bg-slate-100 rounded-full w-full" />
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg p-5 border border-slate-100 shadow-sm">
-                  <div className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2">Attendance Rate</div>
-                  <div className="text-3xl font-bold text-slate-900">98.2%</div>
-                  <div className="mt-4 space-y-2">
-                    <div className="h-1.5 bg-emerald-500 rounded-full w-[98%]" />
-                    <div className="h-1.5 bg-slate-100 rounded-full w-full" />
-                  </div>
-                </div>
-              </div>
+            <div className="bg-white px-8 py-7 text-center">
+              <div className="text-3xl font-bold text-blue-600 mb-2">PYP → DP</div>
+              <p className="text-sm text-slate-500 leading-relaxed">Every workflow maps directly to IB programmes, criteria, and terminology</p>
+            </div>
+            <div className="bg-white px-8 py-7 text-center">
+              <div className="text-3xl font-bold text-blue-600 mb-2">Zero noise</div>
+              <p className="text-sm text-slate-500 leading-relaxed">Trimmed to exactly what IB educators and students need — nothing more</p>
             </div>
           </div>
         </div>
