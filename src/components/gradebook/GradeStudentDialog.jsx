@@ -9,9 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2 } from 'lucide-react';
 import { logAudit, AuditActions, AuditLevels } from '@/components/utils/auditLogger';
+import { useGradebookPolicy } from '@/hooks/useGradebookPolicy';
+import { useUser } from '@/components/auth/UserContext';
 
 export default function GradeStudentDialog({ gradeItem, student, existingGrade, open, onClose }) {
   const queryClient = useQueryClient();
+  const { membership } = useUser();
+  const { policy } = useGradebookPolicy(gradeItem?.school_id);
+  const [justification, setJustification] = useState('');
   const [form, setForm] = useState({
     score: existingGrade?.score || '',
     percentage: existingGrade?.percentage || '',
@@ -65,7 +70,23 @@ export default function GradeStudentDialog({ gradeItem, student, existingGrade, 
     },
   });
 
+  // Determine if grade is effectively locked
+  const isLocked = (() => {
+    if (!policy.lock_grades_after_deadline) return false;
+    const now = new Date();
+    for (const win of policy.reporting_windows || []) {
+      if (win.locked) return true;
+      if (win.locks_at && now > new Date(win.locks_at)) return true;
+    }
+    return false;
+  })();
+
+  const canOverrideLock = policy.admin_can_override_lock && ['school_admin','super_admin','admin'].includes(membership?.role);
+  const effectiveLocked = isLocked && !canOverrideLock;
+  const needsJustification = isLocked && canOverrideLock && policy.require_justification_for_locked_edit && existingGrade;
+
   const handleSave = () => {
+    if (needsJustification && justification.trim().length < (policy.justification_min_chars || 20)) return;
     const gradeData = {
       ...form,
       school_id: gradeItem.school_id,
@@ -95,6 +116,19 @@ export default function GradeStudentDialog({ gradeItem, student, existingGrade, 
           <DialogTitle>Grade: {student.user_name || student.user_email}</DialogTitle>
           <p className="text-sm text-slate-500">{gradeItem.title}</p>
         </DialogHeader>
+
+        {effectiveLocked && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+            <Lock className="w-4 h-4 text-red-600 flex-shrink-0" />
+            <p className="text-xs text-red-700">Grades are locked for the current reporting period. Contact a school admin to make changes.</p>
+          </div>
+        )}
+
+        {policy.feedback_only_mode && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <p className="text-xs text-amber-800">⚠ Feedback-only mode is active. Scores will be saved but hidden from students and parents.</p>
+          </div>
+        )}
 
         <div className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
@@ -152,13 +186,29 @@ export default function GradeStudentDialog({ gradeItem, student, existingGrade, 
             />
           </div>
 
+          {needsJustification && (
+            <div>
+              <Label className="text-sm font-semibold text-amber-700">Justification for locked grade edit *</Label>
+              <Textarea
+                value={justification}
+                onChange={e => setJustification(e.target.value)}
+                placeholder={`Explain reason for editing after deadline (min ${policy.justification_min_chars} characters)…`}
+                rows={2}
+                className="mt-1.5 border-amber-300"
+              />
+              {justification.trim().length < (policy.justification_min_chars || 20) && justification.length > 0 && (
+                <p className="text-xs text-amber-600 mt-1">{justification.trim().length}/{policy.justification_min_chars} characters minimum</p>
+              )}
+            </div>
+          )}
+
           <div className="flex gap-3 pt-2">
             <Button onClick={onClose} variant="outline" className="flex-1">
               Cancel
             </Button>
             <Button
               onClick={handleSave}
-              disabled={saveMutation.isPending}
+              disabled={saveMutation.isPending || effectiveLocked || (needsJustification && justification.trim().length < (policy.justification_min_chars || 20))}
               className="flex-1 bg-indigo-600 hover:bg-indigo-700"
             >
               {saveMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
