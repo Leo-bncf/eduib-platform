@@ -15,18 +15,7 @@ import SyncSettingsTab       from '@/components/timetable/SyncSettingsTab';
 import SyncMonitorTab        from '@/components/timetable/SyncMonitorTab';
 import ConflictResolutionTab from '@/components/timetable/ConflictResolutionTab';
 
-const sidebarLinks = [
-  { label: 'Dashboard',      page: 'SchoolAdminDashboard',     icon: LayoutDashboard },
-  { label: 'Users',          page: 'SchoolAdminUsers',         icon: Users },
-  { label: 'Classes',        page: 'SchoolAdminClasses',       icon: BookOpen },
-  { label: 'Enrollments',    page: 'SchoolAdminEnrollments',   icon: Users },
-  { label: 'Academic Setup', page: 'SchoolAdminAcademicSetup', icon: GraduationCap },
-  { label: 'Attendance',     page: 'SchoolAdminAttendance',    icon: Calendar },
-  { label: 'Timetable',      page: 'SchoolAdminTimetable',     icon: Clock },
-  { label: 'Reports',        page: 'SchoolAdminReports',       icon: FileText },
-  { label: 'Billing',        page: 'SchoolAdminBilling',       icon: CreditCard },
-  { label: 'Settings',       page: 'SchoolAdminSettings',      icon: Settings },
-];
+
 
 export default function SchoolAdminTimetable() {
   const { user, school, schoolId } = useUser();

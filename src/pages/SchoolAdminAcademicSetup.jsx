@@ -15,18 +15,7 @@ import TermsTab from '@/components/academic-setup/TermsTab';
 import CohortsTab from '@/components/academic-setup/CohortsTab';
 import SubjectCatalogTab from '@/components/academic-setup/SubjectCatalogTab';
 
-const sidebarLinks = [
-  { label: 'Dashboard',      page: 'SchoolAdminDashboard',      icon: LayoutDashboard },
-  { label: 'Users',          page: 'SchoolAdminUsers',          icon: Users },
-  { label: 'Classes',        page: 'SchoolAdminClasses',        icon: BookOpen },
-  { label: 'Enrollments',    page: 'SchoolAdminEnrollments',    icon: Users },
-  { label: 'Academic Setup', page: 'SchoolAdminAcademicSetup',  icon: CalendarDays },
-  { label: 'Attendance',     page: 'SchoolAdminAttendance',     icon: Calendar },
-  { label: 'Timetable',      page: 'SchoolAdminTimetable',      icon: Clock },
-  { label: 'Reports',        page: 'SchoolAdminReports',        icon: FileText },
-  { label: 'Billing',        page: 'SchoolAdminBilling',        icon: CreditCard },
-  { label: 'Settings',       page: 'SchoolAdminSettings',       icon: Settings },
-];
+
 
 const TABS = [
   { key: 'years',    label: 'Academic Years',        icon: CalendarDays,  desc: 'Create & manage academic years' },

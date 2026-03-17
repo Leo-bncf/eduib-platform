@@ -22,19 +22,7 @@ import UpgradePrompt from '@/components/plan/UpgradePrompt';
 import { PLAN_LIMITS, PLAN_NAMES, PLAN_PRICES, getUpgradePlans } from '@/components/plan/PlanConfig';
 import { format } from 'date-fns';
 
-const sidebarLinks = [
-  { label: 'Dashboard',        page: 'SchoolAdminDashboard',      icon: LayoutDashboard },
-  { label: 'Users',            page: 'SchoolAdminUsers',           icon: Users },
-  { label: 'Classes',          page: 'SchoolAdminClasses',         icon: BookOpen },
-  { label: 'Enrollments',      page: 'SchoolAdminEnrollments',     icon: Users },
-  { label: 'Academic Setup',   page: 'SchoolAdminAcademicSetup',   icon: GraduationCap },
-  { label: 'Attendance',       page: 'SchoolAdminAttendance',      icon: Calendar },
-  { label: 'Reports',          page: 'SchoolAdminReports',         icon: FileText },
-  { label: 'Governance',       page: 'SchoolAdminGovernance',      icon: Shield },
-  { label: 'Messaging Policy', page: 'SchoolAdminMessagingPolicy', icon: MessageSquare },
-  { label: 'Billing',          page: 'SchoolAdminBilling',         icon: CreditCard },
-  { label: 'Settings',         page: 'SchoolAdminSettings',        icon: Settings },
-];
+
 
 const BILLING_STATUS_CONFIG = {
   trial:     { label: 'Free Trial',   color: 'bg-blue-100 text-blue-700 border-blue-200',    dot: 'bg-blue-500' },

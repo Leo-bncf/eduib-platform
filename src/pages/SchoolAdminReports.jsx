@@ -14,19 +14,7 @@ import CSVExportToolkit from '@/components/reports/CSVExportToolkit';
 import PDFReportBuilder from '@/components/reports/PDFReportBuilder';
 import CoordinatorReports from '@/components/reports/CoordinatorReports';
 
-const sidebarLinks = [
-  { label: 'Dashboard',        page: 'SchoolAdminDashboard',       icon: LayoutDashboard },
-  { label: 'Users',            page: 'SchoolAdminUsers',            icon: Users },
-  { label: 'Classes',          page: 'SchoolAdminClasses',          icon: BookOpen },
-  { label: 'Enrollments',      page: 'SchoolAdminEnrollments',      icon: Users },
-  { label: 'Subjects',         page: 'SchoolAdminSubjects',         icon: GraduationCap },
-  { label: 'Attendance',       page: 'SchoolAdminAttendance',       icon: Calendar },
-  { label: 'Timetable',        page: 'SchoolAdminTimetable',        icon: Clock },
-  { label: 'Reports',          page: 'SchoolAdminReports',          icon: FileText },
-  { label: 'Messaging Policy', page: 'SchoolAdminMessagingPolicy',  icon: MessageSquare },
-  { label: 'Billing',          page: 'SchoolAdminBilling',          icon: CreditCard },
-  { label: 'Settings',         page: 'SchoolAdminSettings',         icon: Settings },
-];
+
 
 export default function SchoolAdminReports() {
   const { user, school, schoolId, role } = useUser();
