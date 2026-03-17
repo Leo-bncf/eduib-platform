@@ -206,10 +206,10 @@ function RolesSection() {
 
 function CTASection() {
   const benefits = [
-    { icon: '⚡', title: 'Lightning Fast', desc: 'Deploy in days, not months. Get up and running quickly.' },
-    { icon: '🔒', title: 'Enterprise Grade', desc: 'Bank-level security with full GDPR compliance.' },
-    { icon: '📞', title: 'Dedicated Support', desc: 'Expert team available to help you succeed.' },
-    { icon: '🚀', title: 'Always Improving', desc: 'Regular updates and new features based on school feedback.' },
+    { title: 'Lightning Fast', desc: 'Deploy in days, not months. Get up and running quickly.' },
+    { title: 'Enterprise Grade', desc: 'Bank-level security with full GDPR compliance.' },
+    { title: 'Dedicated Support', desc: 'Expert team available to help you succeed.' },
+    { title: 'Always Improving', desc: 'Regular updates and new features based on school feedback.' },
   ];
 
   return (
@@ -222,7 +222,7 @@ function CTASection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
           {benefits.map((b, i) => (
             <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm p-6">
-              <div className="text-3xl mb-3">{b.icon}</div>
+              <div className="w-3 h-3 rounded-full bg-blue-600 mb-4"></div>
               <h3 className="font-bold text-slate-900 mb-2">{b.title}</h3>
               <p className="text-sm text-slate-500 leading-relaxed">{b.desc}</p>
             </div>
