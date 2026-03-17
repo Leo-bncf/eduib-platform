@@ -188,6 +188,14 @@ const AuthenticatedApp = () => {
         }
       />
       <Route
+        path="/StudentIBCore"
+        element={
+          <LayoutWrapper currentPageName="StudentIBCore">
+            <StudentIBCore />
+          </LayoutWrapper>
+        }
+      />
+      <Route
         path="/StudentAcademicDashboard"
         element={
           <LayoutWrapper currentPageName="StudentAcademicDashboard">

@@ -226,12 +226,12 @@ function EETab({ schoolId, userId }) {
     <div className="space-y-5">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
-          { label: 'Subject Area', value: latest?.subject_area || 'Not yet selected', icon: FileText, color: 'bg-indigo-50 text-indigo-600' },
-          { label: 'Progress', value: `${approved} / ${Math.max(sorted.length, 8)} milestones`, icon: CheckCircle2, color: 'bg-emerald-50 text-emerald-600' },
-          { label: 'Supervisor', value: latest?.supervisor_name || 'Not assigned', icon: MessageSquare, color: 'bg-amber-50 text-amber-600' },
-        ].map(({ label, value, icon: Icon, color }) => (
+          { label: 'Subject Area', value: latest?.subject_area || 'Not yet selected', colorCls: 'bg-indigo-50 text-indigo-600', Ico: FileText },
+          { label: 'Progress', value: `${approved} / ${Math.max(sorted.length, 8)} milestones`, colorCls: 'bg-emerald-50 text-emerald-600', Ico: CheckCircle2 },
+          { label: 'Supervisor', value: latest?.supervisor_name || 'Not assigned', colorCls: 'bg-amber-50 text-amber-600', Ico: Clock },
+        ].map(({ label, value, colorCls, Ico }) => (
           <div key={label} className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${color}`}><Icon className="w-5 h-5" /></div>
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colorCls}`}><Ico className="w-5 h-5" /></div>
             <div><p className="text-xs text-slate-500">{label}</p><p className="font-semibold text-slate-900 text-sm">{value}</p></div>
           </div>
         ))}

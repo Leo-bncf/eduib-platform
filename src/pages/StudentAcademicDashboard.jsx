@@ -465,7 +465,7 @@ export default function StudentAcademicDashboard() {
               </div>
             ) : (
               <Tabs defaultValue="grades">
-                <TabsList className="mb-6">
+                <TabsList className="mb-6 flex-wrap">
                   <TabsTrigger value="grades" className="flex items-center gap-2">
                     <BarChart3 className="w-4 h-4" /> Grades & Feedback
                   </TabsTrigger>
@@ -474,6 +474,12 @@ export default function StudentAcademicDashboard() {
                   </TabsTrigger>
                   <TabsTrigger value="assignments" className="flex items-center gap-2">
                     <ClipboardList className="w-4 h-4" /> Assignments
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4" /> Analytics
+                  </TabsTrigger>
+                  <TabsTrigger value="export" className="flex items-center gap-2">
+                    <Download className="w-4 h-4" /> Export
                   </TabsTrigger>
                 </TabsList>
 
@@ -485,6 +491,18 @@ export default function StudentAcademicDashboard() {
                 </TabsContent>
                 <TabsContent value="assignments">
                   <AssignmentsTab schoolId={schoolId} userId={user?.id} userName={user?.full_name} classes={classes} />
+                </TabsContent>
+                <TabsContent value="analytics">
+                  <PerformanceTrends schoolId={schoolId} userId={user?.id} classes={classes} />
+                </TabsContent>
+                <TabsContent value="export">
+                  <TermReportExport
+                    schoolId={schoolId}
+                    userId={user?.id}
+                    userName={user?.full_name}
+                    schoolName={school?.name}
+                    classes={classes}
+                  />
                 </TabsContent>
               </Tabs>
             )}
