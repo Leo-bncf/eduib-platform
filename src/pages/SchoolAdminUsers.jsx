@@ -2,18 +2,23 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import RoleGuard from '@/components/auth/RoleGuard';
+import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
-import { UserCheck, Mail, Upload, ShieldCheck } from 'lucide-react';
+import {
+  UserCheck, Mail, Upload, ShieldCheck
+} from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import SchoolAdminPageShell from '@/components/app/SchoolAdminPageShell';
 
 import UserDirectoryTab    from '@/components/users/UserDirectoryTab';
 import InvitationsTab      from '@/components/users/InvitationsTab';
 import BulkImportTab       from '@/components/users/BulkImportTab';
 import MembershipHealthTab from '@/components/users/MembershipHealthTab';
 
+
+
 export default function SchoolAdminUsers() {
-  const { school, schoolId } = useUser();
+  const { user, school, schoolId } = useUser();
 
   const { data: memberships = [] } = useQuery({
     queryKey: ['school-memberships', schoolId],
@@ -33,53 +38,77 @@ export default function SchoolAdminUsers() {
 
   return (
     <RoleGuard allowedRoles={['school_admin', 'super_admin', 'admin']}>
-      <SchoolAdminPageShell
-        title="Users & Memberships"
-        subtitle={`${memberships.length} members · ${school?.name}`}
-        badge={
-          pendingInviteCount > 0 && (
-            <span className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
-              <Mail className="w-3 h-3" />
-              {pendingInviteCount} pending
-            </span>
-          )
-        }
-      >
-        <Tabs defaultValue="directory">
-          <TabsList className="bg-white border border-slate-200 h-10 mb-6">
-            <TabsTrigger value="directory" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-              <UserCheck className="w-3.5 h-3.5" /> Directory
-            </TabsTrigger>
-            <TabsTrigger value="invitations" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-              <Mail className="w-3.5 h-3.5" /> Invitations
-              {pendingInviteCount > 0 && (
-                <span className="ml-0.5 bg-amber-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {pendingInviteCount}
-                </span>
-              )}
-            </TabsTrigger>
-            <TabsTrigger value="import" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-              <Upload className="w-3.5 h-3.5" /> Bulk Import
-            </TabsTrigger>
-            <TabsTrigger value="health" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-              <ShieldCheck className="w-3.5 h-3.5" /> Membership Health
-            </TabsTrigger>
-          </TabsList>
+      <div className="min-h-screen bg-slate-50">
+        <AppSidebar
+          links={SCHOOL_ADMIN_SIDEBAR_LINKS}
+          role="school_admin"
+          schoolName={school?.name}
+          userName={user?.full_name}
+          userId={user?.id}
+          schoolId={schoolId}
+        />
 
-          <TabsContent value="directory">
-            <UserDirectoryTab schoolId={schoolId} />
-          </TabsContent>
-          <TabsContent value="invitations">
-            <InvitationsTab schoolId={schoolId} schoolName={school?.name} />
-          </TabsContent>
-          <TabsContent value="import">
-            <BulkImportTab schoolId={schoolId} schoolName={school?.name} />
-          </TabsContent>
-          <TabsContent value="health">
-            <MembershipHealthTab schoolId={schoolId} />
-          </TabsContent>
-        </Tabs>
-      </SchoolAdminPageShell>
+        <main className="md:ml-64 min-h-screen flex flex-col">
+          {/* Page header */}
+          <div className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
+            <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto">
+              <div>
+                <h1 className="text-base font-black text-slate-900 tracking-tight">User & Membership Administration</h1>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {memberships.length} members · {school?.name}
+                </p>
+              </div>
+              {pendingInviteCount > 0 && (
+                <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium px-3 py-1.5 rounded-lg">
+                  <Mail className="w-3.5 h-3.5" />
+                  {pendingInviteCount} pending invitation{pendingInviteCount !== 1 ? 's' : ''}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex-1 p-4 md:p-6 max-w-6xl mx-auto w-full">
+            <Tabs defaultValue="directory">
+              <TabsList className="bg-white border border-slate-200 h-10 mb-6">
+                <TabsTrigger value="directory" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <UserCheck className="w-3.5 h-3.5" /> Directory
+                </TabsTrigger>
+                <TabsTrigger value="invitations" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <Mail className="w-3.5 h-3.5" /> Invitations
+                  {pendingInviteCount > 0 && (
+                    <span className="ml-0.5 bg-amber-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                      {pendingInviteCount}
+                    </span>
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="import" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <Upload className="w-3.5 h-3.5" /> Bulk Import
+                </TabsTrigger>
+                <TabsTrigger value="health" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <ShieldCheck className="w-3.5 h-3.5" /> Membership Health
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="directory">
+                <UserDirectoryTab schoolId={schoolId} />
+              </TabsContent>
+
+              <TabsContent value="invitations">
+                <InvitationsTab schoolId={schoolId} schoolName={school?.name} />
+              </TabsContent>
+
+              <TabsContent value="import">
+                <BulkImportTab schoolId={schoolId} schoolName={school?.name} />
+              </TabsContent>
+
+              <TabsContent value="health">
+                <MembershipHealthTab schoolId={schoolId} />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </main>
+      </div>
     </RoleGuard>
   );
 }

@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Archive, RotateCcw, Copy, Scissors, Merge, CheckCircle,
-  Loader2, BookOpen, AlertTriangle, Info, ChevronRight, Users, Trash2
+  Loader2, BookOpen, AlertTriangle, Info, ChevronRight, Users
 } from 'lucide-react';
 
 function DuplicateDialog({ classObj, onClose, schoolId, academicYears }) {
@@ -232,11 +232,6 @@ export default function ClassLifecycleTab({ schoolId, classes, memberships, acad
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['school-classes', schoolId] }),
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: (id) => base44.entities.Class.delete(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['school-classes', schoolId] }),
-  });
-
   const activeClasses   = classes.filter(c => c.status === 'active');
   const archivedClasses = classes.filter(c => c.status === 'archived');
 
@@ -316,40 +311,15 @@ export default function ClassLifecycleTab({ schoolId, classes, memberships, acad
                   <span className="text-sm font-medium text-slate-800 truncate">{c.name}</span>
                   <span className="text-[11px] text-slate-400">{c.student_ids?.length || 0} students</span>
                 </div>
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  {c.status === 'archived' && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 gap-1"
-                      disabled={archiveMutation.isPending}
-                      onClick={() => archiveMutation.mutate({ id: c.id, status: 'active' })}
-                    >
-                      <RotateCcw className="w-3 h-3" />Unarchive
-                    </Button>
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={`h-7 text-xs flex-shrink-0 gap-1 ${c.status === 'active' ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-red-600 hover:text-red-700 hover:bg-red-50'}`}
-                    disabled={archiveMutation.isPending || deleteMutation.isPending}
-                    onClick={() => {
-                      if (c.status === 'archived') {
-                        if (window.confirm(`Permanently delete archived class "${c.name}"? This cannot be undone.`)) {
-                          deleteMutation.mutate(c.id);
-                        }
-                      } else {
-                        archiveMutation.mutate({ id: c.id, status: 'archived' });
-                      }
-                    }}
-                  >
-                    {c.status === 'archived' ? (
-                      <><Trash2 className="w-3 h-3" />Delete</>
-                    ) : (
-                      <><Archive className="w-3 h-3" />Archive</>
-                    )}
-                  </Button>
-                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`h-7 text-xs flex-shrink-0 gap-1 ${c.status === 'active' ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50'}`}
+                  disabled={archiveMutation.isPending}
+                  onClick={() => archiveMutation.mutate({ id: c.id, status: c.status === 'active' ? 'archived' : 'active' })}
+                >
+                  {c.status === 'active' ? <><Archive className="w-3 h-3" />Archive</> : <><RotateCcw className="w-3 h-3" />Restore</>}
+                </Button>
               </div>
             ))}
           </div>
