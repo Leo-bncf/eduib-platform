@@ -10,6 +10,7 @@ import {
   Building2,
   CreditCard,
   FileText,
+  Headphones,
   School,
   Settings,
   Users,

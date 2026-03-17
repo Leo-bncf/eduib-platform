@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import SuperAdminAnalytics from './pages/SuperAdminAnalytics';
 import SuperAdminAutomation from './pages/SuperAdminAutomation';
+import SuperAdminSupport from './pages/SuperAdminSupport';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSettings from './pages/SuperAdminSettings';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
