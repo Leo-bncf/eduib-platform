@@ -47,6 +47,7 @@ const GRADE_COLORS = ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b', '#f43f5e', '#8
 
 function AttendanceTrend({ attendance }) {
   const data = useMemo(() => {
+    if (!attendance || attendance.length === 0) return [];
     const weeks = [];
     for (let i = 7; i >= 0; i--) {
       const weekStart = startOfWeek(subDays(new Date(), i * 7), { weekStartsOn: 1 });
@@ -56,12 +57,12 @@ function AttendanceTrend({ attendance }) {
         const d = parseISO(a.date);
         return d >= weekStart && d <= weekEnd;
       });
-      if (inRange.length === 0 && i > 0) return null;
+      if (inRange.length === 0) continue;
       const present = inRange.filter(a => a.status === 'present').length;
       const rate = inRange.length > 0 ? Math.round((present / inRange.length) * 100) : null;
-      weeks.push({ week: label, rate, total: inRange.length });
+      if (rate !== null) weeks.push({ week: label, rate, total: inRange.length });
     }
-    return weeks.filter(Boolean).filter(w => w.total > 0);
+    return weeks;
   }, [attendance]);
 
   if (data.length < 2) return <p className="text-sm text-slate-400 py-4 text-center">Not enough data to show trend</p>;
