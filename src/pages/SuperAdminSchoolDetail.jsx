@@ -64,6 +64,14 @@ export default function SuperAdminSchoolDetail() {
     setActionLoading(false);
   };
 
+  const handleDeleteSchool = async () => {
+    if (!window.confirm(`Permanently delete "${school.name}"? This cannot be undone.`)) return;
+    if (!window.confirm(`Second confirmation: all school data will be lost. Are you absolutely sure?`)) return;
+    setActionLoading(true);
+    await base44.entities.School.delete(schoolId);
+    navigate('/SuperAdminSchools');
+  };
+
   if (isChecking || isLoading) {
     return <SuperAdminLoadingState />;
   }
