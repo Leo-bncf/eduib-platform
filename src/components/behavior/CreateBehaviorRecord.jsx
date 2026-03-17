@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Loader2, Plus } from 'lucide-react';
+import { Loader2, Plus, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function CreateBehaviorRecord({ schoolId, studentId, studentName, recorderId, recorderName, onClose, trigger }) {
@@ -16,15 +16,44 @@ export default function CreateBehaviorRecord({ schoolId, studentId, studentName,
   const [form, setForm] = useState({
     type: 'note',
     category: 'other',
+    incident_type_id: '',
     title: '',
     description: '',
     date: format(new Date(), 'yyyy-MM-dd'),
     severity: 'low',
     visible_to_student: false,
     visible_to_parent: false,
+    staff_only: false,
     action_taken: '',
     follow_up_required: false,
   });
+
+  const { data: policies = [] } = useQuery({
+    queryKey: ['behavior-policy', schoolId],
+    queryFn: () => base44.entities.BehaviorPolicy.filter({ school_id: schoolId }),
+    enabled: !!schoolId,
+  });
+  const policy = policies[0] || null;
+  const activeTypes = policy?.incident_types?.filter(t => t.active) || [];
+  const activeSeverities = policy?.severity_levels?.filter(s => s.active) || [];
+
+  const handleIncidentTypeChange = (typeId) => {
+    const incType = activeTypes.find(t => t.id === typeId);
+    if (incType) {
+      setForm(f => ({
+        ...f,
+        incident_type_id: typeId,
+        visible_to_student: incType.staff_only ? false : incType.default_visible_to_student,
+        visible_to_parent: incType.staff_only ? false : incType.default_visible_to_parent,
+        staff_only: incType.staff_only,
+      }));
+    } else {
+      setForm(f => ({ ...f, incident_type_id: typeId }));
+    }
+  };
+
+  const selectedIncidentType = activeTypes.find(t => t.id === form.incident_type_id);
+  const visibilityLocked = selectedIncidentType?.staff_only || (!policy?.allow_teacher_visibility_override && !!selectedIncidentType);
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.BehaviorRecord.create(data),
