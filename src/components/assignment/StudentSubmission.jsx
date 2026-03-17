@@ -45,6 +45,28 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
   });
 
   const handleAddDocuments = (newDocs) => {
+    // File size / type policy enforcement
+    const errors = [];
+    for (const doc of newDocs) {
+      if (doc.size_bytes && policy.max_file_size_mb) {
+        if (doc.size_bytes > policy.max_file_size_mb * 1024 * 1024) {
+          errors.push(`"${doc.name}" exceeds the ${policy.max_file_size_mb}MB limit.`);
+        }
+      }
+      if (doc.name && policy.allowed_file_extensions?.length > 0) {
+        const ext = '.' + doc.name.split('.').pop().toLowerCase();
+        if (!policy.allowed_file_extensions.map(e => e.toLowerCase()).includes(ext)) {
+          errors.push(`File type "${ext}" is not allowed by school policy.`);
+        }
+      }
+    }
+    if (errors.length > 0) { setPolicyError(errors.join(' ')); return; }
+    // Max files check
+    if (policy.max_files_per_submission && (documents.length + newDocs.length) > policy.max_files_per_submission) {
+      setPolicyError(`Maximum ${policy.max_files_per_submission} files allowed per submission.`);
+      return;
+    }
+    setPolicyError(null);
     setDocuments([...documents, ...newDocs]);
     setDocumentPickerOpen(false);
   };
