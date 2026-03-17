@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
@@ -46,7 +46,7 @@ export default function AttendanceRecorder({ classData, teacherId, teacherName }
   });
 
   // Build status list from policy codes or fallback
-  const statuses = React.useMemo(() => {
+  const statuses = useMemo(() => {
     if (policy?.codes?.length) {
       return policy.codes.filter(c => c.active !== false).map(c => ({
         key: c.key,
@@ -82,7 +82,7 @@ export default function AttendanceRecorder({ classData, teacherId, teacherName }
     enabled: !!selectedDate,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const initialData = {};
     const initialNotes = {};
     existingRecords.forEach(record => {
@@ -133,7 +133,7 @@ export default function AttendanceRecorder({ classData, teacherId, teacherName }
     setAttendanceData(newData);
   };
 
-  const statusCounts = React.useMemo(() => {
+  const statusCounts = useMemo(() => {
     const counts = {};
     Object.values(attendanceData).forEach(s => { counts[s] = (counts[s] || 0) + 1; });
     return counts;
