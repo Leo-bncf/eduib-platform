@@ -35,6 +35,8 @@ export default function AttendanceCorrectionWorkflow({ schoolId }) {
   const [search, setSearch] = useState('');
   const [dateFrom, setDateFrom] = useState(format(subDays(new Date(), 13), 'yyyy-MM-dd'));
   const [dateTo, setDateTo] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [filterClass, setFilterClass] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [correcting, setCorrecting] = useState(null);
   const [newStatus, setNewStatus] = useState('');
   const [reason, setReason] = useState('');
