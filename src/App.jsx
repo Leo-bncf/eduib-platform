@@ -213,6 +213,14 @@ const AuthenticatedApp = () => {
         }
       />
       <Route
+        path="/PrivacyPolicy"
+        element={
+          <LayoutWrapper currentPageName="PrivacyPolicy">
+            <PrivacyPolicy />
+          </LayoutWrapper>
+        }
+      />
+      <Route
         path="/SchoolAdminAcademicSetup"
         element={
           <LayoutWrapper currentPageName="SchoolAdminAcademicSetup">
