@@ -145,26 +145,57 @@ function FeaturesGrid() {
 }
 
 function RolesSection() {
+  const [expandedRole, setExpandedRole] = React.useState(null);
   const roles = [
-    { name: 'Students', desc: 'Personal dashboards, assignments, grades, timetables, and IB Core tracking.' },
-    { name: 'Teachers', desc: 'Class management, gradebook, submissions review, attendance, and analytics.' },
-    { name: 'Parents', desc: 'Child progress monitoring, grades visibility, assignments, and messaging.' },
-    { name: 'Coordinators', desc: 'Cohort oversight, predicted grades, reporting cycles, and IB Core supervision.' },
-    { name: 'Administrators', desc: 'Full school management, users, classes, policies, and audit logs.' },
+    { 
+      name: 'Students', 
+      short: 'Learn and track progress',
+      desc: 'Personal dashboards showing grades and upcoming work, submit assignments and view feedback, check daily timetable, track CAS, EE, and TOK progress.' 
+    },
+    { 
+      name: 'Teachers', 
+      short: 'Manage and assess',
+      desc: 'Create and manage classes, publish assignments with IB criteria, grade submissions with rubrics, track attendance, view class analytics and performance trends.' 
+    },
+    { 
+      name: 'Parents', 
+      short: 'Stay informed',
+      desc: 'Monitor child\'s grades and progress, see upcoming assignments and deadlines, view attendance records, message teachers directly, receive progress alerts.' 
+    },
+    { 
+      name: 'Coordinators', 
+      short: 'Oversee programmes',
+      desc: 'Manage cohorts and predicted grades, oversee IB Core (TOK, EE, CAS), generate compliance reports, track subject registrations, manage exam entries.' 
+    },
+    { 
+      name: 'Administrators', 
+      short: 'Control everything',
+      desc: 'Manage users and permissions, configure academic calendar and terms, set policies and workflows, view audit logs, manage billing and integrations.' 
+    },
   ];
 
   return (
-    <section className="py-24 bg-transparent border-y border-slate-100">
+    <section className="py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-slate-900">Unified Access Control</h2>
-          <p className="mt-3 text-lg text-slate-500">Secure, role-based interfaces ensuring data privacy and operational efficiency.</p>
+          <h2 className="text-3xl font-bold text-slate-900">Purpose-Built Roles</h2>
+          <p className="mt-3 text-lg text-slate-500">Every user type has a tailored experience designed for their specific responsibilities.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {roles.map((r, i) => (
-            <div key={i} className="relative p-6 bg-white/70 backdrop-blur-sm border-t-2 border-t-blue-500 shadow-sm rounded-b-md border-x border-b border-slate-200">
-              <h3 className="font-bold text-slate-900 mb-3">{r.name}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{r.desc}</p>
+            <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+              <button 
+                onClick={() => setExpandedRole(expandedRole === i ? null : i)}
+                className="w-full px-5 py-4 text-left hover:bg-slate-50/50 transition-colors"
+              >
+                <h3 className="font-bold text-slate-900">{r.name}</h3>
+                <p className="text-xs text-slate-500 mt-1">{r.short}</p>
+              </button>
+              {expandedRole === i && (
+                <div className="px-5 pb-4 border-t border-slate-100 bg-slate-50/30">
+                  <p className="text-sm text-slate-600 leading-relaxed">{r.desc}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
