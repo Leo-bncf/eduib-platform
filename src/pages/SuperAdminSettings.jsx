@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { CheckCircle2, Loader2, Megaphone, Palette, Settings, ShieldAlert, Activity, Plug } from 'lucide-react';
+import { CheckCircle2, Loader2, Megaphone, Palette, Settings, ShieldAlert, Activity, Plug, Database } from 'lucide-react';
 import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
 import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
 import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
