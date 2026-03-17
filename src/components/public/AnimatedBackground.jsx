@@ -36,27 +36,27 @@ export default function AnimatedBackground() {
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-      {/* Primary large bloom — top left */}
+      {/* Primary large bloom */}
       <div
         ref={blob1}
         className="absolute -translate-x-1/2 -translate-y-1/2"
         style={{
-          width: '700px',
-          height: '700px',
-          background: 'radial-gradient(circle, rgba(59,130,246,0.30) 0%, rgba(99,102,241,0.15) 50%, transparent 75%)',
-          filter: 'blur(60px)',
+          width: '850px',
+          height: '850px',
+          background: 'radial-gradient(circle, rgba(59,130,246,0.60) 0%, rgba(99,102,241,0.35) 40%, transparent 68%)',
+          filter: 'blur(65px)',
           transition: 'left 0.1s linear, top 0.1s linear',
         }}
       />
-      {/* Secondary bloom — right side */}
+      {/* Secondary bloom */}
       <div
         ref={blob2}
         className="absolute -translate-x-1/2 -translate-y-1/2"
         style={{
-          width: '550px',
-          height: '550px',
-          background: 'radial-gradient(circle, rgba(14,165,233,0.25) 0%, rgba(59,130,246,0.12) 50%, transparent 75%)',
-          filter: 'blur(50px)',
+          width: '650px',
+          height: '650px',
+          background: 'radial-gradient(circle, rgba(14,165,233,0.55) 0%, rgba(59,130,246,0.28) 45%, transparent 70%)',
+          filter: 'blur(55px)',
           transition: 'left 0.1s linear, top 0.1s linear',
         }}
       />
