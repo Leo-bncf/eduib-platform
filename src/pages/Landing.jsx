@@ -264,6 +264,13 @@ function PricingSection() {
           <p className="text-slate-600 max-w-2xl mx-auto">
             Our tiered pricing model ensures you only pay for the students you have. Get volume discounts as your school scales with Scholr.
           </p>
+          <div className="mt-8">
+            <Link to={createPageUrl('Contact')}>
+              <Button variant="outline" className="border-slate-300 text-slate-800 hover:bg-slate-50 rounded-lg px-8 h-12 text-base font-medium">
+                Contact Sales for Custom Solutions
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
