@@ -41,7 +41,7 @@ export default function SchoolAdminAttendance() {
         <main className="md:ml-64 min-h-screen">
           {/* Page Header */}
           <div className="bg-white border-b border-slate-200 px-6 py-5 sticky top-0 z-10">
-            <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-indigo-600" />
@@ -58,7 +58,7 @@ export default function SchoolAdminAttendance() {
 
           {/* Tab Navigation */}
           <div className="bg-white border-b border-slate-200 px-6 py-3">
-            <div className="max-w-7xl mx-auto">
+            <div>
               <div className="flex flex-wrap gap-2">
                 {TABS.map(t => {
                   const Icon = t.icon;
@@ -83,7 +83,7 @@ export default function SchoolAdminAttendance() {
           </div>
 
           {/* Tab Content */}
-          <div className="max-w-7xl mx-auto p-6">
+          <div className="p-6">
             {tab === 'dashboard' && <AttendanceDashboard schoolId={schoolId} />}
             {tab === 'codes' && <AttendanceCodeConfig schoolId={schoolId} />}
             {tab === 'corrections' && <AttendanceCorrectionWorkflow schoolId={schoolId} />}
