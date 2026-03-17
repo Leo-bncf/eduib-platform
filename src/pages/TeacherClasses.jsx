@@ -15,16 +15,20 @@ const sidebarLinks = [
 
 export default function TeacherClasses() {
   const { user, school, schoolId } = useUser();
+  const [statusFilter, setStatusFilter] = React.useState('active');
 
   const { data: classes = [], isLoading } = useQuery({
     queryKey: ['teacher-classes', schoolId, user?.id],
     queryFn: async () => {
-      const all = await base44.entities.Class.filter({ school_id: schoolId, status: 'active' });
+      const all = await base44.entities.Class.filter({ school_id: schoolId });
       return all.filter(c => c.teacher_ids?.includes(user.id));
     },
     enabled: !!schoolId && !!user?.id,
   });
 
+  const filteredClasses = classes.filter(c => statusFilter === 'all' || c.status === statusFilter);
+  const activeCount = classes.filter(c => c.status === 'active').length;
+  const archivedCount = classes.filter(c => c.status === 'archived').length;
   const colors = ['bg-indigo-500', 'bg-emerald-500', 'bg-violet-500', 'bg-amber-500', 'bg-rose-500', 'bg-blue-500'];
 
   return (
