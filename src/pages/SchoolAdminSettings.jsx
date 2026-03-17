@@ -12,10 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
-  FileText, CreditCard, Settings, Loader2, CheckCircle2, AlertCircle,
-  Building2, Globe, Bell, Shield, HardDrive
+  Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell, Shield, HardDrive,
+  FileText, Settings
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { DEFAULT_POLICY } from '@/hooks/useSubmissionPolicy';
 import SubmissionRulesPanel from '@/components/settings/SubmissionRulesPanel';
 import FileSecurityPanel from '@/components/settings/FileSecurityPanel';
@@ -120,7 +120,7 @@ export default function SchoolAdminSettings() {
     <RoleGuard allowedRoles={['school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
         <AppSidebar
-          links={sidebarLinks}
+          links={SCHOOL_ADMIN_SIDEBAR_LINKS}
           role="school_admin"
           schoolName={contextSchool?.name}
           userName={user?.full_name}
