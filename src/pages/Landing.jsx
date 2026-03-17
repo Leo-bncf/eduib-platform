@@ -119,20 +119,20 @@ function FeaturesGrid() {
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-[#060e1e]/90 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-slate-900">Comprehensive Platform Capabilities</h2>
-          <p className="mt-3 text-lg text-slate-500">Engineered for the rigorous demands of International Baccalaureate institutions</p>
+          <h2 className="text-3xl font-bold text-white">Comprehensive Platform Capabilities</h2>
+          <p className="mt-3 text-lg text-blue-200/60">Engineered for the rigorous demands of International Baccalaureate institutions</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {features.map((f, i) => (
             <div key={i} className="group">
-              <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors duration-300">
-                <f.icon className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-300" />
+              <div className="w-12 h-12 rounded-lg bg-blue-900/40 flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors duration-300 border border-blue-800/30">
+                <f.icon className="w-6 h-6 text-blue-400 group-hover:text-white transition-colors duration-300" />
               </div>
-              <h3 className="font-bold text-slate-900 mb-2">{f.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{f.desc}</p>
+              <h3 className="font-bold text-white mb-2">{f.title}</h3>
+              <p className="text-sm text-blue-200/50 leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
