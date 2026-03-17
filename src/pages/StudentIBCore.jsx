@@ -15,15 +15,7 @@ import {
   CheckCircle2, Upload, BookOpen
 } from 'lucide-react';
 import { format } from 'date-fns';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
-  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
-  { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
-  { label: 'IB Core', page: 'StudentIBCore', icon: Star },
-  { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
-];
+import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
 
 const milestoneOrder = ['initial_proposal', 'first_meeting', 'research_planning', 'first_draft', 'interim_reflection', 'second_draft', 'final_draft', 'viva_voce'];
 const milestoneLabels = {
