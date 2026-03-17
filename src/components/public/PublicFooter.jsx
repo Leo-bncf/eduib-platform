@@ -14,7 +14,7 @@ export default function PublicFooter() {
   ];
 
   const socialLinks = [
-    { icon: Mail, href: 'mailto:contact@scholr.pro', label: 'Email' },
+    { icon: Mail, href: 'mailto:support@scholr.pro', label: 'Email' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
     { icon: Twitter, href: '#', label: 'Twitter' },
   ];
@@ -57,10 +57,10 @@ export default function PublicFooter() {
             <ul className="space-y-2">
               <li>
                 <a 
-                  href="mailto:contact@scholr.pro"
+                  href="mailto:support@scholr.pro"
                   className="text-sm text-slate-600 hover:text-slate-900 transition-colors"
                 >
-                  contact@scholr.pro
+                  support@scholr.pro
                 </a>
               </li>
               <li>
