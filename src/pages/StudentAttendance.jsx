@@ -11,18 +11,10 @@ import {
   CheckCircle2, XCircle, Clock, AlertCircle, Loader2, ClipboardList
 } from 'lucide-react';
 import { format, subDays, eachWeekOfInterval, startOfWeek, endOfWeek, parseISO, isWithinInterval } from 'date-fns';
+import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell
 } from 'recharts';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
-  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
-  { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
-  { label: 'IB Core', page: 'StudentCAS', icon: Star },
-  { label: 'Messages', page: 'Messages', icon: MessageSquare },
-];
 
 const STATUS_META = {
   present: { label: 'Present', icon: CheckCircle2, bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', bar: '#10b981' },

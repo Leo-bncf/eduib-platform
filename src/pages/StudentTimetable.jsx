@@ -11,14 +11,7 @@ import {
   ChevronLeft, ChevronRight, Loader2, Bell, Calendar
 } from 'lucide-react';
 import { format, addDays, subDays, startOfWeek, getDay, isPast, differenceInDays, isSameDay } from 'date-fns';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
-  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
-  { label: 'IB Core', page: 'StudentCAS', icon: Star },
-  { label: 'Messages', page: 'Messages', icon: MessageSquare },
-];
+import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const FULL_DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
