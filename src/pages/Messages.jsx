@@ -10,8 +10,13 @@ import NewMessageDialog from '@/components/messaging/NewMessageDialog';
 import { LayoutDashboard, MessageSquare, BookOpen, ClipboardCheck, BarChart3, Users, Loader2 } from 'lucide-react';
 
 const getSidebarLinks = (role) => {
+  const dashboardPage = role === 'teacher' ? 'TeacherDashboard'
+    : role === 'school_admin' || role === 'ib_coordinator' ? 'SchoolAdminDashboard'
+    : role === 'parent' ? 'ParentDashboard'
+    : 'StudentDashboard';
+
   const baseLinks = [
-    { label: 'Dashboard', page: role === 'teacher' ? 'TeacherDashboard' : 'StudentDashboard', icon: LayoutDashboard },
+    { label: 'Dashboard', page: dashboardPage, icon: LayoutDashboard },
   ];
 
   if (role === 'teacher') {
