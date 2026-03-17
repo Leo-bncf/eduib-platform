@@ -33,10 +33,10 @@ export default function Demo() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="pt-4">
               <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-                See AtlasIB in action
+                See Scholr in action
               </h1>
               <p className="mt-4 text-lg text-slate-500 leading-relaxed">
-                Schedule a 30-minute personalized demo. We'll walk you through how AtlasIB can transform your IB school's workflows.
+                Schedule a 30-minute personalized demo. We'll walk you through how Scholr can transform your IB school's workflows.
               </p>
               
               <div className="mt-10 space-y-6">
