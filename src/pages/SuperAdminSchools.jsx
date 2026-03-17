@@ -44,6 +44,14 @@ export default function SuperAdminSchools() {
     setEditingSchoolId(null);
   };
 
+  const handleDeleteSchool = async (school) => {
+    if (!window.confirm(`Permanently delete "${school.name}"? This cannot be undone.`)) return;
+    setDeletingSchoolId(school.id);
+    await base44.entities.School.delete(school.id);
+    await refetch();
+    setDeletingSchoolId(null);
+  };
+
   const filteredSchools = useMemo(() => {
     let filtered = schools;
     if (searchQuery) {
