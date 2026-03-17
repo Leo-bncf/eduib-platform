@@ -149,6 +149,10 @@ export default function ParentDashboard() {
                     <ChildBehaviorOverview schoolId={schoolId} studentId={selectedChildId} />
                   </div>
                 </TabsContent>
+
+                <TabsContent value="reporting">
+                  <ChildReporting schoolId={schoolId} studentId={selectedChildId} studentName={user?.full_name} />
+                </TabsContent>
               </Tabs>
             ) : (
               <div className="bg-white rounded-md border border-slate-200 shadow-sm p-8 md:p-12 text-center">
