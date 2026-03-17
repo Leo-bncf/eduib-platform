@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import {
   LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
-  FileText, CreditCard, Settings, Activity, ShieldCheck, Zap,
+  FileText, CreditCard, Settings, Activity, ShieldCheck, Zap, CalendarDays,
 } from 'lucide-react';
 import AppSidebar from '@/components/app/AppSidebar';
 import LoadingStateBase from '@/components/common/LoadingStateBase';
