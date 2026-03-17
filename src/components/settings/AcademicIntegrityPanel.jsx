@@ -1,0 +1,169 @@
+import React from 'react';
+import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ShieldCheck, Eye, RotateCcw, AlertTriangle, Info } from 'lucide-react';
+
+export default function AcademicIntegrityPanel({ form, onChange }) {
+  return (
+    <div className="space-y-6">
+      <Alert className="border-blue-200 bg-blue-50">
+        <Info className="w-4 h-4 text-blue-600" />
+        <AlertDescription className="text-xs text-blue-800">
+          These tools help enforce academic integrity consistently. Each setting applies school-wide to all assignments and submissions.
+        </AlertDescription>
+      </Alert>
+
+      {/* Plagiarism flags */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <AlertTriangle className="w-4 h-4 text-red-600" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">Plagiarism Concern Flags</p>
+                <p className="text-xs text-slate-500 mt-0.5">Teachers can flag a submission with a plagiarism concern. Flagged submissions are visible to school admins for review.</p>
+              </div>
+              <Switch
+                checked={form.plagiarism_flag_enabled === true}
+                onCheckedChange={v => onChange({ plagiarism_flag_enabled: v })}
+              />
+            </div>
+            {form.plagiarism_flag_enabled && (
+              <div className="mt-3 p-2.5 bg-red-50 rounded-lg border border-red-100 text-xs text-red-700">
+                ✓ Teachers can flag submissions. Admins see a consolidated view of all flagged submissions.
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Resubmission limit */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <RotateCcw className="w-4 h-4 text-amber-600" />
+          </div>
+          <div className="flex-1 space-y-3">
+            <div>
+              <p className="text-sm font-semibold text-slate-900">Resubmission Limit</p>
+              <p className="text-xs text-slate-500 mt-0.5">Maximum number of times a student can resubmit after an assignment is returned. Set to 0 for unlimited.</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Input
+                type="number"
+                min="0"
+                max="20"
+                value={form.resubmission_limit || 0}
+                onChange={e => onChange({ resubmission_limit: parseInt(e.target.value) || 0 })}
+                className="h-9 text-sm w-24"
+              />
+              <span className="text-xs text-slate-500">
+                {form.resubmission_limit === 0 ? 'Unlimited resubmissions' : `Max ${form.resubmission_limit} resubmission${form.resubmission_limit !== 1 ? 's' : ''} per assignment`}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Submission history visibility */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <Eye className="w-4 h-4 text-indigo-600" />
+          </div>
+          <div className="flex-1 space-y-3">
+            <div>
+              <p className="text-sm font-semibold text-slate-900">Submission History Visibility</p>
+              <p className="text-xs text-slate-500 mt-0.5">Control who can see the full submission history including all previous versions and resubmissions.</p>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between py-2 px-3 bg-slate-50 rounded-lg">
+                <div>
+                  <p className="text-xs font-semibold text-slate-700">Students see their own history</p>
+                  <p className="text-[11px] text-slate-400">Students can view timestamps and previous draft/submission versions</p>
+                </div>
+                <Switch
+                  checked={form.show_submission_history_to_student !== false}
+                  onCheckedChange={v => onChange({ show_submission_history_to_student: v })}
+                />
+              </div>
+              <div className="flex items-center justify-between py-2 px-3 bg-slate-50 rounded-lg">
+                <div>
+                  <p className="text-xs font-semibold text-slate-700">Teachers see full history</p>
+                  <p className="text-[11px] text-slate-400">Teachers can see all submission events, resubmissions, and timestamps per student</p>
+                </div>
+                <Switch
+                  checked={form.show_submission_history_to_teacher !== false}
+                  onCheckedChange={v => onChange({ show_submission_history_to_teacher: v })}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Acknowledgement */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          </div>
+          <div className="flex-1 space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">Academic Integrity Acknowledgement</p>
+                <p className="text-xs text-slate-500 mt-0.5">Require students to confirm their work is original before submitting.</p>
+              </div>
+              <Switch
+                checked={form.require_submission_acknowledgement === true}
+                onCheckedChange={v => onChange({ require_submission_acknowledgement: v })}
+              />
+            </div>
+            {form.require_submission_acknowledgement && (
+              <div className="space-y-2">
+                <Label className="text-xs font-semibold text-slate-600">Acknowledgement text (shown to students)</Label>
+                <Textarea
+                  value={form.acknowledgement_text || ''}
+                  onChange={e => onChange({ acknowledgement_text: e.target.value })}
+                  placeholder="I confirm this is my own original work and I have not plagiarised any content."
+                  rows={3}
+                  className="text-sm"
+                />
+                <div className="p-2.5 bg-emerald-50 rounded-lg border border-emerald-100">
+                  <p className="text-xs font-semibold text-emerald-800 mb-1">Preview (student will see):</p>
+                  <div className="flex items-start gap-2">
+                    <input type="checkbox" className="mt-0.5" defaultChecked readOnly />
+                    <p className="text-xs text-emerald-700 italic">
+                      {form.acknowledgement_text || 'I confirm this is my own original work and I have not plagiarised any content.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Summary badge */}
+      <div className="bg-slate-50 rounded-xl border border-slate-200 p-3">
+        <p className="text-xs font-semibold text-slate-600 mb-2">Active integrity controls:</p>
+        <div className="flex flex-wrap gap-1.5">
+          {form.plagiarism_flag_enabled && <Badge className="text-[10px] bg-red-50 text-red-700 border-red-200 border">Plagiarism flags</Badge>}
+          {form.resubmission_limit > 0 && <Badge className="text-[10px] bg-amber-50 text-amber-700 border-amber-200 border">Resubmission limit ({form.resubmission_limit})</Badge>}
+          {form.show_submission_history_to_teacher !== false && <Badge className="text-[10px] bg-indigo-50 text-indigo-700 border-indigo-200 border">Teacher history view</Badge>}
+          {form.show_submission_history_to_student !== false && <Badge className="text-[10px] bg-slate-100 text-slate-600 border-slate-200 border">Student history view</Badge>}
+          {form.require_submission_acknowledgement && <Badge className="text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200 border">Integrity acknowledgement</Badge>}
+          {!form.plagiarism_flag_enabled && !form.require_submission_acknowledgement && form.resubmission_limit === 0 && (
+            <span className="text-xs text-slate-400 italic">No active integrity controls</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
