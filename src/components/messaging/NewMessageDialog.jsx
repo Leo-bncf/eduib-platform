@@ -30,8 +30,8 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
     enabled: userRole === 'teacher' && !!schoolId && !!userId,
   });
 
-  const { data: students = [] } = useQuery({
-    queryKey: ['class-students-messaging', form.recipient_type],
+  const { data: classMembers = [] } = useQuery({
+    queryKey: ['class-members-messaging', form.recipient_type],
     queryFn: async () => {
       const members = await base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' });
       const cls = teacherClasses.find(c => c.id === form.recipient_type.replace('class_', ''));
@@ -39,6 +39,23 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
     },
     enabled: form.recipient_type?.startsWith('class_') && teacherClasses.length > 0,
   });
+
+  // Parents linked to students in selected class
+  const { data: parentLinks = [] } = useQuery({
+    queryKey: ['class-parents-messaging', form.recipient_type],
+    queryFn: async () => {
+      const studentIds = classMembers.map(m => m.user_id);
+      if (studentIds.length === 0) return [];
+      const links = await base44.entities.ParentStudentLink.filter({ school_id: schoolId });
+      const parentUserIds = [...new Set(links.filter(l => studentIds.includes(l.student_id)).map(l => l.parent_id))];
+      if (parentUserIds.length === 0) return [];
+      const allMembers = await base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' });
+      return allMembers.filter(m => parentUserIds.includes(m.user_id));
+    },
+    enabled: form.recipient_type?.startsWith('class_') && classMembers.length > 0 && userRole === 'teacher',
+  });
+
+  const students = classMembers;
 
   const { data: studentClasses = [] } = useQuery({
     queryKey: ['student-classes-messaging', schoolId, userId],
