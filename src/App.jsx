@@ -12,6 +12,7 @@ import SuperAdminSettings from './pages/SuperAdminSettings';
 import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
 import SchoolAdminGradebookGovernance from './pages/SchoolAdminGradebookGovernance';
 import SchoolAdminBehavior from './pages/SchoolAdminBehavior';
+import SchoolAdminMessagingPolicy from './pages/SchoolAdminMessagingPolicy';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -110,6 +111,14 @@ const AuthenticatedApp = () => {
         element={
           <LayoutWrapper currentPageName="SchoolAdminGradebookGovernance">
             <SchoolAdminGradebookGovernance />
+          </LayoutWrapper>
+        }
+      />
+      <Route
+        path="/SchoolAdminMessagingPolicy"
+        element={
+          <LayoutWrapper currentPageName="SchoolAdminMessagingPolicy">
+            <SchoolAdminMessagingPolicy />
           </LayoutWrapper>
         }
       />
