@@ -9,6 +9,7 @@ import SuperAdminAutomation from './pages/SuperAdminAutomation';
 import SuperAdminSupport from './pages/SuperAdminSupport';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSettings from './pages/SuperAdminSettings';
+import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
