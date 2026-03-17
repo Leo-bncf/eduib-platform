@@ -172,7 +172,7 @@ function RolesSection() {
 
 function CTASection() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-transparent">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 rounded-2xl p-12 sm:p-16 text-center relative overflow-hidden border border-slate-200">
           <div className="relative z-10">
