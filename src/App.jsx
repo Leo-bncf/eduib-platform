@@ -7,6 +7,7 @@ import PageNotFound from './lib/PageNotFound';
 import SuperAdminAnalytics from './pages/SuperAdminAnalytics';
 import SuperAdminAutomation from './pages/SuperAdminAutomation';
 import SuperAdminSupport from './pages/SuperAdminSupport';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSettings from './pages/SuperAdminSettings';
 import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
