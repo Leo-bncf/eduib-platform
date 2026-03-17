@@ -250,8 +250,8 @@ function PricingSection() {
               {tier.bonus && (
                 <div className="mt-4 bg-blue-50 rounded-lg p-3">
                   <p className="text-xs font-semibold text-blue-700">{tier.bonus}</p>
-                  <p className="text-xs text-blue-600 mt-1">Advanced scheduling and timetable management</p>
-                  <p className="text-xs text-blue-600 mt-2">Contact our sales team for details</p>
+                  <p className="text-xs text-blue-600 mt-1">Discounted Schedual package available</p>
+                  <p className="text-xs text-blue-600 mt-2">Advanced scheduling and timetable management at special rates</p>
                 </div>
               )}
               <div className="mt-6 pt-6 border-t border-slate-100">
