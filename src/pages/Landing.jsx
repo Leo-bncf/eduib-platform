@@ -87,7 +87,7 @@ function ProblemSection() {
   ];
 
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-20 bg-slate-900/80 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">IB schools deserve better tools</h2>
