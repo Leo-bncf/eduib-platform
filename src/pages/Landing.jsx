@@ -172,20 +172,20 @@ function RolesSection() {
 
 function CTASection() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-[#060e1e]/90 backdrop-blur-sm">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-slate-50 rounded-xl p-12 sm:p-16 text-center relative overflow-hidden shadow-sm border border-slate-200">
+        <div className="bg-white/5 rounded-xl p-12 sm:p-16 text-center relative overflow-hidden border border-white/10">
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to modernize your institution?</h2>
-            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
+            <h2 className="text-3xl font-bold text-white mb-4">Ready to modernize your institution?</h2>
+            <p className="text-lg text-blue-100/60 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={createPageUrl('Demo')}>
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
+                <Button size="lg" className="bg-blue-500 hover:bg-blue-400 text-white rounded-md px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
                   Request Demonstration <ChevronRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
               <Link to={createPageUrl('Plans')}>
-                <Button size="lg" variant="outline" className="border-slate-300 text-slate-700 hover:bg-white rounded-md px-8 h-12 text-base font-medium">
+                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-md px-8 h-12 text-base font-medium">
                   View Licensing
                 </Button>
               </Link>
