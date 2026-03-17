@@ -57,6 +57,14 @@ export default function AttendanceCorrectionWorkflow({ schoolId }) {
     enabled: !!schoolId,
   });
 
+  const { data: classes = [] } = useQuery({
+    queryKey: ['classes-for-corrections', schoolId],
+    queryFn: () => base44.entities.Class.filter({ school_id: schoolId, status: 'active' }),
+    enabled: !!schoolId,
+  });
+
+  const classMap = Object.fromEntries(classes.map(c => [c.id, c.name]));
+
   const correctMutation = useMutation({
     mutationFn: async ({ record, newStatus, reason }) => {
       const correctionEntry = {
