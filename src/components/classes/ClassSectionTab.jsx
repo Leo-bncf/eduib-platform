@@ -282,22 +282,24 @@ export default function ClassSectionTab({ schoolId, classes, subjects, academicY
                       <Pencil className="w-3 h-3" /> Edit
                     </Button>
                     {c.status === 'active' ? (
-                      <Button
-                        variant="ghost" size="sm"
-                        onClick={() => updateMutation.mutate({ id: c.id, data: { status: 'archived' } })}
-                        className="h-7 px-2 text-xs text-slate-500 hover:text-amber-600 gap-1"
-                      >
-                        <Archive className="w-3 h-3" /> Archive
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="ghost" size="sm"
-                        onClick={() => updateMutation.mutate({ id: c.id, data: { status: 'active' } })}
-                        className="h-7 px-2 text-xs text-slate-500 hover:text-emerald-600 gap-1"
-                      >
-                        <RotateCcw className="w-3 h-3" /> Restore
-                      </Button>
-                    )}
+                       <Button
+                         variant="ghost" size="sm"
+                         onClick={() => updateMutation.mutate({ id: c.id, data: { status: 'archived' } })}
+                         disabled={updateMutation.isPending}
+                         className="h-7 px-2 text-xs text-slate-500 hover:text-amber-600 gap-1"
+                       >
+                         {updateMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Archive className="w-3 h-3" />} Archive
+                       </Button>
+                     ) : (
+                       <Button
+                         variant="ghost" size="sm"
+                         onClick={() => updateMutation.mutate({ id: c.id, data: { status: 'active' } })}
+                         disabled={updateMutation.isPending}
+                         className="h-7 px-2 text-xs text-slate-500 hover:text-emerald-600 gap-1"
+                       >
+                         {updateMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3" />} Restore
+                       </Button>
+                     )}
                   </div>
                   {c.status === 'active' && (
                     <Link
