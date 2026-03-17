@@ -201,9 +201,9 @@ export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #060e1e 0%, #0d1b3e 50%, #060e1e 100%)' }}>
+    <div className="min-h-screen bg-white">
       <AnimatedBackground />
-      <div className="relative z-10 shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+      <div className="relative z-10">
         <PublicNavbar />
       </div>
       <div className="relative z-10">
