@@ -27,6 +27,40 @@ export default function ChildReporting({ schoolId, studentId, studentName }) {
     queryFn: () => base44.entities.GradeItem.filter({ school_id: schoolId, student_id: studentId }),
   });
 
+  // Fetch cohort data for class context
+  const { data: cohorts = [], isLoading: cohortsLoading } = useQuery({
+    queryKey: ['parentCohorts', schoolId, studentId],
+    queryFn: async () => {
+      const memberships = await base44.entities.SchoolMembership.filter({ 
+        user_id: studentId, 
+        school_id: schoolId 
+      });
+      if (memberships.length === 0) return [];
+      
+      const cohortIds = memberships
+        .filter(m => m.role === 'student')
+        .map(m => m.grade_level)
+        .filter(Boolean);
+      
+      if (cohortIds.length === 0) return [];
+      
+      return base44.entities.Cohort.filter({ 
+        school_id: schoolId,
+        grade_level: { $in: cohortIds }
+      });
+    },
+  });
+
+  // Fetch student submissions/portfolio
+  const { data: submissions = [], isLoading: submissionsLoading } = useQuery({
+    queryKey: ['parentSubmissions', schoolId, studentId],
+    queryFn: () => base44.entities.Submission.filter({ 
+      school_id: schoolId, 
+      student_id: studentId,
+      status: 'submitted'
+    }),
+  });
+
   const handleDownloadReport = async (reportId) => {
     setDownloading(reportId);
     try {
