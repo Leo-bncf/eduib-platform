@@ -205,25 +205,43 @@ function RolesSection() {
 }
 
 function CTASection() {
+  const benefits = [
+    { icon: '⚡', title: 'Lightning Fast', desc: 'Deploy in days, not months. Get up and running quickly.' },
+    { icon: '🔒', title: 'Enterprise Grade', desc: 'Bank-level security with full GDPR compliance.' },
+    { icon: '📞', title: 'Dedicated Support', desc: 'Expert team available to help you succeed.' },
+    { icon: '🚀', title: 'Always Improving', desc: 'Regular updates and new features based on school feedback.' },
+  ];
+
   return (
     <section className="py-24 bg-transparent">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 rounded-2xl p-12 sm:p-16 text-center relative overflow-hidden border border-slate-200">
-          <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to modernize your institution?</h2>
-            <p className="text-lg text-slate-500 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to={createPageUrl('Demo')}>
-                <Button size="lg" className="bg-slate-900 hover:bg-slate-700 text-white rounded-full px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
-                  Request Demonstration <ChevronRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-              <Link to={createPageUrl('Plans')}>
-                <Button size="lg" variant="outline" className="border-slate-300 text-slate-800 hover:bg-slate-50 rounded-full px-8 h-12 text-base font-medium">
-                  View Licensing
-                </Button>
-              </Link>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-bold text-slate-900">Why Choose Scholr?</h2>
+          <p className="mt-3 text-lg text-slate-500">Built by educators, for educators.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+          {benefits.map((b, i) => (
+            <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm p-6">
+              <div className="text-3xl mb-3">{b.icon}</div>
+              <h3 className="font-bold text-slate-900 mb-2">{b.title}</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">{b.desc}</p>
             </div>
+          ))}
+        </div>
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200 shadow-sm p-12 text-center">
+          <h3 className="text-2xl font-bold text-slate-900 mb-4">Ready to transform your school?</h3>
+          <p className="text-slate-600 mb-8 max-w-2xl mx-auto">See how Scholr can streamline your academic operations. Request a personalized demo or explore our flexible licensing plans.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to={createPageUrl('Demo')}>
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-8 h-12 text-base font-medium shadow-sm border-none">
+                Schedule Demo <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+            <Link to={createPageUrl('Plans')}>
+              <Button size="lg" variant="outline" className="border-slate-300 text-slate-800 hover:bg-slate-50 rounded-lg px-8 h-12 text-base font-medium">
+                View Pricing
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
