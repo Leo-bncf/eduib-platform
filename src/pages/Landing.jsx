@@ -58,18 +58,18 @@ function HeroSection() {
         </div>
         
         <div className="mt-16 mx-auto max-w-4xl">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/10 rounded-xl overflow-hidden border border-white/10 shadow-sm backdrop-blur-sm">
-            <div className="bg-white/5 px-8 py-7 text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-2">IB-only</div>
-              <p className="text-sm text-blue-100/60 leading-relaxed">Built exclusively for IB World Schools — no generic features, no bloat</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-slate-200 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+            <div className="bg-white px-8 py-7 text-center">
+              <div className="text-3xl font-bold text-purple-700 mb-2">IB-only</div>
+              <p className="text-sm text-slate-500 leading-relaxed">Built exclusively for IB World Schools — no generic features, no bloat</p>
             </div>
-            <div className="bg-white/5 px-8 py-7 text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-2">PYP → DP</div>
-              <p className="text-sm text-blue-100/60 leading-relaxed">Every workflow maps directly to IB programmes, criteria, and terminology</p>
+            <div className="bg-white px-8 py-7 text-center">
+              <div className="text-3xl font-bold text-purple-700 mb-2">PYP → DP</div>
+              <p className="text-sm text-slate-500 leading-relaxed">Every workflow maps directly to IB programmes, criteria, and terminology</p>
             </div>
-            <div className="bg-white/5 px-8 py-7 text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-2">Zero noise</div>
-              <p className="text-sm text-blue-100/60 leading-relaxed">Trimmed to exactly what IB educators and students need — nothing more</p>
+            <div className="bg-white px-8 py-7 text-center">
+              <div className="text-3xl font-bold text-purple-700 mb-2">Zero noise</div>
+              <p className="text-sm text-slate-500 leading-relaxed">Trimmed to exactly what IB educators and students need — nothing more</p>
             </div>
           </div>
         </div>
