@@ -57,21 +57,10 @@ function HeroSection() {
            </div>
         </div>
         
-        <div className="mt-16 mx-auto max-w-4xl">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-slate-200/60 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
-            <div className="bg-white/70 backdrop-blur-sm px-8 py-7 text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">IB-only</div>
-              <p className="text-sm text-slate-500/50 leading-relaxed">Built exclusively for IB World Schools — no generic features, no bloat</p>
-            </div>
-            <div className="bg-white/70 backdrop-blur-sm px-8 py-7 text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">PYP → DP</div>
-              <p className="text-sm text-slate-500/50 leading-relaxed">Every workflow maps directly to IB programmes, criteria, and terminology</p>
-            </div>
-            <div className="bg-white/70 backdrop-blur-sm px-8 py-7 text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">Zero noise</div>
-              <p className="text-sm text-slate-500/50 leading-relaxed">Trimmed to exactly what IB educators and students need — nothing more</p>
-            </div>
-          </div>
+        <div className="mt-16 mx-auto max-w-3xl">
+          <p className="text-lg text-slate-600 leading-relaxed text-center">
+            <span className="font-semibold text-slate-900">IB-only</span> — built exclusively for IB World Schools with no generic features or bloat. <span className="font-semibold text-slate-900">PYP → DP</span> — every workflow maps directly to IB programmes, criteria, and terminology. <span className="font-semibold text-slate-900">Zero noise</span> — trimmed to exactly what IB educators and students need, nothing more.
+          </p>
         </div>
       </div>
     </section>
