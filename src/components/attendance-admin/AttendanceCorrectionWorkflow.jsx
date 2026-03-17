@@ -102,6 +102,8 @@ export default function AttendanceCorrectionWorkflow({ schoolId }) {
   const filtered = records.filter(r => {
     if (r.date < dateFrom || r.date > dateTo) return false;
     if (search && !r.student_name?.toLowerCase().includes(search.toLowerCase())) return false;
+    if (filterClass !== 'all' && r.class_id !== filterClass) return false;
+    if (filterStatus !== 'all' && r.status !== filterStatus) return false;
     return true;
   }).sort((a, b) => b.date.localeCompare(a.date));
 
