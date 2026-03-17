@@ -30,11 +30,6 @@ function HeroSection() {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-semibold tracking-wide uppercase mb-8">
-            <Sparkles className="w-3 h-3 text-blue-600" />
-            Built for IB World Schools
-          </div>
-          
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
             The complete
             <span className="text-blue-600"> operating system</span>
