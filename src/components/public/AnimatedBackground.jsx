@@ -5,8 +5,8 @@ export default function AnimatedBackground() {
   const blob2 = useRef(null);
 
   useEffect(() => {
-    let x1 = 30, y1 = 30, vx1 = 0.12, vy1 = 0.08;
-    let x2 = 65, y2 = 55, vx2 = -0.09, vy2 = 0.11;
+    let x1 = 30, y1 = 30, vx1 = 0.06, vy1 = 0.04;
+    let x2 = 65, y2 = 55, vx2 = -0.045, vy2 = 0.055;
     let raf;
 
     const animate = () => {
