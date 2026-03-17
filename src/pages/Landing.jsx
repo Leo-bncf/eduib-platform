@@ -33,7 +33,7 @@ function HeroSection() {
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
            The LMS designed for
-           <span className="text-purple-700"> the needs of</span>
+           <span className="text-blue-600"> the needs of</span>
            {' '}IB World Schools
           </h1>
 
