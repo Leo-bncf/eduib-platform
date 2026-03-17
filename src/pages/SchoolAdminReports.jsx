@@ -13,6 +13,7 @@ import ReportsCenterOverview from '@/components/reports/ReportsCenterOverview';
 import CSVExportToolkit from '@/components/reports/CSVExportToolkit';
 import PDFReportBuilder from '@/components/reports/PDFReportBuilder';
 import CoordinatorReports from '@/components/reports/CoordinatorReports';
+import ClassProgressReport from '@/components/reports/ClassProgressReport';
 
 
 
