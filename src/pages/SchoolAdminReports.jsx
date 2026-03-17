@@ -119,6 +119,10 @@ export default function SchoolAdminReports() {
                 <CSVExportToolkit {...sharedProps} />
               </TabsContent>
 
+              <TabsContent value="class-reports">
+                <ClassProgressReport {...sharedProps} />
+              </TabsContent>
+
               <TabsContent value="pdf">
                 <PDFReportBuilder {...sharedProps} />
               </TabsContent>
