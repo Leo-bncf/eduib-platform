@@ -148,7 +148,7 @@ export default function StudentCommunication() {
 
               {/* Announcements tab */}
               <TabsContent value="announcements">
-                <StudentAnnouncements schoolId={schoolId} userId={user?.id} classes={classes} />
+                <StudentAnnouncements schoolId={schoolId} userId={user?.id} classIds={classes.map(c => c.id)} />
               </TabsContent>
             </Tabs>
           </div>
