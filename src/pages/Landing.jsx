@@ -360,6 +360,7 @@ export default function Landing() {
         <CTASection />
         <PublicFooter />
       </div>
+      <ConsentModal isOpen={showConsent} onClose={() => setShowConsent(false)} />
     </div>
   );
 }
