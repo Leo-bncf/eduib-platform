@@ -192,7 +192,7 @@ function RolesSection() {
                 <p className="text-xs text-slate-500 mt-1">{r.short}</p>
               </button>
               {expandedRole === i && (
-                <div className="px-5 pb-4 border-t border-slate-100 bg-slate-50/30">
+                <div className="px-5 pb-4 border-t border-slate-100 bg-slate-50/30 animate-in fade-in slide-in-from-top-2 duration-300">
                   <p className="text-sm text-slate-600 leading-relaxed">{r.desc}</p>
                 </div>
               )}
