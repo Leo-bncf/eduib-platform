@@ -17,16 +17,23 @@ export default function ChildOverviewHub({ schoolId, studentId }) {
     enabled: !!schoolId && !!studentId,
   });
 
-  const { data: assignments = [], isLoading: loadingAssignments } = useQuery({
-    queryKey: ['parent-child-assignments', schoolId, studentId],
+  const { data: studentClasses = [] } = useQuery({
+    queryKey: ['parent-child-classes', schoolId, studentId],
     queryFn: async () => {
-      const all = await base44.entities.Assignment.filter({ school_id: schoolId, status: 'published' });
-      return all.filter(a => {
-        const classes = await base44.entities.Class.filter({ id: a.class_id });
-        return classes[0]?.student_ids?.includes(studentId);
-      }).slice(0, 5);
+      const all = await base44.entities.Class.filter({ school_id: schoolId, status: 'active' });
+      return all.filter(c => c.student_ids?.includes(studentId));
     },
     enabled: !!schoolId && !!studentId,
+  });
+
+  const { data: assignments = [], isLoading: loadingAssignments } = useQuery({
+    queryKey: ['parent-child-assignments', schoolId, studentClasses],
+    queryFn: async () => {
+      const classIds = new Set(studentClasses.map(c => c.id));
+      const all = await base44.entities.Assignment.filter({ school_id: schoolId, status: 'published' });
+      return all.filter(a => classIds.has(a.class_id)).slice(0, 5);
+    },
+    enabled: !!schoolId && studentClasses.length > 0,
   });
 
   const { data: submissions = [] } = useQuery({
