@@ -64,7 +64,7 @@ function HeroSection() {
               <p className="text-sm text-slate-500 leading-relaxed">Built exclusively for IB World Schools — no generic features, no bloat</p>
             </div>
             <div className="bg-white px-8 py-7 text-center">
-              <div className="text-3xl font-bold text-purple-700 mb-2">PYP → DP</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">PYP → DP</div>
               <p className="text-sm text-slate-500 leading-relaxed">Every workflow maps directly to IB programmes, criteria, and terminology</p>
             </div>
             <div className="bg-white px-8 py-7 text-center">
