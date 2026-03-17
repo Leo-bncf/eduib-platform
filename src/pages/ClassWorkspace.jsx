@@ -11,6 +11,8 @@ import ClassPeople from '@/components/class/ClassPeople';
 import ClassAttendance from '@/components/class/ClassAttendance';
 import ClassAnalytics from '@/components/class/ClassAnalytics';
 import ClassSettings from '@/components/class/ClassSettings';
+import ClassLessons from '@/components/class/ClassLessons';
+import ClassRubrics from '@/components/class/ClassRubrics';
 import { Loader2, ArrowLeft, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createPageUrl } from '@/utils';
@@ -110,8 +112,10 @@ export default function ClassWorkspace() {
       <div className="bg-slate-50 min-h-[calc(100vh-180px)]">
         {activeTab === 'stream' && <ClassStream classData={classData} isTeacher={isTeacher} userId={user.id} />}
         {activeTab === 'assignments' && <ClassAssignments classData={classData} isTeacher={isTeacher} userId={user.id} />}
+        {activeTab === 'lessons' && <ClassLessons classData={classData} isTeacher={isTeacher} userId={user.id} />}
         {activeTab === 'materials' && <ClassMaterials classData={classData} isTeacher={isTeacher} />}
         {activeTab === 'grades' && <ClassGrades classData={classData} isTeacher={isTeacher} isStudent={isStudent} userId={user.id} />}
+        {activeTab === 'rubrics' && <ClassRubrics classData={classData} />}
         {activeTab === 'people' && <ClassPeople classData={classData} />}
         {activeTab === 'attendance' && <ClassAttendance classData={classData} isTeacher={isTeacher} userId={user.id} />}
         {activeTab === 'analytics' && <ClassAnalytics classData={classData} isTeacher={isTeacher} />}
