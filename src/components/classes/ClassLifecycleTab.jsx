@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Archive, RotateCcw, Copy, Scissors, Merge, CheckCircle,
-  Loader2, BookOpen, AlertTriangle, Info, ChevronRight, Users
+  Loader2, BookOpen, AlertTriangle, Info, ChevronRight, Users, Trash2
 } from 'lucide-react';
 
 function DuplicateDialog({ classObj, onClose, schoolId, academicYears }) {
