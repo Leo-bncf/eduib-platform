@@ -52,7 +52,7 @@ const REASON_RULES = [
   {
     key: 'grade_visibility_override',
     label: 'Grade visibility override',
-    description: 'Require reason when a grade's visibility is changed from the school default.',
+    description: "Require reason when a grade's visibility is changed from the school default.",
     level: 'info',
   },
 ];
