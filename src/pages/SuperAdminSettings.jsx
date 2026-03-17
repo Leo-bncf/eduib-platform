@@ -421,6 +421,31 @@ export default function SuperAdminSettings() {
           </ConfigSectionCard>
         </div>
       )}
+
+      {activeTab === 'data' && (
+        <div className="space-y-6">
+          <ConfigSectionCard
+            title="Export / Import"
+            description="Download entity data as JSON for backups or migrations, or re-import from a previous export."
+          >
+            <DataExportImport />
+          </ConfigSectionCard>
+
+          <ConfigSectionCard
+            title="Data Integrity Checks"
+            description="Run automated scans to identify orphaned records, missing references, and other inconsistencies."
+          >
+            <DataIntegrityChecker />
+          </ConfigSectionCard>
+
+          <ConfigSectionCard
+            title="GDPR / Privacy Tools"
+            description="Look up a user by email to view, anonymize, or permanently delete all their personal data across the platform."
+          >
+            <GdprPrivacyTools />
+          </ConfigSectionCard>
+        </div>
+      )}
     </SuperAdminShell>
   );
 }
