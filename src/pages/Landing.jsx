@@ -229,7 +229,7 @@ function PricingSection() {
   const tiers = [
     { range: '1-200 students', price: '$20.99', description: 'Per student' },
     { range: '201-600 students', price: '$16.99', description: 'Per student' },
-    { range: '600+ students', price: '$13.99', description: 'Per student' },
+    { range: '600+ students', price: '$13.99', description: 'Per student', bonus: 'Includes Scholr Group' },
   ];
 
   return (
@@ -247,6 +247,13 @@ function PricingSection() {
                 <span className="text-4xl font-bold text-slate-900">{tier.price}</span>
               </div>
               <p className="text-sm text-slate-600">{tier.description}</p>
+              {tier.bonus && (
+                <div className="mt-4 bg-blue-50 rounded-lg p-3">
+                  <p className="text-xs font-semibold text-blue-700">{tier.bonus}</p>
+                  <p className="text-xs text-blue-600 mt-1">IB-focused scheduling & timetable tool</p>
+                  <p className="text-xs text-blue-600 mt-2">Contact our sales team for details</p>
+                </div>
+              )}
               <div className="mt-6 pt-6 border-t border-slate-100">
                 <p className="text-xs text-slate-500">Billed monthly • No setup fees</p>
               </div>
