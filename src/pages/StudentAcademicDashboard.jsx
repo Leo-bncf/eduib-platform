@@ -20,15 +20,7 @@ import { createPageUrl } from '@/utils';
 import StudentSubmission from '@/components/assignment/StudentSubmission';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
-  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
-  { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
-  { label: 'IB Core', page: 'StudentCAS', icon: Star },
-  { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
-];
+import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
