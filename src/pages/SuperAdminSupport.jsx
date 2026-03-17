@@ -83,6 +83,8 @@ function TicketManagement() {
   const inProgressCount = tickets.filter((t) => t.status === 'in_progress').length;
   const resolvedCount = tickets.filter((t) => t.status === 'resolved').length;
 
+  if (loading) return <div className="flex items-center justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>;
+
   return (
     <div className="space-y-5">
       {/* Stats */}
