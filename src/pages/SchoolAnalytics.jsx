@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useUser } from '@/components/auth/UserContext';
 import RoleGuard from '@/components/auth/RoleGuard';
-import AppSidebar from '@/components/app/AppSidebar';
-import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
+import SchoolAdminPageShell from '@/components/app/SchoolAdminPageShell';
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell, RadarChart,
