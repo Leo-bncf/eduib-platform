@@ -114,7 +114,7 @@ export default function SchoolAdminDashboard() {
         <div className="flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full space-y-8">
 
           {/* Setup Checklist — only visible until complete */}
-          {data.setupDone < data.setupTotal && (
+          {data && data.setupDone < data.setupTotal && (
             <section>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-md flex items-center justify-center flex-shrink-0">
