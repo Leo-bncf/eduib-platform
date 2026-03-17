@@ -319,11 +319,7 @@ function CTASection() {
                 Schedule Demo <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
-            <Link to={createPageUrl('Plans')}>
-              <Button size="lg" variant="outline" className="border-slate-300 text-slate-800 hover:bg-slate-50 rounded-lg px-8 h-12 text-base font-medium">
-                View Pricing
-              </Button>
-            </Link>
+
           </div>
         </div>
       </div>
