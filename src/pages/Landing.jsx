@@ -104,10 +104,10 @@ function HeroSection() {
 
 function ProblemSection() {
   const problems = [
-    { icon: '📊', text: 'Scattered data across spreadsheets, email, and disconnected tools' },
-    { icon: '🔓', text: "Weak role-based access — teachers see data they shouldn't" },
-    { icon: '😤', text: 'Parents lack real-time visibility into their child\'s progress' },
-    { icon: '⏳', text: 'Tedious manual workflows for assignments, grading, and reporting' },
+    { icon: '🧩', text: 'Bloated platforms stuffed with features irrelevant to IB — cluttering every screen' },
+    { icon: '📋', text: 'Grading tools that ignore the 1–7 scale, criteria bands, and SL/HL distinctions' },
+    { icon: '😤', text: 'CAS, EE, and TOK tracked in spreadsheets or separate tools with no integration' },
+    { icon: '⏳', text: 'Workarounds every step of the way — because the platform wasn't made for you' },
   ];
 
   return (
