@@ -14,9 +14,9 @@ import { format } from 'date-fns';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'My Grades', page: 'StudentDashboard', icon: BarChart3 },
-  { label: 'IB Core', page: 'StudentCAS', icon: Star },
-  { label: 'Messages', page: 'Messages', icon: MessageSquare },
+  { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
+  { label: 'IB Core', page: 'StudentIBCore', icon: Star },
+  { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
 ];
 
 const taskTypeLabels = {
