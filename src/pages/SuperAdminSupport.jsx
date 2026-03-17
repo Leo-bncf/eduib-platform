@@ -18,13 +18,7 @@ import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 
 // ─── Sample data (KB only) ────────────────────────────────────────────────────
 
-const SAMPLE_ARTICLES = [
-  { id: 'kb-1', title: 'How to set up academic years and terms', category: 'Onboarding', views: 312, status: 'published', updated: '2026-02-20' },
-  { id: 'kb-2', title: 'Configuring role-based access for staff', category: 'Administration', views: 204, status: 'published', updated: '2026-02-18' },
-  { id: 'kb-3', title: 'Using the IB Gradebook with HL/SL subjects', category: 'Gradebook', views: 489, status: 'published', updated: '2026-03-01' },
-  { id: 'kb-4', title: 'Integrating Google Drive for assignments', category: 'Integrations', views: 177, status: 'published', updated: '2026-03-10' },
-  { id: 'kb-5', title: 'Troubleshooting parent portal access', category: 'Troubleshooting', views: 95, status: 'draft', updated: '2026-03-15' },
-];
+
 
 const PRIORITY_META = {
   high: { label: 'High', color: 'bg-red-100 text-red-700 border-red-200' },
