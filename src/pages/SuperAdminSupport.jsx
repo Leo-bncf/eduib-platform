@@ -53,11 +53,19 @@ const STATUS_META = {
 // ─── Ticket Management ────────────────────────────────────────────────────────
 
 function TicketManagement() {
-  const [tickets, setTickets] = useState(SAMPLE_TICKETS);
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterPriority, setFilterPriority] = useState('all');
   const [expandedId, setExpandedId] = useState(null);
+
+  useEffect(() => {
+    base44.entities.SupportTicket.list('-created_date', 200).then((data) => {
+      setTickets(data);
+      setLoading(false);
+    });
+  }, []);
 
   const filtered = tickets.filter((t) => {
     const matchSearch = t.subject.toLowerCase().includes(search.toLowerCase()) || t.school.toLowerCase().includes(search.toLowerCase());
@@ -66,8 +74,9 @@ function TicketManagement() {
     return matchSearch && matchStatus && matchPriority;
   });
 
-  const handleStatusChange = (id, status) => {
+  const handleStatusChange = async (id, status) => {
     setTickets((prev) => prev.map((t) => t.id === id ? { ...t, status } : t));
+    await base44.entities.SupportTicket.update(id, { status });
   };
 
   const openCount = tickets.filter((t) => t.status === 'open').length;
