@@ -249,7 +249,7 @@ export default function SecurityAndCompliance() {
                 For security or compliance questions, please contact our security team:
               </p>
               <div className="mt-4 p-4 bg-slate-50 rounded-lg">
-                <p><strong>Email:</strong> security@scholr.pro</p>
+                <p><strong>Email:</strong> support@scholr.pro</p>
                 <p className="mt-2"><strong>Response Time:</strong> 24 hours for all security inquiries</p>
               </div>
             </section>
