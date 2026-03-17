@@ -10,6 +10,7 @@ import SuperAdminSupport from './pages/SuperAdminSupport';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSettings from './pages/SuperAdminSettings';
 import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
+import SchoolAdminGradebookGovernance from './pages/SchoolAdminGradebookGovernance';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -100,6 +101,14 @@ const AuthenticatedApp = () => {
         element={
           <LayoutWrapper currentPageName="SuperAdminSupport">
             <SuperAdminSupport />
+          </LayoutWrapper>
+        }
+      />
+      <Route
+        path="/SchoolAdminGradebookGovernance"
+        element={
+          <LayoutWrapper currentPageName="SchoolAdminGradebookGovernance">
+            <SchoolAdminGradebookGovernance />
           </LayoutWrapper>
         }
       />
