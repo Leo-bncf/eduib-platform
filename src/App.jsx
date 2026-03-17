@@ -159,6 +159,14 @@ const AuthenticatedApp = () => {
         }
       />
       <Route
+        path="/SchoolAnalytics"
+        element={
+          <LayoutWrapper currentPageName="SchoolAnalytics">
+            <SchoolAnalytics />
+          </LayoutWrapper>
+        }
+      />
+      <Route
         path="/SchoolAdminAcademicSetup"
         element={
           <LayoutWrapper currentPageName="SchoolAdminAcademicSetup">
