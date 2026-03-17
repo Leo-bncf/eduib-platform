@@ -13,15 +13,7 @@ import {
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { createPageUrl } from '@/utils';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
-  { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
-  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
-  { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
-  { label: 'IB Core', page: 'StudentCAS', icon: Star },
-  { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
-];
+import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
 
 export default function StudentDashboard() {
   const { user, school, schoolId } = useUser();
