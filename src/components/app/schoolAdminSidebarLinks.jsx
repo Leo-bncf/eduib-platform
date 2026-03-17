@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Users, BookOpen, GraduationCap, Calendar,
-  AlertTriangle, Clock, FileText, CreditCard, Settings
+  AlertTriangle, Clock, FileText, CreditCard, Settings, BarChart3
 } from 'lucide-react';
 
 export const SCHOOL_ADMIN_SIDEBAR_LINKS = [
@@ -12,6 +12,7 @@ export const SCHOOL_ADMIN_SIDEBAR_LINKS = [
   { label: 'Attendance',     page: 'SchoolAdminAttendance',     icon: Calendar },
   { label: 'Behavior',       page: 'SchoolAdminBehavior',       icon: AlertTriangle },
   { label: 'Timetable',      page: 'SchoolAdminTimetable',      icon: Clock },
+  { label: 'Analytics',      page: 'SchoolAnalytics',           icon: BarChart3 },
   { label: 'Reports',        page: 'SchoolAdminReports',        icon: FileText },
   { label: 'Billing',        page: 'SchoolAdminBilling',        icon: CreditCard },
   { label: 'Settings',       page: 'SchoolAdminSettings',       icon: Settings },

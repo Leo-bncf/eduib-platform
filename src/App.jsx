@@ -10,6 +10,7 @@ import SuperAdminSupport from './pages/SuperAdminSupport';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSettings from './pages/SuperAdminSettings';
 import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
+import SchoolAnalytics from './pages/SchoolAnalytics';
 import SchoolAdminOnboarding from './pages/SchoolAdminOnboarding';
 import SchoolAdminSupport from './pages/SchoolAdminSupport';
 import SchoolAdminGradebookGovernance from './pages/SchoolAdminGradebookGovernance';
