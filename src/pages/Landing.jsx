@@ -200,8 +200,8 @@ function CTASection() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-slate-50 rounded-xl p-12 sm:p-16 text-center relative overflow-hidden shadow-sm border border-slate-200">
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to modernize your institution?</h2>
-            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Made for IB. Mastered for IB.</h2>
+            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">If your school runs the IB, you shouldn't be making do with tools built for everyone else. See what a purpose-built platform looks like.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={createPageUrl('Demo')}>
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-8 h-12 text-base font-medium shadow-sm transition-all border-none">
