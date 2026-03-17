@@ -140,6 +140,7 @@ export default function StudentCommunication() {
                         conversation={selectedConversation}
                         userId={user?.id}
                         userName={user?.full_name}
+                        userRole={membership?.role || 'student'}
                       />
                     </div>
                   </div>
