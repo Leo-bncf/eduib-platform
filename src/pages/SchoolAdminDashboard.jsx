@@ -5,7 +5,7 @@ import { useSchoolOperationsData } from '@/components/hooks/useSchoolOperationsD
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import {
-  LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
+  LayoutDashboard, Users, BookOpen, Calendar, Clock,
   FileText, CreditCard, Settings, Activity, ShieldCheck, Zap, CalendarDays,
 } from 'lucide-react';
 import AppSidebar from '@/components/app/AppSidebar';
