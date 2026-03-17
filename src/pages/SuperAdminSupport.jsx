@@ -28,15 +28,7 @@ import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageH
 import SuperAdminShell from '@/components/admin/super-admin/SuperAdminShell';
 import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 
-// ─── Sample data ──────────────────────────────────────────────────────────────
-
-const SAMPLE_TICKETS = [
-  { id: 'TKT-001', school: 'Geneva International School', subject: 'Students cannot submit assignments', priority: 'high', status: 'open', created: '2026-03-16', assignee: 'Support Team' },
-  { id: 'TKT-002', school: 'Tokyo IB Academy', subject: 'Gradebook not loading for DP2 class', priority: 'high', status: 'in_progress', created: '2026-03-15', assignee: 'Alice M.' },
-  { id: 'TKT-003', school: 'Madrid World School', subject: 'Parent portal login failing', priority: 'medium', status: 'in_progress', created: '2026-03-14', assignee: 'Bob K.' },
-  { id: 'TKT-004', school: 'Cape Town IB', subject: 'CAS hours not saving correctly', priority: 'low', status: 'resolved', created: '2026-03-12', assignee: 'Alice M.' },
-  { id: 'TKT-005', school: 'Nairobi Int. School', subject: 'Timetable sync stopped working', priority: 'medium', status: 'open', created: '2026-03-17', assignee: 'Unassigned' },
-];
+// ─── Sample data (KB only) ────────────────────────────────────────────────────
 
 const SAMPLE_ARTICLES = [
   { id: 'kb-1', title: 'How to set up academic years and terms', category: 'Onboarding', views: 312, status: 'published', updated: '2026-02-20' },
