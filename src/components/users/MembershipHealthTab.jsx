@@ -1,0 +1,273 @@
+import React from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import {
+  ShieldAlert, CheckCircle, Loader2, UserX, RefreshCw, Trash2, Info
+} from 'lucide-react';
+import { ROLE_CONFIG } from './userConstants';
+
+export default function MembershipHealthTab({ schoolId }) {
+  const queryClient = useQueryClient();
+
+  const { data: memberships = [], isLoading: loadingMemberships } = useQuery({
+    queryKey: ['school-memberships', schoolId],
+    queryFn: () => base44.entities.SchoolMembership.filter({ school_id: schoolId }),
+    enabled: !!schoolId,
+  });
+
+  const { data: allSchoolMemberships = [], isLoading: loadingAll } = useQuery({
+    queryKey: ['all-school-memberships'],
+    queryFn: () => base44.entities.SchoolMembership.list(),
+    enabled: !!schoolId,
+  });
+
+  const isLoading = loadingMemberships || loadingAll;
+
+  // --- Health checks ---
+
+  // 1. Orphan memberships: school_id missing or blank
+  const orphans = allSchoolMemberships.filter(m => !m.school_id);
+
+  // 2. Duplicate memberships: same user_email in same school
+  const emailCount = {};
+  memberships.forEach(m => {
+    const key = m.user_email?.toLowerCase();
+    if (!key) return;
+    emailCount[key] = (emailCount[key] || []).concat(m);
+  });
+  const duplicates = Object.values(emailCount).filter(arr => arr.length > 1).flat();
+
+  // 3. Missing email
+  const missingEmail = memberships.filter(m => !m.user_email);
+
+  // 4. Invalid roles
+  const validRoles = Object.keys(ROLE_CONFIG);
+  const invalidRoles = memberships.filter(m => m.role && !validRoles.includes(m.role));
+
+  // 5. Long-pending (pending > 30 days)
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const stalePending = memberships.filter(m =>
+    m.status === 'pending' && new Date(m.created_date) < thirtyDaysAgo
+  );
+
+  const totalIssues = orphans.length + duplicates.length + missingEmail.length + invalidRoles.length;
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.SchoolMembership.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['school-memberships', schoolId] });
+      queryClient.invalidateQueries({ queryKey: ['all-school-memberships'] });
+    },
+  });
+
+  const fixStatusMutation = useMutation({
+    mutationFn: ({ id, status }) => base44.entities.SchoolMembership.update(id, { status }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['school-memberships', schoolId] }),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="p-16 text-center">
+        <Loader2 className="w-6 h-6 animate-spin text-slate-300 mx-auto" />
+      </div>
+    );
+  }
+
+  if (totalIssues === 0 && stalePending.length === 0) {
+    return (
+      <div className="max-w-lg mx-auto py-12 text-center space-y-4">
+        <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto">
+          <CheckCircle className="w-8 h-8 text-emerald-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-slate-900">All memberships look healthy</h3>
+        <p className="text-sm text-slate-500">
+          No orphan accounts, no duplicates, no missing data. {memberships.length} active memberships in good shape.
+        </p>
+        <Alert className="border-blue-200 bg-blue-50 text-left">
+          <Info className="w-4 h-4 text-blue-600" />
+          <AlertDescription className="text-xs text-blue-700">
+            This check runs on your school's memberships. It detects orphan accounts (no school), duplicates, missing emails, invalid roles, and long-pending (30+ day) invitations.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  const IssueSection = ({ title, description, severity, items, renderItem }) => {
+    if (!items || items.length === 0) return null;
+    const colors = {
+      high:   'bg-red-50 border-red-200 text-red-700',
+      medium: 'bg-amber-50 border-amber-200 text-amber-700',
+      low:    'bg-slate-50 border-slate-200 text-slate-600',
+    };
+    const dotColors = { high: 'bg-red-500', medium: 'bg-amber-400', low: 'bg-slate-400' };
+    return (
+      <div className={`rounded-xl border p-4 ${colors[severity]}`}>
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full ${dotColors[severity]} mt-1 flex-shrink-0`} />
+            <div>
+              <p className="text-sm font-semibold">{title}</p>
+              <p className="text-xs opacity-80 mt-0.5">{description}</p>
+            </div>
+          </div>
+          <Badge className={`${colors[severity]} border text-xs flex-shrink-0`}>{items.length}</Badge>
+        </div>
+        <div className="space-y-2">
+          {items.map((item, i) => renderItem(item, i))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-5 max-w-2xl">
+      <div>
+        <h3 className="text-sm font-semibold text-slate-800 mb-1">Membership Health Check</h3>
+        <p className="text-xs text-slate-500">
+          Detects and helps fix orphan accounts, duplicates, invalid data, and multi-school isolation issues.
+        </p>
+      </div>
+
+      {totalIssues > 0 && (
+        <Alert className="border-red-200 bg-red-50">
+          <ShieldAlert className="w-4 h-4 text-red-600" />
+          <AlertDescription className="text-xs text-red-700">
+            Found <strong>{totalIssues} issue{totalIssues !== 1 ? 's' : ''}</strong> across your school memberships that require attention.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <IssueSection
+        title="Orphan Accounts (No School)"
+        description="These memberships have no school_id and cannot function correctly. They should be deleted."
+        severity="high"
+        items={orphans}
+        renderItem={(m, i) => (
+          <div key={i} className="flex items-center justify-between bg-white/60 rounded-lg px-3 py-2">
+            <div>
+              <p className="text-xs font-medium text-slate-800">{m.user_name || m.user_email || `ID: ${m.id}`}</p>
+              <p className="text-[11px] text-slate-500">role: {m.role} · status: {m.status}</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 gap-1"
+              onClick={() => { if (window.confirm('Delete this orphan membership?')) deleteMutation.mutate(m.id); }}
+            >
+              <Trash2 className="w-3 h-3" /> Delete
+            </Button>
+          </div>
+        )}
+      />
+
+      <IssueSection
+        title="Duplicate Memberships"
+        description="Multiple memberships for the same email in this school. Keep the most recent and remove extras."
+        severity="high"
+        items={duplicates}
+        renderItem={(m, i) => (
+          <div key={i} className="flex items-center justify-between bg-white/60 rounded-lg px-3 py-2">
+            <div>
+              <p className="text-xs font-medium text-slate-800">{m.user_email}</p>
+              <p className="text-[11px] text-slate-500">role: {ROLE_CONFIG[m.role]?.label || m.role} · id: {m.id?.slice(-8)}</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 gap-1"
+              onClick={() => { if (window.confirm(`Remove duplicate membership for ${m.user_email}?`)) deleteMutation.mutate(m.id); }}
+            >
+              <Trash2 className="w-3 h-3" /> Remove
+            </Button>
+          </div>
+        )}
+      />
+
+      <IssueSection
+        title="Missing Email Address"
+        description="These memberships have no email and cannot receive invitations or be identified correctly."
+        severity="medium"
+        items={missingEmail}
+        renderItem={(m, i) => (
+          <div key={i} className="flex items-center justify-between bg-white/60 rounded-lg px-3 py-2">
+            <div>
+              <p className="text-xs font-medium text-slate-800">{m.user_name || `ID: ${m.id}`}</p>
+              <p className="text-[11px] text-slate-500">role: {m.role} · created: {new Date(m.created_date).toLocaleDateString()}</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 gap-1"
+              onClick={() => { if (window.confirm('Delete this incomplete membership?')) deleteMutation.mutate(m.id); }}
+            >
+              <Trash2 className="w-3 h-3" /> Delete
+            </Button>
+          </div>
+        )}
+      />
+
+      <IssueSection
+        title="Invalid Roles"
+        description="These memberships have roles not recognized by the platform."
+        severity="medium"
+        items={invalidRoles}
+        renderItem={(m, i) => (
+          <div key={i} className="flex items-center justify-between bg-white/60 rounded-lg px-3 py-2">
+            <div>
+              <p className="text-xs font-medium text-slate-800">{m.user_email || m.user_name}</p>
+              <p className="text-[11px] text-slate-500">current role: "{m.role}"</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-50 gap-1"
+              onClick={() => fixStatusMutation.mutate({ id: m.id, status: 'inactive' })}
+            >
+              <UserX className="w-3 h-3" /> Suspend
+            </Button>
+          </div>
+        )}
+      />
+
+      <IssueSection
+        title="Long-Pending Accounts (30+ days)"
+        description="These users have been in pending status for over 30 days and may need a nudge or removal."
+        severity="low"
+        items={stalePending}
+        renderItem={(m, i) => (
+          <div key={i} className="flex items-center justify-between bg-white/60 rounded-lg px-3 py-2">
+            <div>
+              <p className="text-xs font-medium text-slate-800">{m.user_email || m.user_name}</p>
+              <p className="text-[11px] text-slate-500">
+                pending since {new Date(m.created_date).toLocaleDateString()} ·
+                {ROLE_CONFIG[m.role]?.label || m.role}
+              </p>
+            </div>
+            <div className="flex gap-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 gap-1"
+                onClick={() => fixStatusMutation.mutate({ id: m.id, status: 'active' })}
+              >
+                <RefreshCw className="w-3 h-3" /> Activate
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs text-red-500 hover:text-red-600 hover:bg-red-50 gap-1"
+                onClick={() => { if (window.confirm(`Remove ${m.user_email}?`)) deleteMutation.mutate(m.id); }}
+              >
+                <Trash2 className="w-3 h-3" /> Remove
+              </Button>
+            </div>
+          </div>
+        )}
+      />
+    </div>
+  );
+}
