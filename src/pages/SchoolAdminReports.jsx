@@ -6,7 +6,7 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  LayoutDashboard, FileText, FileSpreadsheet, Printer, Star,
+  LayoutDashboard, FileText, FileSpreadsheet, Printer, Star, Users,
 } from 'lucide-react';
 import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import ReportsCenterOverview from '@/components/reports/ReportsCenterOverview';
