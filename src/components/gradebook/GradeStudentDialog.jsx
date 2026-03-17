@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lock } from 'lucide-react';
 import { logAudit, AuditActions, AuditLevels } from '@/components/utils/auditLogger';
 import { useGradebookPolicy } from '@/hooks/useGradebookPolicy';
 import { useUser } from '@/components/auth/UserContext';

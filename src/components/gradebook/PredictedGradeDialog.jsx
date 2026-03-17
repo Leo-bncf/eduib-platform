@@ -7,10 +7,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Loader2, TrendingUp } from 'lucide-react';
+import { Loader2, TrendingUp, Lock, AlertTriangle } from 'lucide-react';
+import { useGradebookPolicy } from '@/hooks/useGradebookPolicy';
+import { useUser } from '@/components/auth/UserContext';
 
 export default function PredictedGradeDialog({ classData, student, existingPrediction, open, onClose }) {
   const queryClient = useQueryClient();
+  const { membership } = useUser();
+  const { policy, canEditPredictedGrade } = useGradebookPolicy(classData?.school_id);
+  const userRole = membership?.role || 'teacher';
+  const canEdit = canEditPredictedGrade(userRole);
   const [form, setForm] = useState({
     predicted_ib_grade: existingPrediction?.predicted_ib_grade || '',
     confidence_level: existingPrediction?.confidence_level || 'medium',
