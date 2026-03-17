@@ -55,7 +55,11 @@ export default function SchoolAdminDashboard() {
     }
   }, [user, userLoading]);
 
-  if (userLoading || !user || isLoading || !data) {
+  if (userLoading || !user) {
+    return <LoadingStateBase />;
+  }
+
+  if (isLoading) {
     return <LoadingStateBase />;
   }
 
