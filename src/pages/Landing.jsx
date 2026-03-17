@@ -159,7 +159,7 @@ function RolesSection() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {roles.map((r, i) => (
-            <div key={i} className="relative p-6 bg-white border-t-2 border-t-blue-500 shadow-sm rounded-b-md border-x border-b border-slate-200">
+            <div key={i} className="relative p-6 bg-white/70 backdrop-blur-sm border-t-2 border-t-blue-500 shadow-sm rounded-b-md border-x border-b border-slate-200">
               <h3 className="font-bold text-slate-900 mb-3">{r.name}</h3>
               <p className="text-sm text-slate-500 leading-relaxed">{r.desc}</p>
             </div>
