@@ -1,3 +1,6 @@
+// Re-exports the unified AnnouncementsFeed component for backward compatibility
+export { default } from '@/components/messaging/AnnouncementsFeed';
+
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
