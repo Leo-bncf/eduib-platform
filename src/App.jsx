@@ -13,6 +13,7 @@ import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
 import SchoolAnalytics from './pages/SchoolAnalytics';
 import StudentAcademicDashboard from './pages/StudentAcademicDashboard';
 import StudentTimetable from './pages/StudentTimetable';
+import StudentAttendance from './pages/StudentAttendance';
 import SchoolAdminOnboarding from './pages/SchoolAdminOnboarding';
 import SchoolAdminSupport from './pages/SchoolAdminSupport';
 import SchoolAdminGradebookGovernance from './pages/SchoolAdminGradebookGovernance';
@@ -157,6 +158,14 @@ const AuthenticatedApp = () => {
         element={
           <LayoutWrapper currentPageName="SchoolAdminOnboarding">
             <SchoolAdminOnboarding />
+          </LayoutWrapper>
+        }
+      />
+      <Route
+        path="/StudentAttendance"
+        element={
+          <LayoutWrapper currentPageName="StudentAttendance">
+            <StudentAttendance />
           </LayoutWrapper>
         }
       />
