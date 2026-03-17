@@ -174,7 +174,7 @@ function CTASection() {
   return (
     <section className="py-24 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-50 rounded-2xl p-12 sm:p-16 text-center relative overflow-hidden border border-slate-200">
+        <div className="bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 rounded-2xl p-12 sm:p-16 text-center relative overflow-hidden border border-slate-200">
           <div className="relative z-10">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to modernize your institution?</h2>
             <p className="text-lg text-slate-500 mb-10 max-w-2xl mx-auto">Deploy a robust, professional platform that scales with your academic operations.</p>
