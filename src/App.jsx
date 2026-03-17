@@ -224,6 +224,22 @@ const AuthenticatedApp = () => {
         }
       />
       <Route
+        path="/TermsOfService"
+        element={
+          <LayoutWrapper currentPageName="TermsOfService">
+            <TermsOfService />
+          </LayoutWrapper>
+        }
+      />
+      <Route
+        path="/SecurityAndCompliance"
+        element={
+          <LayoutWrapper currentPageName="SecurityAndCompliance">
+            <SecurityAndCompliance />
+          </LayoutWrapper>
+        }
+      />
+      <Route
         path="/SchoolAdminAcademicSetup"
         element={
           <LayoutWrapper currentPageName="SchoolAdminAcademicSetup">
