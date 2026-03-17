@@ -86,13 +86,33 @@ export default function PredictedGradeDialog({ classData, student, existingPredi
         </DialogHeader>
 
         <div className="space-y-5">
-          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-            <p className="text-sm text-indigo-900 mb-2">
-              Enter your predicted IB grade for this student based on current performance and trajectory.
-            </p>
-          </div>
+          {!policy.predicted_grades_enabled && (
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-slate-500" />
+              <p className="text-xs text-slate-600">Predicted grades are currently disabled by school policy.</p>
+            </div>
+          )}
+          {policy.predicted_grades_locked && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+              <Lock className="w-4 h-4 text-red-600" />
+              <p className="text-xs text-red-700">Predicted grade collection has been locked by the IB Coordinator. No further entries or edits are allowed.</p>
+            </div>
+          )}
+          {!canEdit && policy.predicted_grades_enabled && !policy.predicted_grades_locked && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <p className="text-xs text-amber-700">Your role is not permitted to enter predicted grades for this school.</p>
+            </div>
+          )}
+          {canEdit && !policy.predicted_grades_locked && (
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+              <p className="text-sm text-indigo-900 mb-2">
+                Enter your predicted IB grade for this student based on current performance and trajectory.
+              </p>
+            </div>
+          )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className={`grid grid-cols-2 gap-4 ${!canEdit || policy.predicted_grades_locked ? 'opacity-50 pointer-events-none' : ''}`}>
             <div>
               <Label className="text-sm font-semibold">Predicted IB Grade (1-7) *</Label>
               <Input
@@ -140,8 +160,9 @@ export default function PredictedGradeDialog({ classData, student, existingPredi
           </div>
 
           <div>
-            <Label className="text-sm font-semibold">Rationale *</Label>
+            <Label className="text-sm font-semibold">Rationale {policy.predicted_grades_require_rationale ? '*' : '(optional)'}</Label>
             <Textarea
+              disabled={!canEdit || policy.predicted_grades_locked}
               value={form.rationale}
               onChange={e => setForm({ ...form, rationale: e.target.value })}
               placeholder="Explain the basis for this predicted grade (recent assessments, progress trajectory, work quality, etc.)"
@@ -187,7 +208,7 @@ export default function PredictedGradeDialog({ classData, student, existingPredi
             </Button>
             <Button
               onClick={handleSave}
-              disabled={!form.predicted_ib_grade || !form.rationale || saveMutation.isPending}
+              disabled={!form.predicted_ib_grade || (policy.predicted_grades_require_rationale && !form.rationale) || saveMutation.isPending || !canEdit || policy.predicted_grades_locked}
               className="flex-1 bg-indigo-600 hover:bg-indigo-700"
             >
               {saveMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
