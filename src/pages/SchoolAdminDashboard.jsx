@@ -122,7 +122,7 @@ export default function SchoolAdminDashboard() {
                 </div>
                 <div>
                   <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest">Getting Started</h2>
-                  <p className="text-xs text-slate-400 mt-0.5">{data.setupDone} of {data.setupTotal} setup steps complete</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{data?.setupDone} of {data?.setupTotal} setup steps complete</p>
                 </div>
               </div>
               <OnboardingChecklist
