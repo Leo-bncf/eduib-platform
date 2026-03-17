@@ -30,14 +30,18 @@ function HeroSection() {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-blue-100">
+            <Sparkles className="w-3.5 h-3.5" />
+            Built exclusively for IB World Schools — nothing else
+          </div>
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
-            The LMS designed for
-            <span className="text-blue-600"> the needs of</span>
-            {' '}IB World Schools
+            The LMS built
+            <span className="text-blue-600"> only for IB.</span>
+            {' '}Nothing more.
           </h1>
           
           <p className="mt-6 text-xl text-slate-500 leading-relaxed max-w-2xl mx-auto">
-            A unified platform designed around the IB framework — from PYP to DP, grading to reporting.
+            No bloat. No features for schools that don't run the IB. Every workflow, every screen, every tool is purpose-built for the IB framework — from PYP to DP.
           </p>
           
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
