@@ -12,6 +12,7 @@ import {
   Edit2,
   Loader2,
   Lock,
+  Trash2,
   Unlock,
   Users,
   Zap,
