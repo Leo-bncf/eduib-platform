@@ -3,7 +3,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useUser } from '@/components/auth/UserContext';
 import RoleGuard from '@/components/auth/RoleGuard';
-import AppSidebar from '@/components/app/AppSidebar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,17 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell, Shield, HardDrive,
-  FileText, Settings
-} from 'lucide-react';
-import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
+import { Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell, Shield, HardDrive, FileText } from 'lucide-react';
+import SchoolAdminPageShell from '@/components/app/SchoolAdminPageShell';
 import { DEFAULT_POLICY } from '@/hooks/useSubmissionPolicy';
 import SubmissionRulesPanel from '@/components/settings/SubmissionRulesPanel';
 import FileSecurityPanel from '@/components/settings/FileSecurityPanel';
 import AcademicIntegrityPanel from '@/components/settings/AcademicIntegrityPanel';
-
-
 
 const TIMEZONES = [
   'UTC', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Europe/Madrid',
@@ -29,23 +23,16 @@ const TIMEZONES = [
   'Asia/Dubai', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney', 'Africa/Cairo',
 ];
 
-const MONTHS = [
-  'January','February','March','April','May','June',
-  'July','August','September','October','November','December',
-];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 export default function SchoolAdminSettings() {
   const { user, school: contextSchool, schoolId } = useUser();
   const queryClient = useQueryClient();
   const [message, setMessage] = useState(null);
 
-  // ── School profile ──────────────────────────────────────────────────────────
   const { data: school, isLoading } = useQuery({
     queryKey: ['school-settings', schoolId],
-    queryFn: async () => {
-      const results = await base44.entities.School.filter({ id: schoolId });
-      return results[0];
-    },
+    queryFn: async () => { const results = await base44.entities.School.filter({ id: schoolId }); return results[0]; },
     enabled: !!schoolId,
   });
 
@@ -54,14 +41,9 @@ export default function SchoolAdminSettings() {
   useEffect(() => {
     if (school && !profileForm) {
       setProfileForm({
-        name: school.name || '',
-        email: school.email || '',
-        phone: school.phone || '',
-        city: school.city || '',
-        country: school.country || '',
-        address: school.address || '',
-        timezone: school.timezone || 'UTC',
-        academic_year_start_month: school.academic_year_start_month || 9,
+        name: school.name || '', email: school.email || '', phone: school.phone || '',
+        city: school.city || '', country: school.country || '', address: school.address || '',
+        timezone: school.timezone || 'UTC', academic_year_start_month: school.academic_year_start_month || 9,
         billing_email: school.billing_email || '',
       });
     }
@@ -69,43 +51,26 @@ export default function SchoolAdminSettings() {
 
   const updateSchoolMutation = useMutation({
     mutationFn: (data) => base44.entities.School.update(schoolId, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['school-settings'] });
-      queryClient.invalidateQueries({ queryKey: ['school', schoolId] });
-      showMessage('success', 'School settings saved.');
-    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['school-settings'] }); queryClient.invalidateQueries({ queryKey: ['school', schoolId] }); showMessage('success', 'School settings saved.'); },
     onError: () => showMessage('error', 'Failed to save settings.'),
   });
 
-  // ── Submission policy ───────────────────────────────────────────────────────
   const { data: policyRecord, isLoading: policyLoading } = useQuery({
     queryKey: ['submission-policy', schoolId],
-    queryFn: async () => {
-      const results = await base44.entities.SubmissionPolicy.filter({ school_id: schoolId });
-      return results[0] || null;
-    },
+    queryFn: async () => { const results = await base44.entities.SubmissionPolicy.filter({ school_id: schoolId }); return results[0] || null; },
     enabled: !!schoolId,
   });
 
   const [policyForm, setPolicyForm] = useState({ ...DEFAULT_POLICY });
 
-  useEffect(() => {
-    if (policyRecord) {
-      setPolicyForm({ ...DEFAULT_POLICY, ...policyRecord });
-    }
-  }, [policyRecord?.id]);
+  useEffect(() => { if (policyRecord) setPolicyForm({ ...DEFAULT_POLICY, ...policyRecord }); }, [policyRecord?.id]);
 
   const updatePolicyMutation = useMutation({
     mutationFn: (data) => {
       const payload = { ...data, school_id: schoolId };
-      return policyRecord
-        ? base44.entities.SubmissionPolicy.update(policyRecord.id, payload)
-        : base44.entities.SubmissionPolicy.create(payload);
+      return policyRecord ? base44.entities.SubmissionPolicy.update(policyRecord.id, payload) : base44.entities.SubmissionPolicy.create(payload);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['submission-policy', schoolId] });
-      showMessage('success', 'Governance policy saved.');
-    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['submission-policy', schoolId] }); showMessage('success', 'Policy saved.'); },
     onError: () => showMessage('error', 'Failed to save policy.'),
   });
 
@@ -118,210 +83,157 @@ export default function SchoolAdminSettings() {
 
   return (
     <RoleGuard allowedRoles={['school_admin', 'super_admin', 'admin']}>
-      <div className="min-h-screen bg-slate-50">
-        <AppSidebar
-          links={SCHOOL_ADMIN_SIDEBAR_LINKS}
-          role="school_admin"
-          schoolName={contextSchool?.name}
-          userName={user?.full_name}
-          userId={user?.id}
-          schoolId={schoolId}
-        />
+      <SchoolAdminPageShell
+        title="Settings"
+        subtitle="Manage your school profile, preferences, and governance policies"
+      >
+        {message && (
+          <Alert className={`mb-4 ${message.type === 'success' ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'}`}>
+            {message.type === 'success' ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <AlertCircle className="w-4 h-4 text-red-600" />}
+            <AlertDescription className={message.type === 'success' ? 'text-emerald-800' : 'text-red-800'}>{message.text}</AlertDescription>
+          </Alert>
+        )}
 
-        <main className="md:ml-64 min-h-screen">
-          <div className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
-            <h1 className="text-base font-black text-slate-900 tracking-tight">School Settings</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Manage your school profile, preferences, and governance policies</p>
-          </div>
+        <Tabs defaultValue="school">
+          <TabsList className="bg-white border border-slate-200 h-10 mb-6">
+            <TabsTrigger value="school" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+              <Building2 className="w-3.5 h-3.5" /> School Profile
+            </TabsTrigger>
+            <TabsTrigger value="submissions" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+              <FileText className="w-3.5 h-3.5" /> Submission Rules
+            </TabsTrigger>
+            <TabsTrigger value="files" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+              <HardDrive className="w-3.5 h-3.5" /> File & Storage
+            </TabsTrigger>
+            <TabsTrigger value="integrity" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+              <Shield className="w-3.5 h-3.5" /> Academic Integrity
+            </TabsTrigger>
+          </TabsList>
 
-          {message && (
-            <div className="mx-6 mt-4">
-              <Alert className={message.type === 'success' ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'}>
-                {message.type === 'success'
-                  ? <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  : <AlertCircle className="w-4 h-4 text-red-600" />}
-                <AlertDescription className={message.type === 'success' ? 'text-emerald-800' : 'text-red-800'}>
-                  {message.text}
-                </AlertDescription>
-              </Alert>
-            </div>
-          )}
-
-          <div className="p-6 max-w-4xl">
-            <Tabs defaultValue="school">
-              <TabsList className="bg-white border border-slate-200 h-10 mb-6">
-                <TabsTrigger value="school" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Building2 className="w-3.5 h-3.5" /> School Profile
-                </TabsTrigger>
-                <TabsTrigger value="submissions" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <FileText className="w-3.5 h-3.5" /> Submission Rules
-                </TabsTrigger>
-                <TabsTrigger value="files" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <HardDrive className="w-3.5 h-3.5" /> File & Storage
-                </TabsTrigger>
-                <TabsTrigger value="integrity" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Shield className="w-3.5 h-3.5" /> Academic Integrity
-                </TabsTrigger>
-              </TabsList>
-
-              {/* ── SCHOOL PROFILE TAB ── */}
-              <TabsContent value="school">
-                {isLoading || !profileForm ? (
-                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-                ) : (
-                  <form onSubmit={e => { e.preventDefault(); updateSchoolMutation.mutate(profileForm); }} className="space-y-5 max-w-2xl">
-                    <Card className="shadow-none border-slate-200">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center gap-2">
-                          <Building2 className="w-4 h-4 text-slate-500" />
-                          <CardTitle className="text-sm">School Profile</CardTitle>
-                        </div>
-                        <CardDescription className="text-xs">Basic information about your school</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div>
-                          <Label className="text-xs font-semibold">School Name *</Label>
-                          <Input required value={profileForm.name} onChange={e => setProfileForm({ ...profileForm, name: e.target.value })} className="mt-1" placeholder="e.g. International School of Paris" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label className="text-xs font-semibold">Contact Email</Label>
-                            <Input type="email" value={profileForm.email} onChange={e => setProfileForm({ ...profileForm, email: e.target.value })} className="mt-1" placeholder="admin@school.edu" />
-                          </div>
-                          <div>
-                            <Label className="text-xs font-semibold">Phone</Label>
-                            <Input value={profileForm.phone} onChange={e => setProfileForm({ ...profileForm, phone: e.target.value })} className="mt-1" placeholder="+1 234 567 890" />
-                          </div>
-                        </div>
-                        <div>
-                          <Label className="text-xs font-semibold">Address</Label>
-                          <Input value={profileForm.address} onChange={e => setProfileForm({ ...profileForm, address: e.target.value })} className="mt-1" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label className="text-xs font-semibold">City</Label>
-                            <Input value={profileForm.city} onChange={e => setProfileForm({ ...profileForm, city: e.target.value })} className="mt-1" />
-                          </div>
-                          <div>
-                            <Label className="text-xs font-semibold">Country</Label>
-                            <Input value={profileForm.country} onChange={e => setProfileForm({ ...profileForm, country: e.target.value })} className="mt-1" />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="shadow-none border-slate-200">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center gap-2">
-                          <Globe className="w-4 h-4 text-slate-500" />
-                          <CardTitle className="text-sm">Academic Configuration</CardTitle>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div>
-                          <Label className="text-xs font-semibold">Timezone</Label>
-                          <Select value={profileForm.timezone} onValueChange={v => setProfileForm({ ...profileForm, timezone: v })}>
-                            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                              {TIMEZONES.map(tz => <SelectItem key={tz} value={tz}>{tz}</SelectItem>)}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label className="text-xs font-semibold">Academic Year Start Month</Label>
-                          <Select value={String(profileForm.academic_year_start_month)} onValueChange={v => setProfileForm({ ...profileForm, academic_year_start_month: Number(v) })}>
-                            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                              {MONTHS.map((m, i) => <SelectItem key={i + 1} value={String(i + 1)}>{m}</SelectItem>)}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="shadow-none border-slate-200">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center gap-2">
-                          <Bell className="w-4 h-4 text-slate-500" />
-                          <CardTitle className="text-sm">Billing Contact</CardTitle>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <Label className="text-xs font-semibold">Billing Email</Label>
-                        <Input type="email" value={profileForm.billing_email} onChange={e => setProfileForm({ ...profileForm, billing_email: e.target.value })} className="mt-1" placeholder="billing@school.edu" />
-                      </CardContent>
-                    </Card>
-
-                    <div className="flex justify-end">
-                      <Button type="submit" disabled={updateSchoolMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                        {updateSchoolMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                        Save School Settings
-                      </Button>
+          <TabsContent value="school">
+            {isLoading || !profileForm ? (
+              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+            ) : (
+              <form onSubmit={e => { e.preventDefault(); updateSchoolMutation.mutate(profileForm); }} className="space-y-5 max-w-2xl">
+                <Card className="shadow-none border-slate-200">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2"><Building2 className="w-4 h-4 text-slate-500" /><CardTitle className="text-sm">School Profile</CardTitle></div>
+                    <CardDescription className="text-xs">Basic information about your school</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label className="text-xs font-semibold">School Name *</Label>
+                      <Input required value={profileForm.name} onChange={e => setProfileForm({ ...profileForm, name: e.target.value })} className="mt-1" placeholder="e.g. International School of Paris" />
                     </div>
-                  </form>
-                )}
-              </TabsContent>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs font-semibold">Contact Email</Label>
+                        <Input type="email" value={profileForm.email} onChange={e => setProfileForm({ ...profileForm, email: e.target.value })} className="mt-1" placeholder="admin@school.edu" />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-semibold">Phone</Label>
+                        <Input value={profileForm.phone} onChange={e => setProfileForm({ ...profileForm, phone: e.target.value })} className="mt-1" />
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs font-semibold">Address</Label>
+                      <Input value={profileForm.address} onChange={e => setProfileForm({ ...profileForm, address: e.target.value })} className="mt-1" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs font-semibold">City</Label>
+                        <Input value={profileForm.city} onChange={e => setProfileForm({ ...profileForm, city: e.target.value })} className="mt-1" />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-semibold">Country</Label>
+                        <Input value={profileForm.country} onChange={e => setProfileForm({ ...profileForm, country: e.target.value })} className="mt-1" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
 
-              {/* ── SUBMISSION RULES TAB ── */}
-              <TabsContent value="submissions">
-                {policyLoading ? (
-                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-                ) : (
-                  <div className="max-w-2xl space-y-5">
-                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
-                      <SubmissionRulesPanel form={policyForm} onChange={policyOnChange} />
+                <Card className="shadow-none border-slate-200">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2"><Globe className="w-4 h-4 text-slate-500" /><CardTitle className="text-sm">Academic Configuration</CardTitle></div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label className="text-xs font-semibold">Timezone</Label>
+                      <Select value={profileForm.timezone} onValueChange={v => setProfileForm({ ...profileForm, timezone: v })}>
+                        <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                        <SelectContent>{TIMEZONES.map(tz => <SelectItem key={tz} value={tz}>{tz}</SelectItem>)}</SelectContent>
+                      </Select>
                     </div>
-                    <div className="flex justify-end">
-                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                        Save Submission Policy
-                      </Button>
+                    <div>
+                      <Label className="text-xs font-semibold">Academic Year Start Month</Label>
+                      <Select value={String(profileForm.academic_year_start_month)} onValueChange={v => setProfileForm({ ...profileForm, academic_year_start_month: Number(v) })}>
+                        <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                        <SelectContent>{MONTHS.map((m, i) => <SelectItem key={i + 1} value={String(i + 1)}>{m}</SelectItem>)}</SelectContent>
+                      </Select>
                     </div>
-                  </div>
-                )}
-              </TabsContent>
+                  </CardContent>
+                </Card>
 
-              {/* ── FILE & STORAGE TAB ── */}
-              <TabsContent value="files">
-                {policyLoading ? (
-                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-                ) : (
-                  <div className="max-w-2xl space-y-5">
-                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
-                      <FileSecurityPanel form={policyForm} onChange={policyOnChange} schoolId={schoolId} plan={school?.plan} />
-                    </div>
-                    <div className="flex justify-end">
-                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                        Save File Policy
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
+                <Card className="shadow-none border-slate-200">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2"><Bell className="w-4 h-4 text-slate-500" /><CardTitle className="text-sm">Billing Contact</CardTitle></div>
+                  </CardHeader>
+                  <CardContent>
+                    <Label className="text-xs font-semibold">Billing Email</Label>
+                    <Input type="email" value={profileForm.billing_email} onChange={e => setProfileForm({ ...profileForm, billing_email: e.target.value })} className="mt-1" placeholder="billing@school.edu" />
+                  </CardContent>
+                </Card>
 
-              {/* ── ACADEMIC INTEGRITY TAB ── */}
-              <TabsContent value="integrity">
-                {policyLoading ? (
-                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-                ) : (
-                  <div className="max-w-2xl space-y-5">
-                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
-                      <AcademicIntegrityPanel form={policyForm} onChange={policyOnChange} />
-                    </div>
-                    <div className="flex justify-end">
-                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                        Save Integrity Policy
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
-            </Tabs>
-          </div>
-        </main>
-      </div>
+                <div className="flex justify-end">
+                  <Button type="submit" disabled={updateSchoolMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                    {updateSchoolMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                    Save Settings
+                  </Button>
+                </div>
+              </form>
+            )}
+          </TabsContent>
+
+          <TabsContent value="submissions">
+            {policyLoading ? <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div> : (
+              <div className="max-w-2xl space-y-5">
+                <div className="bg-white border border-slate-200 rounded-xl p-5"><SubmissionRulesPanel form={policyForm} onChange={policyOnChange} /></div>
+                <div className="flex justify-end">
+                  <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700">
+                    {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />} Save Policy
+                  </Button>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="files">
+            {policyLoading ? <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div> : (
+              <div className="max-w-2xl space-y-5">
+                <div className="bg-white border border-slate-200 rounded-xl p-5"><FileSecurityPanel form={policyForm} onChange={policyOnChange} schoolId={schoolId} plan={school?.plan} /></div>
+                <div className="flex justify-end">
+                  <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700">
+                    {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />} Save Policy
+                  </Button>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="integrity">
+            {policyLoading ? <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div> : (
+              <div className="max-w-2xl space-y-5">
+                <div className="bg-white border border-slate-200 rounded-xl p-5"><AcademicIntegrityPanel form={policyForm} onChange={policyOnChange} /></div>
+                <div className="flex justify-end">
+                  <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700">
+                    {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />} Save Policy
+                  </Button>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </SchoolAdminPageShell>
     </RoleGuard>
   );
 }
