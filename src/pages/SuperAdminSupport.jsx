@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
 import {
-  CheckCircle2,
   ChevronDown,
   ChevronUp,
-  Headphones,
   Loader2,
   Search,
   Ticket,
