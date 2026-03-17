@@ -6,10 +6,9 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  LayoutDashboard, Users, BookOpen, GraduationCap, Settings,
-  Calendar, Clock, FileText, FileSpreadsheet, Printer, Star, CreditCard,
-  MessageSquare
+  LayoutDashboard, FileText, FileSpreadsheet, Printer, Star,
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import ReportsCenterOverview from '@/components/reports/ReportsCenterOverview';
 import CSVExportToolkit from '@/components/reports/CSVExportToolkit';
 import PDFReportBuilder from '@/components/reports/PDFReportBuilder';

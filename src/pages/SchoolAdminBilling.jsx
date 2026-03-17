@@ -6,11 +6,10 @@ import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
 import { usePlan } from '@/components/plan/PlanProvider';
 import {
-  LayoutDashboard, Users, BookOpen, Calendar, CreditCard,
-  CheckCircle2, AlertCircle, Loader2, ExternalLink, FileText,
-  Settings, Clock, Shield, ArrowUpCircle, RefreshCw, MessageSquare,
-  GraduationCap
+  Users, CreditCard, CheckCircle2, AlertCircle, Loader2,
+  ExternalLink, Shield, ArrowUpCircle, RefreshCw,
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';

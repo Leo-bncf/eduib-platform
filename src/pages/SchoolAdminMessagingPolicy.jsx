@@ -6,10 +6,9 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { Button } from '@/components/ui/button';
 import {
-  LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
-  FileText, CreditCard, Settings, AlertTriangle, MessageSquare,
-  Lock, Moon, Shield, Loader2, Save, CheckCircle2,
+  MessageSquare, Lock, Moon, Shield, Loader2, Save, CheckCircle2,
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { DEFAULT_MESSAGING_POLICY } from '@/hooks/useMessagingPolicy';
 import PermissionRulesPanel from '@/components/messaging-policy/PermissionRulesPanel';
 import AnnouncementsGovernancePanel from '@/components/messaging-policy/AnnouncementsGovernancePanel';

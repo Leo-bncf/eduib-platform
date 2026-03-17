@@ -3,10 +3,9 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
 import {
-  LayoutDashboard, Users, BookOpen, GraduationCap, Settings,
-  Calendar, Clock, FileText, CreditCard, Activity, MapPin,
-  RefreshCw, AlertTriangle, Link2, ShieldAlert
+  Activity, MapPin, AlertTriangle, Link2, Settings,
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 

@@ -8,10 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
-  FileText, CreditCard, Settings, Loader2, CheckCircle2, AlertCircle,
-  BarChart3, Eye, Lock, Library, TrendingUp
+  Loader2, CheckCircle2, AlertCircle, BarChart3, Eye, Lock, Library, TrendingUp
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { DEFAULT_GRADEBOOK_POLICY } from '@/hooks/useGradebookPolicy';
 import GradingModelPanel from '@/components/gradebook-governance/GradingModelPanel';
 import VisibilityRulesPanel from '@/components/gradebook-governance/VisibilityRulesPanel';

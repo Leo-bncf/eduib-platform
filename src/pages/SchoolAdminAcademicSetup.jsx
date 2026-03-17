@@ -7,9 +7,9 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import LoadingStateBase from '@/components/common/LoadingStateBase';
 import {
-  LayoutDashboard, Users, BookOpen, Calendar, Clock, GraduationCap,
-  Settings, FileText, CreditCard, CalendarDays, BookMarked, UsersRound, Library,
+  CalendarDays, BookMarked, UsersRound, Library,
 } from 'lucide-react';
+import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import AcademicYearsTab from '@/components/academic-setup/AcademicYearsTab';
 import TermsTab from '@/components/academic-setup/TermsTab';
 import CohortsTab from '@/components/academic-setup/CohortsTab';
