@@ -118,7 +118,7 @@ function FeaturesGrid() {
         </div>
         <div className="space-y-3">
           {features.map((f, i) => (
-            <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <motion.div key={i} layout className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
               <button 
                 onClick={() => setExpandedId(expandedId === i ? null : i)}
                 className="w-full px-6 py-4 flex items-start gap-4 text-left hover:bg-slate-50/50 transition-colors"
@@ -132,12 +132,22 @@ function FeaturesGrid() {
                 </div>
                 <ChevronRight className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-300 ${expandedId === i ? 'rotate-90' : ''}`} />
               </button>
-              {expandedId === i && (
-                <div className="px-6 pb-4 border-t border-slate-100 bg-slate-50/30 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
-                </div>
-              )}
-            </div>
+              <AnimatePresence>
+                {expandedId === i && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="border-t border-slate-100 bg-slate-50/30 overflow-hidden"
+                  >
+                    <div className="px-6 py-4">
+                      <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>
