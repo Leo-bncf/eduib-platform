@@ -194,7 +194,7 @@ function RolesSection() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {roles.map((r, i) => (
-            <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <motion.div key={i} layout className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
               <button 
                 onClick={() => setExpandedRole(expandedRole === i ? null : i)}
                 className="w-full px-5 py-4 text-left hover:bg-slate-50/50 transition-colors"
@@ -202,12 +202,22 @@ function RolesSection() {
                 <h3 className="font-bold text-slate-900">{r.name}</h3>
                 <p className="text-xs text-slate-500 mt-1">{r.short}</p>
               </button>
-              {expandedRole === i && (
-                <div className="px-5 pb-4 border-t border-slate-100 bg-slate-50/30 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <p className="text-sm text-slate-600 leading-relaxed">{r.desc}</p>
-                </div>
-              )}
-            </div>
+              <AnimatePresence>
+                {expandedRole === i && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="border-t border-slate-100 bg-slate-50/30 overflow-hidden"
+                  >
+                    <div className="px-5 py-4">
+                      <p className="text-sm text-slate-600 leading-relaxed">{r.desc}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -271,9 +281,9 @@ export default function Landing() {
       </div>
       <div className="relative z-10">
         <HeroSection />
+        <ProblemSection />
         <FeaturesGrid />
         <RolesSection />
-        <ProblemSection />
         <CTASection />
         <PublicFooter />
       </div>
