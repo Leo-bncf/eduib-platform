@@ -103,6 +103,14 @@ const AuthenticatedApp = () => {
           </LayoutWrapper>
         }
       />
+      <Route
+        path="/SchoolAdminAcademicSetup"
+        element={
+          <LayoutWrapper currentPageName="SchoolAdminAcademicSetup">
+            <SchoolAdminAcademicSetup />
+          </LayoutWrapper>
+        }
+      />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
