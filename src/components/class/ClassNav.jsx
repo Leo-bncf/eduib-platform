@@ -1,22 +1,24 @@
 import React from 'react';
 import { 
   MessageSquare, ClipboardList, FolderOpen, BarChart3, 
-  Users, CheckSquare, TrendingUp, Settings 
+  Users, CheckSquare, TrendingUp, Settings, CalendarDays, BookMarked
 } from 'lucide-react';
 
 const tabs = [
   { id: 'stream', label: 'Stream', icon: MessageSquare },
   { id: 'assignments', label: 'Assignments', icon: ClipboardList },
+  { id: 'lessons', label: 'Lessons', icon: CalendarDays, teacherOnly: true },
   { id: 'materials', label: 'Materials', icon: FolderOpen },
   { id: 'grades', label: 'Grades', icon: BarChart3 },
-  { id: 'people', label: 'People', icon: Users },
-  { id: 'attendance', label: 'Attendance', icon: CheckSquare },
-  { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'rubrics', label: 'Rubrics', icon: BookMarked, teacherOnly: true },
+  { id: 'people', label: 'Roster', icon: Users },
+  { id: 'attendance', label: 'Attendance', icon: CheckSquare, teacherOnly: true },
+  { id: 'analytics', label: 'Analytics', icon: TrendingUp, teacherOnly: true },
+  { id: 'settings', label: 'Settings', icon: Settings, teacherOnly: true },
 ];
 
 export default function ClassNav({ activeTab, onTabChange, isTeacher }) {
-  const visibleTabs = isTeacher ? tabs : tabs.filter(t => !['attendance', 'analytics', 'settings'].includes(t.id));
+  const visibleTabs = isTeacher ? tabs : tabs.filter(t => !t.teacherOnly);
 
   return (
     <div className="border-b border-slate-200 bg-white">
