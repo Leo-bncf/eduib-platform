@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
-  LayoutDashboard, BarChart3, Star, MessageSquare,
+  LayoutDashboard, BarChart3, Star, MessageSquare, CalendarDays,
   TrendingUp, ClipboardList, BookOpen, Loader2, Clock,
   AlertCircle, CheckCircle2, ChevronDown, ChevronUp,
   FileText, Send
@@ -22,8 +22,10 @@ import { Button } from '@/components/ui/button';
 const sidebarLinks = [
   { label: 'Dashboard', page: 'StudentDashboard', icon: LayoutDashboard },
   { label: 'Academic', page: 'StudentAcademicDashboard', icon: BarChart3 },
+  { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
+  { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
   { label: 'IB Core', page: 'StudentCAS', icon: Star },
-  { label: 'Messages', page: 'Messages', icon: MessageSquare },
+  { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
 ];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────

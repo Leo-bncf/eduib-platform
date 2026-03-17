@@ -20,7 +20,7 @@ const sidebarLinks = [
   { label: 'Timetable', page: 'StudentTimetable', icon: CalendarDays },
   { label: 'Attendance', page: 'StudentAttendance', icon: ClipboardList },
   { label: 'IB Core', page: 'StudentCAS', icon: Star },
-  { label: 'Messages', page: 'Messages', icon: MessageSquare },
+  { label: 'Messages', page: 'StudentCommunication', icon: MessageSquare },
 ];
 
 export default function StudentDashboard() {
