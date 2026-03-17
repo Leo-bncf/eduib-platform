@@ -137,7 +137,7 @@ export default function Features() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to see it in action?</h2>
-          <p className="text-slate-500 mb-8">Book a personalized demo and discover how AtlasIB can transform your school.</p>
+          <p className="text-slate-500 mb-8">Book a personalized demo and discover how Scholr can transform your school.</p>
           <Link to={createPageUrl('Demo')}>
             <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 rounded-xl px-8 h-12">
               Book a Demo <ArrowRight className="ml-2 w-4 h-4" />
