@@ -9,9 +9,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2, Plus, Upload, X, FileText } from 'lucide-react';
 import SubmissionFormatSelector from './SubmissionFormatSelector';
+import { useSubmissionPolicy } from '@/hooks/useSubmissionPolicy';
 
 export default function CreateAssignment({ classData, userId, onClose, trigger }) {
   const queryClient = useQueryClient();
+  const { policy } = useSubmissionPolicy(classData?.school_id);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -20,9 +22,9 @@ export default function CreateAssignment({ classData, userId, onClose, trigger }
     due_date: '',
     due_time: '',
     max_score: 100,
-    allow_late: true,
+    allow_late: policy.late_submission_default !== 'blocked',
     status: 'draft',
-    primary_submission_format: null,
+    primary_submission_format: policy.default_primary_format || null,
     allow_alternative_formats: false,
     alternative_formats: [],
   });
@@ -210,14 +212,26 @@ export default function CreateAssignment({ classData, userId, onClose, trigger }
             </div>
 
             <div className="flex items-center gap-2 pt-4 border-t">
-              <input
-                type="checkbox"
-                id="allow_late"
-                checked={form.allow_late}
-                onChange={e => setForm({ ...form, allow_late: e.target.checked })}
-                className="w-4 h-4"
-              />
-              <Label htmlFor="allow_late" className="text-sm cursor-pointer">Allow late submissions</Label>
+              {policy.allow_teacher_late_override !== false ? (
+                <>
+                  <input
+                    type="checkbox"
+                    id="allow_late"
+                    checked={form.allow_late}
+                    onChange={e => setForm({ ...form, allow_late: e.target.checked })}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="allow_late" className="text-sm cursor-pointer">Allow late submissions</Label>
+                  {policy.late_submission_default === 'penalised' && form.allow_late && (
+                    <span className="text-xs text-amber-600 ml-2">({policy.late_penalty_percent}% penalty applies)</span>
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <span>Late submissions: <strong>{policy.late_submission_default}</strong></span>
+                  <span className="text-slate-400">(school policy — override not permitted)</span>
+                </div>
+              )}
             </div>
 
             <div className="flex gap-3 pt-2">
