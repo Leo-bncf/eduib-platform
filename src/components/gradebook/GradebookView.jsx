@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useGradebookPolicy } from '@/hooks/useGradebookPolicy';
 import { base44 } from '@/api/base44Client';
 import { Loader2, Edit, Eye, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
@@ -12,6 +13,7 @@ import CreateRubricGradeItem from './CreateRubricGradeItem';
 import PredictedGradeDialog from './PredictedGradeDialog';
 
 export default function GradebookView({ classData, assignments = [] }) {
+  const { policy } = useGradebookPolicy(classData?.school_id);
   const [selectedGradeItem, setSelectedGradeItem] = useState(null);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [gradeDialogOpen, setGradeDialogOpen] = useState(false);
@@ -102,16 +104,18 @@ export default function GradebookView({ classData, assignments = [] }) {
             >
               Grades
             </button>
-            <button
-              onClick={() => setViewMode('predicted')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                viewMode === 'predicted' 
-                  ? 'bg-violet-600 text-white' 
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Predicted Grades
-            </button>
+            {policy.predicted_grades_enabled !== false && (
+              <button
+                onClick={() => setViewMode('predicted')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  viewMode === 'predicted' 
+                    ? 'bg-violet-600 text-white' 
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                Predicted Grades
+              </button>
+            )}
           </div>
           <CreateGradeItem classData={classData} assignments={assignments} />
           <CreateRubricGradeItem classData={classData} />
