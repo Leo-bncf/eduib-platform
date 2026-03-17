@@ -417,6 +417,30 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
         )}
       </div>
 
+      {/* Policy error */}
+      {policyError && (
+        <Alert className="border-red-200 bg-red-50">
+          <AlertCircle className="w-4 h-4 text-red-600" />
+          <AlertDescription className="text-xs text-red-700">{policyError}</AlertDescription>
+        </Alert>
+      )}
+
+      {/* Academic integrity acknowledgement */}
+      {isEditable && policy.require_submission_acknowledgement && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 flex items-start gap-2.5">
+          <input
+            type="checkbox"
+            id="integrity_ack"
+            checked={acknowledged}
+            onChange={e => setAcknowledged(e.target.checked)}
+            className="mt-0.5 w-4 h-4 flex-shrink-0"
+          />
+          <label htmlFor="integrity_ack" className="text-xs text-emerald-800 cursor-pointer leading-relaxed">
+            {policy.acknowledgement_text || 'I confirm this is my own original work and I have not plagiarised any content.'}
+          </label>
+        </div>
+      )}
+
       <div className="flex gap-3 pt-4 border-t">
         {isEditable && (
           <>
