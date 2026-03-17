@@ -30,8 +30,9 @@ const sidebarLinks = [
   { label: 'Attendance',     page: 'SchoolAdminAttendance',    icon: Calendar },
   { label: 'Timetable',      page: 'SchoolAdminTimetable',     icon: Clock },
   { label: 'Reports',        page: 'SchoolAdminReports',       icon: FileText },
-  { label: 'Billing',        page: 'SchoolAdminBilling',       icon: CreditCard },
-  { label: 'Settings',       page: 'SchoolAdminSettings',      icon: Settings },
+  { label: 'Messaging Policy', page: 'SchoolAdminMessagingPolicy', icon: Bell },
+  { label: 'Billing',          page: 'SchoolAdminBilling',         icon: CreditCard },
+  { label: 'Settings',         page: 'SchoolAdminSettings',        icon: Settings },
 ];
 
 const TIMEZONES = [
