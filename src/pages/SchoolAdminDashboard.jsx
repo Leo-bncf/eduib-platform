@@ -158,7 +158,7 @@ export default function SchoolAdminDashboard() {
                 )}
               </div>
             </div>
-            <OperationalAlerts data={data} />
+            {data && <OperationalAlerts data={data} />}
           </section>
 
           {/* School Health Overview */}
@@ -169,7 +169,7 @@ export default function SchoolAdminDashboard() {
               subtitle="Key metrics, activity signals, and reporting windows — scoped to your school"
               accent="slate"
             />
-            <SchoolHealthOverview data={data} />
+            {data && <SchoolHealthOverview data={data} />}
           </section>
 
         </div>
