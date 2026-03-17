@@ -15,18 +15,7 @@ import InvitationsTab      from '@/components/users/InvitationsTab';
 import BulkImportTab       from '@/components/users/BulkImportTab';
 import MembershipHealthTab from '@/components/users/MembershipHealthTab';
 
-const sidebarLinks = [
-  { label: 'Dashboard',     page: 'SchoolAdminDashboard',     icon: LayoutDashboard },
-  { label: 'Users',         page: 'SchoolAdminUsers',         icon: Users },
-  { label: 'Classes',       page: 'SchoolAdminClasses',       icon: BookOpen },
-  { label: 'Enrollments',   page: 'SchoolAdminEnrollments',   icon: Users },
-  { label: 'Academic Setup',page: 'SchoolAdminAcademicSetup', icon: GraduationCap },
-  { label: 'Attendance',    page: 'SchoolAdminAttendance',    icon: Calendar },
-  { label: 'Timetable',     page: 'SchoolAdminTimetable',     icon: Clock },
-  { label: 'Reports',       page: 'SchoolAdminReports',       icon: FileText },
-  { label: 'Billing',       page: 'SchoolAdminBilling',       icon: CreditCard },
-  { label: 'Settings',      page: 'SchoolAdminSettings',      icon: Settings },
-];
+
 
 export default function SchoolAdminUsers() {
   const { user, school, schoolId } = useUser();

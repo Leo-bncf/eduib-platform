@@ -12,20 +12,7 @@ import BehaviorPolicyConfig from '@/components/behavior-admin/BehaviorPolicyConf
 import PastoralOversight from '@/components/behavior-admin/PastoralOversight';
 import BehaviorExport from '@/components/behavior-admin/BehaviorExport';
 
-const sidebarLinks = [
-  { label: 'Dashboard',      page: 'SchoolAdminDashboard',     icon: LayoutDashboard },
-  { label: 'Users',          page: 'SchoolAdminUsers',          icon: Users },
-  { label: 'Classes',        page: 'SchoolAdminClasses',        icon: BookOpen },
-  { label: 'Enrollments',    page: 'SchoolAdminEnrollments',    icon: Users },
-  { label: 'Academic Setup', page: 'SchoolAdminAcademicSetup',  icon: CalendarDays },
-  { label: 'Subjects',       page: 'SchoolAdminSubjects',       icon: GraduationCap },
-  { label: 'Attendance',     page: 'SchoolAdminAttendance',     icon: Calendar },
-  { label: 'Behavior',       page: 'SchoolAdminBehavior',       icon: AlertTriangle },
-  { label: 'Timetable',      page: 'SchoolAdminTimetable',      icon: Clock },
-  { label: 'Reports',        page: 'SchoolAdminReports',        icon: FileText },
-  { label: 'Billing',        page: 'SchoolAdminBilling',        icon: CreditCard },
-  { label: 'Settings',       page: 'SchoolAdminSettings',       icon: Settings },
-];
+
 
 const TABS = [
   { id: 'dashboard',  label: 'Dashboard',         icon: BarChart2,   desc: 'Search, filter & review records' },

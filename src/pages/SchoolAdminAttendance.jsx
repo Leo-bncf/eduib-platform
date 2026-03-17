@@ -13,19 +13,7 @@ import AttendanceCodeConfig from '@/components/attendance-admin/AttendanceCodeCo
 import AttendanceCorrectionWorkflow from '@/components/attendance-admin/AttendanceCorrectionWorkflow';
 import AttendanceExport from '@/components/attendance-admin/AttendanceExport';
 
-const sidebarLinks = [
-  { label: 'Dashboard',     page: 'SchoolAdminDashboard',     icon: LayoutDashboard },
-  { label: 'Users',         page: 'SchoolAdminUsers',          icon: Users },
-  { label: 'Classes',       page: 'SchoolAdminClasses',        icon: BookOpen },
-  { label: 'Enrollments',   page: 'SchoolAdminEnrollments',    icon: Users },
-  { label: 'Academic Setup',page: 'SchoolAdminAcademicSetup',  icon: CalendarDays },
-  { label: 'Subjects',      page: 'SchoolAdminSubjects',       icon: GraduationCap },
-  { label: 'Attendance',    page: 'SchoolAdminAttendance',     icon: Calendar },
-  { label: 'Timetable',     page: 'SchoolAdminTimetable',      icon: Clock },
-  { label: 'Reports',       page: 'SchoolAdminReports',        icon: FileText },
-  { label: 'Billing',       page: 'SchoolAdminBilling',        icon: CreditCard },
-  { label: 'Settings',      page: 'SchoolAdminSettings',       icon: Settings },
-];
+
 
 const TABS = [
   { id: 'dashboard',   label: 'Dashboard',    icon: BarChart2,  desc: 'Trends, patterns & alerts' },

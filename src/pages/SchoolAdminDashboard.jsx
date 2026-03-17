@@ -16,18 +16,7 @@ import QuickActionsHub from '@/components/dashboard/QuickActionsHub';
 import OnboardingChecklist from '@/components/onboarding/OnboardingChecklist';
 import { format } from 'date-fns';
 
-const sidebarLinks = [
-  { label: 'Dashboard',   page: 'SchoolAdminDashboard',  icon: LayoutDashboard },
-  { label: 'Users',       page: 'SchoolAdminUsers',       icon: Users },
-  { label: 'Classes',     page: 'SchoolAdminClasses',     icon: BookOpen },
-  { label: 'Enrollments', page: 'SchoolAdminEnrollments', icon: Users },
-  { label: 'Academic Setup', page: 'SchoolAdminAcademicSetup', icon: CalendarDays },
-  { label: 'Attendance',  page: 'SchoolAdminAttendance',  icon: Calendar },
-  { label: 'Timetable',   page: 'SchoolAdminTimetable',   icon: Clock },
-  { label: 'Reports',     page: 'SchoolAdminReports',     icon: FileText },
-  { label: 'Billing',     page: 'SchoolAdminBilling',     icon: CreditCard },
-  { label: 'Settings',    page: 'SchoolAdminSettings',    icon: Settings },
-];
+
 
 const statusMeta = {
   active:     { label: 'Active',     classes: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
