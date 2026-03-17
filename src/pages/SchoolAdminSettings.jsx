@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   LayoutDashboard, Users, BookOpen, GraduationCap, Calendar, Clock,
-  FileText, CreditCard, Settings, Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell, Database
+  FileText, CreditCard, Settings, Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell
 } from 'lucide-react';
 
 const sidebarLinks = [
@@ -26,7 +26,6 @@ const sidebarLinks = [
   { label: 'Reports', page: 'SchoolAdminReports', icon: FileText },
   { label: 'Billing', page: 'SchoolAdminBilling', icon: CreditCard },
   { label: 'Settings', page: 'SchoolAdminSettings', icon: Settings },
-  { label: 'Data Tools', page: 'SchoolAdminDataTools', icon: Database },
 ];
 
 const TIMEZONES = [

@@ -5,7 +5,6 @@ import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import SuperAdminAnalytics from './pages/SuperAdminAnalytics';
-import SchoolAdminDataTools from './pages/SchoolAdminDataTools';
 import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSettings from './pages/SuperAdminSettings';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -82,14 +81,6 @@ const AuthenticatedApp = () => {
         element={
           <LayoutWrapper currentPageName="SuperAdminSchoolDetail">
             <SuperAdminSchoolDetail />
-          </LayoutWrapper>
-        }
-      />
-      <Route
-        path="/SchoolAdminDataTools"
-        element={
-          <LayoutWrapper currentPageName="SchoolAdminDataTools">
-            <SchoolAdminDataTools />
           </LayoutWrapper>
         }
       />
