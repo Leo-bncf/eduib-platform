@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Loader2, Search, PenLine, History, CheckCircle2, XCircle, Clock, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Loader2, Search, PenLine, History, CheckCircle2, XCircle, Clock, AlertCircle, ChevronDown, ChevronUp, Filter } from 'lucide-react';
 import { format, subDays } from 'date-fns';
 import { logAudit, AuditActions, AuditLevels } from '@/components/utils/auditLogger';
 import { useUser } from '@/components/auth/UserContext';
