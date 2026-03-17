@@ -34,7 +34,7 @@ const REASON_RULES = [
   {
     key: 'role_change',
     label: 'User role change',
-    description: 'Require a documented reason when a user's school role is changed.',
+    description: "Require a documented reason when a user's school role is changed.",
     level: 'warning',
   },
   {
