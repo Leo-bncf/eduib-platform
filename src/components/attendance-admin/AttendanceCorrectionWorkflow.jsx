@@ -186,10 +186,10 @@ export default function AttendanceCorrectionWorkflow({ schoolId }) {
                   <React.Fragment key={record.id}>
                     <tr className={`hover:bg-slate-50 ${hasHistory ? 'bg-amber-50/40' : ''}`}>
                       <td className="px-4 py-3 font-medium text-slate-900">{record.student_name}</td>
-                      <td className="px-4 py-3 text-slate-600">{record.date}</td>
+                      <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{record.date}</td>
+                      <td className="px-4 py-3 text-slate-500 text-xs hidden md:table-cell">{classMap[record.class_id] || '—'}</td>
                       <td className="px-4 py-3 text-center"><StatusBadge status={record.status} /></td>
-                      <td className="px-4 py-3 text-slate-500 max-w-xs truncate">{record.note || '—'}</td>
-                      <td className="px-4 py-3 text-slate-500 text-xs">{record.recorded_by || 'System'}</td>
+                      <td className="px-4 py-3 text-slate-500 max-w-xs truncate hidden lg:table-cell">{record.note || '—'}</td>
                       <td className="px-4 py-3 text-center">
                         {hasHistory ? (
                           <button
