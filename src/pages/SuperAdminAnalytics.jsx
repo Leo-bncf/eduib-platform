@@ -391,14 +391,14 @@ export default function SuperAdminAnalytics() {
           </select>
         }
       >
-        {reportPreview.length === 0 ? (
+        {!reportPreview || reportPreview.length === 0 ? (
           <div className="text-sm text-slate-500 py-8 text-center">No report data available.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-200">
-                  {Object.keys(reportPreview[0]).map((key) => (
+                  {reportPreview[0] && Object.keys(reportPreview[0]).map((key) => (
                     <th key={key} className="text-left py-2 pr-4 text-xs uppercase tracking-wide text-slate-500">{key.replaceAll('_', ' ')}</th>
                   ))}
                 </tr>
@@ -406,7 +406,7 @@ export default function SuperAdminAnalytics() {
               <tbody>
                 {reportPreview.map((row, index) => (
                   <tr key={index} className="border-b border-slate-100">
-                    {Object.values(row).map((value, cellIndex) => (
+                    {row && Object.values(row).map((value, cellIndex) => (
                       <td key={cellIndex} className="py-2 pr-4 text-slate-700 whitespace-nowrap">{String(value)}</td>
                     ))}
                   </tr>
