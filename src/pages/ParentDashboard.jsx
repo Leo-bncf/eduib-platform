@@ -10,8 +10,11 @@ import ChildAttendanceOverview from '@/components/parent/ChildAttendanceOverview
 import ChildBehaviorOverview from '@/components/parent/ChildBehaviorOverview';
 import ChildPredictedGrades from '@/components/parent/ChildPredictedGrades';
 import ParentMessaging from '@/components/parent/ParentMessaging';
-import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText, ExternalLink, Megaphone } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import AnnouncementsFeed from '@/components/messaging/AnnouncementsFeed';
 
 const sidebarLinks = [
   { label: 'Dashboard', page: 'ParentDashboard', icon: LayoutDashboard },
