@@ -7,21 +7,13 @@ import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
-  BookOpen,
   CheckCircle2,
   ChevronDown,
   ChevronUp,
-  Edit2,
   Headphones,
   Loader2,
-  MessageSquare,
-  Plus,
-  Save,
   Search,
-  Tag,
   Ticket,
-  Trash2,
-  X,
 } from 'lucide-react';
 import SuperAdminLoadingState from '@/components/admin/super-admin/SuperAdminLoadingState';
 import SuperAdminPageHeader from '@/components/admin/super-admin/SuperAdminPageHeader';
