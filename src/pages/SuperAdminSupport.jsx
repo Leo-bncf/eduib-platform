@@ -153,10 +153,10 @@ function TicketManagement() {
                     <Ticket className="w-4 h-4 text-slate-400 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-mono text-slate-400">{ticket.id}</span>
+                        <span className="text-xs font-mono text-slate-400">{ticket.ticket_id}</span>
                         <span className="text-sm font-medium text-slate-800 truncate">{ticket.subject}</span>
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5">{ticket.school} · {ticket.created}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{ticket.school} · {ticket.created_date ? ticket.created_date.slice(0, 10) : ''}</p>
                     </div>
                     <span className={`hidden sm:inline text-xs px-2 py-0.5 rounded-full border font-medium ${pm.color}`}>{pm.label}</span>
                     <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${sm.color}`}>{sm.label}</span>
