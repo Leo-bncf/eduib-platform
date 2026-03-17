@@ -94,6 +94,7 @@ function ClassPerformanceChart({ classes, grades }) {
 
 function SchoolAttendanceTrend({ attendance }) {
   const data = useMemo(() => {
+    if (!attendance || attendance.length === 0) return [];
     const weeks = [];
     for (let i = 7; i >= 0; i--) {
       const weekStart = startOfWeek(subDays(new Date(), i * 7), { weekStartsOn: 1 });
@@ -103,12 +104,12 @@ function SchoolAttendanceTrend({ attendance }) {
         const d = parseISO(a.date);
         return d >= weekStart && d <= weekEnd;
       });
-      if (inRange.length === 0) return null;
+      if (inRange.length === 0) continue;
       const present = inRange.filter(a => a.status === 'present').length;
       const rate = Math.round((present / inRange.length) * 100);
       weeks.push({ week: label, rate, sessions: inRange.length });
     }
-    return weeks.filter(Boolean);
+    return weeks;
   }, [attendance]);
 
   if (data.length < 2) return <p className="text-sm text-slate-400 py-4 text-center">Not enough attendance data for trend</p>;
