@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, Edit2, Loader2, Plus, School, Search, Trash2 } from 'lucide-react';
 import CreateSchoolDialog from '@/components/admin/CreateSchoolDialog';
