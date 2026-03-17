@@ -90,14 +90,14 @@ function ProblemSection() {
     <section className="py-20 bg-slate-900/80 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">IB schools deserve better tools</h2>
-          <p className="mt-3 text-lg text-slate-500">Current platforms weren't built for the IB framework's unique demands</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white">IB schools deserve better tools</h2>
+          <p className="mt-3 text-lg text-blue-200/60">Current platforms weren't built for the IB framework's unique demands</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
           {problems.map((p, i) => (
-            <div key={i} className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100">
+            <div key={i} className="flex items-start gap-4 p-5 bg-white/5 rounded-xl border border-white/10">
               <span className="text-2xl">{p.icon}</span>
-              <p className="text-sm text-slate-700 leading-relaxed">{p.text}</p>
+              <p className="text-sm text-blue-100/70 leading-relaxed">{p.text}</p>
             </div>
           ))}
         </div>
