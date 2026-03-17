@@ -217,7 +217,7 @@ export default function AttendanceCorrectionWorkflow({ schoolId }) {
                     </tr>
                     {expanded && hasHistory && (
                       <tr>
-                        <td colSpan={7} className="px-6 py-3 bg-amber-50 border-b border-amber-100">
+                        <td colSpan={7} className="px-6 py-3 bg-amber-50 border-b border-amber-100 hidden md:table-cell" style={{display:'table-cell'}}>
                           <p className="text-xs font-bold text-amber-800 mb-2 flex items-center gap-1"><History className="w-3 h-3" /> Correction History</p>
                           <div className="space-y-1.5">
                             {record.correction_history.map((h, i) => (
