@@ -177,178 +177,11 @@ function TicketManagement() {
   );
 }
 
-
-  const [search, setSearch] = useState('');
-  const [filterCategory, setFilterCategory] = useState('all');
-  const [editing, setEditing] = useState(null); // { id, title, category, status } | 'new'
-  const [saved, setSaved] = useState(false);
-
-  const categories = ['all', ...Array.from(new Set(articles.map((a) => a.category)))];
-
-  const filtered = articles.filter((a) => {
-    const matchSearch = a.title.toLowerCase().includes(search.toLowerCase());
-    const matchCat = filterCategory === 'all' || a.category === filterCategory;
-    return matchSearch && matchCat;
-  });
-
-  const handleSaveArticle = () => {
-    if (!editing || !editing.title.trim()) return;
-    if (editing.id === 'new') {
-      setArticles((prev) => [
-        { id: `kb-${Date.now()}`, title: editing.title, category: editing.category || 'General', views: 0, status: editing.status || 'draft', updated: new Date().toISOString().slice(0, 10) },
-        ...prev,
-      ]);
-    } else {
-      setArticles((prev) => prev.map((a) => a.id === editing.id ? { ...a, title: editing.title, category: editing.category, status: editing.status, updated: new Date().toISOString().slice(0, 10) } : a));
-    }
-    setEditing(null);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
-
-  const handleDelete = (id) => {
-    setArticles((prev) => prev.filter((a) => a.id !== id));
-  };
-
-  return (
-    <div className="space-y-5">
-      {saved && (
-        <Alert className="bg-green-50 border-green-200">
-          <CheckCircle2 className="w-4 h-4 text-green-600" />
-          <AlertDescription className="text-green-800 ml-3 text-sm">Article saved successfully.</AlertDescription>
-        </Alert>
-      )}
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          { label: 'Total Articles', value: articles.length, color: 'text-indigo-600' },
-          { label: 'Published', value: articles.filter((a) => a.status === 'published').length, color: 'text-emerald-600' },
-          { label: 'Total Views', value: articles.reduce((s, a) => s + a.views, 0).toLocaleString(), color: 'text-blue-600' },
-        ].map((s) => (
-          <div key={s.label} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
-            <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-            <p className="text-xs text-slate-500 mt-0.5">{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Toolbar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-[180px]">
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search articles..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-        </div>
-        <div className="flex gap-1 flex-wrap">
-          {categories.map((c) => (
-            <button
-              key={c}
-              onClick={() => setFilterCategory(c)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-medium capitalize transition-colors ${filterCategory === c ? 'bg-indigo-600 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
-            >
-              {c === 'all' ? 'All Categories' : c}
-            </button>
-          ))}
-        </div>
-        <Button
-          size="sm"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1 flex-shrink-0"
-          onClick={() => setEditing({ id: 'new', title: '', category: 'General', status: 'draft' })}
-        >
-          <Plus className="w-3.5 h-3.5" /> New Article
-        </Button>
-      </div>
-
-      {/* Edit form */}
-      {editing && (
-        <div className="bg-white border border-indigo-200 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center justify-between mb-1">
-            <h3 className="text-sm font-semibold text-slate-800">{editing.id === 'new' ? 'New Article' : 'Edit Article'}</h3>
-            <button onClick={() => setEditing(null)}><X className="w-4 h-4 text-slate-400 hover:text-slate-700" /></button>
-          </div>
-          <div>
-            <Label className="text-xs text-slate-600">Title</Label>
-            <Input value={editing.title} onChange={(e) => setEditing((p) => ({ ...p, title: e.target.value }))} placeholder="Article title..." className="mt-1 text-sm" />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs text-slate-600">Category</Label>
-              <Input value={editing.category} onChange={(e) => setEditing((p) => ({ ...p, category: e.target.value }))} placeholder="e.g. Onboarding" className="mt-1 text-sm" />
-            </div>
-            <div>
-              <Label className="text-xs text-slate-600">Status</Label>
-              <select
-                value={editing.status}
-                onChange={(e) => setEditing((p) => ({ ...p, status: e.target.value }))}
-                className="mt-1 w-full border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-              </select>
-            </div>
-          </div>
-          <div className="flex gap-2 pt-1">
-            <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1" onClick={handleSaveArticle}>
-              <Save className="w-3.5 h-3.5" /> Save
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
-          </div>
-        </div>
-      )}
-
-      {/* Articles list */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-        {filtered.length === 0 ? (
-          <div className="text-center py-12 text-slate-400 text-sm">No articles found.</div>
-        ) : (
-          <div className="divide-y divide-slate-100">
-            {filtered.map((article) => (
-              <div key={article.id} className="flex items-center gap-4 px-5 py-3.5 hover:bg-slate-50 transition-colors">
-                <BookOpen className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-800 truncate">{article.title}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{article.category} · Updated {article.updated}</p>
-                </div>
-                <span className="hidden sm:inline text-xs text-slate-400">{article.views} views</span>
-                <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${article.status === 'published' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200'}`}>
-                  {article.status === 'published' ? 'Published' : 'Draft'}
-                </span>
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  <button onClick={() => setEditing({ id: article.id, title: article.title, category: article.category, status: article.status })}
-                    className="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
-                    <Edit2 className="w-3.5 h-3.5" />
-                  </button>
-                  <button onClick={() => handleDelete(article.id)}
-                    className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors">
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // ─── Main Page ────────────────────────────────────────────────────────────────
-
-const TABS = [
-  { key: 'tickets', label: 'Ticket Management', icon: Ticket },
-  { key: 'kb', label: 'Knowledge Base', icon: BookOpen },
-];
 
 export default function SuperAdminSupport() {
   const navigate = useNavigate();
   const { currentUser, isChecking } = useSuperAdminAccess(navigate);
-  const [activeTab, setActiveTab] = useState('tickets');
 
   if (isChecking) return <SuperAdminLoadingState />;
   if (!currentUser) return null;
@@ -357,29 +190,9 @@ export default function SuperAdminSupport() {
     <SuperAdminShell activeItem="support" currentUser={currentUser}>
       <SuperAdminPageHeader
         title="Support Tools"
-        subtitle="Manage school support tickets and the platform knowledge base"
+        subtitle="Manage and resolve issues reported by schools"
       />
-
-      {/* Tab bar */}
-      <div className="flex gap-1 border-b border-slate-200 mb-6">
-        {TABS.map(({ key, label, icon: Icon }) => (
-          <button
-            key={key}
-            onClick={() => setActiveTab(key)}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
-              activeTab === key
-                ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
-            }`}
-          >
-            <Icon className="w-4 h-4" />
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {activeTab === 'tickets' && <TicketManagement />}
-      {activeTab === 'kb' && <KnowledgeBase />}
+      <TicketManagement />
     </SuperAdminShell>
   );
 }
