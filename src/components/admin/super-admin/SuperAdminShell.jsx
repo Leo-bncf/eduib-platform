@@ -30,8 +30,8 @@ const navItems = [
 
 export default function SuperAdminShell({ activeItem, currentUser, children }) {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-4 flex items-center justify-between gap-4">
+    <div className="h-screen flex flex-col bg-slate-50 text-slate-900 overflow-hidden">
+      <div className="flex-shrink-0 bg-white border-b border-slate-200 px-4 md:px-6 py-4 flex items-center justify-between gap-4">
         <Link to={createPageUrl('Landing')} className="flex items-center gap-3 hover:opacity-90 transition-opacity min-w-0">
           <div className="w-8 h-8 bg-indigo-600 rounded-md flex items-center justify-center flex-shrink-0">
             <Building2 className="w-4 h-4 text-white" />
