@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { createPageUrl } from '@/utils';
 import StudentSubmission from '@/components/assignment/StudentSubmission';
 import TeacherSubmissions from '@/components/assignment/TeacherSubmissions';
+import AssignmentComments from '@/components/assignment/AssignmentComments';
 
 export default function AssignmentDetail() {
   const { user, schoolId, membership } = useUser();
@@ -179,6 +180,16 @@ export default function AssignmentDetail() {
                 <TeacherSubmissions assignment={assignment} classData={classData} />
               </div>
             )}
+
+            <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <AssignmentComments
+                assignment={assignment}
+                userId={user.id}
+                userName={user.full_name}
+                userRole={membership?.role || 'student'}
+                schoolId={schoolId}
+              />
+            </div>
           </div>
 
           <div className="space-y-4">

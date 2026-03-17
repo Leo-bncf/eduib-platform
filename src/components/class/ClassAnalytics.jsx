@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import StatCard from '@/components/app/StatCard';
+import StudentAlerts from '@/components/class/StudentAlerts';
 import { TrendingUp, Users, ClipboardCheck, BarChart3, CheckCircle } from 'lucide-react';
 
 export default function ClassAnalytics({ classData, isTeacher }) {
@@ -56,10 +57,7 @@ export default function ClassAnalytics({ classData, isTeacher }) {
         <StatCard label="Class Average" value={avgGrade} icon={TrendingUp} color="violet" />
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
-        <h3 className="font-semibold text-slate-900 mb-4">Performance Overview</h3>
-        <p className="text-slate-500 text-sm">Detailed analytics and charts coming soon.</p>
-      </div>
+      <StudentAlerts classData={classData} />
     </div>
   );
 }
