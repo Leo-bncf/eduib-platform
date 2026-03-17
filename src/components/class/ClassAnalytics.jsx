@@ -57,7 +57,10 @@ export default function ClassAnalytics({ classData, isTeacher }) {
         <StatCard label="Class Average" value={avgGrade} icon={TrendingUp} color="violet" />
       </div>
 
-      <StudentAlerts classData={classData} />
+      <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <h3 className="font-semibold text-slate-900 mb-4">Performance Overview</h3>
+        <p className="text-slate-500 text-sm">Detailed analytics and charts coming soon.</p>
+      </div>
     </div>
   );
 }
