@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { FileText, TrendingUp, Download, Loader2, BarChart3 } from 'lucide-react';
+import { FileText, TrendingUp, Download, Loader2, BarChart3, Users, Briefcase } from 'lucide-react';
 
 export default function ChildReporting({ schoolId, studentId, studentName }) {
   const [downloading, setDownloading] = useState(null);
