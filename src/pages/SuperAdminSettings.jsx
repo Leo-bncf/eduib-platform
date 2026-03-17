@@ -88,6 +88,7 @@ function mergeConfig(config) {
 const TABS = [
   { key: 'config', label: 'Configuration' },
   { key: 'operational', label: 'Operational Tools' },
+  { key: 'data', label: 'Data Management' },
 ];
 
 export default function SuperAdminSettings() {
