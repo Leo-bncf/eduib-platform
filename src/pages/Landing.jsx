@@ -151,17 +151,17 @@ function RolesSection() {
   ];
 
   return (
-    <section className="py-24 bg-slate-50 border-y border-slate-200">
+    <section className="py-24 bg-slate-900/80 backdrop-blur-sm border-y border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-slate-900">Unified Access Control</h2>
-          <p className="mt-3 text-lg text-slate-500">Secure, role-based interfaces ensuring data privacy and operational efficiency.</p>
+          <h2 className="text-3xl font-bold text-white">Unified Access Control</h2>
+          <p className="mt-3 text-lg text-blue-200/60">Secure, role-based interfaces ensuring data privacy and operational efficiency.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {roles.map((r, i) => (
-            <div key={i} className="relative p-6 bg-white border-t-2 border-t-blue-600 shadow-sm rounded-b-md">
-              <h3 className="font-bold text-slate-900 mb-3">{r.name}</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">{r.desc}</p>
+            <div key={i} className="relative p-6 bg-white/5 border-t-2 border-t-blue-500 shadow-sm rounded-b-md border-x border-b border-white/10">
+              <h3 className="font-bold text-white mb-3">{r.name}</h3>
+              <p className="text-sm text-blue-100/60 leading-relaxed">{r.desc}</p>
             </div>
           ))}
         </div>
