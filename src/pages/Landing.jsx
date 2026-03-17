@@ -206,12 +206,14 @@ export default function Landing() {
       <div className="relative z-10 shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
         <PublicNavbar />
       </div>
-      <HeroSection />
-      <ProblemSection />
-      <FeaturesGrid />
-      <RolesSection />
-      <CTASection />
-      <PublicFooter />
+      <div className="relative z-10">
+        <HeroSection />
+        <ProblemSection />
+        <FeaturesGrid />
+        <RolesSection />
+        <CTASection />
+        <PublicFooter />
+      </div>
     </div>
   );
 }
