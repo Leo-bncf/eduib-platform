@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
-import { GraduationCap, Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 
 export default function PublicNavbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
-  }, []);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleSignIn = async () => {
     const isAuthed = await base44.auth.isAuthenticated();
@@ -27,95 +19,67 @@ export default function PublicNavbar() {
     }
   };
 
-  const navLinks = [
-    { label: 'Features', page: 'Features' },
-    { label: 'Pricing', page: 'Plans' },
-    { label: 'Security', page: 'Security' },
-  ];
-
   return (
-    <nav className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl transition-all duration-300 rounded-full border ${
-      scrolled
-        ? 'bg-white/80 backdrop-blur-md border-slate-200 shadow-lg'
-        : 'bg-white/40 backdrop-blur-md border-white/30'
-    }`}>
-      <div className="px-4 sm:px-6 h-14 flex items-center justify-between">
-        {/* Logo */}
-        <Link to={createPageUrl('Landing')} className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <div className="w-7 h-7 bg-blue-50 rounded-md flex items-center justify-center flex-shrink-0">
-            <GraduationCap className="w-4 h-4 text-blue-600" />
-          </div>
-          <span className="text-base font-bold tracking-tight text-slate-900">
-            Scho<span className="text-blue-600 font-normal">lr</span>
-          </span>
-        </Link>
-
-        {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.page}
-              to={createPageUrl(link.page)}
-              className={`text-sm font-medium transition-colors ${
-                location.pathname.includes(link.page)
-                  ? 'text-blue-600'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Desktop CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link to={createPageUrl('Demo')}>
-            <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 text-sm font-medium">
-              Contact Sales
-            </Button>
-          </Link>
-          <Button
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-5 text-sm font-medium"
-            onClick={handleSignIn}
-          >
-            Sign In
-          </Button>
-        </div>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden p-2 text-slate-600 hover:text-slate-900"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+    <nav className="fixed top-0 left-0 right-0 z-50">
+      {/* Top bar - dark navy like Schedual screenshot */}
+      <div className="bg-[#1a2744] text-white/70 text-xs py-1.5 px-6 flex justify-end gap-6 hidden sm:flex">
+        <span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
+        <span className="hover:text-white cursor-pointer transition-colors">Terms of Use</span>
+        <Link to={createPageUrl('Contact')} className="hover:text-white transition-colors">Contact Us</Link>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden px-4 pb-4 pt-2 border-t border-slate-100 space-y-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.page}
-              to={createPageUrl(link.page)}
-              onClick={() => setMobileOpen(false)}
-              className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50"
-            >
-              {link.label}
+      {/* Main navbar */}
+      <div className="bg-white/80 backdrop-blur-md border-b border-slate-200/60 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link to={createPageUrl('Landing')} className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#2d4fa3] flex items-center justify-center shadow-sm">
+                <span className="text-white text-xs font-bold">S</span>
+              </div>
+              <span className="text-lg font-bold text-[#1a2744]">Scholr</span>
             </Link>
-          ))}
-          <Link to={createPageUrl('Demo')} onClick={() => setMobileOpen(false)}>
-            <div className="px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50">Contact Sales</div>
-          </Link>
-          <Button
-            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium"
-            onClick={handleSignIn}
-          >
-            Sign In
-          </Button>
+
+            {/* Desktop nav links */}
+            <div className="hidden md:flex items-center gap-8">
+              <Link to={createPageUrl('Landing')} className="text-sm text-slate-600 hover:text-[#2d4fa3] font-medium transition-colors">
+                Info
+              </Link>
+              <Link to={createPageUrl('Features')} className="text-sm text-slate-600 hover:text-[#2d4fa3] font-medium transition-colors">
+                Features
+              </Link>
+              <Link to={createPageUrl('Plans')} className="text-sm text-slate-600 hover:text-[#2d4fa3] font-medium transition-colors">
+                Pricing
+              </Link>
+            </div>
+
+            {/* CTA */}
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={handleSignIn}
+                className="bg-[#2d4fa3] hover:bg-[#1e3a7a] text-white rounded-full px-5 h-9 text-sm font-medium shadow-sm transition-all hidden sm:flex"
+              >
+                Go to Panel
+              </Button>
+              <button className="md:hidden p-1.5 text-slate-600" onClick={() => setMenuOpen(!menuOpen)}>
+                {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
         </div>
-      )}
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="md:hidden border-t border-slate-100 px-4 py-4 flex flex-col gap-3 bg-white">
+            <Link to={createPageUrl('Landing')} className="text-sm text-slate-700 font-medium py-2">Info</Link>
+            <Link to={createPageUrl('Features')} className="text-sm text-slate-700 font-medium py-2">Features</Link>
+            <Link to={createPageUrl('Plans')} className="text-sm text-slate-700 font-medium py-2">Pricing</Link>
+            <Button onClick={handleSignIn} className="bg-[#2d4fa3] hover:bg-[#1e3a7a] text-white rounded-full mt-2">
+              Go to Panel
+            </Button>
+          </div>
+        )}
+      </div>
     </nav>
   );
 }
