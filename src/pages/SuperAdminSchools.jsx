@@ -36,6 +36,7 @@ export default function SuperAdminSchools() {
   const [filterBilling, setFilterBilling] = useState('all');
   const [editingSchoolId, setEditingSchoolId] = useState(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [deletingSchoolId, setDeletingSchoolId] = useState(null);
   const [page, setPage] = useState(1);
 
   const handleSchoolUpdated = async () => {

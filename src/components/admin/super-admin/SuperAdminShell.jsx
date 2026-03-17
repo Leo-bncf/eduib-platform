@@ -13,6 +13,7 @@ import {
   School,
   Settings,
   Users,
+  Zap,
 } from 'lucide-react';
 
 const navItems = [

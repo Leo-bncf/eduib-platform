@@ -310,6 +310,13 @@ export default function SuperAdminSchoolDetail() {
                     Reactivate School
                   </Button>
                 )}
+
+                <div className="pt-2 mt-1 border-t border-slate-100">
+                  <Button onClick={handleDeleteSchool} disabled={actionLoading} className="w-full justify-start text-xs md:text-sm text-red-600 hover:text-red-700 hover:bg-red-50" variant="outline">
+                    {actionLoading ? <Loader2 className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2 animate-spin" /> : <Trash2 className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />}
+                    Delete School
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 
