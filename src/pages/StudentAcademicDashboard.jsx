@@ -11,8 +11,10 @@ import {
   LayoutDashboard, BarChart3, Star, MessageSquare, CalendarDays,
   TrendingUp, ClipboardList, BookOpen, Loader2, Clock,
   AlertCircle, CheckCircle2, ChevronDown, ChevronUp,
-  FileText, Send
+  FileText, Send, LineChart, Download
 } from 'lucide-react';
+import PerformanceTrends from '@/components/student/PerformanceTrends';
+import TermReportExport from '@/components/student/TermReportExport';
 import { format, isPast } from 'date-fns';
 import { createPageUrl } from '@/utils';
 import StudentSubmission from '@/components/assignment/StudentSubmission';

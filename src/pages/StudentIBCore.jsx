@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import {
   LayoutDashboard, BarChart3, Star, MessageSquare, CalendarDays,
   ClipboardList, Plus, Loader2, Filter, FileText, Clock,
-  CheckCircle2, Upload, AlertCircle
+  CheckCircle2, Upload, BookOpen
 } from 'lucide-react';
 import { format } from 'date-fns';
 

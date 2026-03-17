@@ -15,6 +15,7 @@ import StudentAcademicDashboard from './pages/StudentAcademicDashboard';
 import StudentTimetable from './pages/StudentTimetable';
 import StudentAttendance from './pages/StudentAttendance';
 import StudentCommunication from './pages/StudentCommunication';
+import StudentIBCore from './pages/StudentIBCore';
 import SchoolAdminOnboarding from './pages/SchoolAdminOnboarding';
 import SchoolAdminSupport from './pages/SchoolAdminSupport';
 import SchoolAdminGradebookGovernance from './pages/SchoolAdminGradebookGovernance';
