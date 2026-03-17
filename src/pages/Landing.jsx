@@ -330,6 +330,20 @@ function CTASection() {
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [showConsent, setShowConsent] = useState(false);
+
+  useEffect(() => {
+    const checkConsent = async () => {
+      const isAuthed = await base44.auth.isAuthenticated();
+      const consentGiven = localStorage.getItem('scholr_consent_accepted');
+      
+      if (!isAuthed && !consentGiven) {
+        setShowConsent(true);
+      }
+    };
+
+    checkConsent();
+  }, []);
 
   return (
     <div className="min-h-screen bg-transparent">
