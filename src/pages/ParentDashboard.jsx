@@ -110,14 +110,31 @@ export default function ParentDashboard() {
                 </TabsContent>
 
                 <TabsContent value="messages">
-                  <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-6 uppercase tracking-wide">Teacher Communication</h2>
-                    <ParentMessaging
-                      parentId={user?.id}
-                      parentName={user?.full_name}
-                      schoolId={schoolId}
-                      studentId={selectedChildId}
-                    />
+                  <div className="space-y-6">
+                    <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                      <div className="flex items-center justify-between mb-5">
+                        <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wide">Teacher Communication</h2>
+                        <Link to="/Messages">
+                          <Button variant="outline" size="sm" className="text-indigo-600 border-indigo-200 hover:bg-indigo-50">
+                            <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Full Inbox
+                          </Button>
+                        </Link>
+                      </div>
+                      <ParentMessaging
+                        parentId={user?.id}
+                        parentName={user?.full_name}
+                        schoolId={schoolId}
+                        studentId={selectedChildId}
+                      />
+                    </div>
+
+                    <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
+                      <div className="flex items-center gap-2 mb-5">
+                        <Megaphone className="w-5 h-5 text-indigo-600" />
+                        <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wide">Announcements</h2>
+                      </div>
+                      <AnnouncementsFeed schoolId={schoolId} userId={user?.id} classIds={[]} />
+                    </div>
                   </div>
                 </TabsContent>
 
