@@ -271,9 +271,9 @@ export default function Landing() {
       </div>
       <div className="relative z-10">
         <HeroSection />
-        <ProblemSection />
         <FeaturesGrid />
         <RolesSection />
+        <ProblemSection />
         <CTASection />
         <PublicFooter />
       </div>
