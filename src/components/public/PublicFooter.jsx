@@ -16,7 +16,7 @@ export default function PublicFooter() {
             <h4 className="font-semibold text-white mb-4">Product</h4>
             <ul className="space-y-2 text-sm text-slate-400">
               <li><Link to={createPageUrl('Features')} className="hover:text-slate-100 transition">Features</Link></li>
-              <li><Link to={createPageUrl('Security')} className="hover:text-slate-100 transition">Security</Link></li>
+              <li><Link to={createPageUrl('SecurityAndCompliance')} className="hover:text-slate-100 transition">Security</Link></li>
               <li><Link to={createPageUrl('Demo')} className="hover:text-slate-100 transition">Demo</Link></li>
             </ul>
           </div>
@@ -33,6 +33,8 @@ export default function PublicFooter() {
             <h4 className="font-semibold text-white mb-4">Legal</h4>
             <ul className="space-y-2 text-sm text-slate-400">
               <li><Link to={createPageUrl('PrivacyPolicy')} className="hover:text-slate-100 transition">Privacy Policy</Link></li>
+              <li><Link to={createPageUrl('TermsOfService')} className="hover:text-slate-100 transition">Terms of Service</Link></li>
+              <li><Link to={createPageUrl('SecurityAndCompliance')} className="hover:text-slate-100 transition">Security & Compliance</Link></li>
             </ul>
           </div>
         </div>
