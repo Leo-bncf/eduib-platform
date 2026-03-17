@@ -102,6 +102,8 @@ export default function ChildReporting({ schoolId, studentId, studentName }) {
 
   const trends = calculateGradeTrends();
   const hasAnalyticsPermission = reports.some(r => r.analytics_enabled);
+  const hasCohortPermission = reports.some(r => r.cohort_insights_enabled);
+  const hasPortfolioPermission = reports.some(r => r.portfolio_enabled);
 
   return (
     <div className="space-y-6">
