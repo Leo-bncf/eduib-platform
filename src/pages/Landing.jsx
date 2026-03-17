@@ -227,9 +227,9 @@ function RolesSection() {
 
 function PricingSection() {
   const tiers = [
-    { range: '1-200 students', price: '$20.99', description: 'Per student' },
-    { range: '201-600 students', price: '$16.99', description: 'Per student' },
-    { range: '600+ students', price: '$13.99', description: 'Per student', bonus: 'Includes Scholr Group' },
+    { range: '1-200 students', price: '€20.99', description: 'Per student' },
+    { range: '201-600 students', price: '€16.99', description: 'Per student' },
+    { range: '600+ students', price: '€13.99', description: 'Per student', bonus: 'Includes Scholr Group' },
   ];
 
   return (
