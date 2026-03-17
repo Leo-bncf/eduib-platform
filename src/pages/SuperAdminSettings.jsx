@@ -21,6 +21,10 @@ import SystemHealthPanel from '@/components/admin/super-admin/operational/System
 import { useSuperAdminAccess } from '@/components/hooks/useSuperAdminAccess';
 import { useSuperAdminConfigurationQuery } from '@/components/hooks/useSuperAdminData';
 import { DEFAULT_SCHOOL_PLAN, SCHOOL_PLAN_OPTIONS, SCHOOL_TRIAL_DURATION_DAYS } from '@/components/admin/super-admin/superAdminConfig';
+import DataExportImport from '@/components/admin/super-admin/data/DataExportImport';
+import DataIntegrityChecker from '@/components/admin/super-admin/data/DataIntegrityChecker';
+import GdprPrivacyTools from '@/components/admin/super-admin/data/GdprPrivacyTools';
+import ConfigSectionCard from '@/components/admin/super-admin/settings/ConfigSectionCard';
 
 const DEFAULT_CONFIG = {
   name: 'default',
