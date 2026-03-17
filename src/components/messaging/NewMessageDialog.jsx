@@ -7,11 +7,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Loader2, Plus, Send } from 'lucide-react';
+import { Loader2, Plus, Send, Moon, AlertTriangle } from 'lucide-react';
+import { useMessagingPolicy } from '@/hooks/useMessagingPolicy';
 
 export default function NewMessageDialog({ userId, userName, userRole, schoolId, onClose, trigger }) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const { canSend, canBroadcast, isQuietHour, policy } = useMessagingPolicy(schoolId);
   const [form, setForm] = useState({
     recipient_type: '',
     recipient_id: '',
@@ -90,7 +92,15 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
     });
   };
 
-  const canSend = form.recipient_id && form.subject.trim() && form.body.trim();
+  // Determine recipient role from selected membership for policy check
+  const allRecipients = [...students, ...teachers];
+  const selectedRecipient = allRecipients.find(m => m.user_id === form.recipient_id);
+  const recipientRole = selectedRecipient?.role || (userRole === 'teacher' ? 'student' : 'teacher');
+  const policyBlocked = form.recipient_id ? !canSend(userRole, recipientRole) : false;
+  const quietHour = isQuietHour();
+  const quietBlocked = quietHour && (policy?.quiet_hours?.block_send_during_quiet ?? false) && (policy?.quiet_hours?.applies_to_roles || []).includes(userRole);
+
+  const canSend = form.recipient_id && form.subject.trim() && form.body.trim() && !policyBlocked && !quietBlocked;
 
   return (
     <>
@@ -109,6 +119,25 @@ export default function NewMessageDialog({ userId, userName, userRole, schoolId,
           </DialogHeader>
 
           <div className="space-y-4">
+            {quietHour && (policy?.quiet_hours?.applies_to_roles || []).includes(userRole) && (
+              <div className={`flex items-start gap-2 rounded-lg px-3 py-2.5 text-sm border ${quietBlocked ? 'bg-red-50 border-red-200 text-red-800' : 'bg-amber-50 border-amber-200 text-amber-800'}`}>
+                <Moon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold">{quietBlocked ? 'Quiet hours active — sending is disabled' : 'Quiet hours active'}</p>
+                  <p className="text-xs mt-0.5 opacity-80">
+                    {quietBlocked
+                      ? `Your school has disabled messaging during quiet hours (${policy.quiet_hours.start_time} – ${policy.quiet_hours.end_time}).`
+                      : `It's outside recommended communication hours (${policy.quiet_hours.start_time} – ${policy.quiet_hours.end_time}). You can still send, but consider the recipient's time.`}
+                  </p>
+                </div>
+              </div>
+            )}
+            {policyBlocked && form.recipient_id && (
+              <div className="flex items-start gap-2 rounded-lg px-3 py-2.5 text-sm bg-red-50 border border-red-200 text-red-800">
+                <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <p>Your school's communication policy does not allow this type of message. Please contact your school administrator.</p>
+              </div>
+            )}
             <div>
               <Label className="text-sm font-semibold">Select Class</Label>
               <Select value={form.recipient_type} onValueChange={v => setForm({ ...form, recipient_type: v, recipient_id: '' })}>
