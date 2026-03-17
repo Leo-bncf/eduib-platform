@@ -118,7 +118,7 @@ export default function SchoolAdminGovernance() {
     <RoleGuard allowedRoles={['school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
         <AppSidebar
-          links={sidebarLinks}
+          links={SCHOOL_ADMIN_SIDEBAR_LINKS}
           role="school_admin"
           schoolName={contextSchool?.name}
           userName={user?.full_name}

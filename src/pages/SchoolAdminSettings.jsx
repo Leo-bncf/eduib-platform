@@ -21,19 +21,7 @@ import SubmissionRulesPanel from '@/components/settings/SubmissionRulesPanel';
 import FileSecurityPanel from '@/components/settings/FileSecurityPanel';
 import AcademicIntegrityPanel from '@/components/settings/AcademicIntegrityPanel';
 
-const sidebarLinks = [
-  { label: 'Dashboard',      page: 'SchoolAdminDashboard',     icon: LayoutDashboard },
-  { label: 'Users',          page: 'SchoolAdminUsers',         icon: Users },
-  { label: 'Classes',        page: 'SchoolAdminClasses',       icon: BookOpen },
-  { label: 'Enrollments',    page: 'SchoolAdminEnrollments',   icon: Users },
-  { label: 'Academic Setup', page: 'SchoolAdminAcademicSetup', icon: GraduationCap },
-  { label: 'Attendance',     page: 'SchoolAdminAttendance',    icon: Calendar },
-  { label: 'Timetable',      page: 'SchoolAdminTimetable',     icon: Clock },
-  { label: 'Reports',        page: 'SchoolAdminReports',       icon: FileText },
-  { label: 'Messaging Policy', page: 'SchoolAdminMessagingPolicy', icon: Bell },
-  { label: 'Billing',          page: 'SchoolAdminBilling',         icon: CreditCard },
-  { label: 'Settings',         page: 'SchoolAdminSettings',        icon: Settings },
-];
+
 
 const TIMEZONES = [
   'UTC', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Europe/Madrid',

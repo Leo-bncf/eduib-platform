@@ -89,7 +89,7 @@ export default function SchoolAdminGradebookGovernance() {
     <RoleGuard allowedRoles={['school_admin', 'super_admin', 'admin', 'ib_coordinator']}>
       <div className="min-h-screen bg-slate-50">
         <AppSidebar
-          links={sidebarLinks}
+          links={SCHOOL_ADMIN_SIDEBAR_LINKS}
           role={membership?.role || 'school_admin'}
           schoolName={contextSchool?.name}
           userName={user?.full_name}
