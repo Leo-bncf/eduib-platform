@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
@@ -53,7 +53,7 @@ export default function AttendanceCodeConfig({ schoolId }) {
   const [chronicThreshold, setChronicThreshold] = useState(20);
   const [latenessThreshold, setLatenessThreshold] = useState(3);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (policy) {
       setCodes(policy.codes?.length ? policy.codes : DEFAULT_CODES);
       setReasons(policy.reason_categories?.length ? policy.reason_categories : DEFAULT_REASONS);
