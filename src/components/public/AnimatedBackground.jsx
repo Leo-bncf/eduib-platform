@@ -1,78 +1,65 @@
 import React, { useEffect, useRef } from 'react';
 
 export default function AnimatedBackground() {
-  const bloom1Ref = useRef(null);
-  const bloom2Ref = useRef(null);
+  const blob1 = useRef(null);
+  const blob2 = useRef(null);
 
   useEffect(() => {
-    let frame;
-    let t = 0;
+    let x1 = 30, y1 = 30, vx1 = 0.12, vy1 = 0.08;
+    let x2 = 65, y2 = 55, vx2 = -0.09, vy2 = 0.11;
+    let raf;
 
     const animate = () => {
-      t += 0.005;
-      if (bloom1Ref.current) {
-        const scale = 1 + Math.sin(t) * 0.04;
-        bloom1Ref.current.style.transform = `scale(${scale})`;
+      x1 += vx1; y1 += vy1;
+      x2 += vx2; y2 += vy2;
+
+      if (x1 < 10 || x1 > 80) vx1 *= -1;
+      if (y1 < 10 || y1 > 80) vy1 *= -1;
+      if (x2 < 20 || x2 > 90) vx2 *= -1;
+      if (y2 < 10 || y2 > 80) vy2 *= -1;
+
+      if (blob1.current) {
+        blob1.current.style.left = `${x1}%`;
+        blob1.current.style.top = `${y1}%`;
       }
-      if (bloom2Ref.current) {
-        const scale = 1 + Math.sin(t + 1.5) * 0.04;
-        bloom2Ref.current.style.transform = `scale(${scale})`;
+      if (blob2.current) {
+        blob2.current.style.left = `${x2}%`;
+        blob2.current.style.top = `${y2}%`;
       }
-      frame = requestAnimationFrame(animate);
+
+      raf = requestAnimationFrame(animate);
     };
 
-    animate();
-    return () => cancelAnimationFrame(frame);
+    raf = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   return (
-    <div
-      className="fixed inset-0 pointer-events-none overflow-hidden"
-      style={{ zIndex: 0 }}
-      aria-hidden="true"
-    >
-      {/* White base */}
-      <div className="absolute inset-0 bg-white" />
-
-      {/* Yellow/gold bloom — top left */}
+    <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+      {/* Primary large bloom — top left */}
       <div
-        ref={bloom1Ref}
+        ref={blob1}
+        className="absolute -translate-x-1/2 -translate-y-1/2"
         style={{
-          position: 'absolute',
-          top: '-10%',
-          left: '-5%',
-          width: '55%',
-          height: '80%',
-          background: 'radial-gradient(ellipse at center, rgba(251, 211, 100, 0.55) 0%, rgba(251, 211, 100, 0.2) 45%, transparent 75%)',
+          width: '700px',
+          height: '700px',
+          background: 'radial-gradient(circle, rgba(59,130,246,0.30) 0%, rgba(99,102,241,0.15) 50%, transparent 75%)',
           filter: 'blur(60px)',
-          animation: 'bloomIn 1.6s ease-out both',
-          transformOrigin: 'center center',
+          transition: 'left 0.1s linear, top 0.1s linear',
         }}
       />
-
-      {/* Pink/lavender bloom — top right / center */}
+      {/* Secondary bloom — right side */}
       <div
-        ref={bloom2Ref}
+        ref={blob2}
+        className="absolute -translate-x-1/2 -translate-y-1/2"
         style={{
-          position: 'absolute',
-          top: '-15%',
-          right: '-10%',
-          width: '65%',
-          height: '90%',
-          background: 'radial-gradient(ellipse at center, rgba(216, 155, 210, 0.5) 0%, rgba(196, 130, 200, 0.2) 45%, transparent 72%)',
-          filter: 'blur(70px)',
-          animation: 'bloomIn 1.8s ease-out 0.2s both',
-          transformOrigin: 'center center',
+          width: '550px',
+          height: '550px',
+          background: 'radial-gradient(circle, rgba(14,165,233,0.25) 0%, rgba(59,130,246,0.12) 50%, transparent 75%)',
+          filter: 'blur(50px)',
+          transition: 'left 0.1s linear, top 0.1s linear',
         }}
       />
-
-      <style>{`
-        @keyframes bloomIn {
-          0%   { opacity: 0; transform: scale(0.3); }
-          60%  { opacity: 1; transform: scale(1.08); }
-          100% { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
     </div>
   );
 }
