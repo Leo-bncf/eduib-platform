@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
@@ -6,28 +6,38 @@ import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Send } from 'lucide-react';
 import { format } from 'date-fns';
 
-export default function ConversationView({ conversation, userId, userName }) {
+export default function ConversationView({ conversation, userId, userName, userRole }) {
   const queryClient = useQueryClient();
   const [reply, setReply] = useState('');
+  const bottomRef = useRef(null);
 
   const { data: messages = [], isLoading } = useQuery({
-    queryKey: ['conversation-messages', conversation?.id],
+    queryKey: ['thread-messages', conversation?.thread_id || conversation?.id],
     queryFn: async () => {
-      // In a real system, you'd have a separate messages thread table
-      // For now, we'll use the existing Message entity structure
-      const results = await base44.entities.Message.filter({
+      const threadId = conversation.thread_id || conversation.id;
+      const all = await base44.entities.Message.filter({
         school_id: conversation.school_id,
-        id: conversation.id
-      });
-      return results;
+        thread_id: threadId,
+      }, 'created_date');
+      // If no thread messages, fall back to showing the original message
+      if (all.length === 0) {
+        const orig = await base44.entities.Message.filter({ school_id: conversation.school_id, id: conversation.id });
+        return orig;
+      }
+      return all;
     },
     enabled: !!conversation,
+    refetchInterval: 10000, // poll every 10s
   });
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const sendMutation = useMutation({
     mutationFn: (data) => base44.entities.Message.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['conversation-messages'] });
+      queryClient.invalidateQueries({ queryKey: ['thread-messages'] });
       queryClient.invalidateQueries({ queryKey: ['user-conversations'] });
       setReply('');
     },
@@ -35,22 +45,35 @@ export default function ConversationView({ conversation, userId, userName }) {
 
   const handleSend = () => {
     if (!reply.trim() || !conversation) return;
-
+    const threadId = conversation.thread_id || conversation.id;
     sendMutation.mutate({
       school_id: conversation.school_id,
+      thread_id: threadId,
       sender_id: userId,
       sender_name: userName,
-      recipient_ids: conversation.recipient_ids,
-      subject: `Re: ${conversation.subject}`,
+      sender_role: userRole,
+      recipient_ids: conversation.recipient_ids?.includes(userId)
+        ? [conversation.sender_id || conversation.participant_id]
+        : conversation.recipient_ids,
+      subject: conversation.subject.startsWith('Re: ') ? conversation.subject : `Re: ${conversation.subject}`,
       body: reply,
       is_announcement: false,
     });
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      handleSend();
+    }
+  };
+
   if (!conversation) {
     return (
       <div className="flex-1 flex items-center justify-center bg-slate-50">
-        <p className="text-slate-400">Select a conversation to view messages</p>
+        <div className="text-center text-slate-400">
+          <Send className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+          <p className="text-sm">Select a conversation to view messages</p>
+        </div>
       </div>
     );
   }
@@ -65,10 +88,11 @@ export default function ConversationView({ conversation, userId, userName }) {
 
   return (
     <div className="flex-1 flex flex-col bg-white">
-      <div className="px-6 py-4 border-b border-slate-200">
+      <div className="px-6 py-4 border-b border-slate-200 bg-white">
         <h2 className="font-semibold text-slate-900">{conversation.subject}</h2>
         <p className="text-sm text-slate-500 mt-0.5">
-          with {conversation.participant_name} ({conversation.participant_role})
+          {conversation.participant_name}
+          {conversation.participant_role ? ` · ${conversation.participant_role}` : ''}
         </p>
       </div>
 
@@ -82,23 +106,25 @@ export default function ConversationView({ conversation, userId, userName }) {
                   <p className="text-xs font-semibold mb-1 opacity-70">{msg.sender_name}</p>
                 )}
                 <p className="text-sm whitespace-pre-wrap">{msg.body}</p>
-                <p className={`text-xs mt-2 ${isSender ? 'text-indigo-200' : 'text-slate-500'}`}>
+                <p className={`text-xs mt-2 ${isSender ? 'text-indigo-200' : 'text-slate-400'}`}>
                   {msg.created_date ? format(new Date(msg.created_date), 'MMM d, h:mm a') : ''}
                 </p>
               </div>
             </div>
           );
         })}
+        <div ref={bottomRef} />
       </div>
 
-      <div className="p-4 border-t border-slate-200">
+      <div className="p-4 border-t border-slate-200 bg-white">
         <div className="flex gap-3">
           <Textarea
             value={reply}
             onChange={e => setReply(e.target.value)}
-            placeholder="Type your message..."
+            onKeyDown={handleKeyDown}
+            placeholder="Type your reply… (Ctrl+Enter to send)"
             rows={2}
-            className="flex-1"
+            className="flex-1 resize-none"
           />
           <Button
             onClick={handleSend}
@@ -108,6 +134,7 @@ export default function ConversationView({ conversation, userId, userName }) {
             {sendMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
           </Button>
         </div>
+        <p className="text-xs text-slate-400 mt-1">Ctrl+Enter to send</p>
       </div>
     </div>
   );
