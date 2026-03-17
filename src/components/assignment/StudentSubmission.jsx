@@ -16,16 +16,20 @@ import GoogleDocCreator from './GoogleDocCreator';
 import GoogleDrivePicker from './GoogleDrivePicker';
 import SubmissionDocumentsView from './SubmissionDocumentsView';
 import GoogleConnectionStatus from '@/components/google/GoogleConnectionStatus';
+import { useSubmissionPolicy, validateFileForPolicy, getLateSubmissionStatus } from '@/hooks/useSubmissionPolicy';
 
 export default function StudentSubmission({ assignment, studentId, studentName, existingSubmission }) {
   const queryClient = useQueryClient();
   const { school } = useUser();
+  const { policy } = useSubmissionPolicy(assignment?.school_id);
   const [content, setContent] = useState(existingSubmission?.content || '');
   const [documents, setDocuments] = useState(existingSubmission?.documents || []);
   const [documentPickerOpen, setDocumentPickerOpen] = useState(false);
   const [googleDocCreator, setGoogleDocCreator] = useState({ open: false, type: null });
   const [googleDrivePickerOpen, setGoogleDrivePickerOpen] = useState(false);
   const [googleConnectionAlert, setGoogleConnectionAlert] = useState(null);
+  const [acknowledged, setAcknowledged] = useState(false);
+  const [policyError, setPolicyError] = useState(null);
 
   const submitMutation = useMutation({
     mutationFn: (data) => {
@@ -161,6 +165,26 @@ export default function StudentSubmission({ assignment, studentId, studentName, 
   };
 
   const handleSubmit = (status) => {
+    setPolicyError(null);
+    // Acknowledgement check
+    if (status === 'submitted' && policy.require_submission_acknowledgement && !acknowledged) {
+      setPolicyError('Please confirm the academic integrity acknowledgement before submitting.');
+      return;
+    }
+    // Resubmission limit check
+    if (status === 'submitted' && existingSubmission?.status === 'returned' && policy.resubmission_limit > 0) {
+      const resubCount = existingSubmission?.resubmission_count || 0;
+      if (resubCount >= policy.resubmission_limit) {
+        setPolicyError(`Resubmission limit reached (${policy.resubmission_limit}). Contact your teacher.`);
+        return;
+      }
+    }
+    // Late submission policy
+    const lateStatus = getLateSubmissionStatus(assignment.due_date, policy);
+    if (status === 'submitted' && lateStatus === 'blocked') {
+      setPolicyError('Late submissions are not accepted for this assignment.');
+      return;
+    }
     const isLate = new Date() > new Date(assignment.due_date);
     submitMutation.mutate({
       school_id: assignment.school_id,
