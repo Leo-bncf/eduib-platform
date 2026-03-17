@@ -171,10 +171,10 @@ export default function AttendanceCorrectionWorkflow({ schoolId }) {
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Student</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Date</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase hidden md:table-cell">Class</th>
                 <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Note</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Recorded By</th>
-                <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase">Corrections</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase hidden lg:table-cell">Note</th>
+                <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase">History</th>
                 <th className="px-4 py-3 text-right text-xs font-semibold text-slate-600 uppercase">Actions</th>
               </tr>
             </thead>
