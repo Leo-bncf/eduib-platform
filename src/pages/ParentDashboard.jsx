@@ -9,6 +9,7 @@ import ChildAssignmentsOverview from '@/components/parent/ChildAssignmentsOvervi
 import ChildAttendanceOverview from '@/components/parent/ChildAttendanceOverview';
 import ChildBehaviorOverview from '@/components/parent/ChildBehaviorOverview';
 import ChildPredictedGrades from '@/components/parent/ChildPredictedGrades';
+import ChildReporting from '@/components/parent/ChildReporting';
 import ParentMessaging from '@/components/parent/ParentMessaging';
 import { Link } from 'react-router-dom';
 import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText, ExternalLink, Megaphone } from 'lucide-react';
