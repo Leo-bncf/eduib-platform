@@ -11,6 +11,7 @@ import SuperAdminSchoolDetail from './pages/SuperAdminSchoolDetail';
 import SuperAdminSettings from './pages/SuperAdminSettings';
 import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
 import SchoolAnalytics from './pages/SchoolAnalytics';
+import StudentAcademicDashboard from './pages/StudentAcademicDashboard';
 import SchoolAdminOnboarding from './pages/SchoolAdminOnboarding';
 import SchoolAdminSupport from './pages/SchoolAdminSupport';
 import SchoolAdminGradebookGovernance from './pages/SchoolAdminGradebookGovernance';
@@ -155,6 +156,14 @@ const AuthenticatedApp = () => {
         element={
           <LayoutWrapper currentPageName="SchoolAdminOnboarding">
             <SchoolAdminOnboarding />
+          </LayoutWrapper>
+        }
+      />
+      <Route
+        path="/StudentAcademicDashboard"
+        element={
+          <LayoutWrapper currentPageName="StudentAcademicDashboard">
+            <StudentAcademicDashboard />
           </LayoutWrapper>
         }
       />
