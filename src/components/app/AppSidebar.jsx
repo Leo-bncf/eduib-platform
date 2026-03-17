@@ -25,7 +25,7 @@ export default function AppSidebar({ links, role, schoolName, userName, userId, 
             <div className="w-7 md:w-8 h-7 md:h-8 bg-blue-50 rounded-md flex items-center justify-center flex-shrink-0">
               <GraduationCap className="w-3.5 md:w-4.5 h-3.5 md:h-4.5 text-blue-600" />
             </div>
-            <span className="text-base md:text-lg font-bold truncate text-sm md:text-base tracking-tight text-slate-900">Atlas<span className="text-blue-600 font-normal">IB</span></span>
+            <span className="text-base md:text-lg font-bold truncate text-sm md:text-base tracking-tight text-slate-900">Scho<span className="text-blue-600 font-normal">lr</span></span>
           </Link>
           {userId && schoolId && (
             <div className="hidden md:block">
