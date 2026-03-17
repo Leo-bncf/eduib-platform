@@ -69,10 +69,10 @@ function HeroSection() {
 
 function ProblemSection() {
   const problems = [
-    { icon: '📊', text: 'Scattered data across spreadsheets, email, and disconnected tools' },
-    { icon: '🔓', text: "Weak role-based access — teachers see data they shouldn't" },
-    { icon: '😤', text: 'Parents lack real-time visibility into their child\'s progress' },
-    { icon: '⏳', text: 'Tedious manual workflows for assignments, grading, and reporting' },
+    { text: 'Scattered data across spreadsheets, email, and disconnected tools' },
+    { text: "Weak role-based access — teachers see data they shouldn't" },
+    { text: 'Parents lack real-time visibility into their child\'s progress' },
+    { text: 'Tedious manual workflows for assignments, grading, and reporting' },
   ];
 
   return (
@@ -85,7 +85,7 @@ function ProblemSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
           {problems.map((p, i) => (
             <div key={i} className="flex items-start gap-4 p-5 bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm">
-              <span className="text-2xl">{p.icon}</span>
+              <div className="w-1 h-1 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
               <p className="text-sm text-slate-600 leading-relaxed">{p.text}</p>
             </div>
           ))}
