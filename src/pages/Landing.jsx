@@ -96,15 +96,16 @@ function ProblemSection() {
 }
 
 function FeaturesGrid() {
+  const [expandedId, setExpandedId] = React.useState(null);
   const features = [
-    { icon: BarChart3, title: 'Executive Dashboards', desc: 'Role-specific dashboards for students, teachers, coordinators, parents, and admins.' },
-    { icon: ClipboardCheck, title: 'Academic Workflows', desc: 'Create, distribute, collect, and grade assignments with IB criteria support.' },
-    { icon: BookOpen, title: 'IB Gradebook', desc: '1-7 scale grading, predicted grades, SL/HL tracking, and term-based reporting.' },
-    { icon: Users, title: 'Parent Portal', desc: 'Real-time visibility into grades, attendance, assignments, and teacher communications.' },
-    { icon: Calendar, title: 'Timetable Integration', desc: 'Sync schedules, view daily agendas, and manage class periods.' },
-    { icon: MessageSquare, title: 'Internal Messaging', desc: 'Role-aware communication between teachers, students, parents, and staff.' },
-    { icon: Shield, title: 'Enterprise Security', desc: 'Complete data isolation per school with strict role-based access control.' },
-    { icon: Star, title: 'IB Core Modules', desc: 'Track CAS activities, Extended Essay milestones, and TOK tasks.' },
+    { icon: BarChart3, title: 'Executive Dashboards', short: 'Role-specific insights', desc: 'Personalized dashboards for every stakeholder—students see academic progress, teachers manage their classes, coordinators oversee cohorts, parents track their children, and admins control the entire school.' },
+    { icon: ClipboardCheck, title: 'Academic Workflows', short: 'Complete assignment lifecycle', desc: 'From creation to grading—publish assignments with IB criteria alignment, students submit work (Google Docs, files, links), teachers provide criterion-based feedback, and grades sync automatically.' },
+    { icon: BookOpen, title: 'IB Gradebook', short: '1-7 scale precision', desc: 'Native 1-7 grading, predicted grade tracking, SL/HL subject management, rubric-based assessment, and comprehensive term reports that align with IB terminology and workflows.' },
+    { icon: Users, title: 'Parent Portal', short: 'Real-time family engagement', desc: 'Parents see grades, attendance, upcoming assignments, and teacher feedback—all updated in real-time. Direct messaging with teachers keeps communication secure and organized.' },
+    { icon: Calendar, title: 'Timetable Integration', short: 'Schedule synchronization', desc: 'Sync with external timetable systems, display daily class schedules, manage periods and rooms, resolve conflicts, and track historical schedule changes.' },
+    { icon: MessageSquare, title: 'Internal Messaging', short: 'Secure communication hub', desc: 'Role-aware messaging between teachers, students, and parents. Announcements, class discussions, quiet hours policies, and compliance logging all built-in.' },
+    { icon: Shield, title: 'Enterprise Security', short: 'Data protection', desc: 'Complete multi-tenant isolation, granular role-based access control, audit logging of all critical actions, GDPR compliance tools, and encrypted data storage.' },
+    { icon: Star, title: 'IB Core Modules', short: 'CAS, EE, TOK tracking', desc: 'Manage CAS experiences with strand mapping, track Extended Essay milestones from proposal to viva, manage TOK deadlines, and generate IB-compliant reports.' },
   ];
 
   return (
@@ -114,14 +115,27 @@ function FeaturesGrid() {
           <h2 className="text-3xl font-bold text-slate-900">Comprehensive Platform Capabilities</h2>
           <p className="mt-3 text-lg text-slate-500">Engineered for the rigorous demands of International Baccalaureate institutions</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {features.map((f, i) => (
-            <div key={i} className="group">
-              <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors duration-300 border border-blue-100">
-                <f.icon className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-300" />
-              </div>
-              <h3 className="font-bold text-slate-900 mb-2">{f.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{f.desc}</p>
+            <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+              <button 
+                onClick={() => setExpandedId(expandedId === i ? null : i)}
+                className="w-full px-6 py-4 flex items-start gap-4 text-left hover:bg-slate-50/50 transition-colors"
+              >
+                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 border border-blue-100">
+                  <f.icon className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-slate-900">{f.title}</h3>
+                  <p className="text-sm text-slate-500 mt-1">{f.short}</p>
+                </div>
+                <ChevronRight className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-300 ${expandedId === i ? 'rotate-90' : ''}`} />
+              </button>
+              {expandedId === i && (
+                <div className="px-6 pb-4 border-t border-slate-100 bg-slate-50/30">
+                  <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
