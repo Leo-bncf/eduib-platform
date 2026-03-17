@@ -22,8 +22,8 @@ export default function Contact() {
                 <Mail className="w-6 h-6 text-indigo-600" />
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Email</h3>
-              <p className="text-sm text-slate-500">hello@atlasib.com</p>
-              <p className="text-sm text-slate-500">support@atlasib.com</p>
+              <p className="text-sm text-slate-500">hello@scholr.app</p>
+              <p className="text-sm text-slate-500">support@scholr.app</p>
             </div>
 
             <div className="text-center p-8 rounded-2xl border border-slate-100 hover:shadow-lg transition-shadow">
