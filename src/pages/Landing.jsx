@@ -128,8 +128,8 @@ function FeaturesGrid() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {features.map((f, i) => (
             <div key={i} className="group">
-              <div className="w-12 h-12 rounded-lg bg-purple-50 flex items-center justify-center mb-4 group-hover:bg-purple-600 transition-colors duration-300 border border-purple-100">
-                <f.icon className="w-6 h-6 text-purple-600 group-hover:text-white transition-colors duration-300" />
+              <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors duration-300 border border-blue-100">
+                <f.icon className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-300" />
               </div>
               <h3 className="font-bold text-slate-900 mb-2">{f.title}</h3>
               <p className="text-sm text-slate-500 leading-relaxed">{f.desc}</p>
