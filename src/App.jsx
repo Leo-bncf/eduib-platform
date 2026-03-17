@@ -13,6 +13,7 @@ import SchoolAdminAcademicSetup from './pages/SchoolAdminAcademicSetup';
 import SchoolAdminGradebookGovernance from './pages/SchoolAdminGradebookGovernance';
 import SchoolAdminBehavior from './pages/SchoolAdminBehavior';
 import SchoolAdminMessagingPolicy from './pages/SchoolAdminMessagingPolicy';
+import SchoolAdminGovernance from './pages/SchoolAdminGovernance';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
