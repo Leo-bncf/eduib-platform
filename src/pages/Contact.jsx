@@ -49,7 +49,7 @@ export default function Contact() {
             <div className="bg-slate-50 rounded-2xl border border-slate-100 p-8 sm:p-10 text-center">
               <MessageSquare className="w-10 h-10 text-indigo-600 mx-auto mb-4" />
               <h2 className="text-xl font-bold text-slate-900 mb-2">Looking for a demo?</h2>
-              <p className="text-slate-500 mb-6">Visit our demo page to schedule a personalized walkthrough of AtlasIB for your school.</p>
+              <p className="text-slate-500 mb-6">Visit our demo page to schedule a personalized walkthrough of Scholr for your school.</p>
               <a href={createPageUrl('Demo')} className="inline-flex items-center gap-2 text-indigo-600 font-semibold hover:text-indigo-700">
                 Book a Demo →
               </a>
