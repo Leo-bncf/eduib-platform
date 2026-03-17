@@ -201,7 +201,8 @@ export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-950">
+      <AnimatedBackground />
       <PublicNavbar />
       <HeroSection />
       <ProblemSection />
