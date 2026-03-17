@@ -330,14 +330,20 @@ function CTASection() {
 
 export default function Landing() {
   const navigate = useNavigate();
-  const [showConsent, setShowConsent] = useState(false);
+  const [showConsent, setShowConsent] = useState(true);
 
   useEffect(() => {
     const checkConsent = async () => {
-      const isAuthed = await base44.auth.isAuthenticated();
-      const consentGiven = localStorage.getItem('scholr_consent_accepted');
-      
-      if (!isAuthed && !consentGiven) {
+      try {
+        const consentGiven = localStorage.getItem('scholr_consent_accepted');
+        
+        if (consentGiven === 'true') {
+          setShowConsent(false);
+        } else {
+          setShowConsent(true);
+        }
+      } catch (error) {
+        console.error('Error checking consent:', error);
         setShowConsent(true);
       }
     };
