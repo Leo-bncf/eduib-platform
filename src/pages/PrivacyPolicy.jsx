@@ -39,7 +39,7 @@ export default function PrivacyPolicy() {
                 <p><span className="font-medium text-slate-800">Data Controller:</span> The Chief Executive Officer of Scholr SAS</p>
                 <p><span className="font-medium text-slate-800">Data Protection Officer (DPO):</span> <a href="mailto:support@scholr.pro" className="text-blue-600 hover:underline">support@scholr.pro</a></p>
                 <p><span className="font-medium text-slate-800">General privacy contact:</span> <a href="mailto:support@scholr.pro" className="text-blue-600 hover:underline">support@scholr.pro</a></p>
-                <p><span className="font-medium text-slate-800">Website:</span> <a href="https://www.scholr.fr" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.fr</a></p>
+                <p><span className="font-medium text-slate-800">Website:</span> <a href="https://www.scholr.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.com</a></p>
               </div>
             </section>
 
@@ -259,7 +259,7 @@ export default function PrivacyPolicy() {
                 <p><span className="font-medium text-slate-800">By email:</span> <a href="mailto:support@scholr.pro" className="text-blue-600 hover:underline">support@scholr.pro</a></p>
                 <p><span className="font-medium text-slate-800">DPO:</span> <a href="mailto:support@scholr.pro" className="text-blue-600 hover:underline">support@scholr.pro</a></p>
                 <p><span className="font-medium text-slate-800">By post:</span> Scholr SAS — Data Protection, [Registered office address], France</p>
-                <p><span className="font-medium text-slate-800">Website:</span> <a href="https://www.scholr.fr/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.fr/privacy</a></p>
+                <p><span className="font-medium text-slate-800">Website:</span> <a href="https://www.scholr.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.com/privacy</a></p>
               </div>
             </section>
 

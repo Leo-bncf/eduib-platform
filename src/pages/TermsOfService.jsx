@@ -39,7 +39,7 @@ export default function TermsOfService() {
                 <p><span className="font-medium text-slate-800">VAT number:</span> To be completed</p>
                 <p><span className="font-medium text-slate-800">Contact email:</span> <a href="mailto:support@scholr.pro" className="text-blue-600 hover:underline">support@scholr.pro</a></p>
                 <p><span className="font-medium text-slate-800">Support email:</span> <a href="mailto:support@scholr.pro" className="text-blue-600 hover:underline">support@scholr.pro</a></p>
-                <p><span className="font-medium text-slate-800">Website:</span> <a href="https://www.scholr.fr" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.fr</a></p>
+                <p><span className="font-medium text-slate-800">Website:</span> <a href="https://www.scholr.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.com</a></p>
               </div>
             </section>
 
@@ -159,7 +159,7 @@ export default function TermsOfService() {
             {/* Section 8 */}
             <section>
               <h2 className="text-xl font-bold text-slate-900 mb-4">8. Data Protection and Privacy</h2>
-              <p className="mb-3">The collection and processing of personal data by Scholr in connection with the Service is governed by the Scholr Privacy Policy, which forms an integral part of these Terms and is available at <a href="https://www.scholr.fr/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.fr/privacy</a>.</p>
+              <p className="mb-3">The collection and processing of personal data by Scholr in connection with the Service is governed by the Scholr Privacy Policy, which forms an integral part of these Terms and is available at <a href="https://www.scholr.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.com/privacy</a>.</p>
               <p className="mb-3">Scholr processes personal data as a data processor on behalf of schools, which act as data controllers, in accordance with Article 28 of the GDPR. The data processing agreement applicable to institutional clients is incorporated into the MSA.</p>
               <p>Users acknowledge that by using the Service, certain personal data will be collected and processed as described in the Privacy Policy. Users are encouraged to read the Privacy Policy carefully.</p>
             </section>
@@ -274,7 +274,7 @@ export default function TermsOfService() {
                 <p><span className="font-medium text-slate-800">Technical support:</span> <a href="mailto:support@scholr.pro" className="text-blue-600 hover:underline">support@scholr.pro</a></p>
                 <p><span className="font-medium text-slate-800">Legal &amp; compliance:</span> <a href="mailto:support@scholr.pro" className="text-blue-600 hover:underline">support@scholr.pro</a></p>
                 <p><span className="font-medium text-slate-800">By post:</span> Scholr SAS — Legal Department, [Registered office address], France</p>
-                <p><span className="font-medium text-slate-800">Website:</span> <a href="https://www.scholr.fr/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.fr/terms</a></p>
+                <p><span className="font-medium text-slate-800">Website:</span> <a href="https://www.scholr.com/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.scholr.com/terms</a></p>
               </div>
             </section>
 
