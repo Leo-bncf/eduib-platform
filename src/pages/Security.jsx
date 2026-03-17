@@ -28,7 +28,7 @@ export default function Security() {
             Security by design
           </h1>
           <p className="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">
-            AtlasIB is built with security at its core. Data isolation, role enforcement, and audit logging are not add-ons — they're foundational.
+            Scholr is built with security at its core. Data isolation, role enforcement, and audit logging are not add-ons — they're foundational.
           </p>
         </div>
       </section>
