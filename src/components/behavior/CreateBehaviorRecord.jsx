@@ -106,6 +106,24 @@ export default function CreateBehaviorRecord({ schoolId, studentId, studentName,
           </DialogHeader>
 
           <div className="space-y-4">
+            {activeTypes.length > 0 && (
+              <div>
+                <Label className="text-sm font-semibold">Incident Type</Label>
+                <Select value={form.incident_type_id} onValueChange={handleIncidentTypeChange}>
+                  <SelectTrigger className="mt-1.5">
+                    <SelectValue placeholder="Select incident type…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {activeTypes.map(t => <SelectItem key={t.id} value={t.id}>{t.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+                {selectedIncidentType?.staff_only && (
+                  <div className="flex items-center gap-1.5 mt-1.5 text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded px-3 py-1.5">
+                    <EyeOff className="w-3 h-3" /> This type is staff-only. Visibility is locked.
+                  </div>
+                )}
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label className="text-sm font-semibold">Type</Label>
@@ -201,30 +219,25 @@ export default function CreateBehaviorRecord({ schoolId, studentId, studentName,
 
             <div className="space-y-3 pt-2 border-t">
               <Label className="text-sm font-semibold">Visibility</Label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="visible_student"
-                  checked={form.visible_to_student}
-                  onChange={e => setForm({ ...form, visible_to_student: e.target.checked })}
-                  className="w-4 h-4"
-                />
-                <Label htmlFor="visible_student" className="text-sm cursor-pointer">
-                  Visible to student
-                </Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="visible_parent"
-                  checked={form.visible_to_parent}
-                  onChange={e => setForm({ ...form, visible_to_parent: e.target.checked })}
-                  className="w-4 h-4"
-                />
-                <Label htmlFor="visible_parent" className="text-sm cursor-pointer">
-                  Visible to parents
-                </Label>
-              </div>
+              {visibilityLocked ? (
+                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-600">
+                  <EyeOff className="w-4 h-4 text-rose-500" />
+                  {selectedIncidentType?.staff_only ? 'Staff-only: visibility locked by school policy.' : 'Visibility override disabled by school policy.'}
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2">
+                    <input type="checkbox" id="visible_student" checked={form.visible_to_student}
+                      onChange={e => setForm({ ...form, visible_to_student: e.target.checked })} className="w-4 h-4" />
+                    <Label htmlFor="visible_student" className="text-sm cursor-pointer">Visible to student</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input type="checkbox" id="visible_parent" checked={form.visible_to_parent}
+                      onChange={e => setForm({ ...form, visible_to_parent: e.target.checked })} className="w-4 h-4" />
+                    <Label htmlFor="visible_parent" className="text-sm cursor-pointer">Visible to parents</Label>
+                  </div>
+                </>
+              )}
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
