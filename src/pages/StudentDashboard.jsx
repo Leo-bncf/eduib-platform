@@ -13,10 +13,11 @@ import {
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { createPageUrl } from '@/utils';
-import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
+import { getStudentSidebarLinks } from '@/components/app/studentSidebarLinks';
 
 export default function StudentDashboard() {
-  const { user, school, schoolId } = useUser();
+  const { user, school, schoolId, curriculum } = useUser();
+  const studentLinks = getStudentSidebarLinks(curriculum);
 
   const { data: classes = [], isLoading } = useQuery({
     queryKey: ['student-classes', schoolId, user?.id],
