@@ -20,7 +20,7 @@ import { createPageUrl } from '@/utils';
 import StudentSubmission from '@/components/assignment/StudentSubmission';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
+import { getStudentSidebarLinks } from '@/components/app/studentSidebarLinks';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

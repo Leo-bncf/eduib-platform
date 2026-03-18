@@ -14,7 +14,7 @@ import {
   LayoutDashboard, BarChart3, Star, MessageSquare, CalendarDays,
   ClipboardList, Megaphone, Loader2
 } from 'lucide-react';
-import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
+import { getStudentSidebarLinks } from '@/components/app/studentSidebarLinks';
 
 export default function StudentCommunication() {
   const { user, school, schoolId, membership } = useUser();

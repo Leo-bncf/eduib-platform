@@ -15,7 +15,7 @@ import {
   CheckCircle2, Upload, BookOpen
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
+import { getStudentSidebarLinks } from '@/components/app/studentSidebarLinks';
 
 const milestoneOrder = ['initial_proposal', 'first_meeting', 'research_planning', 'first_draft', 'interim_reflection', 'second_draft', 'final_draft', 'viva_voce'];
 const milestoneLabels = {

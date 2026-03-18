@@ -11,7 +11,7 @@ import {
   CheckCircle2, XCircle, Clock, AlertCircle, Loader2, ClipboardList
 } from 'lucide-react';
 import { format, subDays, eachWeekOfInterval, startOfWeek, endOfWeek, parseISO, isWithinInterval } from 'date-fns';
-import { STUDENT_SIDEBAR_LINKS } from '@/components/app/studentSidebarLinks';
+import { getStudentSidebarLinks } from '@/components/app/studentSidebarLinks';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell
 } from 'recharts';
