@@ -78,6 +78,7 @@ export function UserProvider({ children }) {
       isAuthenticated,
       role: getRole(),
       schoolId: getSchoolId(),
+      curriculum: school?.curriculum || 'ib_dp',
       reload: loadUser,
       checkPermission,
       checkAllPermissions,
