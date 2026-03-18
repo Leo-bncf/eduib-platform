@@ -17,7 +17,8 @@ import {
 import { getStudentSidebarLinks } from '@/components/app/studentSidebarLinks';
 
 export default function StudentCommunication() {
-  const { user, school, schoolId, membership } = useUser();
+  const { user, school, schoolId, membership, curriculum } = useUser();
+  const studentLinks = getStudentSidebarLinks(curriculum);
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   const { data: classes = [] } = useQuery({
@@ -81,7 +82,7 @@ export default function StudentCommunication() {
   return (
     <RoleGuard allowedRoles={['student', 'school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
-        <AppSidebar links={STUDENT_SIDEBAR_LINKS} role="student" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
+        <AppSidebar links={studentLinks} role="student" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         <main className="ml-0 md:ml-64 p-4 md:p-6">
           <div className="max-w-5xl mx-auto">
             <div className="mb-5">

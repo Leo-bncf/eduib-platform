@@ -280,12 +280,13 @@ function EETab({ schoolId, userId }) {
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function StudentIBCore() {
-  const { user, school, schoolId } = useUser();
+  const { user, school, schoolId, curriculum } = useUser();
+  const studentLinks = getStudentSidebarLinks(curriculum);
 
   return (
     <RoleGuard allowedRoles={['student', 'school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
-        <AppSidebar links={STUDENT_SIDEBAR_LINKS} role="student" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
+        <AppSidebar links={studentLinks} role="student" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         <main className="ml-0 md:ml-64 p-4 md:p-8">
           <div className="max-w-5xl mx-auto">
             <div className="mb-6">

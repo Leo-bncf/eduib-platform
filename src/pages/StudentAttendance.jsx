@@ -93,7 +93,8 @@ function StatusBreakdownBar({ counts, total }) {
 // ── Main Page ────────────────────────────────────────────────────────────────
 
 export default function StudentAttendance() {
-  const { user, school, schoolId } = useUser();
+  const { user, school, schoolId, curriculum } = useUser();
+  const studentLinks = getStudentSidebarLinks(curriculum);
   const [range, setRange] = useState('90');
   const [classFilter, setClassFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -150,7 +151,7 @@ export default function StudentAttendance() {
   return (
     <RoleGuard allowedRoles={['student', 'school_admin', 'super_admin', 'admin']}>
       <div className="min-h-screen bg-slate-50">
-        <AppSidebar links={STUDENT_SIDEBAR_LINKS} role="student" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
+        <AppSidebar links={studentLinks} role="student" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
         <main className="ml-0 md:ml-64 p-4 md:p-8">
           <div className="max-w-4xl mx-auto">
             <div className="mb-6">
