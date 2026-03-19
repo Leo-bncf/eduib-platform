@@ -11,17 +11,13 @@ import {
   Loader2, TrendingUp, TrendingDown, Minus, Filter
 } from 'lucide-react';
 import { format } from 'date-fns';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'CoordinatorDashboard', icon: LayoutDashboard },
-  { label: 'Cohorts', page: 'CoordinatorDashboard', icon: Users },
-  { label: 'Predicted Grades', page: 'CoordinatorPredictedGrades', icon: BarChart3 },
-  { label: 'Reporting', page: 'CoordinatorDashboard', icon: FileText },
-  { label: 'IB Core', page: 'CoordinatorIBCore', icon: Star },
-];
+import { getCoordinatorSidebarLinks } from '@/components/app/coordinatorSidebarLinks';
+import { useCurriculum } from '@/hooks/useCurriculum';
 
 export default function CoordinatorPredictedGrades() {
   const { user, school, schoolId } = useUser();
+  const { curriculum, config, isIBDP, gradeScale } = useCurriculum();
+  const sidebarLinks = getCoordinatorSidebarLinks(curriculum, config);
   const [filterGrade, setFilterGrade] = useState('all');
   const [filterClass, setFilterClass] = useState('all');
 

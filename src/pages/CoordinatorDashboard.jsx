@@ -10,17 +10,13 @@ import {
   Loader2, GraduationCap, BookOpen, TrendingUp
 } from 'lucide-react';
 import { format } from 'date-fns';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'CoordinatorDashboard', icon: LayoutDashboard },
-  { label: 'Cohorts', page: 'CoordinatorDashboard', icon: Users },
-  { label: 'Predicted Grades', page: 'CoordinatorPredictedGrades', icon: BarChart3 },
-  { label: 'Reporting', page: 'CoordinatorDashboard', icon: FileText },
-  { label: 'IB Core', page: 'CoordinatorIBCore', icon: Star },
-];
+import { getCoordinatorSidebarLinks } from '@/components/app/coordinatorSidebarLinks';
+import { useCurriculum } from '@/hooks/useCurriculum';
 
 export default function CoordinatorDashboard() {
   const { user, school, schoolId } = useUser();
+  const { curriculum, config, coordinatorLabel, shortLabel } = useCurriculum();
+  const sidebarLinks = getCoordinatorSidebarLinks(curriculum, config);
 
   const { data: memberships = [], isLoading } = useQuery({
     queryKey: ['school-memberships-coord', schoolId],
@@ -50,8 +46,8 @@ export default function CoordinatorDashboard() {
         <main className="ml-64 p-8">
           <div className="max-w-7xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-slate-900">IB Coordinator Dashboard</h1>
-              <p className="text-sm text-slate-500 mt-1">{school?.name} · {format(new Date(), 'MMMM d, yyyy')}</p>
+              <h1 className="text-2xl font-bold text-slate-900">{coordinatorLabel} Dashboard</h1>
+              <p className="text-sm text-slate-500 mt-1">{school?.name} · {shortLabel} · {format(new Date(), 'MMMM d, yyyy')}</p>
             </div>
 
             {isLoading ? (

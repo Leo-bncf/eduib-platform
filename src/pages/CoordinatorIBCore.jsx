@@ -10,17 +10,13 @@ import {
   LayoutDashboard, Users, BarChart3, FileText, Loader2, Star, 
   Palette, Heart, Users as UsersIcon, GraduationCap
 } from 'lucide-react';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'CoordinatorDashboard', icon: LayoutDashboard },
-  { label: 'Cohorts', page: 'CoordinatorDashboard', icon: Users },
-  { label: 'Predicted Grades', page: 'CoordinatorDashboard', icon: BarChart3 },
-  { label: 'Reporting', page: 'CoordinatorDashboard', icon: FileText },
-  { label: 'IB Core', page: 'CoordinatorIBCore', icon: Star },
-];
+import { getCoordinatorSidebarLinks } from '@/components/app/coordinatorSidebarLinks';
+import { useCurriculum } from '@/hooks/useCurriculum';
 
 export default function CoordinatorIBCore() {
   const { user, school, schoolId } = useUser();
+  const { curriculum, config } = useCurriculum();
+  const sidebarLinks = getCoordinatorSidebarLinks(curriculum, config);
 
   const { data: casExperiences = [], isLoading: casLoading } = useQuery({
     queryKey: ['all-cas', schoolId],
