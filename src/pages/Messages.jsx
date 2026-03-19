@@ -10,25 +10,8 @@ import NewMessageDialog from '@/components/messaging/NewMessageDialog';
 import AnnouncementComposer from '@/components/messaging/AnnouncementComposer';
 import AnnouncementsFeed from '@/components/messaging/AnnouncementsFeed';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  LayoutDashboard, MessageSquare, BookOpen, ClipboardCheck,
-  BarChart3, Users, Loader2, Megaphone
-} from 'lucide-react';
-
-const getSidebarLinks = (role) => {
-  const dashboardPage = role === 'teacher' ? 'TeacherDashboard'
-    : role === 'school_admin' || role === 'ib_coordinator' ? 'SchoolAdminDashboard'
-    : role === 'parent' ? 'ParentDashboard'
-    : 'StudentDashboard';
-
-  const base = [{ label: 'Dashboard', page: dashboardPage, icon: LayoutDashboard }];
-
-  if (role === 'teacher') return [...base, { label: 'My Classes', page: 'TeacherClasses', icon: BookOpen }, { label: 'Messages', page: 'Messages', icon: MessageSquare }];
-  if (role === 'student') return [...base, { label: 'My Classes', page: 'StudentDashboard', icon: BookOpen }, { label: 'Assignments', page: 'StudentDashboard', icon: ClipboardCheck }, { label: 'My Grades', page: 'StudentDashboard', icon: BarChart3 }, { label: 'Messages', page: 'Messages', icon: MessageSquare }];
-  if (role === 'parent') return [...base, { label: 'Messages', page: 'Messages', icon: MessageSquare }];
-  if (role === 'school_admin' || role === 'ib_coordinator') return [...base, { label: 'Users', page: 'SchoolAdminUsers', icon: Users }, { label: 'Messages', page: 'Messages', icon: MessageSquare }];
-  return base;
-};
+import { MessageSquare, Loader2, Megaphone } from 'lucide-react';
+import { getAppSidebarLinks } from '@/components/app/sidebarLinks';
 
 export default function Messages() {
   const { user, school, schoolId, role } = useUser();
