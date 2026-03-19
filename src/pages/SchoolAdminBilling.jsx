@@ -367,9 +367,8 @@ export default function SchoolAdminBilling() {
                       );
                     })}
                   </div>
-                </TabsContent>
+                </div>
               )}
-            </Tabs>
           </div>
         </main>
       </div>
