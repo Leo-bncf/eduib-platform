@@ -39,10 +39,16 @@ export default function SuperAdminSchoolDetail() {
   const school = data?.school || null;
   const stats = data?.stats || null;
   const members = data?.members || [];
+  const { impersonate } = useImpersonation();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [billingDialogOpen, setBillingDialogOpen] = useState(false);
   const [addAdminDialogOpen, setAddAdminDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+
+  const handleImpersonate = (role) => {
+    impersonate(school, role);
+    navigate('/SchoolAdminDashboard');
+  };
 
   const reloadSchool = async () => {
     await refetch();
