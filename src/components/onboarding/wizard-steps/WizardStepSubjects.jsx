@@ -6,36 +6,35 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, Plus, Trash2, BookOpen } from 'lucide-react';
+import { getSubjectTemplate } from '@/lib/curriculumTemplates';
+import { getCurriculumConfig } from '@/lib/curriculumConfig';
 
-const IB_PRESETS = [
-  { name: 'English Literature', code: 'EN-A', ib_group: 1 },
-  { name: 'Spanish B', code: 'SP-B', ib_group: 2 },
-  { name: 'History', code: 'HI', ib_group: 3 },
-  { name: 'Biology', code: 'BI', ib_group: 4 },
-  { name: 'Mathematics: Analysis', code: 'MA-AA', ib_group: 5 },
-  { name: 'Visual Arts', code: 'VA', ib_group: 6 },
-  { name: 'Theory of Knowledge', code: 'TOK', ib_group: null },
-];
-
-export default function WizardStepSubjects({ schoolId, onDone }) {
+export default function WizardStepSubjects({ schoolId, curriculum = 'ib_dp', onDone }) {
   const queryClient = useQueryClient();
   const [saving, setSaving] = useState(false);
   const [subjects, setSubjects] = useState([{ name: '', code: '' }]);
-  const [useIBPresets, setUseIBPresets] = useState(false);
-  const [selectedPresets, setSelectedPresets] = useState(new Set());
+  const [useTemplate, setUseTemplate] = useState(true);
+  const [selectedFromTemplate, setSelectedFromTemplate] = useState(new Set());
+
+  const template = getSubjectTemplate(curriculum);
+  const config = getCurriculumConfig(curriculum);
+  const hasTemplate = template.length > 0;
 
   const { data: existingSubjects = [], refetch } = useQuery({
     queryKey: ['subjects-wizard', schoolId],
     queryFn: () => base44.entities.Subject.filter({ school_id: schoolId }),
   });
 
-  const togglePreset = (name) => {
-    setSelectedPresets(prev => {
+  const toggleTemplate = (code) => {
+    setSelectedFromTemplate(prev => {
       const next = new Set(prev);
-      next.has(name) ? next.delete(name) : next.add(name);
+      next.has(code) ? next.delete(code) : next.add(code);
       return next;
     });
   };
+
+  const selectAll = () => setSelectedFromTemplate(new Set(template.map(s => s.code)));
+  const selectNone = () => setSelectedFromTemplate(new Set());
 
   const addRow = () => setSubjects(s => [...s, { name: '', code: '' }]);
   const removeRow = (i) => setSubjects(s => s.filter((_, idx) => idx !== i));
@@ -43,12 +42,12 @@ export default function WizardStepSubjects({ schoolId, onDone }) {
 
   const handleSave = async () => {
     setSaving(true);
-    const toCreate = useIBPresets
-      ? IB_PRESETS.filter(p => selectedPresets.has(p.name))
+    const toCreate = (useTemplate && hasTemplate)
+      ? template.filter(s => selectedFromTemplate.has(s.code))
       : subjects.filter(s => s.name.trim());
 
     await Promise.all(
-      toCreate.map(s => base44.entities.Subject.create({ ...s, school_id: schoolId, is_ib: true }))
+      toCreate.map(s => base44.entities.Subject.create({ ...s, school_id: schoolId, status: 'active' }))
     );
     await refetch();
     queryClient.invalidateQueries({ queryKey: ['onboarding-status', schoolId] });
@@ -56,11 +55,29 @@ export default function WizardStepSubjects({ schoolId, onDone }) {
     onDone?.();
   };
 
+  const canSave = useTemplate && hasTemplate
+    ? selectedFromTemplate.size > 0
+    : subjects.some(s => s.name.trim());
+
+  // Group template subjects by ib_group for display
+  const groupedTemplate = template.reduce((acc, s) => {
+    const groupKey = s.ib_group || '_other';
+    if (!acc[groupKey]) acc[groupKey] = [];
+    acc[groupKey].push(s);
+    return acc;
+  }, {});
+
+  const groupLabels = config.subjectGroupLabels || {};
+
   return (
     <div className="space-y-5">
       <div>
         <h3 className="text-base font-bold text-slate-900 mb-1">Subject Catalogue</h3>
-        <p className="text-sm text-slate-500">Add the subjects your school teaches. You can use IB standard subjects as a starting point or create your own.</p>
+        <p className="text-sm text-slate-500">
+          {hasTemplate
+            ? `Choose from the ${config.shortLabel} subject template or create custom subjects.`
+            : 'Add the subjects your school teaches.'}
+        </p>
       </div>
 
       {existingSubjects.length > 0 && (
@@ -79,47 +96,65 @@ export default function WizardStepSubjects({ schoolId, onDone }) {
         </div>
       )}
 
-      <div className="flex gap-2">
-        <button
-          onClick={() => setUseIBPresets(false)}
-          className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-colors ${!useIBPresets ? 'bg-indigo-600 text-white border-indigo-600' : 'border-slate-200 text-slate-600'}`}
-        >
-          Custom Subjects
-        </button>
-        <button
-          onClick={() => setUseIBPresets(true)}
-          className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-colors ${useIBPresets ? 'bg-indigo-600 text-white border-indigo-600' : 'border-slate-200 text-slate-600'}`}
-        >
-          IB Presets
-        </button>
-      </div>
+      {hasTemplate && (
+        <div className="flex gap-2">
+          <button
+            onClick={() => setUseTemplate(true)}
+            className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-colors ${useTemplate ? 'bg-indigo-600 text-white border-indigo-600' : 'border-slate-200 text-slate-600'}`}
+          >
+            {config.shortLabel} Template
+          </button>
+          <button
+            onClick={() => setUseTemplate(false)}
+            className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-colors ${!useTemplate ? 'bg-indigo-600 text-white border-indigo-600' : 'border-slate-200 text-slate-600'}`}
+          >
+            Custom Subjects
+          </button>
+        </div>
+      )}
 
-      {useIBPresets ? (
-        <div className="bg-slate-50 rounded-xl border border-slate-200 p-5 space-y-3">
-          <p className="text-xs text-slate-500 mb-3">Select the IB subjects your school offers:</p>
-          <div className="grid sm:grid-cols-2 gap-2">
-            {IB_PRESETS.map(p => (
-              <button
-                key={p.name}
-                onClick={() => togglePreset(p.name)}
-                className={`flex items-center gap-2 p-3 rounded-lg border text-left transition-all ${
-                  selectedPresets.has(p.name)
-                    ? 'bg-indigo-50 border-indigo-300 text-indigo-800'
-                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
-                }`}
-              >
-                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                  selectedPresets.has(p.name) ? 'bg-indigo-600 border-indigo-600' : 'border-slate-300'
-                }`}>
-                  {selectedPresets.has(p.name) && <CheckCircle2 className="w-3 h-3 text-white" />}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">{p.name}</p>
-                  <p className="text-xs text-slate-400">{p.code}{p.ib_group ? ` · Group ${p.ib_group}` : ' · Core'}</p>
-                </div>
-              </button>
-            ))}
+      {(useTemplate && hasTemplate) ? (
+        <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-slate-500">Select the subjects your school offers:</p>
+            <div className="flex gap-2">
+              <button onClick={selectAll} className="text-xs text-indigo-600 hover:underline">Select all</button>
+              <span className="text-slate-300">|</span>
+              <button onClick={selectNone} className="text-xs text-slate-500 hover:underline">None</button>
+            </div>
           </div>
+          {Object.entries(groupedTemplate).map(([groupKey, items]) => (
+            <div key={groupKey}>
+              {groupKey !== '_other' && (
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
+                  {groupLabels[groupKey] || groupKey}
+                </p>
+              )}
+              <div className="grid sm:grid-cols-2 gap-1.5">
+                {items.map(s => (
+                  <button
+                    key={s.code}
+                    onClick={() => toggleTemplate(s.code)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-left transition-all ${
+                      selectedFromTemplate.has(s.code)
+                        ? 'bg-indigo-50 border-indigo-300 text-indigo-800'
+                        : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+                      selectedFromTemplate.has(s.code) ? 'bg-indigo-600 border-indigo-600' : 'border-slate-300'
+                    }`}>
+                      {selectedFromTemplate.has(s.code) && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium truncate">{s.name}</p>
+                      <p className="text-[10px] text-slate-400">{s.code}{s.level && s.level !== 'na' ? ` · ${s.level}` : ''}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="bg-slate-50 rounded-xl border border-slate-200 p-5 space-y-3">
@@ -146,7 +181,7 @@ export default function WizardStepSubjects({ schoolId, onDone }) {
 
       <Button
         onClick={handleSave}
-        disabled={saving || (useIBPresets ? selectedPresets.size === 0 : subjects.every(s => !s.name.trim()))}
+        disabled={saving || !canSave}
         className="w-full bg-indigo-600 hover:bg-indigo-700 gap-1.5"
       >
         {saving ? 'Saving…' : <><BookOpen className="w-4 h-4" /> Save Subjects &amp; Continue</>}
