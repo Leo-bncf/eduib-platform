@@ -14,8 +14,8 @@ export function ImpersonationProvider({ children }) {
     }
   });
 
-  const impersonate = (school, membershipRole = 'school_admin') => {
-    const data = { school, membershipRole };
+  const impersonate = (school, membershipRole = 'school_admin', curriculumOverride = null) => {
+    const data = { school, membershipRole, curriculumOverride };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     setImpersonation(data);
   };
