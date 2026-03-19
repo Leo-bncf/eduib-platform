@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { hasPermission, hasAllPermissions } from '@/components/auth/PermissionsModule';
+import { useImpersonation } from '@/components/auth/ImpersonationContext';
 
 const UserContext = createContext(null);
 
