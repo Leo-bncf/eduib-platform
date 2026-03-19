@@ -160,7 +160,7 @@ export default function SubjectCatalogTab({ schoolId, curriculum = 'ib_dp' }) {
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <h2 className="text-sm font-bold text-slate-900">Subject Catalogue</h2>
-          <p className="text-xs text-slate-500 mt-0.5">Define IB subjects with SL/HL variants, group classifications, departments, and default grading settings.</p>
+          <p className="text-xs text-slate-500 mt-0.5">Define subjects with level variants, group classifications, departments, and default grading settings for {currConfig.shortLabel}.</p>
         </div>
         <div className="flex items-center gap-2">
           {notYetAdded.length > 0 && (
@@ -180,23 +180,25 @@ export default function SubjectCatalogTab({ schoolId, curriculum = 'ib_dp' }) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
           <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search subjects…" className="pl-9 bg-white h-8 text-xs w-48" />
         </div>
-        <Select value={groupFilter} onValueChange={setGroupFilter}>
-          <SelectTrigger className="w-48 h-8 text-xs bg-white"><SelectValue placeholder="All IB Groups" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All IB Groups</SelectItem>
-            {IB_GROUPS.map(g => <SelectItem key={g.value} value={g.value}>{g.short} – {g.label.split('–')[1]?.trim()}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <Select value={levelFilter} onValueChange={setLevelFilter}>
-          <SelectTrigger className="w-32 h-8 text-xs bg-white"><SelectValue placeholder="All Levels" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Levels</SelectItem>
-            <SelectItem value="HL">HL</SelectItem>
-            <SelectItem value="SL">SL</SelectItem>
-            <SelectItem value="core">Core</SelectItem>
-            <SelectItem value="na">N/A</SelectItem>
-          </SelectContent>
-        </Select>
+        {hasSubjectGroups && (
+          <Select value={groupFilter} onValueChange={setGroupFilter}>
+            <SelectTrigger className="w-48 h-8 text-xs bg-white"><SelectValue placeholder="All Groups" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Groups</SelectItem>
+              {currGroups.map(g => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        )}
+        {hasSubjectLevels && (
+          <Select value={levelFilter} onValueChange={setLevelFilter}>
+            <SelectTrigger className="w-36 h-8 text-xs bg-white"><SelectValue placeholder="All Levels" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Levels</SelectItem>
+              {currConfig.subjectLevels.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+              <SelectItem value="na">N/A</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
         <span className="text-xs text-slate-400">{filtered.length} of {subjects.length} subjects</span>
       </div>
 
