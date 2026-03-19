@@ -13,7 +13,7 @@ import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarL
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AdminTabNavigation from '@/components/admin/AdminTabNavigation';
 import PlanUsageCard from '@/components/plan/PlanUsageCard';
 import TrialBanner from '@/components/plan/TrialBanner';
 import BillingStatusBanner from '@/components/plan/BillingStatusBanner';
