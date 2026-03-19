@@ -119,20 +119,27 @@ export default function SchoolAdminBilling() {
       <div className="min-h-screen bg-slate-50">
         <AppSidebar links={SCHOOL_ADMIN_SIDEBAR_LINKS} role="school_admin" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
 
-        <main className="md:ml-64">
-          <div className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-base font-black text-slate-900 tracking-tight">Billing & Subscription</h1>
-                <p className="text-xs text-slate-400 mt-0.5">Manage your school's plan, usage limits, and payment details</p>
-              </div>
+        <main className="md:ml-64 min-h-screen flex flex-col">
+          <AdminTabNavigation
+            tabs={[
+              { id: 'status', label: 'Subscription Status', icon: CreditCard },
+              { id: 'usage', label: 'Usage & Limits', icon: Users, badge: hasAnyWarning ? '!' : null },
+              { id: 'modules', label: 'Plan Features', icon: Shield },
+              ...(upgradePlans.length > 0 ? [{ id: 'upgrade', label: 'Upgrade', icon: ArrowUpCircle }] : []),
+            ]}
+            activeTab={billingTab}
+            onTabChange={setBillingTab}
+            colorScheme="indigo"
+            title="Billing & Subscription"
+            subtitle="Manage your school's plan, usage limits, and payment details"
+            rightContent={
               <Button size="sm" variant="ghost" onClick={() => refetch()} className="gap-1.5 text-slate-500">
                 <RefreshCw className="w-3.5 h-3.5" /> Refresh
               </Button>
-            </div>
-          </div>
+            }
+          />
 
-          <div className="p-6 max-w-6xl space-y-5">
+          <div className="flex-1 p-6 max-w-6xl space-y-5">
             <TrialBanner />
             <BillingStatusBanner />
 
@@ -148,25 +155,6 @@ export default function SchoolAdminBilling() {
                 </AlertDescription>
               </Alert>
             )}
-
-            <Tabs defaultValue="status">
-              <TabsList className="bg-white border border-slate-200 h-auto">
-                <TabsTrigger value="status" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <CreditCard className="w-3.5 h-3.5" /> Subscription Status
-                </TabsTrigger>
-                <TabsTrigger value="usage" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Users className="w-3.5 h-3.5" /> Usage & Limits
-                  {hasAnyWarning && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 ml-1" />}
-                </TabsTrigger>
-                <TabsTrigger value="modules" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Shield className="w-3.5 h-3.5" /> Plan Features
-                </TabsTrigger>
-                {upgradePlans.length > 0 && (
-                  <TabsTrigger value="upgrade" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                    <ArrowUpCircle className="w-3.5 h-3.5" /> Upgrade
-                  </TabsTrigger>
-                )}
-              </TabsList>
 
               {/* ── SUBSCRIPTION STATUS ── */}
               <TabsContent value="status" className="mt-5">
