@@ -245,10 +245,10 @@ export default function SchoolAdminBilling() {
                     </div>
                   </div>
                 </div>
-              </TabsContent>
+              </div>}
 
               {/* ── USAGE & LIMITS ── */}
-              <TabsContent value="usage" className="mt-5">
+              {billingTab === 'usage' && <div className="mt-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="space-y-4">
                     <PlanUsageCard userCount={usageCounts.userCount} classCount={usageCounts.classCount} />
