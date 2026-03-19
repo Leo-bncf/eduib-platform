@@ -77,7 +77,7 @@ export default function SchoolAdminAcademicSetup() {
               {activeTab === 'years'    && <AcademicYearsTab schoolId={schoolId} />}
               {activeTab === 'terms'    && <TermsTab schoolId={schoolId} />}
               {activeTab === 'cohorts'  && <CohortsTab schoolId={schoolId} />}
-              {activeTab === 'subjects' && <SubjectCatalogTab schoolId={schoolId} />}
+              {activeTab === 'subjects' && <SubjectCatalogTab schoolId={schoolId} curriculum={school?.curriculum || 'ib_dp'} />}
             </div>
           </div>
         </main>
