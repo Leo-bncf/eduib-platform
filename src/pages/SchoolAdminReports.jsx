@@ -78,7 +78,7 @@ export default function SchoolAdminReports() {
 
   const isCoordinator = ['ib_coordinator', 'school_admin', 'super_admin', 'admin'].includes(role);
 
-  const [tab, setTab] = React.useState('overview');
+  const [tab, setTab] = useState('overview');
 
   const TABS = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
