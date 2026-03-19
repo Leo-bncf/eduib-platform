@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   CheckCircle2, ChevronRight, ChevronLeft, Calendar, Clock,
-  BookOpen, Layers, UserCheck, Mail, GraduationCap, Sparkles, ArrowRight
+  BookOpen, Layers, Mail, GraduationCap, Sparkles
 } from 'lucide-react';
+import WizardStepCurriculum from './wizard-steps/WizardStepCurriculum';
 import WizardStepAcademicYear from './wizard-steps/WizardStepAcademicYear';
 import WizardStepTerms from './wizard-steps/WizardStepTerms';
 import WizardStepSubjects from './wizard-steps/WizardStepSubjects';
@@ -16,11 +17,12 @@ import WizardStepClasses from './wizard-steps/WizardStepClasses';
 import WizardStepInviteUsers from './wizard-steps/WizardStepInviteUsers';
 
 const STEPS = [
-  { id: 'academic_year',  label: 'Academic Year',     icon: Calendar,      component: WizardStepAcademicYear, description: 'Define your school year dates' },
-  { id: 'terms',          label: 'Terms',              icon: Clock,         component: WizardStepTerms,        description: 'Add reporting periods and terms' },
-  { id: 'subjects',       label: 'Subjects',           icon: BookOpen,      component: WizardStepSubjects,     description: 'Build your subject catalogue' },
-  { id: 'classes',        label: 'Classes',            icon: Layers,        component: WizardStepClasses,      description: 'Create your first class groups' },
-  { id: 'invite',         label: 'Invite Users',       icon: Mail,          component: WizardStepInviteUsers,  description: 'Invite teachers and students' },
+  { id: 'curriculum',    label: 'Curriculum',    icon: GraduationCap, description: 'Choose your curriculum system' },
+  { id: 'academic_year', label: 'Academic Year', icon: Calendar,      description: 'Define your school year dates' },
+  { id: 'terms',         label: 'Terms',         icon: Clock,         description: 'Add reporting periods and terms' },
+  { id: 'subjects',      label: 'Subjects',      icon: BookOpen,      description: 'Build your subject catalogue' },
+  { id: 'classes',       label: 'Classes',       icon: Layers,        description: 'Create your first class groups' },
+  { id: 'invite',        label: 'Invite Users',  icon: Mail,          description: 'Invite teachers and students' },
 ];
 
 function StepNav({ steps, currentIndex, completedStepIds }) {
@@ -64,22 +66,22 @@ function StepNav({ steps, currentIndex, completedStepIds }) {
 }
 
 export default function SetupWizard({ onComplete }) {
-  const { schoolId } = useUser();
+  const { schoolId, school } = useUser();
   const queryClient = useQueryClient();
   const { data: status } = useOnboardingStatus(schoolId);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [academicYearId, setAcademicYearId] = useState(null);
+  const [curriculum, setCurriculum] = useState(school?.curriculum || 'ib_dp');
 
   const completedStepIds = new Set((status?.steps || []).filter(s => s.completed).map(s => s.id));
 
-  // Find the first incomplete step index on mount
-  const firstIncompleteIndex = STEPS.findIndex(s => !completedStepIds.has(s.id));
-
   const currentStep = STEPS[currentIndex];
-  const StepComponent = currentStep.component;
   const isLastStep = currentIndex === STEPS.length - 1;
 
-  const handleStepDone = () => {
+  const handleStepDone = (extraData) => {
+    if (currentStep.id === 'curriculum' && extraData?.curriculum) {
+      setCurriculum(extraData.curriculum);
+    }
     queryClient.invalidateQueries({ queryKey: ['onboarding-status', schoolId] });
     if (isLastStep) {
       onComplete?.();
@@ -91,6 +93,60 @@ export default function SetupWizard({ onComplete }) {
   const handleSkip = () => {
     if (!isLastStep) setCurrentIndex(i => i + 1);
     else onComplete?.();
+  };
+
+  const renderStep = () => {
+    switch (currentStep.id) {
+      case 'curriculum':
+        return (
+          <WizardStepCurriculum
+            schoolId={schoolId}
+            currentCurriculum={curriculum}
+            onDone={handleStepDone}
+          />
+        );
+      case 'academic_year':
+        return (
+          <WizardStepAcademicYear
+            schoolId={schoolId}
+            onAcademicYearCreated={setAcademicYearId}
+            onDone={handleStepDone}
+          />
+        );
+      case 'terms':
+        return (
+          <WizardStepTerms
+            schoolId={schoolId}
+            academicYearId={academicYearId}
+            onDone={handleStepDone}
+          />
+        );
+      case 'subjects':
+        return (
+          <WizardStepSubjects
+            schoolId={schoolId}
+            curriculum={curriculum}
+            onDone={handleStepDone}
+          />
+        );
+      case 'classes':
+        return (
+          <WizardStepClasses
+            schoolId={schoolId}
+            academicYearId={academicYearId}
+            onDone={handleStepDone}
+          />
+        );
+      case 'invite':
+        return (
+          <WizardStepInviteUsers
+            schoolId={schoolId}
+            onDone={handleStepDone}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -105,13 +161,13 @@ export default function SetupWizard({ onComplete }) {
           </div>
           <div className="ml-auto">
             <Badge className="bg-white/20 text-white border-0 text-xs">
-              {completedStepIds.size}/{STEPS.length} complete
+              {currentIndex}/{STEPS.length} complete
             </Badge>
           </div>
         </div>
         <StepNav steps={STEPS} currentIndex={currentIndex} completedStepIds={completedStepIds} />
         <Progress
-          value={((currentIndex) / STEPS.length) * 100}
+          value={(currentIndex / STEPS.length) * 100}
           className="h-1 mt-4 bg-indigo-400/50"
           indicatorClassName="bg-white"
         />
@@ -119,12 +175,7 @@ export default function SetupWizard({ onComplete }) {
 
       {/* Step content */}
       <div className="p-6">
-        <StepComponent
-          schoolId={schoolId}
-          academicYearId={academicYearId}
-          onAcademicYearCreated={setAcademicYearId}
-          onDone={handleStepDone}
-        />
+        {renderStep()}
       </div>
 
       {/* Footer nav */}
