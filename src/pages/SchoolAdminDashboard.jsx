@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import AppSidebar from '@/components/app/AppSidebar';
 import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
+import { useCurriculum } from '@/hooks/useCurriculum';
 import LoadingStateBase from '@/components/common/LoadingStateBase';
 import SchoolHealthOverview from '@/components/dashboard/SchoolHealthOverview';
 import OperationalAlerts from '@/components/dashboard/OperationalAlerts';
@@ -47,6 +48,7 @@ function SectionHeader({ icon: Icon, title, subtitle, accent = 'slate' }) {
 export default function SchoolAdminDashboard() {
   const navigate = useNavigate();
   const { user, schoolId, loading: userLoading } = useUser();
+  const { shortLabel } = useCurriculum();
   const { data, isLoading } = useSchoolOperationsData(schoolId);
 
   useEffect(() => {
@@ -101,7 +103,7 @@ export default function SchoolAdminDashboard() {
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400 mt-0.5 truncate">{school?.name} · {today}</p>
+              <p className="text-xs text-slate-400 mt-0.5 truncate">{school?.name} · <span className="text-blue-500 font-semibold">{shortLabel}</span> · {today}</p>
             </div>
             <div className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider border rounded-md flex-shrink-0 ${sm.classes}`}>
               <span className={`w-2 h-2 rounded-full ${sm.dot}`} />
