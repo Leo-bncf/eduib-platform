@@ -11,6 +11,7 @@ export function UserProvider({ children }) {
   const [school, setSchool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { impersonation } = useImpersonation() || {};
 
   useEffect(() => {
     loadUser();
