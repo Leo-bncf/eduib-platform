@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { DEFAULT_POLICY } from '@/hooks/useSubmissionPolicy';
+import { CURRICULUM_OPTIONS } from '@/lib/curriculumConfig';
 import SubmissionRulesPanel from '@/components/settings/SubmissionRulesPanel';
 import FileSecurityPanel from '@/components/settings/FileSecurityPanel';
 import AcademicIntegrityPanel from '@/components/settings/AcademicIntegrityPanel';
@@ -161,6 +162,9 @@ export default function SchoolAdminSettings() {
                 </TabsTrigger>
                 <TabsTrigger value="integrity" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
                   <Shield className="w-3.5 h-3.5" /> Academic Integrity
+                </TabsTrigger>
+                <TabsTrigger value="curriculum" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
+                  <BookOpen className="w-3.5 h-3.5" /> Curriculum
                 </TabsTrigger>
               </TabsList>
 
@@ -315,6 +319,58 @@ export default function SchoolAdminSettings() {
                         Save Integrity Policy
                       </Button>
                     </div>
+                  </div>
+                )}
+              </TabsContent>
+              {/* ── CURRICULUM TAB ── */}
+              <TabsContent value="curriculum">
+                {isLoading || !school ? (
+                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                ) : (
+                  <div className="max-w-2xl space-y-5">
+                    <Card className="shadow-none border-slate-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center gap-2">
+                          <BookOpen className="w-4 h-4 text-slate-500" />
+                          <CardTitle className="text-sm">Curriculum System</CardTitle>
+                        </div>
+                        <CardDescription className="text-xs">
+                          Changing the curriculum affects sidebar navigation, grading scales, coordinator roles, and feature availability across the platform.
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="space-y-3">
+                          {CURRICULUM_OPTIONS.map(opt => (
+                            <label
+                              key={opt.value}
+                              className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                                school.curriculum === opt.value
+                                  ? 'border-indigo-300 bg-indigo-50'
+                                  : 'border-slate-200 bg-white hover:bg-slate-50'
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name="curriculum"
+                                value={opt.value}
+                                checked={school.curriculum === opt.value}
+                                onChange={() => updateSchoolMutation.mutate({ curriculum: opt.value })}
+                                className="mt-0.5 accent-indigo-600"
+                              />
+                              <div>
+                                <p className={`text-sm font-semibold ${school.curriculum === opt.value ? 'text-indigo-800' : 'text-slate-800'}`}>{opt.label}</p>
+                                <p className="text-xs text-slate-500 mt-0.5">{opt.description}</p>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                        {updateSchoolMutation.isPending && (
+                          <div className="flex items-center gap-2 text-sm text-slate-500">
+                            <Loader2 className="w-4 h-4 animate-spin" /> Saving…
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
                   </div>
                 )}
               </TabsContent>
