@@ -13,7 +13,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell, Shield, HardDrive,
-  FileText, Settings
+  FileText, Settings, BookOpen
 } from 'lucide-react';
 import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { DEFAULT_POLICY } from '@/hooks/useSubmissionPolicy';
