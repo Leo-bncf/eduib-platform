@@ -415,7 +415,9 @@ export default function SchoolAnalytics() {
                 </div>
               </div>
             </div>
+          </div>
 
+          <div className="flex-1 p-6 max-w-7xl mx-auto w-full">
             {isLoading ? (
               <div className="flex items-center justify-center py-32">
                 <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
