@@ -130,11 +130,21 @@ export default function SchoolAdminSettings() {
           schoolId={schoolId}
         />
 
-        <main className="md:ml-64 min-h-screen">
-          <div className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
-            <h1 className="text-base font-black text-slate-900 tracking-tight">School Settings</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Manage your school profile, preferences, and governance policies</p>
-          </div>
+        <main className="md:ml-64 min-h-screen flex flex-col">
+          <AdminTabNavigation
+            tabs={[
+              { id: 'school', label: 'School Profile', icon: Building2 },
+              { id: 'submissions', label: 'Submission Rules', icon: FileText },
+              { id: 'files', label: 'File & Storage', icon: HardDrive },
+              { id: 'integrity', label: 'Academic Integrity', icon: Shield },
+              { id: 'curriculum', label: 'Curriculum', icon: BookOpen },
+            ]}
+            activeTab={settingsTab}
+            onTabChange={setSettingsTab}
+            colorScheme="indigo"
+            title="School Settings"
+            subtitle="Manage your school profile, preferences, and governance policies"
+          />
 
           {message && (
             <div className="mx-6 mt-4">
@@ -149,25 +159,7 @@ export default function SchoolAdminSettings() {
             </div>
           )}
 
-          <div className="p-6 max-w-4xl">
-            <Tabs defaultValue="school">
-              <TabsList className="bg-white border border-slate-200 h-10 mb-6">
-                <TabsTrigger value="school" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Building2 className="w-3.5 h-3.5" /> School Profile
-                </TabsTrigger>
-                <TabsTrigger value="submissions" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <FileText className="w-3.5 h-3.5" /> Submission Rules
-                </TabsTrigger>
-                <TabsTrigger value="files" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <HardDrive className="w-3.5 h-3.5" /> File & Storage
-                </TabsTrigger>
-                <TabsTrigger value="integrity" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Shield className="w-3.5 h-3.5" /> Academic Integrity
-                </TabsTrigger>
-                <TabsTrigger value="curriculum" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <BookOpen className="w-3.5 h-3.5" /> Curriculum
-                </TabsTrigger>
-              </TabsList>
+          <div className="flex-1 p-6 max-w-4xl">
 
               {/* ── SCHOOL PROFILE TAB ── */}
               <TabsContent value="school">
