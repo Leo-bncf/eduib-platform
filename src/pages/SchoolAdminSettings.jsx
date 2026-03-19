@@ -257,117 +257,125 @@ export default function SchoolAdminSettings() {
                     </div>
                   </form>
                 )}
-              </TabsContent>
+              </div>}
 
               {/* ── SUBMISSION RULES TAB ── */}
-              <TabsContent value="submissions">
-                {policyLoading ? (
-                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-                ) : (
-                  <div className="max-w-2xl space-y-5">
-                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
-                      <SubmissionRulesPanel form={policyForm} onChange={policyOnChange} />
+              {settingsTab === 'submissions' && (
+                <div>
+                  {policyLoading ? (
+                    <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                  ) : (
+                    <div className="max-w-2xl space-y-5">
+                      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+                        <SubmissionRulesPanel form={policyForm} onChange={policyOnChange} />
+                      </div>
+                      <div className="flex justify-end">
+                        <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                          {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                          Save Submission Policy
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex justify-end">
-                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                        Save Submission Policy
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
+                  )}
+                </div>
+              )}
 
               {/* ── FILE & STORAGE TAB ── */}
-              <TabsContent value="files">
-                {policyLoading ? (
-                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-                ) : (
-                  <div className="max-w-2xl space-y-5">
-                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
-                      <FileSecurityPanel form={policyForm} onChange={policyOnChange} schoolId={schoolId} plan={school?.plan} />
+              {settingsTab === 'files' && (
+                <div>
+                  {policyLoading ? (
+                    <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                  ) : (
+                    <div className="max-w-2xl space-y-5">
+                      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+                        <FileSecurityPanel form={policyForm} onChange={policyOnChange} schoolId={schoolId} plan={school?.plan} />
+                      </div>
+                      <div className="flex justify-end">
+                        <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                          {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                          Save File Policy
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex justify-end">
-                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                        Save File Policy
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
+                  )}
+                </div>
+              )}
 
               {/* ── ACADEMIC INTEGRITY TAB ── */}
-              <TabsContent value="integrity">
-                {policyLoading ? (
-                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-                ) : (
-                  <div className="max-w-2xl space-y-5">
-                    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
-                      <AcademicIntegrityPanel form={policyForm} onChange={policyOnChange} />
+              {settingsTab === 'integrity' && (
+                <div>
+                  {policyLoading ? (
+                    <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                  ) : (
+                    <div className="max-w-2xl space-y-5">
+                      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+                        <AcademicIntegrityPanel form={policyForm} onChange={policyOnChange} />
+                      </div>
+                      <div className="flex justify-end">
+                        <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                          {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                          Save Integrity Policy
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex justify-end">
-                      <Button onClick={() => updatePolicyMutation.mutate(policyForm)} disabled={updatePolicyMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                        {updatePolicyMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                        Save Integrity Policy
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
+                  )}
+                </div>
+              )}
+
               {/* ── CURRICULUM TAB ── */}
-              <TabsContent value="curriculum">
-                {isLoading || !school ? (
-                  <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
-                ) : (
-                  <div className="max-w-2xl space-y-5">
-                    <Card className="shadow-none border-slate-200">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center gap-2">
-                          <BookOpen className="w-4 h-4 text-slate-500" />
-                          <CardTitle className="text-sm">Curriculum System</CardTitle>
-                        </div>
-                        <CardDescription className="text-xs">
-                          Changing the curriculum affects sidebar navigation, grading scales, coordinator roles, and feature availability across the platform.
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="space-y-3">
-                          {CURRICULUM_OPTIONS.map(opt => (
-                            <label
-                              key={opt.value}
-                              className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
-                                school.curriculum === opt.value
-                                  ? 'border-indigo-300 bg-indigo-50'
-                                  : 'border-slate-200 bg-white hover:bg-slate-50'
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="curriculum"
-                                value={opt.value}
-                                checked={school.curriculum === opt.value}
-                                onChange={() => updateSchoolMutation.mutate({ curriculum: opt.value })}
-                                className="mt-0.5 accent-indigo-600"
-                              />
-                              <div>
-                                <p className={`text-sm font-semibold ${school.curriculum === opt.value ? 'text-indigo-800' : 'text-slate-800'}`}>{opt.label}</p>
-                                <p className="text-xs text-slate-500 mt-0.5">{opt.description}</p>
-                              </div>
-                            </label>
-                          ))}
-                        </div>
-                        {updateSchoolMutation.isPending && (
-                          <div className="flex items-center gap-2 text-sm text-slate-500">
-                            <Loader2 className="w-4 h-4 animate-spin" /> Saving…
+              {settingsTab === 'curriculum' && (
+                <div>
+                  {isLoading || !school ? (
+                    <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
+                  ) : (
+                    <div className="max-w-2xl space-y-5">
+                      <Card className="shadow-none border-slate-200">
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center gap-2">
+                            <BookOpen className="w-4 h-4 text-slate-500" />
+                            <CardTitle className="text-sm">Curriculum System</CardTitle>
                           </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </div>
-                )}
-              </TabsContent>
-            </Tabs>
+                          <CardDescription className="text-xs">
+                            Changing the curriculum affects sidebar navigation, grading scales, coordinator roles, and feature availability across the platform.
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="space-y-3">
+                            {CURRICULUM_OPTIONS.map(opt => (
+                              <label
+                                key={opt.value}
+                                className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                                  school.curriculum === opt.value
+                                    ? 'border-indigo-300 bg-indigo-50'
+                                    : 'border-slate-200 bg-white hover:bg-slate-50'
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  name="curriculum"
+                                  value={opt.value}
+                                  checked={school.curriculum === opt.value}
+                                  onChange={() => updateSchoolMutation.mutate({ curriculum: opt.value })}
+                                  className="mt-0.5 accent-indigo-600"
+                                />
+                                <div>
+                                  <p className={`text-sm font-semibold ${school.curriculum === opt.value ? 'text-indigo-800' : 'text-slate-800'}`}>{opt.label}</p>
+                                  <p className="text-xs text-slate-500 mt-0.5">{opt.description}</p>
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                          {updateSchoolMutation.isPending && (
+                            <div className="flex items-center gap-2 text-sm text-slate-500">
+                              <Loader2 className="w-4 h-4 animate-spin" /> Saving…
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
+                </div>
+              )}
           </div>
         </main>
       </div>

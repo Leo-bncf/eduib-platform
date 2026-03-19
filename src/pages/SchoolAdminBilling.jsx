@@ -372,6 +372,7 @@ export default function SchoolAdminBilling() {
               )}
           </div>
         </main>
+
       </div>
 
       <UpgradePrompt open={showUpgrade} onClose={() => setShowUpgrade(false)} />
