@@ -6,17 +6,9 @@ import AppSidebar from '@/components/app/AppSidebar';
 import StatCard from '@/components/app/StatCard';
 import TodaySchedule from '@/components/timetable/TodaySchedule';
 import { useUser } from '@/components/auth/UserContext';
-import { 
-  LayoutDashboard, BookOpen, ClipboardCheck, BarChart3, 
-  MessageSquare, Users, Loader2, Clock, AlertCircle
-} from 'lucide-react';
+import { Loader2, Clock, AlertCircle, BookOpen, Users, ClipboardCheck, BarChart3 } from 'lucide-react';
 import { format } from 'date-fns';
-
-const sidebarLinks = [
-  { label: 'Dashboard', page: 'TeacherDashboard', icon: LayoutDashboard },
-  { label: 'My Classes', page: 'TeacherClasses', icon: BookOpen },
-  { label: 'Messages', page: 'Messages', icon: MessageSquare },
-];
+import { getAppSidebarLinks } from '@/components/app/sidebarLinks';
 
 export default function TeacherDashboard() {
   const { user, school, schoolId } = useUser();
