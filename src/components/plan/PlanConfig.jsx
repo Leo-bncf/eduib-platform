@@ -1,9 +1,15 @@
-// Plan-based feature definitions and limits
+// Student-based pricing tiers
+// Starter:    up to 200 students  @ €24/student/yr
+// Growth:     201–600 students    @ €20/student/yr
+// Enterprise: 600+ students       @ €16/student/yr
+// Teachers are UNLIMITED on all plans.
+
 export const PLAN_LIMITS = {
   starter: {
-    max_users: 100,
-    max_classes: 50,
-    max_students_per_class: 30,
+    max_students: 200,
+    max_teachers: -1, // unlimited
+    max_classes: -1,  // unlimited
+    price_per_student: 24,
     modules: ['core', 'gradebook', 'assignments', 'attendance'],
     features: {
       parent_portal: false,
@@ -17,10 +23,11 @@ export const PLAN_LIMITS = {
       audit_logs: false,
     },
   },
-  professional: {
-    max_users: 500,
-    max_classes: 200,
-    max_students_per_class: 50,
+  growth: {
+    max_students: 600,
+    max_teachers: -1,
+    max_classes: -1,
+    price_per_student: 20,
     modules: ['core', 'gradebook', 'assignments', 'attendance', 'ib_core', 'behavior', 'messaging'],
     features: {
       parent_portal: true,
@@ -35,9 +42,10 @@ export const PLAN_LIMITS = {
     },
   },
   enterprise: {
-    max_users: -1, // unlimited
+    max_students: -1, // unlimited
+    max_teachers: -1,
     max_classes: -1,
-    max_students_per_class: -1,
+    price_per_student: 16,
     modules: ['core', 'gradebook', 'assignments', 'attendance', 'ib_core', 'behavior', 'messaging', 'timetable'],
     features: {
       parent_portal: true,
@@ -55,15 +63,36 @@ export const PLAN_LIMITS = {
 
 export const PLAN_NAMES = {
   starter: 'Starter',
-  professional: 'Professional',
+  growth: 'Growth',
   enterprise: 'Enterprise',
 };
 
-export const PLAN_PRICES = {
-  starter: 99,
-  professional: 299,
-  enterprise: 799,
+export const PLAN_DESCRIPTIONS = {
+  starter: 'Up to 200 students',
+  growth: '201–600 students — most popular',
+  enterprise: '600+ students / multi-campus',
 };
+
+// Price IDs in Stripe (per student per year)
+export const STRIPE_PRICE_IDS = {
+  starter:    'price_1TCqN7BCrwoLhJNy0ZUAckNW',
+  growth:     'price_1TCqN7BCrwoLhJNydURe3Oyz',
+  enterprise: 'price_1TCqN7BCrwoLhJNyELaRhBGI',
+};
+
+// Calculate annual cost for a given plan + student count
+export function calcAnnualCost(plan, studentCount) {
+  const limits = PLAN_LIMITS[plan];
+  if (!limits) return 0;
+  return limits.price_per_student * studentCount;
+}
+
+// Determine which plan applies for a given student count
+export function getPlanForStudentCount(count) {
+  if (count <= 200) return 'starter';
+  if (count <= 600) return 'growth';
+  return 'enterprise';
+}
 
 // Check if a school can access a specific feature
 export function canAccessFeature(plan, feature) {
@@ -83,16 +112,25 @@ export function getPlanLimit(plan, limitKey) {
   return limits[limitKey];
 }
 
-// Check if school is within limits
-export function isWithinLimit(plan, limitKey, currentValue) {
-  const limit = getPlanLimit(plan, limitKey);
-  if (limit === -1) return true; // unlimited
-  return currentValue < limit;
+// Check if school is within student limits
+export function isWithinStudentLimit(plan, studentCount) {
+  const limit = getPlanLimit(plan, 'max_students');
+  if (limit === -1) return true;
+  return studentCount <= limit;
 }
 
-// Get all available plans for upgrade
+// Get all available plans for upgrade from current
 export function getUpgradePlans(currentPlan) {
-  const planOrder = ['starter', 'professional', 'enterprise'];
+  const planOrder = ['starter', 'growth', 'enterprise'];
   const currentIndex = planOrder.indexOf(currentPlan);
   return planOrder.slice(currentIndex + 1);
 }
+
+// Legacy compat — keep PLAN_PRICES pointing to per-student rates
+export const PLAN_PRICES = {
+  starter: 24,
+  growth: 20,
+  enterprise: 16,
+  // legacy keys
+  professional: 20,
+};

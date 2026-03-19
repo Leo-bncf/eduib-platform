@@ -1,14 +1,15 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
 import Stripe from 'npm:stripe@17.5.0';
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'), {
   apiVersion: '2024-12-18.acacia',
 });
 
+// Per-student annual price IDs (EUR)
 const PRICE_IDS = {
-  starter: 'price_1T57DeBCrwoLhJNyWKJ8UGjO',
-  professional: 'price_1T57DeBCrwoLhJNy1oR4SAgL',
-  enterprise: 'price_1T57DeBCrwoLhJNyaIhnHSbE',
+  starter:    'price_1TCqN7BCrwoLhJNy0ZUAckNW',  // €24/student/yr
+  growth:     'price_1TCqN7BCrwoLhJNydURe3Oyz',  // €20/student/yr
+  enterprise: 'price_1TCqN7BCrwoLhJNyELaRhBGI',  // €16/student/yr
 };
 
 Deno.serve(async (req) => {
@@ -20,21 +21,31 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { schoolId, plan } = await req.json();
+    const { schoolId, plan, studentCount } = await req.json();
 
     if (!schoolId || !plan) {
       return Response.json({ error: 'School ID and plan required' }, { status: 400 });
     }
 
-    // Verify user has access to this school (school_admin or super_admin)
-    if (user.role !== 'super_admin') {
+    const quantity = parseInt(studentCount) || 50;
+    if (quantity < 1) {
+      return Response.json({ error: 'Student count must be at least 1' }, { status: 400 });
+    }
+
+    // Validate student count against plan limits
+    const planLimits = { starter: 200, growth: 600, enterprise: Infinity };
+    if (plan !== 'enterprise' && quantity > planLimits[plan]) {
+      return Response.json({ error: `Student count exceeds ${plan} plan limit` }, { status: 400 });
+    }
+
+    // Verify user has access to this school
+    if (user.role !== 'super_admin' && user.role !== 'admin') {
       const memberships = await base44.entities.SchoolMembership.filter({
         user_id: user.id,
         school_id: schoolId,
         status: 'active'
       });
-      
-      if (memberships.length === 0 || !['school_admin', 'admin'].includes(memberships[0].role)) {
+      if (memberships.length === 0 || !['school_admin'].includes(memberships[0].role)) {
         return Response.json({ error: 'Forbidden' }, { status: 403 });
       }
     }
@@ -48,7 +59,6 @@ Deno.serve(async (req) => {
 
     // Get or create Stripe customer
     let customerId = school.stripe_customer_id;
-    
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: school.billing_email || school.email,
@@ -59,8 +69,6 @@ Deno.serve(async (req) => {
         },
       });
       customerId = customer.id;
-
-      // Update school with customer ID
       await base44.asServiceRole.entities.School.update(schoolId, {
         stripe_customer_id: customerId,
       });
@@ -71,14 +79,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
-    // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
       line_items: [
         {
           price: priceId,
-          quantity: 1,
+          quantity: quantity,
         },
       ],
       success_url: `${req.headers.get('origin')}/SchoolAdminBilling?success=true`,
@@ -86,12 +93,14 @@ Deno.serve(async (req) => {
       metadata: {
         school_id: schoolId,
         plan: plan,
+        student_count: String(quantity),
         base44_app_id: Deno.env.get('BASE44_APP_ID'),
       },
       subscription_data: {
         metadata: {
           school_id: schoolId,
           plan: plan,
+          student_count: String(quantity),
         },
         trial_period_days: 14,
       },
