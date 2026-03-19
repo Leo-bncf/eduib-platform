@@ -122,11 +122,11 @@ export default function SchoolAdminEnrollments() {
 
         <main className="md:ml-64 min-h-screen flex flex-col">
           <div className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
-            <h1 className="text-base font-semibold text-slate-900">Enrollments & Curriculum</h1>
+            <h1 className="text-base font-black text-slate-900 tracking-tight">Enrollments & Curriculum</h1>
             <p className="text-xs text-slate-400 mt-0.5">Manage class rosters, assign students, and map subjects to teachers</p>
           </div>
 
-          <div className="p-6 space-y-3">
+          <div className="flex-1 p-6 space-y-3">
             <div className="relative max-w-xs">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <Input placeholder="Search classes…" value={search} onChange={e => setSearch(e.target.value)} className="pl-9 bg-white" />
