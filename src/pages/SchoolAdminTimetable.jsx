@@ -18,7 +18,7 @@ import ConflictResolutionTab from '@/components/timetable/ConflictResolutionTab'
 
 export default function SchoolAdminTimetable() {
   const { user, school, schoolId } = useUser();
-  const [activeTab, setActiveTab] = React.useState('structure');
+  const [activeTab, setActiveTab] = useState('structure');
 
   const {
     scheduleEntries, periods, rooms, syncHistory, settings,
