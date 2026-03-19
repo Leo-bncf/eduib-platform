@@ -21,6 +21,9 @@ export default function ImpersonationBanner() {
         <span>
           Impersonating <strong>{impersonation.school?.name}</strong> as{' '}
           <strong className="capitalize">{impersonation.membershipRole.replace('_', ' ')}</strong>
+          {impersonation.curriculumOverride && (
+            <span className="ml-2 bg-white/20 px-1.5 py-0.5 rounded text-xs font-mono">{impersonation.curriculumOverride}</span>
+          )}
         </span>
       </div>
       <button
