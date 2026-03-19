@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, Loader2, GraduationCap, Users, BookOpen, Zap } from 'lucide-react';
+import { CheckCircle2, Loader2, GraduationCap, Users, BookOpen, Zap, CreditCard } from 'lucide-react';
 import { PLAN_LIMITS, PLAN_NAMES, PLAN_DESCRIPTIONS, calcAnnualCost } from './PlanConfig';
 
 const PLANS = [
@@ -204,14 +204,5 @@ export default function StudentPricingUpgrade({ schoolId, currentPlan, currentSt
         14-day free trial included. Annual billing. Cancel anytime via Stripe portal. Prices in EUR, excl. VAT.
       </p>
     </div>
-  );
-}
-
-function CreditCard({ className }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-      <line x1="1" y1="10" x2="23" y2="10"/>
-    </svg>
   );
 }
