@@ -265,31 +265,33 @@ export default function SubjectCatalogTab({ schoolId, curriculum = 'ib_dp' }) {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs font-semibold">Code</Label>
-                <Input value={form.code} onChange={e => setForm({ ...form, code: e.target.value })} placeholder="MATH_AA" className="mt-1 font-mono" />
+                <Input value={form.code} onChange={e => setForm({ ...form, code: e.target.value })} placeholder="e.g. MATH" className="mt-1 font-mono" />
               </div>
+              {hasSubjectLevels && (
+                <div>
+                  <Label className="text-xs font-semibold">Level</Label>
+                  <Select value={form.level || 'na'} onValueChange={v => setForm({ ...form, level: v })}>
+                    <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {currConfig.subjectLevels.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                      <SelectItem value="na">N/A</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
+            {hasSubjectGroups && (
               <div>
-                <Label className="text-xs font-semibold">Level</Label>
-                <Select value={form.level} onValueChange={v => setForm({ ...form, level: v })}>
-                  <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                <Label className="text-xs font-semibold">Subject Group</Label>
+                <Select value={form.ib_group || 'none'} onValueChange={v => setForm({ ...form, ib_group: v === 'none' ? '' : v })}>
+                  <SelectTrigger className="mt-1"><SelectValue placeholder="Select group…" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="HL">Higher Level (HL)</SelectItem>
-                    <SelectItem value="SL">Standard Level (SL)</SelectItem>
-                    <SelectItem value="core">Core</SelectItem>
-                    <SelectItem value="na">N/A</SelectItem>
+                    <SelectItem value="none">None / Not applicable</SelectItem>
+                    {currGroups.map(g => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-            <div>
-              <Label className="text-xs font-semibold">IB Group</Label>
-              <Select value={form.ib_group || 'none'} onValueChange={v => setForm({ ...form, ib_group: v === 'none' ? '' : v })}>
-                <SelectTrigger className="mt-1"><SelectValue placeholder="Select IB group…" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">None / Not applicable</SelectItem>
-                  {IB_GROUPS.map(g => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
+            )}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs font-semibold">Department Tag</Label>
