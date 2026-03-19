@@ -77,7 +77,7 @@ export default function Messages() {
     enabled: !!schoolId && !!user?.id,
   });
 
-  const sidebarLinks = getSidebarLinks(role);
+  const sidebarLinks = getAppSidebarLinks(role);
   const classIds = myClasses.map(c => c.id);
   const isAdminOrCoord = role === 'school_admin' || role === 'ib_coordinator';
 
