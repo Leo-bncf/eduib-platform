@@ -149,9 +149,10 @@ export default function SubjectCatalogTab({ schoolId, curriculum = 'ib_dp' }) {
     return matchSearch && matchGroup && matchLevel;
   });
 
-  // Group by IB group for display
-  const grouped = IB_GROUPS.map(g => ({ ...g, items: filtered.filter(s => s.ib_group === g.value) })).filter(g => g.items.length > 0);
-  const noGroup = filtered.filter(s => !s.ib_group);
+  // Group by subject group for display (using curriculum-appropriate groups)
+  const displayGroups = hasSubjectGroups ? currGroups : (isIBDP ? IB_GROUPS : []);
+  const grouped = displayGroups.map(g => ({ ...g, items: filtered.filter(s => s.ib_group === g.value) })).filter(g => g.items.length > 0);
+  const noGroup = filtered.filter(s => !s.ib_group || !displayGroups.some(g => g.value === s.ib_group));
 
   const notYetAdded = isIBDP ? IB_QUICK_ADD.filter(q => !subjects.some(s => s.code === q.code)) : [];
 
@@ -208,9 +209,9 @@ export default function SubjectCatalogTab({ schoolId, curriculum = 'ib_dp' }) {
         <div className="bg-white border border-dashed border-slate-300 rounded-lg p-12 text-center">
           <Library className="w-10 h-10 text-slate-200 mx-auto mb-3" />
           <p className="text-sm font-semibold text-slate-500">No subjects yet</p>
-          <p className="text-xs text-slate-400 mt-1 mb-4">Add IB subjects individually or use Quick Add to import common IB subjects at once.</p>
+          <p className="text-xs text-slate-400 mt-1 mb-4">Add subjects individually{isIBDP ? ' or use Quick Add to import common IB subjects at once' : ''}.</p>
           <div className="flex gap-2 justify-center flex-wrap">
-            <Button variant="outline" onClick={() => setShowQuickAdd(true)} className="h-8 text-xs gap-1.5"><Library className="w-3.5 h-3.5" /> Quick Add IB</Button>
+            {isIBDP && <Button variant="outline" onClick={() => setShowQuickAdd(true)} className="h-8 text-xs gap-1.5"><Library className="w-3.5 h-3.5" /> Quick Add IB</Button>}
             <Button onClick={openCreate} className="bg-indigo-600 hover:bg-indigo-700 h-8 text-xs gap-1.5"><Plus className="w-3.5 h-3.5" /> Custom Subject</Button>
           </div>
         </div>
