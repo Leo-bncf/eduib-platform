@@ -204,6 +204,7 @@ const CURRICULA = {
 
     coordinatorRole: 'coordinator',
     coordinatorLabel: 'Examinations Coordinator',
+    labels: { predictedGrades: 'Grade Forecasts' },
 
     features: {
       predictedGrades: true,
@@ -252,6 +253,7 @@ const CURRICULA = {
 
     coordinatorRole: 'coordinator',
     coordinatorLabel: 'Academic Coordinator',
+    labels: { predictedGrades: 'Grade Forecasts' },
 
     features: {
       predictedGrades: true,
