@@ -49,6 +49,7 @@ export default function SchoolAdminBilling() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [billingTab, setBillingTab] = useState('status');
 
   const { data: schoolData, refetch } = useQuery({
     queryKey: ['school-billing', schoolId],
