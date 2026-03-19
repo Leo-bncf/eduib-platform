@@ -392,7 +392,7 @@ export default function SchoolAnalytics() {
                 <h1 className="text-base font-black text-slate-900 tracking-tight">School Analytics</h1>
                 <p className="text-xs text-slate-400 mt-0.5">Performance, attendance, and pastoral trends across your school.</p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 items-end">
                 <div>
                   <p className="text-xs text-slate-500 mb-1">Cohort</p>
                   <Select value={cohortFilter} onValueChange={setCohortFilter}>
