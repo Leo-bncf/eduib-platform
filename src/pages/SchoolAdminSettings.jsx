@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AdminTabNavigation from '@/components/admin/AdminTabNavigation';
 import {
   Loader2, CheckCircle2, AlertCircle, Building2, Globe, Bell, Shield, HardDrive,
   FileText, Settings, BookOpen
