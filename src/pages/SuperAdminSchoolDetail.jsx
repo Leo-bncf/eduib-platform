@@ -280,6 +280,26 @@ export default function SuperAdminSchoolDetail() {
                 <CardTitle className="text-base md:text-lg">Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 p-4 md:p-6 pt-0 md:pt-0">
+                <div className="pb-2 mb-1 border-b border-slate-100 space-y-1.5">
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Impersonate</p>
+                  <Button
+                    onClick={() => handleImpersonate('school_admin')}
+                    className="w-full justify-start text-xs md:text-sm bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200"
+                    variant="outline"
+                  >
+                    <Eye className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
+                    View as School Admin
+                  </Button>
+                  <Button
+                    onClick={() => handleImpersonate('teacher')}
+                    className="w-full justify-start text-xs md:text-sm bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200"
+                    variant="outline"
+                  >
+                    <Eye className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
+                    View as Teacher
+                  </Button>
+                </div>
+
                 <Button onClick={() => setEditDialogOpen(true)} disabled={actionLoading} className="w-full justify-start text-xs md:text-sm" variant="outline">
                   <Edit2 className="w-3 md:w-4 h-3 md:h-4 mr-1 md:mr-2" />
                   Edit Details
