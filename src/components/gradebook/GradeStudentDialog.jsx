@@ -11,11 +11,17 @@ import { Loader2, Lock } from 'lucide-react';
 import { logAudit, AuditActions, AuditLevels } from '@/components/utils/auditLogger';
 import { useGradebookPolicy } from '@/hooks/useGradebookPolicy';
 import { useUser } from '@/components/auth/UserContext';
+import { getCurriculumConfig } from '@/lib/curriculumConfig';
 
 export default function GradeStudentDialog({ gradeItem, student, existingGrade, open, onClose }) {
   const queryClient = useQueryClient();
-  const { membership } = useUser();
+  const { membership, curriculum } = useUser();
   const { policy } = useGradebookPolicy(gradeItem?.school_id);
+  const currConfig = getCurriculumConfig(curriculum);
+  const gradeScale = currConfig.gradeScale;
+  const showIBGrade = currConfig.features?.ibGradeScale;
+  const isLetterScale = gradeScale.type === 'letter';
+  const isDescriptiveScale = gradeScale.type === 'descriptive';
   const [justification, setJustification] = useState('');
   const [form, setForm] = useState({
     score: existingGrade?.score || '',
@@ -145,18 +151,42 @@ export default function GradeStudentDialog({ gradeItem, student, existingGrade, 
                 <span className="text-sm text-slate-500">/ {gradeItem.max_score}</span>
               </div>
             </div>
-            <div>
-              <Label className="text-sm font-semibold">IB Grade (1-7)</Label>
-              <Input
-                type="number"
-                min="1"
-                max="7"
-                value={form.ib_grade}
-                onChange={e => setForm({ ...form, ib_grade: e.target.value ? Number(e.target.value) : '' })}
-                placeholder="1-7"
-                className="mt-1.5"
-              />
-            </div>
+            {showIBGrade && (
+              <div>
+                <Label className="text-sm font-semibold">{gradeScale.displayLabel} Grade</Label>
+                <Input
+                  type="number"
+                  min={gradeScale.min}
+                  max={gradeScale.max}
+                  value={form.ib_grade}
+                  onChange={e => setForm({ ...form, ib_grade: e.target.value ? Number(e.target.value) : '' })}
+                  placeholder={`${gradeScale.min}–${gradeScale.max}`}
+                  className="mt-1.5"
+                />
+              </div>
+            )}
+            {isLetterScale && (
+              <div>
+                <Label className="text-sm font-semibold">Grade ({gradeScale.displayLabel})</Label>
+                <Select value={form.ib_grade || ''} onValueChange={v => setForm({ ...form, ib_grade: v })}>
+                  <SelectTrigger className="mt-1.5"><SelectValue placeholder="Select grade…" /></SelectTrigger>
+                  <SelectContent>
+                    {gradeScale.values.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            {isDescriptiveScale && (
+              <div>
+                <Label className="text-sm font-semibold">Achievement Level</Label>
+                <Select value={form.ib_grade || ''} onValueChange={v => setForm({ ...form, ib_grade: v })}>
+                  <SelectTrigger className="mt-1.5"><SelectValue placeholder="Select level…" /></SelectTrigger>
+                  <SelectContent>
+                    {gradeScale.values.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
 
           <div>
