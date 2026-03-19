@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import RoleGuard from '@/components/auth/RoleGuard';
 import AppSidebar from '@/components/app/AppSidebar';
 import { useUser } from '@/components/auth/UserContext';
