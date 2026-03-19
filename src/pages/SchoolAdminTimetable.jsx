@@ -6,8 +6,7 @@ import {
   Activity, MapPin, AlertTriangle, Link2, Settings,
 } from 'lucide-react';
 import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
+import AdminTabNavigation from '@/components/admin/AdminTabNavigation';
 
 import { useTimetableData, OVERRIDE_POLICY_CONFIG } from '@/components/timetable/useTimetableData';
 import TimetableStructureTab from '@/components/timetable/TimetableStructureTab';
