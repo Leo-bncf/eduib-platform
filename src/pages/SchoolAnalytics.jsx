@@ -385,13 +385,12 @@ export default function SchoolAnalytics() {
       <div className="min-h-screen bg-slate-50">
         <AppSidebar links={SCHOOL_ADMIN_SIDEBAR_LINKS} role="school_admin" schoolName={school?.name} userName={user?.full_name} userId={user?.id} schoolId={schoolId} />
 
-        <main className="md:ml-64 p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <main className="md:ml-64 min-h-screen flex flex-col">
+          <div className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-4 max-w-7xl mx-auto">
               <div>
-                <h1 className="text-2xl font-bold text-slate-900">School Analytics</h1>
-                <p className="text-slate-500 mt-1 text-sm">Performance, attendance, and pastoral trends across your school.</p>
+                <h1 className="text-base font-black text-slate-900 tracking-tight">School Analytics</h1>
+                <p className="text-xs text-slate-400 mt-0.5">Performance, attendance, and pastoral trends across your school.</p>
               </div>
               <div className="flex flex-wrap gap-3">
                 <div>
