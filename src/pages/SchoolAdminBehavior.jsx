@@ -6,6 +6,7 @@ import {
   BarChart2, Tag, Shield, Download, ShieldCheck, AlertTriangle,
 } from 'lucide-react';
 import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
+import AdminTabNavigation from '@/components/admin/AdminTabNavigation';
 
 import BehaviorDashboard from '@/components/behavior-admin/BehaviorDashboard';
 import BehaviorPolicyConfig from '@/components/behavior-admin/BehaviorPolicyConfig';
