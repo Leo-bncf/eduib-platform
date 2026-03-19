@@ -31,8 +31,7 @@ const getSidebarLinks = (role) => {
 };
 
 export default function Messages() {
-  const { user, school, schoolId, membership } = useUser();
-  const role = membership?.role;
+  const { user, school, schoolId, role } = useUser();
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [activeTab, setActiveTab] = useState('messages');
 
