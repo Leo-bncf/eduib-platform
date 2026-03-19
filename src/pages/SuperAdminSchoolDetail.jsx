@@ -44,10 +44,27 @@ export default function SuperAdminSchoolDetail() {
   const [billingDialogOpen, setBillingDialogOpen] = useState(false);
   const [addAdminDialogOpen, setAddAdminDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [curriculumOverride, setCurriculumOverride] = useState('');
+
+  const CURRICULUM_OPTIONS = [
+    { value: '', label: 'Use school default' },
+    { value: 'ib_dp', label: 'IB Diploma Programme' },
+    { value: 'ib_myp', label: 'IB Middle Years' },
+    { value: 'ib_pyp', label: 'IB Primary Years' },
+    { value: 'igcse', label: 'IGCSE' },
+    { value: 'a_levels', label: 'A Levels' },
+    { value: 'us_common_core', label: 'US Common Core' },
+  ];
+
+  const roleRedirects = {
+    school_admin: '/SchoolAdminDashboard',
+    teacher: '/TeacherDashboard',
+    student: '/StudentDashboard',
+  };
 
   const handleImpersonate = (role) => {
-    impersonate(school, role);
-    navigate('/SchoolAdminDashboard');
+    impersonate(school, role, curriculumOverride || null);
+    navigate(roleRedirects[role] || '/SchoolAdminDashboard');
   };
 
   const reloadSchool = async () => {
