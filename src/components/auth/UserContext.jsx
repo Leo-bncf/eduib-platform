@@ -52,12 +52,19 @@ export function UserProvider({ children }) {
   };
 
   const getRole = () => {
+    if (impersonation) return impersonation.membershipRole;
     if (user?.role === 'super_admin') return 'super_admin';
     return membership?.role || user?.role || 'user';
   };
 
   const getSchoolId = () => {
+    if (impersonation) return impersonation.school?.id || null;
     return membership?.school_id || null;
+  };
+
+  const getSchool = () => {
+    if (impersonation) return impersonation.school || null;
+    return school;
   };
 
   // Permission checking helpers
