@@ -259,14 +259,17 @@ function App() {
 
   return (
     <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <RLSProvider>
-          <Router>
-            <AuthenticatedApp />
-          </Router>
-        </RLSProvider>
-        <Toaster />
-      </QueryClientProvider>
+      <ImpersonationProvider>
+        <QueryClientProvider client={queryClientInstance}>
+          <RLSProvider>
+            <Router>
+              <ImpersonationBanner />
+              <AuthenticatedApp />
+            </Router>
+          </RLSProvider>
+          <Toaster />
+        </QueryClientProvider>
+      </ImpersonationProvider>
     </AuthProvider>
   )
 }
