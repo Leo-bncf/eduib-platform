@@ -46,7 +46,7 @@ function ItemRow({ label, description, available, lockedOnPlan }) {
 }
 
 function findUnlockPlan(key, type) {
-  const order = ['starter', 'professional', 'enterprise'];
+  const order = ['starter', 'growth', 'enterprise'];
   for (const p of order) {
     const limits = PLAN_LIMITS[p];
     const available = type === 'module' ? limits.modules.includes(key) : limits.features[key] === true;

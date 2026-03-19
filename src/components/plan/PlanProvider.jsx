@@ -63,7 +63,9 @@ export function PlanProvider({ children }) {
       },
       canCreateMore: (limitKey, currentCount) => {
         if (isBlocked) return false;
-        return isWithinLimit(plan, limitKey, currentCount);
+        const limit = getPlanLimit(plan, limitKey);
+        if (limit === -1) return true;
+        return currentCount < limit;
       },
       getLimit: (limitKey) => getPlanLimit(plan, limitKey),
     };
