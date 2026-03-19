@@ -26,14 +26,17 @@ Deno.serve(async (req) => {
         const session = event.data.object;
         const schoolId = session.metadata?.school_id;
         const plan = session.metadata?.plan;
+        const studentCount = parseInt(session.metadata?.student_count) || null;
 
         if (schoolId && session.subscription) {
-          await base44.asServiceRole.entities.School.update(schoolId, {
+          const updatePayload = {
             stripe_subscription_id: session.subscription,
             plan: plan,
             billing_status: 'trial',
-          });
-          console.log(`Subscription created for school ${schoolId}`);
+          };
+          if (studentCount) updatePayload.max_students = studentCount;
+          await base44.asServiceRole.entities.School.update(schoolId, updatePayload);
+          console.log(`Subscription created for school ${schoolId}, plan ${plan}, students ${studentCount}`);
         }
         break;
       }

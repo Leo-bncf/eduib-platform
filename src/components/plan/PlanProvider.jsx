@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { useUser } from '@/components/auth/UserContext';
-import { canAccessFeature, canAccessModule, isWithinLimit, getPlanLimit } from './PlanConfig';
+import { canAccessFeature, canAccessModule, getPlanLimit } from './PlanConfig';
 
 const PlanContext = createContext(null);
 
