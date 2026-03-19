@@ -28,7 +28,7 @@ import SchoolAdminGovernance from './pages/SchoolAdminGovernance';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { RLSProvider } from '@/components/security/RLSProvider';
-import { ImpersonationProvider } from '@/components/auth/ImpersonationContext';
+import { ImpersonationProvider, useImpersonation } from '@/components/auth/ImpersonationContext';
 import ImpersonationBanner from '@/components/auth/ImpersonationBanner';
 
 const { Pages, Layout, mainPage } = pagesConfig;
