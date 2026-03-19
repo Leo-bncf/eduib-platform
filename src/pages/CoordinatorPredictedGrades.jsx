@@ -91,8 +91,8 @@ export default function CoordinatorPredictedGrades() {
         <main className="ml-64 p-8">
           <div className="max-w-7xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">Predicted IB Grades</h1>
-              <p className="text-slate-600">Monitor predicted grades across all DP students and classes</p>
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">{isIBDP ? 'Predicted IB Grades' : 'Grade Forecasts'}</h1>
+              <p className="text-slate-600">Monitor {isIBDP ? 'predicted grades across all DP' : 'forecasted grades across all'} students and classes</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -114,8 +114,8 @@ export default function CoordinatorPredictedGrades() {
                     <BarChart3 className="w-5 h-5 text-violet-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500">Average Predicted</p>
-                    <p className="text-2xl font-bold text-slate-900">{averagePredicted}</p>
+                    <p className="text-sm text-slate-500">Average {isIBDP ? 'Predicted' : 'Forecast'}</p>
+                     <p className="text-2xl font-bold text-slate-900">{averagePredicted} {isIBDP ? `/ ${gradeScale.max}` : gradeScale.displayLabel}</p>
                   </div>
                 </div>
               </div>
