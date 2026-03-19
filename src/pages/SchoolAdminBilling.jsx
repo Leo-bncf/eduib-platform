@@ -157,7 +157,7 @@ export default function SchoolAdminBilling() {
             )}
 
               {/* ── SUBSCRIPTION STATUS ── */}
-              <TabsContent value="status" className="mt-5">
+              {billingTab === 'status' && <div className="mt-5">
                 <div className="grid md:grid-cols-3 gap-5">
                   <div className="md:col-span-2 bg-white rounded-xl border border-slate-200 p-6 space-y-5">
                     <div className="flex items-start justify-between">
