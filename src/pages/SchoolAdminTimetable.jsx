@@ -47,103 +47,57 @@ export default function SchoolAdminTimetable() {
         />
 
         <main className="md:ml-64 min-h-screen flex flex-col">
-          {/* Header */}
-          <div className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
-            <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto">
-              <div>
-                <h1 className="text-base font-black text-slate-900 tracking-tight">Timetable & Integration Controls</h1>
-                <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                  <p className="text-xs text-slate-400">
-                    {scheduleEntries.filter(e => e.status === 'active').length} schedule entries · {periods.length} periods · {rooms.length} rooms
-                  </p>
-                  {settings?.sync_enabled && (
-                    <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${policyCfg.color}`}>
-                      {policyCfg.icon} {policyCfg.label}
-                    </span>
-                  )}
-                  {openConflicts > 0 && (
-                    <span className="text-[11px] font-medium px-2 py-0.5 rounded-full border bg-amber-50 text-amber-700 border-amber-200 flex items-center gap-1">
-                      <AlertTriangle className="w-3 h-3" />{openConflicts} conflict{openConflicts !== 1 ? 's' : ''}
-                    </span>
-                  )}
-                  {lastSyncFailed && (
-                    <span className="text-[11px] font-medium px-2 py-0.5 rounded-full border bg-red-50 text-red-700 border-red-200">
-                      Last sync failed
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+          <AdminTabNavigation
+            tabs={[
+              { id: 'structure', label: 'Structure', icon: MapPin },
+              { id: 'sync-settings', label: 'Sync Settings', icon: Settings },
+              { id: 'monitor', label: 'Monitor & Logs', icon: Activity, badge: (openConflicts > 0 || lastSyncFailed) ? '!' : null },
+              { id: 'conflicts', label: 'Conflict Resolution', icon: Link2, badge: openConflicts > 0 ? openConflicts : null },
+            ]}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            colorScheme="indigo"
+            title="Timetable & Integration Controls"
+            subtitle={`${scheduleEntries.filter(e => e.status === 'active').length} schedule entries · ${periods.length} periods · ${rooms.length} rooms`}
+          />
 
-          {/* Tabs */}
-          <div className="flex-1 p-4 md:p-6 max-w-6xl mx-auto w-full">
-            <Tabs defaultValue="structure">
-              <TabsList className="bg-white border border-slate-200 h-10 mb-6 flex-wrap h-auto gap-0">
-                <TabsTrigger value="structure" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <MapPin className="w-3.5 h-3.5" /> Structure
-                </TabsTrigger>
-                <TabsTrigger value="sync-settings" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Settings className="w-3.5 h-3.5" /> Sync Settings
-                </TabsTrigger>
-                <TabsTrigger value="monitor" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Activity className="w-3.5 h-3.5" /> Monitor & Logs
-                  {(openConflicts > 0 || lastSyncFailed) && (
-                    <span className="ml-0.5 bg-amber-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                      !
-                    </span>
-                  )}
-                </TabsTrigger>
-                <TabsTrigger value="conflicts" className="text-xs gap-1.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700">
-                  <Link2 className="w-3.5 h-3.5" /> Conflict Resolution
-                  {openConflicts > 0 && (
-                    <span className="ml-0.5 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                      {openConflicts > 9 ? '9+' : openConflicts}
-                    </span>
-                  )}
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="structure">
-                <TimetableStructureTab
-                  schoolId={schoolId}
-                  periods={periods}
-                  rooms={rooms}
-                  scheduleEntries={scheduleEntries}
-                  settings={settings}
-                />
-              </TabsContent>
-
-              <TabsContent value="sync-settings">
-                <SyncSettingsTab
-                  schoolId={schoolId}
-                  settings={settings}
-                />
-              </TabsContent>
-
-              <TabsContent value="monitor">
-                <SyncMonitorTab
-                  schoolId={schoolId}
-                  syncHistory={syncHistory}
-                  settings={settings}
-                  scheduleEntries={scheduleEntries}
-                  periods={periods}
-                  rooms={rooms}
-                />
-              </TabsContent>
-
-              <TabsContent value="conflicts">
-                <ConflictResolutionTab
-                  schoolId={schoolId}
-                  syncHistory={syncHistory}
-                  settings={settings}
-                  memberships={memberships}
-                  classes={classes}
-                  rooms={rooms}
-                  periods={periods}
-                />
-              </TabsContent>
-            </Tabs>
+          <div className="flex-1 p-6">
+            {activeTab === 'structure' && (
+              <TimetableStructureTab
+                schoolId={schoolId}
+                periods={periods}
+                rooms={rooms}
+                scheduleEntries={scheduleEntries}
+                settings={settings}
+              />
+            )}
+            {activeTab === 'sync-settings' && (
+              <SyncSettingsTab
+                schoolId={schoolId}
+                settings={settings}
+              />
+            )}
+            {activeTab === 'monitor' && (
+              <SyncMonitorTab
+                schoolId={schoolId}
+                syncHistory={syncHistory}
+                settings={settings}
+                scheduleEntries={scheduleEntries}
+                periods={periods}
+                rooms={rooms}
+              />
+            )}
+            {activeTab === 'conflicts' && (
+              <ConflictResolutionTab
+                schoolId={schoolId}
+                syncHistory={syncHistory}
+                settings={settings}
+                memberships={memberships}
+                classes={classes}
+                rooms={rooms}
+                periods={periods}
+              />
+            )}
           </div>
         </main>
       </div>
