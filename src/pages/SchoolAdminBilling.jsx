@@ -291,16 +291,14 @@ export default function SchoolAdminBilling() {
                     </div>
                   </div>
                 </div>
-              </TabsContent>
+              </div>}
 
               {/* ── PLAN FEATURES ── */}
-              <TabsContent value="modules" className="mt-5">
-                <ModuleStatusGrid currentPlan={currentPlan} />
-              </TabsContent>
+              {billingTab === 'modules' && <div className="mt-5"><ModuleStatusGrid currentPlan={currentPlan} /></div>}
 
               {/* ── UPGRADE ── */}
-              {upgradePlans.length > 0 && (
-                <TabsContent value="upgrade" className="mt-5">
+              {billingTab === 'upgrade' && upgradePlans.length > 0 && (
+                <div className="mt-5">
                   <div className="grid md:grid-cols-2 gap-5">
                     {upgradePlans.map(targetPlan => {
                       const limits = PLAN_LIMITS[targetPlan];
