@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   DollarSign,
   Edit2,
+  Eye,
   Loader2,
   Lock,
   Trash2,
@@ -17,6 +18,7 @@ import {
   Users,
   Zap,
 } from 'lucide-react';
+import { useImpersonation } from '@/components/auth/ImpersonationContext';
 import EditSchoolDialog from '@/components/admin/EditSchoolDialog';
 import ManageBillingDialog from '@/components/admin/ManageBillingDialog';
 import AddSchoolAdminDialog from '@/components/admin/super-admin/AddSchoolAdminDialog';
