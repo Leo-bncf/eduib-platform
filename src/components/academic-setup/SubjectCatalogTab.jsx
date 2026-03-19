@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Loader2, Pencil, Trash2, Library, Search } from 'lucide-react';
+import { getCurriculumConfig } from '@/lib/curriculumConfig';
 
 const IB_GROUPS = [
   { value: 'group1_language_literature',  label: 'Group 1 – Language & Literature',   short: 'G1' },
@@ -26,15 +27,25 @@ const IB_GROUP_MAP = Object.fromEntries(IB_GROUPS.map(g => [g.value, g]));
 const LEVEL_STYLES = {
   HL:   'bg-rose-50 text-rose-700 border-rose-200',
   SL:   'bg-blue-50 text-blue-700 border-blue-200',
+  AS:   'bg-sky-50 text-sky-700 border-sky-200',
+  A2:   'bg-indigo-50 text-indigo-700 border-indigo-200',
+  'A Level': 'bg-violet-50 text-violet-700 border-violet-200',
+  Core: 'bg-slate-50 text-slate-600 border-slate-200',
+  Extended: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  Standard: 'bg-blue-50 text-blue-700 border-blue-200',
+  Honors: 'bg-amber-50 text-amber-700 border-amber-200',
+  AP:   'bg-rose-50 text-rose-700 border-rose-200',
   core: 'bg-amber-50 text-amber-700 border-amber-200',
   na:   'bg-slate-50 text-slate-500 border-slate-200',
 };
 
 const GRADING_TYPES = [
   { value: 'ib_1_7',   label: 'IB 1–7 Scale' },
-  { value: 'rubric',   label: 'Rubric-based' },
+  { value: 'letter',   label: 'Letter Grade (A*–U)' },
   { value: 'percentage', label: 'Percentage' },
+  { value: 'rubric',   label: 'Rubric-based' },
   { value: 'pass_fail', label: 'Pass / Fail' },
+  { value: 'descriptive', label: 'Descriptive (PYP)' },
 ];
 
 const EMPTY = { name: '', code: '', level: 'na', ib_group: '', department: '', default_grading_type: '', status: 'active' };
@@ -53,8 +64,16 @@ const IB_QUICK_ADD = [
   { name: 'CAS', code: 'CAS', level: 'core', ib_group: 'core_cas' },
 ];
 
-export default function SubjectCatalogTab({ schoolId }) {
+export default function SubjectCatalogTab({ schoolId, curriculum = 'ib_dp' }) {
   const qc = useQueryClient();
+  const currConfig = getCurriculumConfig(curriculum);
+  const hasSubjectGroups = currConfig.features?.subjectGroups && currConfig.subjectGroups?.length > 0;
+  const hasSubjectLevels = currConfig.features?.subjectLevels && currConfig.subjectLevels?.length > 0;
+  const isIBDP = curriculum === 'ib_dp';
+  // Build group list from curriculum config (fall back to IB groups for ib_dp)
+  const currGroups = hasSubjectGroups
+    ? currConfig.subjectGroups.map(v => ({ value: v, label: currConfig.subjectGroupLabels[v] || v, short: v.slice(0, 4).toUpperCase() }))
+    : [];
   const [showDialog, setShowDialog] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY);
@@ -134,7 +153,7 @@ export default function SubjectCatalogTab({ schoolId }) {
   const grouped = IB_GROUPS.map(g => ({ ...g, items: filtered.filter(s => s.ib_group === g.value) })).filter(g => g.items.length > 0);
   const noGroup = filtered.filter(s => !s.ib_group);
 
-  const notYetAdded = IB_QUICK_ADD.filter(q => !subjects.some(s => s.code === q.code));
+  const notYetAdded = isIBDP ? IB_QUICK_ADD.filter(q => !subjects.some(s => s.code === q.code)) : [];
 
   return (
     <div className="space-y-5">
