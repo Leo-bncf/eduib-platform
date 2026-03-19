@@ -7,22 +7,19 @@ import { useUser } from '@/components/auth/UserContext';
 import { usePlan } from '@/components/plan/PlanProvider';
 import {
   Users, CreditCard, CheckCircle2, AlertCircle, Loader2,
-  ExternalLink, Shield, ArrowUpCircle, RefreshCw,
+  ExternalLink, Shield, ArrowUpCircle, RefreshCw, GraduationCap,
 } from 'lucide-react';
 import { SCHOOL_ADMIN_SIDEBAR_LINKS } from '@/components/app/schoolAdminSidebarLinks';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import AdminTabNavigation from '@/components/admin/AdminTabNavigation';
-import PlanUsageCard from '@/components/plan/PlanUsageCard';
 import TrialBanner from '@/components/plan/TrialBanner';
 import BillingStatusBanner from '@/components/plan/BillingStatusBanner';
 import ModuleStatusGrid from '@/components/plan/ModuleStatusGrid';
-import UpgradePrompt from '@/components/plan/UpgradePrompt';
-import { PLAN_LIMITS, PLAN_NAMES, PLAN_PRICES, getUpgradePlans } from '@/components/plan/PlanConfig';
+import StudentPricingUpgrade from '@/components/plan/StudentPricingUpgrade';
+import { PLAN_LIMITS, PLAN_NAMES, PLAN_DESCRIPTIONS, calcAnnualCost, getUpgradePlans } from '@/components/plan/PlanConfig';
 import { format } from 'date-fns';
-
-
 
 const BILLING_STATUS_CONFIG = {
   trial:     { label: 'Free Trial',   color: 'bg-blue-100 text-blue-700 border-blue-200',    dot: 'bg-blue-500' },
@@ -60,17 +57,13 @@ export default function SchoolAdminBilling() {
     enabled: !!schoolId,
   });
 
-  const { data: usageCounts } = useQuery({
-    queryKey: ['usage-counts', schoolId],
+  const { data: studentCount = 0 } = useQuery({
+    queryKey: ['student-count', schoolId],
     queryFn: async () => {
-      const [memberships, classes] = await Promise.all([
-        base44.entities.SchoolMembership.filter({ school_id: schoolId, status: 'active' }),
-        base44.entities.Class.filter({ school_id: schoolId, status: 'active' }),
-      ]);
-      return { userCount: memberships.length, classCount: classes.length };
+      const students = await base44.entities.SchoolMembership.filter({ school_id: schoolId, role: 'student', status: 'active' });
+      return students.length;
     },
     enabled: !!schoolId,
-    initialData: { userCount: 0, classCount: 0 },
   });
 
   useEffect(() => {
@@ -94,26 +87,15 @@ export default function SchoolAdminBilling() {
     }
   };
 
-  const handleUpgradeCheckout = async (targetPlan) => {
-    setLoading(true);
-    try {
-      const response = await base44.functions.invoke('createCheckoutSession', { schoolId, plan: targetPlan });
-      window.location.href = response.data.url;
-    } catch {
-      setMessage({ type: 'error', text: 'Failed to start checkout. Please try again.' });
-      setLoading(false);
-    }
-  };
-
   const currentPlan = schoolData?.plan || 'starter';
   const billingStatus = schoolData?.billing_status;
   const hasStripeSubscription = !!schoolData?.stripe_subscription_id;
   const upgradePlans = getUpgradePlans(currentPlan);
-  const planLimits = PLAN_LIMITS[currentPlan];
-
-  const userPct = planLimits?.max_users !== -1 ? Math.round((usageCounts.userCount / planLimits?.max_users) * 100) : 0;
-  const classPct = planLimits?.max_classes !== -1 ? Math.round((usageCounts.classCount / planLimits?.max_classes) * 100) : 0;
-  const hasAnyWarning = (planLimits?.max_users !== -1 && userPct >= 80) || (planLimits?.max_classes !== -1 && classPct >= 80);
+  const planLimits = PLAN_LIMITS[currentPlan] || PLAN_LIMITS.starter;
+  const purchasedStudents = schoolData?.max_students || 0;
+  const annualCost = purchasedStudents > 0 ? calcAnnualCost(currentPlan, purchasedStudents) : null;
+  const studentPct = purchasedStudents > 0 ? Math.round((studentCount / purchasedStudents) * 100) : 0;
+  const hasStudentWarning = purchasedStudents > 0 && studentPct >= 80;
 
   return (
     <RoleGuard allowedRoles={['school_admin', 'super_admin', 'admin']}>
@@ -123,16 +105,16 @@ export default function SchoolAdminBilling() {
         <main className="md:ml-64 min-h-screen flex flex-col">
           <AdminTabNavigation
             tabs={[
-              { id: 'status', label: 'Subscription Status', icon: CreditCard },
-              { id: 'usage', label: 'Usage & Limits', icon: Users, badge: hasAnyWarning ? '!' : null },
+              { id: 'status', label: 'Subscription', icon: CreditCard },
+              { id: 'students', label: 'Student Slots', icon: GraduationCap, badge: hasStudentWarning ? '!' : null },
               { id: 'modules', label: 'Plan Features', icon: Shield },
-              ...(upgradePlans.length > 0 ? [{ id: 'upgrade', label: 'Upgrade', icon: ArrowUpCircle }] : []),
+              ...(upgradePlans.length > 0 ? [{ id: 'upgrade', label: 'Upgrade / Change Plan', icon: ArrowUpCircle }] : []),
             ]}
             activeTab={billingTab}
             onTabChange={setBillingTab}
             colorScheme="indigo"
             title="Billing & Subscription"
-            subtitle="Manage your school's plan, usage limits, and payment details"
+            subtitle="Per-student annual pricing — unlimited teachers included"
             rightContent={
               <Button size="sm" variant="ghost" onClick={() => refetch()} className="gap-1.5 text-slate-500">
                 <RefreshCw className="w-3.5 h-3.5" /> Refresh
@@ -157,224 +139,186 @@ export default function SchoolAdminBilling() {
               </Alert>
             )}
 
-              {/* ── SUBSCRIPTION STATUS ── */}
-              {billingTab === 'status' && <div className="mt-5">
-                <div className="grid md:grid-cols-3 gap-5">
-                  <div className="md:col-span-2 bg-white rounded-xl border border-slate-200 p-6 space-y-5">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="text-xs text-slate-400 uppercase tracking-wide font-semibold mb-2">Current Plan</p>
-                        <div className="flex items-center gap-3">
-                          <h2 className="text-3xl font-black text-slate-900">{PLAN_NAMES[currentPlan]}</h2>
-                          <p className="text-xl font-semibold text-slate-500">${PLAN_PRICES[currentPlan]}<span className="text-sm font-normal">/mo</span></p>
+            {/* ── SUBSCRIPTION STATUS ── */}
+            {billingTab === 'status' && (
+              <div className="grid md:grid-cols-3 gap-5 mt-2">
+                <div className="md:col-span-2 bg-white rounded-xl border border-slate-200 p-6 space-y-5">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-xs text-slate-400 uppercase tracking-wide font-semibold mb-2">Current Plan</p>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <h2 className="text-3xl font-black text-slate-900">{PLAN_NAMES[currentPlan] || currentPlan}</h2>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-2xl font-bold text-indigo-600">€{planLimits.price_per_student}</span>
+                          <span className="text-slate-400 text-sm">/student/yr</span>
                         </div>
                       </div>
-                      {billingStatus && <StatusPill status={billingStatus} />}
+                      <p className="text-sm text-slate-500 mt-1">{PLAN_DESCRIPTIONS[currentPlan]}</p>
                     </div>
+                    {billingStatus && <StatusPill status={billingStatus} />}
+                  </div>
 
-                    <div className="grid grid-cols-2 gap-4 py-4 border-y border-slate-100">
-                      <div>
-                        <p className="text-xs text-slate-400 font-medium">Max Users</p>
-                        <p className="text-lg font-bold text-slate-800">{planLimits?.max_users === -1 ? 'Unlimited' : planLimits?.max_users}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-400 font-medium">Max Classes</p>
-                        <p className="text-lg font-bold text-slate-800">{planLimits?.max_classes === -1 ? 'Unlimited' : planLimits?.max_classes}</p>
-                      </div>
-                      {billingStatus === 'trial' && schoolData?.trial_end_date && (
-                        <div>
-                          <p className="text-xs text-slate-400 font-medium">Trial Ends</p>
-                          <p className="text-base font-semibold text-blue-700">{format(new Date(schoolData.trial_end_date), 'dd MMM yyyy')}</p>
-                        </div>
-                      )}
-                      {billingStatus === 'active' && schoolData?.subscription_current_period_end && (
-                        <div>
-                          <p className="text-xs text-slate-400 font-medium">
-                            {schoolData.subscription_cancel_at_period_end ? 'Cancels On' : 'Next Renewal'}
-                          </p>
-                          <p className={`text-base font-semibold ${schoolData.subscription_cancel_at_period_end ? 'text-orange-600' : 'text-slate-800'}`}>
-                            {format(new Date(schoolData.subscription_current_period_end), 'dd MMM yyyy')}
-                          </p>
-                        </div>
-                      )}
-                      <div>
-                        <p className="text-xs text-slate-400 font-medium">Billing Email</p>
-                        <p className="text-sm text-slate-700">{schoolData?.billing_email || school?.email || '—'}</p>
-                      </div>
+                  <div className="grid grid-cols-2 gap-4 py-4 border-y border-slate-100">
+                    <div>
+                      <p className="text-xs text-slate-400 font-medium">Student Slots Purchased</p>
+                      <p className="text-lg font-bold text-slate-800">{purchasedStudents > 0 ? purchasedStudents.toLocaleString() : '—'}</p>
                     </div>
-
-                    <div className="flex gap-3 flex-wrap">
-                      {hasStripeSubscription && (
-                        <Button onClick={handleManageBilling} disabled={loading} className="bg-indigo-600 hover:bg-indigo-700 gap-1.5">
-                          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />}
-                          Manage Billing in Stripe
-                        </Button>
-                      )}
-                      {!hasStripeSubscription && upgradePlans.length > 0 && (
-                        <Button onClick={() => handleUpgradeCheckout(currentPlan)} disabled={loading} className="bg-indigo-600 hover:bg-indigo-700 gap-1.5">
-                          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                          Activate Subscription
-                        </Button>
-                      )}
-                      {upgradePlans.length > 0 && (
-                        <Button variant="outline" onClick={() => setShowUpgrade(true)} className="gap-1.5">
-                          <ArrowUpCircle className="w-4 h-4" /> View Upgrade Options
-                        </Button>
-                      )}
+                    <div>
+                      <p className="text-xs text-slate-400 font-medium">Annual Cost</p>
+                      <p className="text-lg font-bold text-slate-800">{annualCost ? `€${annualCost.toLocaleString()}` : '—'}</p>
                     </div>
+                    <div>
+                      <p className="text-xs text-slate-400 font-medium">Teachers / Staff</p>
+                      <p className="text-lg font-bold text-emerald-600">Unlimited</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400 font-medium">Classes</p>
+                      <p className="text-lg font-bold text-emerald-600">Unlimited</p>
+                    </div>
+                    {billingStatus === 'trial' && schoolData?.trial_end_date && (
+                      <div>
+                        <p className="text-xs text-slate-400 font-medium">Trial Ends</p>
+                        <p className="text-base font-semibold text-blue-700">{format(new Date(schoolData.trial_end_date), 'dd MMM yyyy')}</p>
+                      </div>
+                    )}
+                    {billingStatus === 'active' && schoolData?.subscription_current_period_end && (
+                      <div>
+                        <p className="text-xs text-slate-400 font-medium">
+                          {schoolData.subscription_cancel_at_period_end ? 'Cancels On' : 'Next Renewal'}
+                        </p>
+                        <p className={`text-base font-semibold ${schoolData.subscription_cancel_at_period_end ? 'text-orange-600' : 'text-slate-800'}`}>
+                          {format(new Date(schoolData.subscription_current_period_end), 'dd MMM yyyy')}
+                        </p>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-xs text-slate-400 font-medium">Billing Email</p>
+                      <p className="text-sm text-slate-700">{schoolData?.billing_email || school?.email || '—'}</p>
+                    </div>
+                  </div>
 
+                  <div className="flex gap-3 flex-wrap">
                     {hasStripeSubscription && (
-                      <p className="text-xs text-slate-400">
-                        You'll be redirected to the Stripe billing portal to update payment methods, download invoices, or change your plan.
-                      </p>
+                      <Button onClick={handleManageBilling} disabled={loading} className="bg-indigo-600 hover:bg-indigo-700 gap-1.5">
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />}
+                        Manage Billing in Stripe
+                      </Button>
+                    )}
+                    {!hasStripeSubscription && (
+                      <Button onClick={() => setBillingTab('upgrade')} className="bg-indigo-600 hover:bg-indigo-700 gap-1.5">
+                        <CreditCard className="w-4 h-4" /> Activate Subscription
+                      </Button>
+                    )}
+                    {upgradePlans.length > 0 && (
+                      <Button variant="outline" onClick={() => setBillingTab('upgrade')} className="gap-1.5">
+                        <ArrowUpCircle className="w-4 h-4" /> Change Plan
+                      </Button>
                     )}
                   </div>
+                </div>
 
-                  <div className="space-y-4">
-                    <PlanUsageCard userCount={usageCounts.userCount} classCount={usageCounts.classCount} />
-
-                    <div className="bg-white rounded-xl border border-slate-200 p-4">
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Included Modules</p>
-                      <div className="space-y-1.5">
-                        {(planLimits?.modules || []).map(mod => (
-                          <div key={mod} className="flex items-center gap-2 text-sm text-slate-700">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                            <span className="capitalize">{mod.replace(/_/g, ' ')}</span>
-                          </div>
-                        ))}
+                {/* Included modules sidebar */}
+                <div className="bg-white rounded-xl border border-slate-200 p-5">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Included Modules</p>
+                  <div className="space-y-1.5">
+                    {(planLimits.modules || []).map(mod => (
+                      <div key={mod} className="flex items-center gap-2 text-sm text-slate-700">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span className="capitalize">{mod.replace(/_/g, ' ')}</span>
                       </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── STUDENT SLOTS ── */}
+            {billingTab === 'students' && (
+              <div className="grid md:grid-cols-2 gap-5 mt-2">
+                <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
+                      <GraduationCap className="w-5 h-5 text-indigo-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">Student Slots</p>
+                      <p className="text-xs text-slate-400">Purchased vs. enrolled students</p>
+                    </div>
+                  </div>
+
+                  {purchasedStudents > 0 ? (
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-600">Active students</span>
+                        <span className="font-semibold text-slate-900">{studentCount} / {purchasedStudents}</span>
+                      </div>
+                      <div className="w-full bg-slate-100 rounded-full h-3">
+                        <div
+                          className={`h-3 rounded-full transition-all ${studentPct >= 95 ? 'bg-red-500' : studentPct >= 80 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                          style={{ width: `${Math.min(studentPct, 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex justify-between text-xs text-slate-400">
+                        <span>{studentPct}% used</span>
+                        <span>{Math.max(0, purchasedStudents - studentCount)} slots remaining</span>
+                      </div>
+                      {studentPct >= 80 && (
+                        <Alert className="border-amber-200 bg-amber-50">
+                          <AlertCircle className="w-4 h-4 text-amber-600" />
+                          <AlertDescription className="text-amber-800 text-xs">
+                            <strong>Approaching student limit.</strong> Contact your account manager or upgrade your plan to add more slots.
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="py-4 text-center text-sm text-slate-400">
+                      No student slots purchased yet.{' '}
+                      <button onClick={() => setBillingTab('upgrade')} className="text-indigo-600 underline font-medium">Activate subscription →</button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">How student billing works</p>
+                  <div className="space-y-3 text-sm text-slate-600">
+                    <div className="flex gap-2.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" />
+                      <p>You purchase a set number of <strong>student slots</strong> per year — only student accounts count toward your quota.</p>
+                    </div>
+                    <div className="flex gap-2.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+                      <p><strong>Teachers, coordinators, and admins are unlimited</strong> at no extra cost on all plans.</p>
+                    </div>
+                    <div className="flex gap-2.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0" />
+                      <p>You'll receive warnings at <strong>80%</strong> and <strong>95%</strong> of capacity so you can act before hitting the limit.</p>
+                    </div>
+                    <div className="flex gap-2.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-1.5 shrink-0" />
+                      <p>Need more slots mid-year? Contact us or manage your subscription via Stripe to update the quantity.</p>
                     </div>
                   </div>
                 </div>
-              </div>}
+              </div>
+            )}
 
-              {/* ── USAGE & LIMITS ── */}
-              {billingTab === 'usage' && <div className="mt-5">
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div className="space-y-4">
-                    <PlanUsageCard userCount={usageCounts.userCount} classCount={usageCounts.classCount} />
+            {/* ── PLAN FEATURES ── */}
+            {billingTab === 'modules' && (
+              <div className="mt-2">
+                <ModuleStatusGrid currentPlan={currentPlan} />
+              </div>
+            )}
 
-                    {hasAnyWarning && (
-                      <Alert className="border-amber-200 bg-amber-50">
-                        <AlertCircle className="w-4 h-4 text-amber-600" />
-                        <AlertDescription className="text-amber-800">
-                          <strong>Approaching plan limits.</strong> Consider upgrading your plan before limits are reached to avoid disruption.
-                          {' '}
-                          {upgradePlans.length > 0 && (
-                            <button onClick={() => setShowUpgrade(true)} className="font-semibold underline cursor-pointer">
-                              View upgrade options →
-                            </button>
-                          )}
-                        </AlertDescription>
-                      </Alert>
-                    )}
-                  </div>
-
-                  <div className="bg-white rounded-xl border border-slate-200 p-5">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-4">What happens at limits?</p>
-                    <div className="space-y-4 text-sm text-slate-600">
-                      <div className="flex gap-2.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
-                        <p><strong>User limit reached:</strong> New invitations cannot be sent until existing accounts are deactivated or your plan is upgraded.</p>
-                      </div>
-                      <div className="flex gap-2.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
-                        <p><strong>Class limit reached:</strong> New classes cannot be created. Existing classes continue to function normally.</p>
-                      </div>
-                      <div className="flex gap-2.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0" />
-                        <p><strong>No data is lost</strong> when limits are reached. All existing records remain fully accessible.</p>
-                      </div>
-                      <div className="flex gap-2.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" />
-                        <p><strong>Warnings appear</strong> at 80% and 95% of each limit so you have time to act before being blocked.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>}
-
-              {/* ── PLAN FEATURES ── */}
-              {billingTab === 'modules' && <div className="mt-5"><ModuleStatusGrid currentPlan={currentPlan} /></div>}
-
-              {/* ── UPGRADE ── */}
-              {billingTab === 'upgrade' && upgradePlans.length > 0 && (
-                <div className="mt-5">
-                  <div className="grid md:grid-cols-2 gap-5">
-                    {upgradePlans.map(targetPlan => {
-                      const limits = PLAN_LIMITS[targetPlan];
-                      const newFeatures = Object.entries(limits.features)
-                        .filter(([k, v]) => v === true && !planLimits?.features[k])
-                        .map(([k]) => k.replace(/_/g, ' '));
-                      const newModules = limits.modules.filter(m => !planLimits?.modules.includes(m));
-
-                      return (
-                        <div key={targetPlan} className={`bg-white rounded-xl border-2 p-6 ${targetPlan === 'professional' ? 'border-indigo-300' : 'border-slate-200'}`}>
-                          {targetPlan === 'professional' && (
-                            <div className="flex justify-end mb-2">
-                              <Badge className="bg-indigo-100 text-indigo-700 border-0">Most Popular</Badge>
-                            </div>
-                          )}
-                          <div className="flex items-baseline gap-2 mb-1">
-                            <h3 className="text-xl font-bold text-slate-900">{PLAN_NAMES[targetPlan]}</h3>
-                          </div>
-                          <div className="flex items-baseline gap-1 mb-4">
-                            <span className="text-3xl font-black text-slate-900">${PLAN_PRICES[targetPlan]}</span>
-                            <span className="text-slate-500 text-sm">/month</span>
-                          </div>
-
-                          <div className="space-y-3 text-sm mb-5">
-                            <div>
-                              <p className="font-semibold text-slate-700 mb-1.5">Limits</p>
-                              <p className="text-slate-600">Up to <strong>{limits.max_users === -1 ? 'Unlimited' : limits.max_users}</strong> users · <strong>{limits.max_classes === -1 ? 'Unlimited' : limits.max_classes}</strong> classes</p>
-                            </div>
-                            {newModules.length > 0 && (
-                              <div>
-                                <p className="font-semibold text-slate-700 mb-1.5">New Modules Unlocked</p>
-                                <div className="space-y-1">
-                                  {newModules.map(m => (
-                                    <div key={m} className="flex items-center gap-2 text-emerald-700">
-                                      <CheckCircle2 className="w-3.5 h-3.5" />
-                                      <span className="capitalize">{m.replace(/_/g, ' ')}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {newFeatures.length > 0 && (
-                              <div>
-                                <p className="font-semibold text-slate-700 mb-1.5">New Features</p>
-                                <div className="space-y-1">
-                                  {newFeatures.map(f => (
-                                    <div key={f} className="flex items-center gap-2 text-emerald-700">
-                                      <CheckCircle2 className="w-3.5 h-3.5" />
-                                      <span className="capitalize">{f}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-
-                          <Button
-                            onClick={() => handleUpgradeCheckout(targetPlan)}
-                            disabled={loading}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 gap-1.5"
-                          >
-                            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowUpCircle className="w-4 h-4" />}
-                            Upgrade to {PLAN_NAMES[targetPlan]}
-                          </Button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
+            {/* ── UPGRADE ── */}
+            {billingTab === 'upgrade' && (
+              <div className="mt-2">
+                <StudentPricingUpgrade schoolId={schoolId} currentPlan={currentPlan} currentStudents={purchasedStudents} />
+              </div>
+            )}
           </div>
         </main>
       </div>
-
-      <UpgradePrompt open={showUpgrade} onClose={() => setShowUpgrade(false)} />
     </RoleGuard>
   );
 }
