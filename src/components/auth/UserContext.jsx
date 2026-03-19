@@ -78,16 +78,19 @@ export function UserProvider({ children }) {
     return hasAllPermissions(userData, checks);
   };
 
+  const effectiveSchool = getSchool();
+
   return (
     <UserContext.Provider value={{
       user,
       membership,
-      school,
+      school: effectiveSchool,
       loading,
       isAuthenticated,
       role: getRole(),
       schoolId: getSchoolId(),
-      curriculum: school?.curriculum || 'ib_dp',
+      curriculum: effectiveSchool?.curriculum || 'ib_dp',
+      isImpersonating: !!impersonation,
       reload: loadUser,
       checkPermission,
       checkAllPermissions,
