@@ -39,6 +39,7 @@ export default function SchoolAdminSettings() {
   const { user, school: contextSchool, schoolId } = useUser();
   const queryClient = useQueryClient();
   const [message, setMessage] = useState(null);
+  const [settingsTab, setSettingsTab] = useState('school');
 
   // ── School profile ──────────────────────────────────────────────────────────
   const { data: school, isLoading } = useQuery({
