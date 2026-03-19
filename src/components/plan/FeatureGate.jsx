@@ -6,7 +6,7 @@ import UpgradePrompt from './UpgradePrompt';
 import { PLAN_NAMES, PLAN_LIMITS, getUpgradePlans } from './PlanConfig';
 
 function findUnlockPlan(feature, module) {
-  const order = ['starter', 'professional', 'enterprise'];
+  const order = ['starter', 'growth', 'enterprise'];
   for (const p of order) {
     const limits = PLAN_LIMITS[p];
     const featureOk = !feature || limits.features[feature] === true;
