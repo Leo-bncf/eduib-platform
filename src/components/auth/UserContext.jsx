@@ -89,7 +89,7 @@ export function UserProvider({ children }) {
       isAuthenticated,
       role: getRole(),
       schoolId: getSchoolId(),
-      curriculum: effectiveSchool?.curriculum || 'ib_dp',
+      curriculum: impersonation?.curriculumOverride || effectiveSchool?.curriculum || 'ib_dp',
       isImpersonating: !!impersonation,
       reload: loadUser,
       checkPermission,
