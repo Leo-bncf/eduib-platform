@@ -40,50 +40,24 @@ export default function SchoolAdminBehavior() {
           schoolId={schoolId}
         />
 
-        <main className="md:ml-64 min-h-screen">
-          {/* Header */}
-          <div className="bg-white border-b border-slate-200 px-6 py-5 sticky top-0 z-10">
-            <div className="max-w-7xl mx-auto flex items-center justify-between">
-              <div>
-                <h1 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-amber-500" />
-                  Behavior & Pastoral Notes
-                </h1>
-                <p className="text-xs text-slate-500 mt-0.5">{school?.name} · Governed pastoral operations</p>
-              </div>
+        <main className="md:ml-64 min-h-screen flex flex-col">
+          <AdminTabNavigation
+            tabs={TABS}
+            activeTab={tab}
+            onTabChange={setTab}
+            colorScheme="amber"
+            title="Behavior & Pastoral Notes"
+            subtitle={`${school?.name} · Governed pastoral operations`}
+            rightContent={
               <div className="flex items-center gap-2 text-xs font-bold text-slate-500 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 School-scoped · Role-protected
               </div>
-            </div>
-          </div>
-
-          {/* Tab Navigation */}
-          <div className="bg-white border-b border-slate-200 px-6">
-            <div className="max-w-7xl mx-auto">
-              <div className="flex gap-1 -mb-px">
-                {TABS.map(t => {
-                  const Icon = t.icon;
-                  const active = tab === t.id;
-                  return (
-                    <button
-                      key={t.id}
-                      onClick={() => setTab(t.id)}
-                      className={`flex items-center gap-2 px-4 py-3.5 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap ${
-                        active ? 'border-amber-500 text-amber-700' : 'border-transparent text-slate-500 hover:text-slate-700'
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                      {t.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+            }
+          />
 
           {/* Content */}
-          <div className="max-w-7xl mx-auto p-6">
+          <div className="flex-1 p-6">
             {tab === 'dashboard'  && <BehaviorDashboard schoolId={schoolId} isPastoral={isPastoral} />}
             {tab === 'pastoral'   && <PastoralOversight schoolId={schoolId} />}
             {tab === 'policy'     && <BehaviorPolicyConfig schoolId={schoolId} />}
