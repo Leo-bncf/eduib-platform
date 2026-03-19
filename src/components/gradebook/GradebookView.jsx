@@ -11,9 +11,17 @@ import RubricGradingDialog from './RubricGradingDialog';
 import CreateGradeItem from './CreateGradeItem';
 import CreateRubricGradeItem from './CreateRubricGradeItem';
 import PredictedGradeDialog from './PredictedGradeDialog';
+import { useUser } from '@/components/auth/UserContext';
+import { getCurriculumConfig, formatGrade } from '@/lib/curriculumConfig';
 
 export default function GradebookView({ classData, assignments = [] }) {
   const { policy } = useGradebookPolicy(classData?.school_id);
+  const { curriculum } = useUser();
+  const currConfig = getCurriculumConfig(curriculum);
+  const isIBDP = curriculum === 'ib_dp';
+  const showIBGrade = currConfig.features?.ibGradeScale;
+  const gradeScaleLabel = currConfig.gradeScale?.displayLabel || 'Grade';
+  const predictedLabel = isIBDP ? 'Predicted IB Grades' : currConfig.labels?.predictedGrades || 'Grade Forecasts';
   const [selectedGradeItem, setSelectedGradeItem] = useState(null);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [gradeDialogOpen, setGradeDialogOpen] = useState(false);
@@ -104,7 +112,7 @@ export default function GradebookView({ classData, assignments = [] }) {
             >
               Grades
             </button>
-            {policy.predicted_grades_enabled !== false && (
+            {policy.predicted_grades_enabled !== false && currConfig.features?.predictedGrades && (
               <button
                 onClick={() => setViewMode('predicted')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -113,7 +121,7 @@ export default function GradebookView({ classData, assignments = [] }) {
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
-                Predicted Grades
+                {predictedLabel}
               </button>
             )}
           </div>
@@ -131,7 +139,7 @@ export default function GradebookView({ classData, assignments = [] }) {
                   Student
                 </th>
                 <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase">
-                  Predicted IB Grade
+                  {predictedLabel}
                 </th>
                 <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase">
                   Confidence
@@ -168,7 +176,7 @@ export default function GradebookView({ classData, assignments = [] }) {
                       >
                         {pred ? (
                           <div className="text-2xl font-bold text-violet-700">
-                            {pred.predicted_ib_grade}
+                            {formatGrade(pred.predicted_ib_grade, curriculum)}
                           </div>
                         ) : (
                           <span className="text-slate-300 text-sm">Not set</span>
@@ -265,16 +273,16 @@ export default function GradebookView({ classData, assignments = [] }) {
                            {grade ? (
                              <div>
                                {grade.score != null && (
-                                 <div className="text-lg font-semibold text-slate-900">
-                                   {grade.score}
-                                   {isRubric && <span className="text-xs text-indigo-600 ml-1">R</span>}
-                                 </div>
-                               )}
-                               {grade.ib_grade && (
-                                 <Badge className="bg-violet-50 text-violet-700 border-0 text-xs mt-1">
-                                   IB {grade.ib_grade}
-                                 </Badge>
-                               )}
+                                   <div className="text-lg font-semibold text-slate-900">
+                                     {formatGrade(grade.score, curriculum)}
+                                     {isRubric && <span className="text-xs text-indigo-600 ml-1">R</span>}
+                                   </div>
+                                 )}
+                                 {showIBGrade && grade.ib_grade && (
+                                   <Badge className="bg-violet-50 text-violet-700 border-0 text-xs mt-1">
+                                     {gradeScaleLabel} {grade.ib_grade}
+                                   </Badge>
+                                 )}
                                {grade.status && grade.status !== 'draft' && grade.status !== 'published' && (
                                  <Badge className={`text-xs mt-1 border-0 ${
                                    grade.status === 'missing' ? 'bg-red-50 text-red-700' :
@@ -293,8 +301,8 @@ export default function GradebookView({ classData, assignments = [] }) {
                      );
                     })}
                     <td className="px-4 py-3 text-center">
-                      <div className="text-lg font-bold text-slate-900">{avg}</div>
-                      {avg !== '—' && <div className="text-xs text-slate-400">%</div>}
+                      <div className="text-lg font-bold text-slate-900">{avg !== '—' ? formatGrade(avg, curriculum) : '—'}</div>
+                      {avg !== '—' && <div className="text-xs text-slate-400">{gradeScaleLabel}</div>}
                     </td>
                   </tr>
                 );
