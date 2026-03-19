@@ -162,7 +162,7 @@ export default function SchoolAdminSettings() {
           <div className="flex-1 p-6 max-w-4xl">
 
               {/* ── SCHOOL PROFILE TAB ── */}
-              <TabsContent value="school">
+              {settingsTab === 'school' && <div>
                 {isLoading || !profileForm ? (
                   <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-slate-400" /></div>
                 ) : (
