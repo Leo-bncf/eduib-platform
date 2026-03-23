@@ -36,11 +36,11 @@ function HeroSection() {
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
            The LMS designed for
            <span className="text-blue-600"> the needs of</span>
-           {' '}IB World Schools
+           {' '}International Schools
           </h1>
 
           <p className="mt-6 text-xl text-slate-500 leading-relaxed max-w-2xl mx-auto">
-            A unified platform designed around the IB framework — from PYP to DP, grading to reporting.
+            A unified platform built for international schools — supporting multiple curricula, grading frameworks, and reporting standards.
           </p>
           
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -61,7 +61,7 @@ function HeroSection() {
         
         <div className="mt-16 mx-auto max-w-3xl">
           <p className="text-lg text-slate-600 leading-relaxed text-center">
-            <span className="font-semibold text-slate-900">IB-only</span> — built exclusively for IB World Schools with no generic features or bloat. <span className="font-semibold text-slate-900">PYP → DP</span> — every workflow maps directly to IB programmes, criteria, and terminology. <span className="font-semibold text-slate-900">Zero noise</span> — trimmed to exactly what IB educators and students need, nothing more.
+            <span className="font-semibold text-slate-900">Multi-curricular</span> — built for schools running IB, IGCSE, A-Levels, US Common Core, and more. <span className="font-semibold text-slate-900">Flexible frameworks</span> — every workflow adapts to your curriculum's structure, criteria, and terminology. <span className="font-semibold text-slate-900">Zero noise</span> — trimmed to exactly what international educators and students need, nothing more.
           </p>
         </div>
       </div>
@@ -81,8 +81,8 @@ function ProblemSection() {
     <section className="py-20 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">IB schools deserve better tools</h2>
-          <p className="mt-3 text-lg text-slate-500">Current platforms weren't built for the IB framework's unique demands</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">International schools deserve better tools</h2>
+          <p className="mt-3 text-lg text-slate-500">Current platforms weren't built for the unique demands of multi-curricular international schools</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
           {problems.map((p, i) => (
@@ -102,12 +102,12 @@ function FeaturesGrid() {
   const features = [
     { icon: BarChart3, title: 'Executive Dashboards', short: 'Role-specific insights', desc: 'Personalized dashboards for every stakeholder—students see academic progress, teachers manage their classes, coordinators oversee cohorts, parents track their children, and admins control the entire school. Each role receives contextual information tailored to their responsibilities, with quick actions and performance indicators prominently displayed.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/666e7c602_generated_image.png' },
     { icon: ClipboardCheck, title: 'Academic Workflows', short: 'Complete assignment lifecycle', desc: 'From creation to grading—publish assignments with IB criteria alignment, students submit work through Google Docs, files, or links, teachers provide criterion-based feedback, and grades sync automatically. Support for multiple submission formats, late submission handling, and comprehensive submission tracking ensure transparency throughout the entire workflow.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/cee3c90d6_generated_image.png' },
-    { icon: BookOpen, title: 'IB Gradebook', short: '1-7 scale precision', desc: 'Native 1-7 IB grading scale, predicted grade tracking with historical trends, SL/HL subject level management, rubric-based criterion assessment, and comprehensive term reports that align with IB terminology. Generate assessment reports by criterion, track grade distribution patterns, and lock grades for compliance with school policies.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/7021edd96_generated_image.png' },
+    { icon: BookOpen, title: 'Gradebook', short: 'Multi-framework grading', desc: 'Support for multiple grading scales including 1-7 IB, A*-E, letter grades, and percentage-based systems. Predicted grade tracking with historical trends, subject level management, rubric-based criterion assessment, and comprehensive term reports aligned to your curriculum. Generate assessment reports by criterion, track grade distribution patterns, and lock grades for compliance with school policies.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/7021edd96_generated_image.png' },
     { icon: Users, title: 'Parent Portal', short: 'Real-time family engagement', desc: 'Parents see grades, attendance records, upcoming assignments, teacher feedback, and behavioral notes—all updated in real-time with notification preferences. Direct messaging with teachers keeps communication secure, organized, and compliant with school policies. Parents can also receive progress alerts and attendance warnings.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/8a2036ae5_generated_image.png' },
     { icon: Calendar, title: 'Timetable Integration', short: 'Schedule synchronization', desc: 'Sync with external timetable systems like Veracross or iSAMS, display daily class schedules, manage periods and rooms, resolve scheduling conflicts automatically, and track historical schedule changes. Supports multiple concurrent timetables for different academic years and handles special events and exam schedules.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/40cbab407_generated_image.png' },
     { icon: MessageSquare, title: 'Internal Messaging', short: 'Secure communication hub', desc: 'Role-aware messaging between teachers, students, and parents with granular permission controls. Create class announcements, manage discussions, implement quiet hours policies, and maintain compliance logging for all communications. Thread-based conversations keep context clear and searchable.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/5afba6700_generated_image.png' },
     { icon: Shield, title: 'Enterprise Security', short: 'Data protection', desc: 'Complete multi-tenant isolation ensures schools cannot access each other\'s data. Granular role-based access control with customizable permissions, audit logging of all critical actions, GDPR compliance tools including data export and deletion, encrypted data storage at rest and in transit.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/cd0fc202d_generated_image.png' },
-    { icon: Star, title: 'IB Core Modules', short: 'CAS, EE, TOK tracking', desc: 'Manage CAS experiences with strand mapping, supervisor tracking, and hourly reflection submissions. Track Extended Essay milestones from initial proposal through final viva voce with supervisor feedback integration. Manage TOK deadlines, student reflections, and coordinator approvals in one unified interface.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/bcfce6faa_generated_image.png' },
+    { icon: Star, title: 'Extended Curriculum Modules', short: 'CAS, EE, TOK & more', desc: 'Manage CAS experiences with strand mapping, supervisor tracking, and hourly reflection submissions. Track Extended Essay milestones from initial proposal through final viva voce with supervisor feedback integration. Manage TOK deadlines, student reflections, and coordinator approvals in one unified interface.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/bcfce6faa_generated_image.png' },
   ];
 
   return (
@@ -115,7 +115,7 @@ function FeaturesGrid() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-slate-900">Comprehensive Platform Capabilities</h2>
-          <p className="mt-3 text-lg text-slate-500">Engineered for the rigorous demands of International Baccalaureate institutions</p>
+          <p className="mt-3 text-lg text-slate-500">Engineered for the rigorous demands of international multi-curricular institutions</p>
         </div>
         <div className="space-y-6">
           {features.map((f, i) => (
@@ -171,12 +171,12 @@ function RolesSection() {
     { 
       name: 'Students', 
       short: 'Learn and track progress',
-      desc: 'Personal dashboards showing grades and upcoming work, submit assignments and view feedback, check daily timetable, track CAS, EE, and TOK progress.' 
+      desc: 'Personal dashboards showing grades and upcoming work, submit assignments and view feedback, check daily timetable, track extended curriculum activities and core programme progress.' 
     },
     { 
       name: 'Teachers', 
       short: 'Manage and assess',
-      desc: 'Create and manage classes, publish assignments with IB criteria, grade submissions with rubrics, track attendance, view class analytics and performance trends.' 
+      desc: 'Create and manage classes, publish assignments with curriculum-aligned criteria, grade submissions with rubrics, track attendance, view class analytics and performance trends.' 
     },
     { 
       name: 'Parents', 
@@ -186,7 +186,7 @@ function RolesSection() {
     { 
       name: 'Coordinators', 
       short: 'Oversee programmes',
-      desc: 'Manage cohorts and predicted grades, oversee IB Core (TOK, EE, CAS), generate compliance reports, track subject registrations, manage exam entries.' 
+      desc: 'Manage cohorts and predicted grades, oversee extended curriculum programmes, generate compliance reports, track subject registrations, manage exam entries.' 
     },
     { 
       name: 'Administrators', 
