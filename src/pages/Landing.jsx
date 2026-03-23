@@ -12,7 +12,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, BookOpen, Users, BarChart3, Shield, 
   MessageSquare, Calendar, ClipboardCheck, Star,
-  ChevronRight, Sparkles
+  ChevronRight, Sparkles, GraduationCap, UserCheck,
+  Heart, Compass, Settings2, CheckCircle2
 } from 'lucide-react';
 
 function HeroSection() {
@@ -166,34 +167,91 @@ function FeaturesGrid() {
 }
 
 function RolesSection() {
-  const [expandedRole, setExpandedRole] = React.useState(null);
   const roles = [
-    { 
-      name: 'Students', 
+    {
+      name: 'Students',
       short: 'Learn and track progress',
-      desc: 'Personal dashboards showing grades and upcoming work, submit assignments and view feedback, check daily timetable, track extended curriculum activities and core programme progress.' 
+      icon: GraduationCap,
+      color: 'blue',
+      desc: 'A personalised academic hub that keeps students on top of their workload, performance, and extended curriculum commitments.',
+      features: [
+        'Personal dashboard with grade trends and upcoming deadlines',
+        'Submit assignments via Google Docs, file upload, or links',
+        'View teacher feedback and criterion scores',
+        'Daily timetable with class schedule and room info',
+        'Track CAS, EE, and TOK milestones and reflections',
+        'Attendance history and absence notifications',
+      ]
     },
-    { 
-      name: 'Teachers', 
+    {
+      name: 'Teachers',
       short: 'Manage and assess',
-      desc: 'Create and manage classes, publish assignments with curriculum-aligned criteria, grade submissions with rubrics, track attendance, view class analytics and performance trends.' 
+      icon: BookOpen,
+      color: 'indigo',
+      desc: 'Everything a teacher needs to run their classes, assess students, and communicate — in one focused workspace.',
+      features: [
+        'Class workspace with stream, assignments, and gradebook',
+        'Publish assignments with curriculum-aligned criteria',
+        'Rubric and criterion-based grading with feedback',
+        'One-click attendance recording per class session',
+        'Class analytics showing performance trends',
+        'Direct messaging with students and parents',
+      ]
     },
-    { 
-      name: 'Parents', 
-      short: 'Stay informed',
-      desc: 'Monitor child\'s grades and progress, see upcoming assignments and deadlines, view attendance records, message teachers directly, receive progress alerts.' 
+    {
+      name: 'Parents',
+      short: 'Stay informed and engaged',
+      icon: Heart,
+      color: 'rose',
+      desc: 'Real-time visibility into your child's academic life — grades, attendance, deadlines, and direct communication with teachers.',
+      features: [
+        'Live grade and assessment overview per subject',
+        'Upcoming assignments and submission status',
+        'Attendance records with absence alerts',
+        'Behavioural notes visible to parents',
+        'Direct, secure messaging with teachers',
+        'Term report access and progress summaries',
+      ]
     },
-    { 
-      name: 'Coordinators', 
+    {
+      name: 'Coordinators',
       short: 'Oversee programmes',
-      desc: 'Manage cohorts and predicted grades, oversee extended curriculum programmes, generate compliance reports, track subject registrations, manage exam entries.' 
+      icon: Compass,
+      color: 'amber',
+      desc: 'Oversight tools for programme coordinators to manage cohorts, predicted grades, extended curriculum, and compliance.',
+      features: [
+        'Cohort-level grade and performance dashboards',
+        'Predicted grade management with trend tracking',
+        'IB Core oversight — CAS, EE, and TOK tracking',
+        'Compliance reports and exam entry management',
+        'Subject registration and level (HL/SL) management',
+        'Coordinator approval workflows for student submissions',
+      ]
     },
-    { 
-      name: 'Administrators', 
+    {
+      name: 'Administrators',
       short: 'Control everything',
-      desc: 'Manage users and permissions, configure academic calendar and terms, set policies and workflows, view audit logs, manage billing and integrations.' 
+      icon: Settings2,
+      color: 'slate',
+      desc: 'Full school management — users, policies, academic structure, billing, integrations, and security — from one admin panel.',
+      features: [
+        'User management, invitations, and role assignment',
+        'Academic calendar, terms, and cohort configuration',
+        'Attendance, behaviour, and gradebook policy controls',
+        'Timetable setup and external system integrations',
+        'Audit logs, GDPR tools, and access controls',
+        'Billing dashboard and subscription management',
+      ]
     },
   ];
+
+  const colorMap = {
+    blue: { bg: 'bg-blue-50', border: 'border-blue-100', icon: 'text-blue-600', dot: 'bg-blue-500', tag: 'bg-blue-50 text-blue-700' },
+    indigo: { bg: 'bg-indigo-50', border: 'border-indigo-100', icon: 'text-indigo-600', dot: 'bg-indigo-500', tag: 'bg-indigo-50 text-indigo-700' },
+    rose: { bg: 'bg-rose-50', border: 'border-rose-100', icon: 'text-rose-600', dot: 'bg-rose-500', tag: 'bg-rose-50 text-rose-700' },
+    amber: { bg: 'bg-amber-50', border: 'border-amber-100', icon: 'text-amber-600', dot: 'bg-amber-500', tag: 'bg-amber-50 text-amber-700' },
+    slate: { bg: 'bg-slate-100', border: 'border-slate-200', icon: 'text-slate-600', dot: 'bg-slate-500', tag: 'bg-slate-100 text-slate-700' },
+  };
 
   return (
     <section className="py-24 bg-transparent">
@@ -202,33 +260,32 @@ function RolesSection() {
           <h2 className="text-3xl font-bold text-slate-900">Purpose-Built Roles</h2>
           <p className="mt-3 text-lg text-slate-500">Every user type has a tailored experience designed for their specific responsibilities.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {roles.map((r, i) => (
-            <motion.div key={i} layout className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-              <button 
-                onClick={() => setExpandedRole(expandedRole === i ? null : i)}
-                className="w-full px-5 py-4 text-left hover:bg-slate-50/50 transition-colors"
-              >
-                <h3 className="font-bold text-slate-900">{r.name}</h3>
-                <p className="text-xs text-slate-500 mt-1">{r.short}</p>
-              </button>
-              <AnimatePresence>
-                {expandedRole === i && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="border-t border-slate-100 bg-slate-50/30 overflow-hidden"
-                  >
-                    <div className="px-5 py-4">
-                      <p className="text-sm text-slate-600 leading-relaxed">{r.desc}</p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {roles.map((r, i) => {
+            const c = colorMap[r.color];
+            return (
+              <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`w-10 h-10 rounded-lg ${c.bg} ${c.border} border flex items-center justify-center flex-shrink-0`}>
+                    <r.icon className={`w-5 h-5 ${c.icon}`} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900">{r.name}</h3>
+                    <p className="text-xs text-slate-500">{r.short}</p>
+                  </div>
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">{r.desc}</p>
+                <ul className="space-y-2">
+                  {r.features.map((f, j) => (
+                    <li key={j} className="flex items-start gap-2">
+                      <CheckCircle2 className={`w-4 h-4 ${c.icon} flex-shrink-0 mt-0.5`} />
+                      <span className="text-xs text-slate-600 leading-relaxed">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
