@@ -113,24 +113,7 @@ function buildAlerts(data) {
     });
   }
 
-  if (setupDone < setupTotal) {
-    const missing = [];
-    if (!setupSteps.academicYears) missing.push('Academic year');
-    if (!setupSteps.terms) missing.push('Terms');
-    if (!setupSteps.subjects) missing.push('Subjects');
-    if (!setupSteps.classes) missing.push('Classes');
-    if (!setupSteps.staff) missing.push('Staff accounts');
-    alerts.push({
-      id: 'onboarding',
-      severity: 'info',
-      icon: CheckSquare,
-      title: `Setup Incomplete — ${setupDone} of ${setupTotal} Steps Done`,
-      desc: 'Complete school setup to unlock full platform access for staff and students.',
-      detail: `Missing: ${missing.join(' · ')}`,
-      action: 'Continue Setup',
-      link: 'SchoolOnboarding',
-    });
-  }
+
 
   return alerts;
 }
