@@ -100,9 +100,12 @@ Deno.serve(async (req) => {
     }
 
     // Write school_id to user.data so RLS rules ({{user.data.school_id}}) work correctly
+    // IMPORTANT: Pass flat fields — SDK puts them into user.data automatically.
+    // Do NOT wrap in { data: { ... } } as that causes double-nesting (data.data.school_id).
     await base44.asServiceRole.entities.User.update(user.id, {
       school_id: invitation.school_id,
       active_school_id: invitation.school_id,
+      intended_role: invitation.role,
     });
 
     console.log(`User ${user.id} accepted invitation for school ${invitation.school_id}`);
