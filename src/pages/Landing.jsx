@@ -176,7 +176,9 @@ function FeaturesGrid() {
               >
                 <f.icon className={`w-6 h-6 mb-1.5 ${isExpanded ? 'text-white' : 'text-blue-500/80'}`} />
                 <span className={`text-xs font-semibold text-center leading-tight px-3 ${isExpanded ? 'text-white' : 'text-slate-700/80'}`}>
-              </motion.button>
+                  {f.title}
+                </span>
+                </motion.button>
             );
           })}
         </div>
