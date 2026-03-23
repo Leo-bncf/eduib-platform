@@ -636,14 +636,8 @@ export function seedDemoQueryCache(queryClient, schoolId, school) {
 }
 
 export function clearDemoQueryCache(queryClient, schoolId) {
-  const keys = [
-    'school-operations', 'school-memberships', 'school-classes', 'school-subjects',
-    'academic-years', 'cohorts', 'school-terms', 'analytics-memberships',
-    'analytics-classes', 'analytics-grades-school', 'analytics-attendance-school',
-    'analytics-cohorts', 'analytics-pg', 'analytics-behavior', 'attendance-records',
-    'school-attendance', 'behavior-records', 'school-behavior', 'school-assignments',
-    'school-submissions', 'grade-items', 'predicted-grades', 'messages',
-    'school-messages', 'timetable-syncs', 'user-invitations',
-  ];
-  keys.forEach(k => queryClient.removeQueries({ queryKey: [k, schoolId] }));
+  // Remove all cached queries that contain the schoolId — covers every demo-seeded key
+  queryClient.removeQueries({
+    predicate: (query) => query.queryKey.includes(schoolId),
+  });
 }
