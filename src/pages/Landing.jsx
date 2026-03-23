@@ -134,7 +134,7 @@ function FeaturesGrid() {
         </div>
 
         {/* Bubble arena */}
-        <div className="relative w-full rounded-3xl border border-slate-200/60 bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/60 backdrop-blur-sm" style={{ height: '500px' }}>
+        <div className="relative w-full rounded-3xl bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/60 backdrop-blur-sm" style={{ height: '500px' }}>
           {features.map((f, i) => {
             const cfg = bubbleConfigs[i];
             const isExpanded = expandedId === i;
