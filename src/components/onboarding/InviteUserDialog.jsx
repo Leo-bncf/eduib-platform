@@ -63,8 +63,47 @@ export default function InviteUserDialog({ open, onClose, schoolId, schoolName }
     inviteMutation.mutate(formData);
   };
 
+  const handleClose = () => {
+    setInviteLink(null);
+    setCopied(false);
+    onClose();
+  };
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(inviteLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (inviteLink) {
+    return (
+      <Dialog open={open} onOpenChange={handleClose}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-green-600" />
+              Invitation Created
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <p className="text-sm text-slate-600">
+              The invitation has been created. Share this link with the user to accept their invitation:
+            </p>
+            <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <p className="text-xs text-slate-700 flex-1 break-all font-mono">{inviteLink}</p>
+              <Button size="sm" variant="outline" onClick={copyLink} className="shrink-0">
+                {copied ? <CheckCircle2 className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+              </Button>
+            </div>
+            <Button className="w-full" onClick={handleClose}>Done</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
