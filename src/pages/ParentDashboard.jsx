@@ -12,7 +12,8 @@ import ChildPredictedGrades from '@/components/parent/ChildPredictedGrades';
 import ChildReporting from '@/components/parent/ChildReporting';
 import ParentMessaging from '@/components/parent/ParentMessaging';
 import { Link } from 'react-router-dom';
-import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText, ExternalLink, Megaphone } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText, ExternalLink, Megaphone, Home } from 'lucide-react';
+import ParentDashboardHome from '@/components/parent/ParentDashboardHome';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import AnnouncementsFeed from '@/components/messaging/AnnouncementsFeed';
@@ -46,8 +47,12 @@ export default function ParentDashboard() {
             </div>
 
             {selectedChildId ? (
-              <Tabs defaultValue="overview" className="space-y-6">
+              <Tabs defaultValue="home" className="space-y-6">
                 <TabsList className="bg-white border border-slate-200 w-full justify-start overflow-x-auto flex-wrap md:flex-nowrap">
+                  <TabsTrigger value="home" className="text-xs md:text-sm">
+                    <Home className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Home</span>
+                  </TabsTrigger>
                   <TabsTrigger value="overview" className="text-xs md:text-sm">
                     <LayoutDashboard className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" />
                     <span className="hidden sm:inline">Overview</span>
@@ -81,6 +86,14 @@ export default function ParentDashboard() {
                     <span className="hidden sm:inline">Reporting</span>
                   </TabsTrigger>
                 </TabsList>
+
+                <TabsContent value="home">
+                  <ParentDashboardHome
+                    schoolId={schoolId}
+                    studentId={selectedChildId}
+                    parentUserId={user?.id}
+                  />
+                </TabsContent>
 
                 <TabsContent value="overview">
                   <ChildOverviewHub schoolId={schoolId} studentId={selectedChildId} />
