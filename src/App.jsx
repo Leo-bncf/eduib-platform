@@ -259,8 +259,8 @@ function App() {
 
   return (
     <AuthProvider>
-      <ImpersonationProvider>
-        <QueryClientProvider client={queryClientInstance}>
+      <QueryClientProvider client={queryClientInstance}>
+        <ImpersonationProvider>
           <RLSProvider>
             <Router>
               <ImpersonationBanner />
