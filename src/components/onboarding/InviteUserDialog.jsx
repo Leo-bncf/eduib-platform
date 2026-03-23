@@ -24,50 +24,18 @@ export default function InviteUserDialog({ open, onClose, schoolId, schoolName }
 
   const inviteMutation = useMutation({
     mutationFn: async (data) => {
-      const invitationToken = `inv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const expiresAt = new Date();
-      expiresAt.setDate(expiresAt.getDate() + 7); // 7 days expiry
-
-      const user = await base44.auth.me();
-
-      const invitation = await base44.entities.UserInvitation.create({
-        school_id: schoolId,
+      const response = await base44.functions.invoke('sendInvitation', {
+        schoolId,
+        schoolName,
         email: data.email,
         role: data.role,
-        invited_by: user.id,
-        invited_by_name: user.full_name || user.email,
-        status: 'pending',
-        invitation_token: invitationToken,
-        expires_at: expiresAt.toISOString(),
-        metadata: {
-          first_name: data.first_name,
-          last_name: data.last_name,
-          grade_level: data.grade_level,
-          department: data.department,
-          custom_message: data.custom_message,
-        },
+        firstName: data.first_name,
+        lastName: data.last_name,
+        gradeLevel: data.grade_level,
+        department: data.department,
+        customMessage: data.custom_message,
       });
-
-      // Send invitation email
-      const inviteUrl = `${window.location.origin}?page=AcceptInvitation&token=${invitationToken}`;
-      
-      await base44.integrations.Core.SendEmail({
-        to: data.email,
-        from_name: schoolName,
-        subject: `You're invited to join ${schoolName} on AtlasIB`,
-        body: `
-          <h2>Welcome to ${schoolName}!</h2>
-          <p>You've been invited to join ${schoolName} on AtlasIB as a <strong>${data.role.replace('_', ' ')}</strong>.</p>
-          ${data.custom_message ? `<p><em>"${data.custom_message}"</em></p>` : ''}
-          <p>Click the link below to accept your invitation and set up your account:</p>
-          <p><a href="${inviteUrl}" style="display:inline-block;padding:12px 24px;background:#4F46E5;color:white;text-decoration:none;border-radius:8px;font-weight:600;">Accept Invitation</a></p>
-          <p>Or copy this link: ${inviteUrl}</p>
-          <p style="color:#666;font-size:14px;">This invitation expires in 7 days.</p>
-          <p style="color:#999;font-size:12px;margin-top:24px;">If you didn't expect this invitation, you can safely ignore this email.</p>
-        `,
-      });
-
-      return invitation;
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-invitations'] });
