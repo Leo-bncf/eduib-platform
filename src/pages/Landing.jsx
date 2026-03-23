@@ -203,7 +203,7 @@ function RolesSection() {
       short: 'Stay informed and engaged',
       icon: Heart,
       color: 'rose',
-      desc: 'Real-time visibility into your child's academic life — grades, attendance, deadlines, and direct communication with teachers.',
+      desc: "Real-time visibility into your child's academic life — grades, attendance, deadlines, and direct communication with teachers.", — grades, attendance, deadlines, and direct communication with teachers.',
       features: [
         'Live grade and assessment overview per subject',
         'Upcoming assignments and submission status',
