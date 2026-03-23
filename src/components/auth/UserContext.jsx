@@ -91,6 +91,16 @@ export function UserProvider({ children }) {
       membership,
       school: effectiveSchool,
       effectiveUserId: getEffectiveUserId(),
+      loading,
+      isAuthenticated,
+      role: getRole(),
+      schoolId: getSchoolId(),
+      curriculum: impersonation?.curriculumOverride || effectiveSchool?.curriculum || 'ib_dp',
+      isImpersonating: !!impersonation,
+      reload: loadUser,
+      checkPermission,
+      checkAllPermissions,
+    }}>
       {children}
     </UserContext.Provider>
   );
