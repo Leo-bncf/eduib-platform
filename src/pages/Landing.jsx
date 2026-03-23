@@ -266,6 +266,7 @@ function RolesSection() {
     rose: { bg: 'bg-rose-50', border: 'border-rose-100', icon: 'text-rose-600', dot: 'bg-rose-500', tag: 'bg-rose-50 text-rose-700' },
     amber: { bg: 'bg-amber-50', border: 'border-amber-100', icon: 'text-amber-600', dot: 'bg-amber-500', tag: 'bg-amber-50 text-amber-700' },
     slate: { bg: 'bg-slate-100', border: 'border-slate-200', icon: 'text-slate-600', dot: 'bg-slate-500', tag: 'bg-slate-100 text-slate-700' },
+    green: { bg: 'bg-green-50', border: 'border-green-100', icon: 'text-green-600', dot: 'bg-green-500', tag: 'bg-green-50 text-green-700' },
   };
 
   return (
