@@ -11,8 +11,7 @@ import ChildBehaviorOverview from '@/components/parent/ChildBehaviorOverview';
 import ChildPredictedGrades from '@/components/parent/ChildPredictedGrades';
 import ChildReporting from '@/components/parent/ChildReporting';
 import ParentMessaging from '@/components/parent/ParentMessaging';
-import { Link } from 'react-router-dom';
-import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText, ExternalLink, Megaphone, Home } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, BarChart3, ClipboardCheck, Calendar, FileText, Megaphone, Home } from 'lucide-react';
 import ParentDashboardHome from '@/components/parent/ParentDashboardHome';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -132,11 +131,6 @@ export default function ParentDashboard() {
                     <div className="bg-white rounded-md border border-slate-200 shadow-sm p-4 md:p-6">
                       <div className="flex items-center justify-between mb-5">
                         <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wide">Teacher Communication</h2>
-                        <Link to="/Messages">
-                          <Button variant="outline" size="sm" className="text-indigo-600 border-indigo-200 hover:bg-indigo-50">
-                            <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Full Inbox
-                          </Button>
-                        </Link>
                       </div>
                       <ParentMessaging
                         parentId={user?.id}
