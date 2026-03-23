@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { seedDemoQueryCache, clearDemoQueryCache } from '@/lib/demoData';
 
 const STORAGE_KEY = 'scholr_impersonation';
 
@@ -14,13 +16,22 @@ export function ImpersonationProvider({ children }) {
     }
   });
 
+  const queryClient = useQueryClient();
+
   const impersonate = (school, membershipRole = 'school_admin', curriculumOverride = null) => {
     const data = { school, membershipRole, curriculumOverride };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     setImpersonation(data);
+    // Seed demo data into query cache for every school page
+    if (school?.id) {
+      seedDemoQueryCache(queryClient, school.id, school);
+    }
   };
 
   const exitImpersonation = () => {
+    if (impersonation?.school?.id) {
+      clearDemoQueryCache(queryClient, impersonation.school.id);
+    }
     sessionStorage.removeItem(STORAGE_KEY);
     setImpersonation(null);
   };
