@@ -23,26 +23,36 @@ Deno.serve(async (req) => {
     const errors = [];
 
     for (const user of users) {
-      // If user already has school_id set correctly, skip
-      if (user.school_id) {
+      // Check for nested data.data.school_id (legacy bug) OR missing school_id
+      const hasNestedBug = user.data?.data?.school_id && !user.school_id;
+      const alreadyCorrect = user.school_id && !hasNestedBug;
+
+      if (alreadyCorrect) {
         skipped++;
         continue;
       }
 
-      // Try to get school_id from SchoolMembership
-      const memberships = await base44.asServiceRole.entities.SchoolMembership.filter({
-        user_id: user.id,
-        status: 'active',
-      });
+      // Try to get school_id from various sources
+      let schoolId = user.school_id
+        || user.data?.data?.school_id
+        || user.active_school_id
+        || user.data?.active_school_id
+        || null;
 
-      let schoolId = user.active_school_id || null;
-
-      if (!schoolId && memberships.length > 0) {
-        schoolId = memberships[0].school_id;
+      if (!schoolId) {
+        // Try to get school_id from SchoolMembership
+        const memberships = await base44.asServiceRole.entities.SchoolMembership.filter({
+          user_id: user.id,
+          status: 'active',
+        });
+        if (memberships.length > 0) {
+          schoolId = memberships[0].school_id;
+        }
       }
 
       if (schoolId) {
         try {
+          // Flat fields — SDK puts them into user.data.school_id correctly
           await base44.asServiceRole.entities.User.update(user.id, {
             school_id: schoolId,
             active_school_id: schoolId,
