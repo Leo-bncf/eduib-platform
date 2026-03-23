@@ -27,7 +27,15 @@ export function ImpersonationProvider({ children }) {
   }, []);
 
   const impersonate = (school, membershipRole = 'school_admin', curriculumOverride = null) => {
-    const data = { school, membershipRole, curriculumOverride };
+    const demoUserIdMap = {
+      school_admin: 'demo-user-admin',
+      ib_coordinator: 'demo-user-coord',
+      teacher: 'demo-user-t1',
+      student: 'demo-student-1',
+      parent: 'demo-parent-1',
+    };
+    const demoUserId = demoUserIdMap[membershipRole] || 'demo-user-admin';
+    const data = { school, membershipRole, curriculumOverride, demoUserId };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     setImpersonation(data);
     // Seed demo data into query cache for every school page

@@ -67,6 +67,11 @@ export function UserProvider({ children }) {
     return school;
   };
 
+  const getEffectiveUserId = () => {
+    if (impersonation?.demoUserId) return impersonation.demoUserId;
+    return user?.id;
+  };
+
   // Permission checking helpers
   const checkPermission = (resource, action) => {
     const userData = { ...user, role: getRole() };
@@ -85,16 +90,7 @@ export function UserProvider({ children }) {
       user,
       membership,
       school: effectiveSchool,
-      loading,
-      isAuthenticated,
-      role: getRole(),
-      schoolId: getSchoolId(),
-      curriculum: impersonation?.curriculumOverride || effectiveSchool?.curriculum || 'ib_dp',
-      isImpersonating: !!impersonation,
-      reload: loadUser,
-      checkPermission,
-      checkAllPermissions,
-    }}>
+      effectiveUserId: getEffectiveUserId(),
       {children}
     </UserContext.Provider>
   );

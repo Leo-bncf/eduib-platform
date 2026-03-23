@@ -16,20 +16,21 @@ import { createPageUrl } from '@/utils';
 import { getStudentSidebarLinks } from '@/components/app/studentSidebarLinks';
 
 export default function StudentDashboard() {
-  const { user, school, schoolId, curriculum } = useUser();
+  const { user, school, schoolId, curriculum, effectiveUserId } = useUser();
+  const userId = effectiveUserId || user?.id;
   const studentLinks = getStudentSidebarLinks(curriculum);
 
   const { data: classes = [], isLoading } = useQuery({
-    queryKey: ['student-classes', schoolId, user?.id],
+    queryKey: ['student-classes', schoolId, userId],
     queryFn: async () => {
       const all = await base44.entities.Class.filter({ school_id: schoolId, status: 'active' });
-      return all.filter(c => c.student_ids?.includes(user.id));
+      return all.filter(c => c.student_ids?.includes(userId));
     },
-    enabled: !!schoolId && !!user?.id,
+    enabled: !!schoolId && !!userId,
   });
 
   const { data: assignments = [] } = useQuery({
-    queryKey: ['student-assignments', schoolId, user?.id],
+    queryKey: ['student-assignments', schoolId, userId],
     queryFn: async () => {
       const classIds = classes.map(c => c.id);
       if (classIds.length === 0) return [];
@@ -40,9 +41,9 @@ export default function StudentDashboard() {
   });
 
   const { data: grades = [] } = useQuery({
-    queryKey: ['student-grades', schoolId, user?.id],
-    queryFn: () => base44.entities.GradeItem.filter({ school_id: schoolId, student_id: user.id, visible_to_student: true }),
-    enabled: !!schoolId && !!user?.id,
+    queryKey: ['student-grades', schoolId, userId],
+    queryFn: () => base44.entities.GradeItem.filter({ school_id: schoolId, student_id: userId, visible_to_student: true }),
+    enabled: !!schoolId && !!userId,
   });
 
   const upcomingAssignments = assignments.filter(a => a.due_date && new Date(a.due_date) > new Date()).sort((a, b) => new Date(a.due_date) - new Date(b.due_date));

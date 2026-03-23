@@ -11,21 +11,22 @@ import { format } from 'date-fns';
 import { getAppSidebarLinks } from '@/components/app/sidebarLinks';
 
 export default function TeacherDashboard() {
-  const { user, school, schoolId } = useUser();
+  const { user, school, schoolId, effectiveUserId } = useUser();
+  const userId = effectiveUserId || user?.id;
 
   const { data: classes = [], isLoading } = useQuery({
-    queryKey: ['teacher-classes', schoolId, user?.id],
+    queryKey: ['teacher-classes', schoolId, userId],
     queryFn: async () => {
       const all = await base44.entities.Class.filter({ school_id: schoolId, status: 'active' });
-      return all.filter(c => c.teacher_ids?.includes(user.id));
+      return all.filter(c => c.teacher_ids?.includes(userId));
     },
-    enabled: !!schoolId && !!user?.id,
+    enabled: !!schoolId && !!userId,
   });
 
   const { data: assignments = [] } = useQuery({
-    queryKey: ['teacher-assignments', schoolId, user?.id],
-    queryFn: () => base44.entities.Assignment.filter({ school_id: schoolId, teacher_id: user.id }),
-    enabled: !!schoolId && !!user?.id,
+    queryKey: ['teacher-assignments', schoolId, userId],
+    queryFn: () => base44.entities.Assignment.filter({ school_id: schoolId, teacher_id: userId }),
+    enabled: !!schoolId && !!userId,
   });
 
   const pendingAssignments = assignments.filter(a => a.status === 'published');

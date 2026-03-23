@@ -529,6 +529,18 @@ export function buildDemoOperationsData(schoolId, school) {
   };
 }
 
+// ─── Per-user cache helpers ──────────────────────────────────────────────────
+
+const TEACHER_IDS = [D.t1id, D.t2id, D.t3id, D.t4id, D.t5id];
+
+function getTeacherClasses(classes, teacherId) {
+  return classes.filter(c => c.teacher_ids?.includes(teacherId));
+}
+
+function getStudentClasses(classes, studentId) {
+  return classes.filter(c => c.student_ids?.includes(studentId));
+}
+
 // ─── Cache Seeder ─────────────────────────────────────────────────────────────
 
 export function seedDemoQueryCache(queryClient, schoolId, school) {
@@ -595,6 +607,32 @@ export function seedDemoQueryCache(queryClient, schoolId, school) {
 
   // Invitations (empty — realistic for a demo)
   queryClient.setQueryData(['user-invitations', schoolId], [], opts);
+
+  // ── Teacher-specific query keys ──
+  TEACHER_IDS.forEach(tid => {
+    const myClasses = getTeacherClasses(classes, tid);
+    const myAssignments = assignments.filter(a => a.teacher_id === tid);
+    const myClassIds = new Set(myClasses.map(c => c.id));
+    const mySubmissions = submissions.filter(s => myClassIds.has(s.class_id));
+    queryClient.setQueryData(['teacher-classes', schoolId, tid], myClasses, opts);
+    queryClient.setQueryData(['teacher-assignments', schoolId, tid], myAssignments, opts);
+    queryClient.setQueryData(['teacher-submissions', schoolId, tid], mySubmissions, opts);
+  });
+
+  // ── Student-specific query keys ──
+  STUDENT_IDS.forEach(sid => {
+    const myClasses = getStudentClasses(classes, sid);
+    const myClassIds = new Set(myClasses.map(c => c.id));
+    const myAssignments = assignments.filter(a => myClassIds.has(a.class_id));
+    const myGrades = grades.filter(g => g.student_id === sid && g.visible_to_student);
+    const myAttendance = attendance.filter(a => a.student_id === sid);
+    const myBehavior = behavior.filter(b => b.student_id === sid && b.visible_to_student);
+    queryClient.setQueryData(['student-classes', schoolId, sid], myClasses, opts);
+    queryClient.setQueryData(['student-assignments', schoolId, sid], myAssignments, opts);
+    queryClient.setQueryData(['student-grades', schoolId, sid], myGrades, opts);
+    queryClient.setQueryData(['student-attendance', schoolId, sid], myAttendance, opts);
+    queryClient.setQueryData(['student-behavior', schoolId, sid], myBehavior, opts);
+  });
 }
 
 export function clearDemoQueryCache(queryClient, schoolId) {
