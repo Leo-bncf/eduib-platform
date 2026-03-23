@@ -155,7 +155,7 @@ export default function InviteUserDialog({ open, onClose, schoolId, schoolName }
           <Alert className="border-indigo-200 bg-indigo-50">
             <Mail className="w-4 h-4 text-indigo-700" />
             <AlertDescription className="text-sm text-indigo-900">
-              An email with an accept link will be sent to <strong>{formData.email || 'the user'}</strong>. The link expires in 7 days.
+              An invitation email will be sent to <strong>{formData.email || 'the user'}</strong>. They'll set their own password when they accept.
             </AlertDescription>
           </Alert>
 
