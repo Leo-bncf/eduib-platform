@@ -168,7 +168,7 @@ export default function InviteUserDialog({ open, onClose, schoolId, schoolName }
           )}
 
           <div className="flex items-center gap-3 pt-4">
-            <Button type="button" onClick={handleClose} variant="outline" className="flex-1">
+            <Button type="button" onClick={onClose} variant="outline" className="flex-1">
               Cancel
             </Button>
             <Button 
