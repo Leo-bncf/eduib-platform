@@ -37,13 +37,8 @@ export default function InviteUserDialog({ open, onClose, schoolId, schoolName }
       });
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-invitations'] });
-      if (data?.inviteUrl) {
-        setInviteLink(data.inviteUrl);
-      } else {
-        onClose();
-      }
       setFormData({
         email: '',
         role: 'teacher',
@@ -53,6 +48,7 @@ export default function InviteUserDialog({ open, onClose, schoolId, schoolName }
         department: '',
         custom_message: '',
       });
+      onClose();
     },
   });
 
