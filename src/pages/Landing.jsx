@@ -100,82 +100,120 @@ function ProblemSection() {
 
 function FeaturesGrid() {
   const [expandedId, setExpandedId] = React.useState(null);
+
   const features = [
-    { icon: BarChart3, title: 'Executive Dashboards', short: 'Role-specific insights', desc: 'Personalized dashboards for every stakeholder—students see academic progress, teachers manage their classes, coordinators oversee cohorts, parents track their children, and admins control the entire school. Each role receives contextual information tailored to their responsibilities, with quick actions and performance indicators prominently displayed.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/666e7c602_generated_image.png' },
-    { icon: ClipboardCheck, title: 'Academic Workflows', short: 'Complete assignment lifecycle', desc: 'From creation to grading—publish assignments with IB criteria alignment, students submit work through Google Docs, files, or links, teachers provide criterion-based feedback, and grades sync automatically. Support for multiple submission formats, late submission handling, and comprehensive submission tracking ensure transparency throughout the entire workflow.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/cee3c90d6_generated_image.png' },
-    { icon: BookOpen, title: 'Gradebook', short: 'Multi-framework grading', desc: 'Support for multiple grading scales including 1-7 IB, A*-E, letter grades, and percentage-based systems. Predicted grade tracking with historical trends, subject level management, rubric-based criterion assessment, and comprehensive term reports aligned to your curriculum. Generate assessment reports by criterion, track grade distribution patterns, and lock grades for compliance with school policies.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/7021edd96_generated_image.png' },
-    { icon: Users, title: 'Parent Portal', short: 'Real-time family engagement', desc: 'Parents see grades, attendance records, upcoming assignments, teacher feedback, and behavioral notes—all updated in real-time with notification preferences. Direct messaging with teachers keeps communication secure, organized, and compliant with school policies. Parents can also receive progress alerts and attendance warnings.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/8a2036ae5_generated_image.png' },
-    { icon: Calendar, title: 'Timetable Integration', short: 'Schedule synchronization', desc: 'Sync with external timetable systems like Veracross or iSAMS, display daily class schedules, manage periods and rooms, resolve scheduling conflicts automatically, and track historical schedule changes. Supports multiple concurrent timetables for different academic years and handles special events and exam schedules.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/40cbab407_generated_image.png' },
-    { icon: MessageSquare, title: 'Internal Messaging', short: 'Secure communication hub', desc: 'Role-aware messaging between teachers, students, and parents with granular permission controls. Create class announcements, manage discussions, implement quiet hours policies, and maintain compliance logging for all communications. Thread-based conversations keep context clear and searchable.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/5afba6700_generated_image.png' },
-    { icon: Shield, title: 'Enterprise Security', short: 'Data protection', desc: 'Complete multi-tenant isolation ensures schools cannot access each other\'s data. Granular role-based access control with customizable permissions, audit logging of all critical actions, GDPR compliance tools including data export and deletion, encrypted data storage at rest and in transit.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/cd0fc202d_generated_image.png' },
-    { icon: Star, title: 'Extended Curriculum Modules', short: 'CAS, EE, TOK & more', desc: 'Manage CAS experiences with strand mapping, supervisor tracking, and hourly reflection submissions. Track Extended Essay milestones from initial proposal through final viva voce with supervisor feedback integration. Manage TOK deadlines, student reflections, and coordinator approvals in one unified interface.', screenshot: 'https://media.base44.com/images/public/69a0347d243a60c91ce938c9/bcfce6faa_generated_image.png' },
+    { icon: BarChart3,     title: 'Executive Dashboards',        short: 'Role-specific insights',         desc: 'Personalized dashboards for every stakeholder — students see academic progress, teachers manage their classes, coordinators oversee cohorts, parents track their children, and admins control the entire school. Each role receives contextual information tailored to their responsibilities, with quick actions and performance indicators prominently displayed.' },
+    { icon: ClipboardCheck, title: 'Academic Workflows',          short: 'Complete assignment lifecycle',   desc: 'From creation to grading — publish assignments with IB criteria alignment, students submit work through Google Docs, files, or links, teachers provide criterion-based feedback, and grades sync automatically. Support for multiple submission formats, late submission handling, and comprehensive submission tracking ensure transparency throughout.' },
+    { icon: BookOpen,      title: 'Gradebook',                   short: 'Multi-framework grading',        desc: 'Support for multiple grading scales including 1-7 IB, A*-E, letter grades, and percentages. Predicted grade tracking with historical trends, rubric-based criterion assessment, and comprehensive term reports aligned to your curriculum. Generate assessment reports by criterion and lock grades for compliance.' },
+    { icon: Users,         title: 'Parent Portal',               short: 'Real-time family engagement',   desc: 'Parents see grades, attendance records, upcoming assignments, teacher feedback, and behavioral notes — all updated in real-time. Direct messaging with teachers keeps communication secure, organised, and compliant with school policies. Parents can also receive progress alerts and attendance warnings.' },
+    { icon: Calendar,      title: 'Timetable Integration',       short: 'Schedule synchronisation',      desc: 'Sync with external timetable systems like Veracross or iSAMS, display daily class schedules, manage periods and rooms, resolve scheduling conflicts automatically, and track historical schedule changes. Supports multiple concurrent timetables and handles special events and exam schedules.' },
+    { icon: MessageSquare, title: 'Internal Messaging',          short: 'Secure communication hub',      desc: 'Role-aware messaging between teachers, students, and parents with granular permission controls. Create class announcements, manage discussions, implement quiet hours policies, and maintain compliance logging for all communications. Thread-based conversations keep context clear and searchable.' },
+    { icon: Shield,        title: 'Enterprise Security',         short: 'Data protection',               desc: 'Complete multi-tenant isolation ensures schools cannot access each other\'s data. Granular role-based access control, audit logging of all critical actions, GDPR compliance tools including data export and deletion, and encrypted data storage at rest and in transit.' },
+    { icon: Star,          title: 'Extended Curriculum',         short: 'CAS, EE, TOK & more',           desc: 'Manage CAS experiences with strand mapping, supervisor tracking, and hourly reflection submissions. Track Extended Essay milestones from initial proposal through final viva voce. Manage TOK deadlines, student reflections, and coordinator approvals in one unified interface.' },
+  ];
+
+  // Deterministic float positions so bubbles don't jump on re-render
+  const bubbleConfigs = [
+    { size: 140, x: 8,  y: 12, dur: 9,  delay: 0 },
+    { size: 120, x: 28, y: 55, dur: 11, delay: 1.5 },
+    { size: 155, x: 52, y: 8,  dur: 8,  delay: 0.8 },
+    { size: 130, x: 72, y: 48, dur: 12, delay: 2.2 },
+    { size: 145, x: 18, y: 72, dur: 10, delay: 0.3 },
+    { size: 125, x: 62, y: 72, dur: 9,  delay: 1.8 },
+    { size: 135, x: 85, y: 18, dur: 11, delay: 0.6 },
+    { size: 150, x: 40, y: 38, dur: 10, delay: 1.2 },
   ];
 
   return (
     <section className="py-24 bg-transparent">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-slate-900">Comprehensive Platform Capabilities</h2>
           <p className="mt-3 text-lg text-slate-500">Engineered for the rigorous demands of international multi-curricular institutions</p>
+          <p className="mt-2 text-sm text-slate-400">Click any bubble to explore</p>
         </div>
-        <div className="space-y-6">
-          {features.map((f, i) => (
-            <motion.div key={i} layout className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-              <button 
-                onClick={() => setExpandedId(expandedId === i ? null : i)}
-                className="w-full px-6 py-4 flex items-start gap-4 text-left hover:bg-slate-50/50 transition-colors"
+
+        {/* Bubble arena */}
+        <div className="relative w-full rounded-3xl overflow-hidden border border-slate-200/60 bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/60 backdrop-blur-sm" style={{ height: '480px' }}>
+          {features.map((f, i) => {
+            const cfg = bubbleConfigs[i];
+            const isExpanded = expandedId === i;
+            return (
+              <motion.button
+                key={i}
+                onClick={() => setExpandedId(isExpanded ? null : i)}
+                className="absolute flex flex-col items-center justify-center rounded-full cursor-pointer select-none"
+                style={{
+                  width: cfg.size,
+                  height: cfg.size,
+                  left: `calc(${cfg.x}% - ${cfg.size / 2}px)`,
+                  top:  `calc(${cfg.y}% - ${cfg.size / 2}px)`,
+                  background: isExpanded
+                    ? 'linear-gradient(135deg, #1e40af, #3b82f6)'
+                    : 'linear-gradient(135deg, rgba(219,234,254,0.9), rgba(191,219,254,0.85))',
+                  backdropFilter: 'blur(8px)',
+                  border: isExpanded ? '2px solid #2563eb' : '1.5px solid rgba(147,197,253,0.6)',
+                  boxShadow: isExpanded
+                    ? '0 8px 32px rgba(37,99,235,0.35)'
+                    : '0 4px 16px rgba(147,197,253,0.3)',
+                  zIndex: isExpanded ? 10 : 1,
+                }}
+                animate={isExpanded ? { scale: 1.15 } : {
+                  y: [0, -10, 0, 8, 0],
+                  x: [0, 5, 0, -4, 0],
+                  transition: {
+                    duration: cfg.dur,
+                    delay: cfg.delay,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }
+                }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                whileHover={isExpanded ? {} : { scale: 1.08, boxShadow: '0 8px 24px rgba(59,130,246,0.4)' }}
               >
-                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 border border-blue-100">
-                  <f.icon className="w-5 h-5 text-blue-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-slate-900">{f.title}</h3>
-                  <p className="text-sm text-slate-500 mt-1">{f.short}</p>
-                </div>
-                <ChevronRight className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-300 ${expandedId === i ? 'rotate-90' : ''}`} />
-              </button>
-              <AnimatePresence>
-                {expandedId === i && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="border-t border-slate-100 bg-slate-50/30 overflow-hidden"
-                  >
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-6 py-6">
-                      <div className="lg:col-span-1">
-                        <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
-                      </div>
-                      <div className="lg:col-span-2">
-                        <img 
-                          src={f.screenshot} 
-                          alt={f.title}
-                          className="w-full rounded-lg border border-slate-200 shadow-sm"
-                        />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+                <f.icon className={`w-6 h-6 mb-1.5 ${isExpanded ? 'text-white' : 'text-blue-600'}`} />
+                <span className={`text-xs font-semibold text-center leading-tight px-3 ${isExpanded ? 'text-white' : 'text-blue-900'}`}>
+                  {f.title}
+                </span>
+              </motion.button>
+            );
+          })}
         </div>
+
+        {/* Expanded detail card */}
+        <AnimatePresence mode="wait">
+          {expandedId !== null && (
+            <motion.div
+              key={expandedId}
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.97 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="mt-6 bg-white/90 backdrop-blur-md rounded-2xl border border-blue-200 shadow-xl p-8"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
+                    {React.createElement(features[expandedId].icon, { className: 'w-6 h-6 text-white' })}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900">{features[expandedId].title}</h3>
+                    <p className="text-sm text-blue-600 font-medium mt-0.5">{features[expandedId].short}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setExpandedId(null)}
+                  className="text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0 mt-1"
+                >
+                  <ChevronRight className="w-5 h-5 rotate-45" />
+                </button>
+              </div>
+              <p className="mt-5 text-slate-600 leading-relaxed text-base">{features[expandedId].desc}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
-  );
-}
-
-function FadeInCard({ children, delay = 0 }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.35, delay, ease: 'easeOut' }}
-    >
-      {children}
-    </motion.div>
   );
 }
 
