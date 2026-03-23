@@ -18,6 +18,14 @@ export function ImpersonationProvider({ children }) {
 
   const queryClient = useQueryClient();
 
+  // Re-seed demo data after a page refresh if impersonation is still active
+  React.useEffect(() => {
+    if (impersonation?.school?.id) {
+      seedDemoQueryCache(queryClient, impersonation.school.id, impersonation.school);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const impersonate = (school, membershipRole = 'school_admin', curriculumOverride = null) => {
     const data = { school, membershipRole, curriculumOverride };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
