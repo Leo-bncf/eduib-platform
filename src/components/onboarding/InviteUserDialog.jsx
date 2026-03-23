@@ -12,8 +12,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function InviteUserDialog({ open, onClose, schoolId, schoolName }) {
   const queryClient = useQueryClient();
-  const [inviteLink, setInviteLink] = useState(null);
-  const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     role: 'teacher',
