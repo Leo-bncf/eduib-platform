@@ -167,6 +167,8 @@ function FeaturesGrid() {
 }
 
 function RolesSection() {
+  const [selectedRole, setSelectedRole] = React.useState(null);
+
   const roles = [
     {
       name: 'Students',
@@ -248,7 +250,7 @@ function RolesSection() {
       short: 'No irrelevant clutter',
       icon: Sparkles,
       color: 'green',
-      desc: 'Tools not designed for your curriculum stay completely hidden. IB-only features like CAS, EE, and TOK never appear in an IGCSE or A-Level school — and vice versa. Every user sees only what applies to them.',
+      desc: 'Tools not designed for your curriculum stay completely hidden. IB-only features like CAS, EE, and TOK never appear in an IGCSE or A-Level school — and vice versa.',
       features: [
         'Curriculum detected at school setup — no manual toggles',
         'IB Core tools hidden for non-IB programmes',
@@ -261,48 +263,82 @@ function RolesSection() {
   ];
 
   const colorMap = {
-    blue: { bg: 'bg-blue-50', border: 'border-blue-100', icon: 'text-blue-600', dot: 'bg-blue-500', tag: 'bg-blue-50 text-blue-700' },
-    indigo: { bg: 'bg-indigo-50', border: 'border-indigo-100', icon: 'text-indigo-600', dot: 'bg-indigo-500', tag: 'bg-indigo-50 text-indigo-700' },
-    rose: { bg: 'bg-rose-50', border: 'border-rose-100', icon: 'text-rose-600', dot: 'bg-rose-500', tag: 'bg-rose-50 text-rose-700' },
-    amber: { bg: 'bg-amber-50', border: 'border-amber-100', icon: 'text-amber-600', dot: 'bg-amber-500', tag: 'bg-amber-50 text-amber-700' },
-    slate: { bg: 'bg-slate-100', border: 'border-slate-200', icon: 'text-slate-600', dot: 'bg-slate-500', tag: 'bg-slate-100 text-slate-700' },
-    green: { bg: 'bg-green-50', border: 'border-green-100', icon: 'text-green-600', dot: 'bg-green-500', tag: 'bg-green-50 text-green-700' },
+    blue:   { bg: 'bg-blue-50',   border: 'border-blue-100',   icon: 'text-blue-600',   activeBorder: 'border-blue-400',   activeRing: 'ring-blue-200' },
+    indigo: { bg: 'bg-indigo-50', border: 'border-indigo-100', icon: 'text-indigo-600', activeBorder: 'border-indigo-400', activeRing: 'ring-indigo-200' },
+    rose:   { bg: 'bg-rose-50',   border: 'border-rose-100',   icon: 'text-rose-600',   activeBorder: 'border-rose-400',   activeRing: 'ring-rose-200' },
+    amber:  { bg: 'bg-amber-50',  border: 'border-amber-100',  icon: 'text-amber-600',  activeBorder: 'border-amber-400',  activeRing: 'ring-amber-200' },
+    slate:  { bg: 'bg-slate-100', border: 'border-slate-200',  icon: 'text-slate-600',  activeBorder: 'border-slate-400',  activeRing: 'ring-slate-200' },
+    green:  { bg: 'bg-green-50',  border: 'border-green-100',  icon: 'text-green-600',  activeBorder: 'border-green-400',  activeRing: 'ring-green-200' },
   };
+
+  const selected = selectedRole !== null ? roles[selectedRole] : null;
+  const sc = selected ? colorMap[selected.color] : null;
 
   return (
     <section className="py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-slate-900">Purpose-Built Roles</h2>
-          <p className="mt-3 text-lg text-slate-500">Every user type has a tailored experience designed for their specific responsibilities.</p>
+          <p className="mt-3 text-lg text-slate-500">Every user type has a tailored experience. Click a role to explore its features.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
           {roles.map((r, i) => {
             const c = colorMap[r.color];
+            const isActive = selectedRole === i;
             return (
-              <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-10 h-10 rounded-lg ${c.bg} ${c.border} border flex items-center justify-center flex-shrink-0`}>
+              <FadeInCard key={i} delay={i * 0.07}>
+                <button
+                  onClick={() => setSelectedRole(isActive ? null : i)}
+                  className={`w-full flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? `${c.bg} ${c.activeBorder} shadow-md`
+                      : 'bg-white/70 backdrop-blur-sm border-slate-200 hover:shadow-md hover:border-slate-300'
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-lg ${c.bg} ${c.border} border flex items-center justify-center`}>
                     <r.icon className={`w-5 h-5 ${c.icon}`} />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-slate-900">{r.name}</h3>
-                    <p className="text-xs text-slate-500">{r.short}</p>
-                  </div>
-                </div>
-                <p className="text-sm text-slate-600 leading-relaxed mb-4">{r.desc}</p>
-                <ul className="space-y-2">
-                  {r.features.map((f, j) => (
-                    <li key={j} className="flex items-start gap-2">
-                      <CheckCircle2 className={`w-4 h-4 ${c.icon} flex-shrink-0 mt-0.5`} />
-                      <span className="text-xs text-slate-600 leading-relaxed">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  <p className="text-sm font-semibold text-slate-900 text-center">{r.name}</p>
+                  <p className="text-xs text-slate-500 text-center leading-tight">{r.short}</p>
+                  <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isActive ? 'rotate-90' : ''}`} />
+                </button>
+              </FadeInCard>
             );
           })}
         </div>
+
+        <AnimatePresence mode="wait">
+          {selected && sc && (
+            <motion.div
+              key={selectedRole}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className={`bg-white/80 backdrop-blur-sm rounded-2xl border-2 ${sc.activeBorder} shadow-lg p-8`}
+            >
+              <div className="flex items-start gap-4 mb-5">
+                <div className={`w-12 h-12 rounded-xl ${sc.bg} ${sc.border} border flex items-center justify-center flex-shrink-0`}>
+                  <selected.icon className={`w-6 h-6 ${sc.icon}`} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">{selected.name}</h3>
+                  <p className="text-sm text-slate-500 mt-0.5">{selected.short}</p>
+                </div>
+              </div>
+              <p className="text-slate-600 leading-relaxed mb-6">{selected.desc}</p>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {selected.features.map((f, j) => (
+                  <li key={j} className="flex items-start gap-2.5 bg-slate-50 rounded-lg p-3">
+                    <CheckCircle2 className={`w-4 h-4 ${sc.icon} flex-shrink-0 mt-0.5`} />
+                    <span className="text-sm text-slate-600 leading-relaxed">{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
