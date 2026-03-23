@@ -243,6 +243,21 @@ function RolesSection() {
         'Billing dashboard and subscription management',
       ]
     },
+    {
+      name: 'Curriculum-Aware UI',
+      short: 'No irrelevant clutter',
+      icon: Sparkles,
+      color: 'green',
+      desc: 'Tools not designed for your curriculum stay completely hidden. IB-only features like CAS, EE, and TOK never appear in an IGCSE or A-Level school — and vice versa. Every user sees only what applies to them.',
+      features: [
+        'Curriculum detected at school setup — no manual toggles',
+        'IB Core tools hidden for non-IB programmes',
+        'Grading scales match your framework automatically',
+        'Terminology adapts to your curriculum automatically',
+        'Module visibility controlled by school administrators',
+        'Zero noise — only relevant tools in every workflow',
+      ]
+    },
   ];
 
   const colorMap = {
