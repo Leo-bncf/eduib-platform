@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
-  AlertCircle, UserX, RefreshCw, CreditCard, CheckSquare,
+  AlertCircle, UserX, RefreshCw, CreditCard,
   ArrowRight, CheckCircle2, ShieldAlert, ChevronDown, ChevronUp,
   GraduationCap, BookOpen, Clock, TrendingDown, Info,
 } from 'lucide-react';

@@ -75,7 +75,7 @@ export default function SchoolAdminDashboard() {
     (data.studentsWithoutClasses.length > 0 ? 1 : 0) +
     ((data.failedSyncs?.length ?? 0) > 0 ? 1 : 0) +
     (['past_due', 'unpaid', 'incomplete'].includes(school?.billing_status) ? 1 : 0) +
-    (data.setupDone < data.setupTotal ? 1 : 0)
+    0
   ) : 0;
 
   return (
