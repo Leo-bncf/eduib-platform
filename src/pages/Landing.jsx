@@ -114,14 +114,14 @@ function FeaturesGrid() {
 
   // Positions kept away from edges so floating animation never clips
   const bubbleConfigs = [
-    { size: 140, x: 15, y: 15, dur: 9,  delay: 0 },
-    { size: 120, x: 35, y: 55, dur: 11, delay: 1.5 },
-    { size: 155, x: 55, y: 12, dur: 8,  delay: 0.8 },
-    { size: 130, x: 72, y: 52, dur: 12, delay: 2.2 },
-    { size: 145, x: 22, y: 72, dur: 10, delay: 0.3 },
-    { size: 125, x: 62, y: 75, dur: 9,  delay: 1.8 },
-    { size: 135, x: 83, y: 20, dur: 11, delay: 0.6 },
-    { size: 150, x: 45, y: 40, dur: 10, delay: 1.2 },
+    { size: 180, x: 8,  y: 10, dur: 9,  delay: 0 },
+    { size: 160, x: 30, y: 55, dur: 11, delay: 1.5 },
+    { size: 195, x: 52, y: 8,  dur: 8,  delay: 0.8 },
+    { size: 170, x: 74, y: 50, dur: 12, delay: 2.2 },
+    { size: 175, x: 16, y: 70, dur: 10, delay: 0.3 },
+    { size: 165, x: 64, y: 72, dur: 9,  delay: 1.8 },
+    { size: 185, x: 86, y: 15, dur: 11, delay: 0.6 },
+    { size: 190, x: 42, y: 38, dur: 10, delay: 1.2 },
   ];
 
   return (
@@ -149,13 +149,16 @@ function FeaturesGrid() {
                   left: `calc(${cfg.x}% - ${cfg.size / 2}px)`,
                   top:  `calc(${cfg.y}% - ${cfg.size / 2}px)`,
                   background: isExpanded
-                    ? 'linear-gradient(135deg, #1e40af, #3b82f6)'
-                    : 'linear-gradient(135deg, rgba(219,234,254,0.9), rgba(191,219,254,0.85))',
-                  backdropFilter: 'blur(8px)',
-                  border: isExpanded ? '2px solid #2563eb' : '1.5px solid rgba(147,197,253,0.6)',
+                    ? 'linear-gradient(135deg, rgba(37,99,235,0.75), rgba(96,165,250,0.65))'
+                    : 'linear-gradient(135deg, rgba(239,246,255,0.35) 0%, rgba(186,230,253,0.25) 40%, rgba(224,231,255,0.3) 70%, rgba(167,243,208,0.2) 100%)',
+                  backdropFilter: 'blur(12px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                  border: isExpanded
+                    ? '1.5px solid rgba(96,165,250,0.8)'
+                    : '1px solid rgba(255,255,255,0.55)',
                   boxShadow: isExpanded
-                    ? '0 8px 32px rgba(37,99,235,0.35)'
-                    : '0 4px 16px rgba(147,197,253,0.3)',
+                    ? '0 8px 32px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.4)'
+                    : '0 4px 24px rgba(147,197,253,0.18), inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(147,197,253,0.15)',
                   zIndex: isExpanded ? 10 : 1,
                 }}
                 animate={isExpanded ? { scale: 1.15 } : {
@@ -171,10 +174,8 @@ function FeaturesGrid() {
                 transition={{ duration: 0.35, ease: 'easeOut' }}
                 whileHover={isExpanded ? {} : { scale: 1.08, boxShadow: '0 8px 24px rgba(59,130,246,0.4)' }}
               >
-                <f.icon className={`w-6 h-6 mb-1.5 ${isExpanded ? 'text-white' : 'text-blue-600'}`} />
-                <span className={`text-xs font-semibold text-center leading-tight px-3 ${isExpanded ? 'text-white' : 'text-blue-900'}`}>
-                  {f.title}
-                </span>
+                <f.icon className={`w-6 h-6 mb-1.5 ${isExpanded ? 'text-white' : 'text-blue-500/80'}`} />
+                <span className={`text-xs font-semibold text-center leading-tight px-3 ${isExpanded ? 'text-white' : 'text-slate-700/80'}`}>
               </motion.button>
             );
           })}
