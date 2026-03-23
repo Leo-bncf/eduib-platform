@@ -112,16 +112,16 @@ function FeaturesGrid() {
     { icon: Star,          title: 'Extended Curriculum',         short: 'CAS, EE, TOK & more',           desc: 'Manage CAS experiences with strand mapping, supervisor tracking, and hourly reflection submissions. Track Extended Essay milestones from initial proposal through final viva voce. Manage TOK deadlines, student reflections, and coordinator approvals in one unified interface.' },
   ];
 
-  // Deterministic float positions so bubbles don't jump on re-render
+  // Positions kept away from edges so floating animation never clips
   const bubbleConfigs = [
-    { size: 140, x: 8,  y: 12, dur: 9,  delay: 0 },
-    { size: 120, x: 28, y: 55, dur: 11, delay: 1.5 },
-    { size: 155, x: 52, y: 8,  dur: 8,  delay: 0.8 },
-    { size: 130, x: 72, y: 48, dur: 12, delay: 2.2 },
-    { size: 145, x: 18, y: 72, dur: 10, delay: 0.3 },
-    { size: 125, x: 62, y: 72, dur: 9,  delay: 1.8 },
-    { size: 135, x: 85, y: 18, dur: 11, delay: 0.6 },
-    { size: 150, x: 40, y: 38, dur: 10, delay: 1.2 },
+    { size: 140, x: 15, y: 15, dur: 9,  delay: 0 },
+    { size: 120, x: 35, y: 55, dur: 11, delay: 1.5 },
+    { size: 155, x: 55, y: 12, dur: 8,  delay: 0.8 },
+    { size: 130, x: 72, y: 52, dur: 12, delay: 2.2 },
+    { size: 145, x: 22, y: 72, dur: 10, delay: 0.3 },
+    { size: 125, x: 62, y: 75, dur: 9,  delay: 1.8 },
+    { size: 135, x: 83, y: 20, dur: 11, delay: 0.6 },
+    { size: 150, x: 45, y: 40, dur: 10, delay: 1.2 },
   ];
 
   return (
@@ -134,7 +134,7 @@ function FeaturesGrid() {
         </div>
 
         {/* Bubble arena */}
-        <div className="relative w-full rounded-3xl overflow-hidden border border-slate-200/60 bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/60 backdrop-blur-sm" style={{ height: '480px' }}>
+        <div className="relative w-full rounded-3xl border border-slate-200/60 bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/60 backdrop-blur-sm" style={{ height: '500px' }}>
           {features.map((f, i) => {
             const cfg = bubbleConfigs[i];
             const isExpanded = expandedId === i;
