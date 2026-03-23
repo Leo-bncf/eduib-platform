@@ -55,18 +55,9 @@ Deno.serve(async (req) => {
             status: 'active',
           });
         }
-        // Also write school_id to user.data so RLS ({{user.data.school_id}}) works
-        await base44.asServiceRole.entities.User.update(userId, {
-          school_id: schoolId,
-          active_school_id: schoolId,
-        });
         results.school_assigned = schoolId;
       } else {
-        // Remove from all schools — clear school_id from user.data too
-        await base44.asServiceRole.entities.User.update(userId, {
-          school_id: null,
-          active_school_id: null,
-        });
+        // Remove from all schools
         for (const m of existingMemberships) {
           await base44.asServiceRole.entities.SchoolMembership.delete(m.id);
         }

@@ -26,10 +26,9 @@ Deno.serve(async (req) => {
     }
     const foundSchool = schools[0];
 
-    // Update user with school — write school_id so RLS rules ({{user.data.school_id}}) work correctly
+    // Update user with school
     await base44.asServiceRole.entities.User.update(foundUser.id, {
-      school_id: foundSchool.id,
-      active_school_id: foundSchool.id,
+      active_school_id: foundSchool.id
     });
 
     return Response.json({ 
