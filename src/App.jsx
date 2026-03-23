@@ -268,8 +268,8 @@ function App() {
             </Router>
           </RLSProvider>
           <Toaster />
-        </QueryClientProvider>
-      </ImpersonationProvider>
+        </ImpersonationProvider>
+      </QueryClientProvider>
     </AuthProvider>
   )
 }
