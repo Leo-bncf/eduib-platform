@@ -19,7 +19,7 @@ export function ImpersonationProvider({ children }) {
   const queryClient = useQueryClient();
 
   // Re-seed demo data after a page refresh if impersonation is still active
-  React.useEffect(() => {
+  useEffect(() => {
     if (impersonation?.school?.id) {
       seedDemoQueryCache(queryClient, impersonation.school.id, impersonation.school);
     }
