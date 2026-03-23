@@ -155,6 +155,7 @@ export default function UserDirectoryTab({ schoolId }) {
     queryKey: ['school-memberships', schoolId],
     queryFn: () => base44.entities.SchoolMembership.filter({ school_id: schoolId }),
     enabled: !!schoolId,
+    staleTime: 0,
   });
 
   const { data: cohorts = [] } = useQuery({
