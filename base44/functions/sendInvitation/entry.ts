@@ -15,8 +15,7 @@ Deno.serve(async (req) => {
     }
 
     // Use Base44's native inviteUser — handles account creation + email automatically
-    // Role here is the platform role; we use 'user' for all school members
-    await base44.asServiceRole.users.inviteUser(email, 'user');
+    await base44.auth.inviteUser(email, 'user');
 
     // Also store the school invitation record for role assignment on first login
     const invitationToken = `inv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
