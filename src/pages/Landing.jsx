@@ -13,7 +13,7 @@ import {
   ArrowRight, BookOpen, Users, BarChart3, Shield, 
   MessageSquare, Calendar, ClipboardCheck, Star,
   ChevronRight, Sparkles, GraduationCap, UserCheck,
-  Heart, Compass, Settings2, CheckCircle2
+  UserCircle, Compass, Settings2, CheckCircle2
 } from 'lucide-react';
 
 function HeroSection() {
@@ -187,7 +187,7 @@ function RolesSection() {
       name: 'Students',
       short: 'Learn and track progress',
       icon: GraduationCap,
-      color: 'blue',
+      color: 'sky',
       desc: 'A personalised academic hub that keeps students on top of their workload, performance, and extended curriculum commitments.',
       features: [
         'Personal dashboard with grade trends and upcoming deadlines',
@@ -202,7 +202,7 @@ function RolesSection() {
       name: 'Teachers',
       short: 'Manage and assess',
       icon: BookOpen,
-      color: 'indigo',
+      color: 'blue',
       desc: 'Everything a teacher needs to run their classes, assess students, and communicate — in one focused workspace.',
       features: [
         'Class workspace with stream, assignments, and gradebook',
@@ -216,8 +216,8 @@ function RolesSection() {
     {
       name: 'Parents',
       short: 'Stay informed and engaged',
-      icon: Heart,
-      color: 'rose',
+      icon: UserCircle,
+      color: 'cyan',
       desc: "Real-time visibility into your child's academic life - grades, attendance, deadlines, and direct communication with teachers.",
       features: [
         'Live grade and assessment overview per subject',
@@ -232,7 +232,7 @@ function RolesSection() {
       name: 'Coordinators',
       short: 'Oversee programmes',
       icon: Compass,
-      color: 'amber',
+      color: 'indigo',
       desc: 'Oversight tools for programme coordinators to manage cohorts, predicted grades, extended curriculum, and compliance.',
       features: [
         'Cohort-level grade and performance dashboards',
@@ -247,7 +247,7 @@ function RolesSection() {
       name: 'Administrators',
       short: 'Control everything',
       icon: Settings2,
-      color: 'slate',
+      color: 'violet',
       desc: 'Full school management — users, policies, academic structure, billing, integrations, and security — from one admin panel.',
       features: [
         'User management, invitations, and role assignment',
@@ -262,7 +262,7 @@ function RolesSection() {
       name: 'Curriculum-Aware UI',
       short: 'No irrelevant clutter',
       icon: Sparkles,
-      color: 'green',
+      color: 'teal',
       desc: 'Tools not designed for your curriculum stay completely hidden. IB-only features like CAS, EE, and TOK never appear in an IGCSE or A-Level school — and vice versa.',
       features: [
         'Curriculum detected at school setup — no manual toggles',
@@ -276,12 +276,12 @@ function RolesSection() {
   ];
 
   const colorMap = {
+    sky:    { bg: 'bg-sky-50',    border: 'border-sky-100',    icon: 'text-sky-500',    activeBorder: 'border-sky-400',    activeRing: 'ring-sky-200' },
     blue:   { bg: 'bg-blue-50',   border: 'border-blue-100',   icon: 'text-blue-600',   activeBorder: 'border-blue-400',   activeRing: 'ring-blue-200' },
+    cyan:   { bg: 'bg-cyan-50',   border: 'border-cyan-100',   icon: 'text-cyan-600',   activeBorder: 'border-cyan-400',   activeRing: 'ring-cyan-200' },
     indigo: { bg: 'bg-indigo-50', border: 'border-indigo-100', icon: 'text-indigo-600', activeBorder: 'border-indigo-400', activeRing: 'ring-indigo-200' },
-    rose:   { bg: 'bg-rose-50',   border: 'border-rose-100',   icon: 'text-rose-600',   activeBorder: 'border-rose-400',   activeRing: 'ring-rose-200' },
-    amber:  { bg: 'bg-amber-50',  border: 'border-amber-100',  icon: 'text-amber-600',  activeBorder: 'border-amber-400',  activeRing: 'ring-amber-200' },
-    slate:  { bg: 'bg-slate-100', border: 'border-slate-200',  icon: 'text-slate-600',  activeBorder: 'border-slate-400',  activeRing: 'ring-slate-200' },
-    green:  { bg: 'bg-green-50',  border: 'border-green-100',  icon: 'text-green-600',  activeBorder: 'border-green-400',  activeRing: 'ring-green-200' },
+    violet: { bg: 'bg-violet-50', border: 'border-violet-100', icon: 'text-violet-600', activeBorder: 'border-violet-400', activeRing: 'ring-violet-200' },
+    teal:   { bg: 'bg-teal-50',   border: 'border-teal-100',   icon: 'text-teal-600',   activeBorder: 'border-teal-400',   activeRing: 'ring-teal-200' },
   };
 
   const selected = selectedRole !== null ? roles[selectedRole] : null;
